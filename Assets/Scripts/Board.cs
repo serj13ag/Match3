@@ -9,12 +9,10 @@ public class Board : MonoBehaviour
 
     private Tile[,] _tiles;
 
-    private void Start()
-    {
-        SetupTiles();
-    }
+    public int Width => _width;
+    public int Height => _height;
 
-    private void SetupTiles()
+    public void SetupTiles()
     {
         _tiles = new Tile[_width, _height];
 

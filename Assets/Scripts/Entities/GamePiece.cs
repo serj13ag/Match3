@@ -6,8 +6,7 @@ namespace Entities
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
-        private int _x;
-        private int _y;
+        private Vector2Int _position;
 
         public void Init(Color color)
         {
@@ -16,8 +15,7 @@ namespace Entities
 
         public void MoveToPosition(int x, int y)
         {
-            _x = x;
-            _y = y;
+            _position = new Vector2Int(x, y);
 
             transform.position = new Vector3(x, y, 0);
             transform.rotation = Quaternion.identity;

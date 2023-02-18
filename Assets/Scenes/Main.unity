@@ -329,6 +329,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cameraController: {fileID: 2108273087}
   _board: {fileID: 1728171552}
+  _colorData: {fileID: 11400000, guid: 5783d67eebb527c46b48ba2e0cef3a70, type: 2}
 --- !u!1 &1728171550
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,6 +377,8 @@ MonoBehaviour:
   _width: 7
   _height: 9
   _tilePrefab: {fileID: 8639118720009340608, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
+  _gamePiecePrefab: {fileID: 4546735267292664957, guid: 6c52fc19e30d8164c96e747707315a49, type: 3}
+  _gamePieceColors: 0000000001000000040000000600000007000000
 --- !u!1 &1929346699
 GameObject:
   m_ObjectHideFlags: 0

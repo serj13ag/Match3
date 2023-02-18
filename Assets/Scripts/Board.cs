@@ -21,8 +21,7 @@ public class Board : MonoBehaviour
             for (var j = 0; j < _height; j++)
             {
                 Tile tile = Instantiate(_tilePrefab, new Vector3(i, j, 0), Quaternion.identity);
-                tile.name = $"Tile ({i}, {j})";
-                tile.transform.SetParent(transform);
+                tile.Init(i, j, this);
 
                 _tiles[i, j] = tile;
             }

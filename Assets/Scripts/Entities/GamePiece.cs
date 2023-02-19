@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Data;
+using Enums;
 using Helpers;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ namespace Entities
         private GameDataRepository _gameDataRepository;
         private bool _isMoving;
         private Vector2Int _position;
+
+        public GamePieceColor Color { get; private set; }
 
         public Vector2Int Position
         {
@@ -29,7 +32,8 @@ namespace Entities
 
         public event Action<GamePiece> OnPositionChanged;
 
-        public void Init(Color color, int x, int y, GameDataRepository gameDataRepository, Transform parentTransform)
+        public void Init(GamePieceColor color, int x, int y, GameDataRepository gameDataRepository,
+            Transform parentTransform)
         {
             _gameDataRepository = gameDataRepository;
 
@@ -85,9 +89,11 @@ namespace Entities
             Position = position;
         }
 
-        private void SetColor(Color color)
+        private void SetColor(GamePieceColor color)
         {
-            _spriteRenderer.color = color;
+            Color = color;
+
+            _spriteRenderer.color = _gameDataRepository.Colors[color];
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Data;
 using Entities;
 using Enums;
@@ -71,13 +72,6 @@ public class Board : MonoBehaviour
         }
     }
 
-    private Color GetRandomGamePieceColor()
-    {
-        int randomColorIndex = _random.Next(_gameDataRepository.Colors.Count - 1);
-        GamePieceColor color = _gamePieceColors[randomColorIndex];
-        return _gameDataRepository.Colors[color];
-    }
-
     private void OnGamePiecePositionChanged(GamePiece gamePiece)
     {
         _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = gamePiece;
@@ -117,5 +111,54 @@ public class Board : MonoBehaviour
 
         clickedGamePiece.Move(targetTile.Position);
         targetGamePiece.Move(clickedTile.Position);
+    }
+
+    private GamePieceColor GetRandomGamePieceColor()
+    {
+        int randomColorIndex = _random.Next(_gameDataRepository.Colors.Count - 1);
+        return _gamePieceColors[randomColorIndex];
+    }
+
+    private bool TryFindMatches(Vector2Int startPosition, Vector2Int searchDirection, out List<GamePiece> matches,
+        int minMatchesCount = 3)
+    {
+        matches = new List<GamePiece>();
+
+        GamePiece startGamePiece = _gamePieces[startPosition.x, startPosition.y];
+        matches.Add(startGamePiece);
+
+        Vector2Int nextPosition = Vector2Int.zero;
+
+        int maxSearches = Mathf.Max(_width, _height);
+
+        for (var i = 0; i < maxSearches - 1; i++)
+        {
+            nextPosition.x = startPosition.x + searchDirection.x * i;
+            nextPosition.y = startPosition.y + searchDirection.y * i;
+
+            if (IsOutOfBounds(nextPosition))
+            {
+                break;
+            }
+
+            GamePiece gamePieceToCheck = _gamePieces[nextPosition.x, nextPosition.y];
+
+            if (gamePieceToCheck.Color == startGamePiece.Color)
+            {
+                matches.Add(gamePieceToCheck);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return matches.Count > minMatchesCount;
+    }
+
+    private bool IsOutOfBounds(Vector2Int position)
+    {
+        return position.x < 0 || position.x > _width ||
+               position.y < 0 || position.y > _height;
     }
 }

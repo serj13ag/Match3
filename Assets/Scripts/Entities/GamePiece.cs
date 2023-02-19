@@ -74,9 +74,9 @@ namespace Entities
                 yield return new WaitForEndOfFrame();
             }
 
+            _isMoving = false;
             SetPosition(destination);
             transform.position = destinationPosition;
-            _isMoving = false;
         }
 
         private void SetPosition(int x, int y)

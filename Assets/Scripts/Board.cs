@@ -24,6 +24,8 @@ public class Board : MonoBehaviour
 
     private Tile _clickedTile;
     private Tile _targetTile;
+    private Stack<GamePiece> _movedPieces;
+    private bool _revertingPieces;
 
     public int Width => _width;
     public int Height => _height;
@@ -32,6 +34,8 @@ public class Board : MonoBehaviour
     {
         _random = random;
         _gameDataRepository = gameDataRepository;
+
+        _movedPieces = new Stack<GamePiece>();
     }
 
     public void SetupTiles()
@@ -70,36 +74,13 @@ public class Board : MonoBehaviour
                 _gamePieces[i, j] = gamePiece;
             }
         }
-
-        DebugHighlightMatches();
-    }
-
-    private void DebugHighlightMatches()
-    {
-        for (int i = 0; i < _width; i++)
-        {
-            for (int j = 0; j < _height; j++)
-            {
-                var spriteRenderer = _tiles[i, j].GetComponent<SpriteRenderer>();
-                spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b,
-                    0f);
-
-                if (TryFindMatches(new Vector2Int(i, j), Constants.MinMatchesCount, out HashSet<GamePiece> matches))
-                {
-                    foreach (var gamePiece in matches)
-                    {
-                        spriteRenderer = _tiles[gamePiece.Position.x, gamePiece.Position.y]
-                            .GetComponent<SpriteRenderer>();
-                        spriteRenderer.color = gamePiece.GetComponent<SpriteRenderer>().color;
-                    }
-                }
-            }
-        }
     }
 
     private void OnGamePiecePositionChanged(GamePiece gamePiece)
     {
         _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = gamePiece;
+
+        HandleMovedPieces(gamePiece);
     }
 
     private void OnTileClicked(Tile tile)
@@ -136,6 +117,59 @@ public class Board : MonoBehaviour
 
         clickedGamePiece.Move(targetTile.Position);
         targetGamePiece.Move(clickedTile.Position);
+    }
+
+    private void HandleMovedPieces(GamePiece gamePiece)
+    {
+        _movedPieces.Push(gamePiece);
+
+        if (_movedPieces.Count == 2)
+        {
+            if (_revertingPieces)
+            {
+                _movedPieces.Clear();
+                _revertingPieces = false;
+                return;
+            }
+
+            var movedGamePieces = new GamePiece[]
+            {
+                _movedPieces.Pop(),
+                _movedPieces.Pop(),
+            };
+
+            if (HasMatches(movedGamePieces))
+            {
+                foreach (GamePiece piece in movedGamePieces)
+                {
+                    DebugHighlightTiles(piece.Position.x, piece.Position.y);
+                }
+            }
+            else
+            {
+                RevertMovedGamePieces(movedGamePieces);
+            }
+        }
+    }
+
+    private bool HasMatches(IEnumerable<GamePiece> gamePieces)
+    {
+        foreach (GamePiece gamePiece in gamePieces)
+        {
+            if (TryFindMatches(gamePiece.Position, 3, out _))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void RevertMovedGamePieces(GamePiece[] movedGamePieces)
+    {
+        _revertingPieces = true;
+        movedGamePieces[0].Move(movedGamePieces[1].Position);
+        movedGamePieces[1].Move(movedGamePieces[0].Position);
     }
 
     private GamePieceColor GetRandomGamePieceColor()
@@ -238,5 +272,23 @@ public class Board : MonoBehaviour
     {
         return position.x < 0 || position.x > _width - 1 ||
                position.y < 0 || position.y > _height - 1;
+    }
+
+    private void DebugHighlightTiles(int x, int y)
+    {
+        if (TryFindMatches(new Vector2Int(x, y), Constants.MinMatchesCount, out HashSet<GamePiece> matches))
+        {
+            foreach (var gamePiece in matches)
+            {
+                DebugHighlightTileOn(gamePiece.Position.x, gamePiece.Position.y,
+                    gamePiece.GetComponent<SpriteRenderer>().color);
+            }
+        }
+    }
+
+    private void DebugHighlightTileOn(int x, int y, Color color)
+    {
+        SpriteRenderer spriteRenderer = _tiles[x, y].GetComponent<SpriteRenderer>();
+        spriteRenderer.color = color;
     }
 }

@@ -70,6 +70,31 @@ public class Board : MonoBehaviour
                 _gamePieces[i, j] = gamePiece;
             }
         }
+
+        DebugHighlightMatches();
+    }
+
+    private void DebugHighlightMatches()
+    {
+        for (int i = 0; i < _width; i++)
+        {
+            for (int j = 0; j < _height; j++)
+            {
+                var spriteRenderer = _tiles[i, j].GetComponent<SpriteRenderer>();
+                spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b,
+                    0f);
+
+                if (TryFindMatches(new Vector2Int(i, j), Constants.MinMatchesCount, out HashSet<GamePiece> matches))
+                {
+                    foreach (var gamePiece in matches)
+                    {
+                        spriteRenderer = _tiles[gamePiece.Position.x, gamePiece.Position.y]
+                            .GetComponent<SpriteRenderer>();
+                        spriteRenderer.color = gamePiece.GetComponent<SpriteRenderer>().color;
+                    }
+                }
+            }
+        }
     }
 
     private void OnGamePiecePositionChanged(GamePiece gamePiece)
@@ -119,10 +144,63 @@ public class Board : MonoBehaviour
         return _gamePieceColors[randomColorIndex];
     }
 
-    private bool TryFindMatches(Vector2Int startPosition, Vector2Int searchDirection, out List<GamePiece> matches,
-        int minMatchesCount = 3)
+    private bool TryFindMatches(Vector2Int startPosition, int minMatchesCount, out HashSet<GamePiece> matches)
     {
-        matches = new List<GamePiece>();
+        matches = new HashSet<GamePiece>();
+
+        if (TryFindHorizontalMatches(startPosition, out HashSet<GamePiece> horizontalMatches, minMatchesCount))
+        {
+            matches.UnionWith(horizontalMatches);
+        }
+
+        if (TryFindVerticalMatches(startPosition, out HashSet<GamePiece> verticalMatches, minMatchesCount))
+        {
+            matches.UnionWith(verticalMatches);
+        }
+
+        return matches.Count >= minMatchesCount;
+    }
+
+    private bool TryFindHorizontalMatches(Vector2Int startPosition, out HashSet<GamePiece> horizontalMatches,
+        int minMatchesCount)
+    {
+        horizontalMatches = new HashSet<GamePiece>();
+
+        if (TryFindMatchesByDirection(startPosition, Vector2Int.right, out HashSet<GamePiece> upMatches, 2))
+        {
+            horizontalMatches.UnionWith(upMatches);
+        }
+
+        if (TryFindMatchesByDirection(startPosition, Vector2Int.left, out HashSet<GamePiece> downMatches, 2))
+        {
+            horizontalMatches.UnionWith(downMatches);
+        }
+
+        return horizontalMatches.Count >= minMatchesCount;
+    }
+
+    private bool TryFindVerticalMatches(Vector2Int startPosition, out HashSet<GamePiece> verticalMatches,
+        int minMatchesCount)
+    {
+        verticalMatches = new HashSet<GamePiece>();
+
+        if (TryFindMatchesByDirection(startPosition, Vector2Int.up, out HashSet<GamePiece> upMatches, 2))
+        {
+            verticalMatches.UnionWith(upMatches);
+        }
+
+        if (TryFindMatchesByDirection(startPosition, Vector2Int.down, out HashSet<GamePiece> downMatches, 2))
+        {
+            verticalMatches.UnionWith(downMatches);
+        }
+
+        return verticalMatches.Count >= minMatchesCount;
+    }
+
+    private bool TryFindMatchesByDirection(Vector2Int startPosition, Vector2Int searchDirection,
+        out HashSet<GamePiece> matches, int minMatchesCount)
+    {
+        matches = new HashSet<GamePiece>();
 
         GamePiece startGamePiece = _gamePieces[startPosition.x, startPosition.y];
         matches.Add(startGamePiece);
@@ -153,12 +231,12 @@ public class Board : MonoBehaviour
             }
         }
 
-        return matches.Count > minMatchesCount;
+        return matches.Count >= minMatchesCount;
     }
 
     private bool IsOutOfBounds(Vector2Int position)
     {
-        return position.x < 0 || position.x > _width ||
-               position.y < 0 || position.y > _height;
+        return position.x < 0 || position.x > _width - 1 ||
+               position.y < 0 || position.y > _height - 1;
     }
 }

@@ -14,11 +14,20 @@ public class Board : MonoBehaviour
 
     [SerializeField] private GamePieceColor[] _gamePieceColors;
 
+    private GameDataRepository _gameDataRepository;
+    private Random _random;
+
     private Tile[,] _tiles;
     private GamePiece[,] _gamePieces;
 
     public int Width => _width;
     public int Height => _height;
+
+    public void Init(GameDataRepository gameDataRepository, Random random)
+    {
+        _random = random;
+        _gameDataRepository = gameDataRepository;
+    }
 
     public void SetupTiles()
     {
@@ -36,7 +45,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    public void FillBoardWithRandomGamePieces(GameDataRepository gameDataRepository, Random random)
+    public void FillBoardWithRandomGamePieces()
     {
         _gamePieces = new GamePiece[_width, _height];
 
@@ -45,17 +54,17 @@ public class Board : MonoBehaviour
             for (var j = 0; j < _height; j++)
             {
                 GamePiece gamePiece = Instantiate(_gamePiecePrefab, Vector3.zero, Quaternion.identity);
-                gamePiece.Init(GetRandomGamePieceColor(random, gameDataRepository), i, j);
+                gamePiece.Init(GetRandomGamePieceColor(), i, j, _gameDataRepository);
 
                 _gamePieces[i, j] = gamePiece;
             }
         }
     }
 
-    private Color GetRandomGamePieceColor(Random random, GameDataRepository gameDataRepository)
+    private Color GetRandomGamePieceColor()
     {
-        int randomColorIndex = random.Next(gameDataRepository.Colors.Count - 1);
+        int randomColorIndex = _random.Next(_gameDataRepository.Colors.Count - 1);
         GamePieceColor color = _gamePieceColors[randomColorIndex];
-        return gameDataRepository.Colors[color];
+        return _gameDataRepository.Colors[color];
     }
 }

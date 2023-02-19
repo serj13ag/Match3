@@ -1,4 +1,6 @@
 using System.Collections;
+using Data;
+using Helpers;
 using UnityEngine;
 
 namespace Entities
@@ -7,16 +9,21 @@ namespace Entities
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
+        private GameDataRepository _gameDataRepository;
+
         private Vector2Int _position;
         private bool _isMoving;
 
-        public void Init(Color color, int x, int y)
+        public void Init(Color color, int x, int y, GameDataRepository gameDataRepository)
         {
+            _gameDataRepository = gameDataRepository;
+
             SetColor(color);
             SetPosition(x, y);
 
-            transform.position = new Vector3(x, y, 0f);
-            transform.rotation = Quaternion.identity;
+            Transform trm = transform;
+            trm.position = new Vector3(x, y, 0f);
+            trm.rotation = Quaternion.identity;
         }
 
         private void Update()
@@ -55,6 +62,7 @@ namespace Entities
             {
                 timeLeft -= Time.deltaTime;
                 float t = (timeToMove - timeLeft) / timeToMove;
+                t = MovementHelper.ApplyInterpolation(t, _gameDataRepository.MoveInterpolationType);
 
                 transform.position = Vector3.Lerp(startPosition, destinationPosition, t);
 

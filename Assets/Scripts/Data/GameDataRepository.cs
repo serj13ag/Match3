@@ -8,9 +8,13 @@ namespace Data
     {
         public Dictionary<GamePieceColor, Color> Colors { get; private set; }
 
-        public GameDataRepository(ColorData colorData)
+        public MoveInterpolationType MoveInterpolationType { get; }
+
+        public GameDataRepository(ColorData colorData, MoveData moveData)
         {
             SetupColors(colorData);
+
+            MoveInterpolationType = moveData.MoveInterpolationType;
         }
 
         private void SetupColors(ColorData colorData)

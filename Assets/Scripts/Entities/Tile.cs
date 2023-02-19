@@ -1,9 +1,14 @@
+using System;
 using UnityEngine;
 
 namespace Entities
 {
     public class Tile : MonoBehaviour
     {
+        public event Action<Tile> OnClicked;
+        public event Action<Tile> OnMouseEntered;
+        public event Action OnMouseReleased;
+
         private Vector2Int _position;
 
         private Board _board;
@@ -19,17 +24,17 @@ namespace Entities
 
         private void OnMouseDown()
         {
-            _board.ClickTile(this);
+            OnClicked?.Invoke(this);
         }
 
         private void OnMouseEnter()
         {
-            _board.DragToTile(this);
+            OnMouseEntered?.Invoke(this);
         }
 
         private void OnMouseUp()
         {
-            _board.ReleaseTile();
+            OnMouseReleased?.Invoke();
         }
     }
 }

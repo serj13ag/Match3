@@ -43,6 +43,10 @@ public class Board : MonoBehaviour
                 Tile tile = Instantiate(_tilePrefab, new Vector3(i, j, 0), Quaternion.identity);
                 tile.Init(i, j, this);
 
+                tile.OnClicked += OnTileClicked;
+                tile.OnMouseEntered += OnTileMouseEntered;
+                tile.OnMouseReleased += OnTileMouseReleased;
+
                 _tiles[i, j] = tile;
             }
         }
@@ -71,7 +75,7 @@ public class Board : MonoBehaviour
         return _gameDataRepository.Colors[color];
     }
 
-    public void ClickTile(Tile tile)
+    private void OnTileClicked(Tile tile)
     {
         if (_clickedTile == null)
         {
@@ -79,7 +83,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    public void DragToTile(Tile tile)
+    private void OnTileMouseEntered(Tile tile)
     {
         if (_clickedTile != null)
         {
@@ -87,7 +91,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    public void ReleaseTile()
+    private void OnTileMouseReleased()
     {
         if (_clickedTile != null && _targetTile != null)
         {

@@ -1,6 +1,7 @@
 using Data;
 using Entities;
 using Enums;
+using Helpers;
 using UnityEngine;
 using Random = System.Random;
 
@@ -41,7 +42,7 @@ public class Board : MonoBehaviour
             for (var j = 0; j < _height; j++)
             {
                 Tile tile = Instantiate(_tilePrefab, new Vector3(i, j, 0), Quaternion.identity);
-                tile.Init(i, j, this);
+                tile.Init(i, j, transform);
 
                 tile.OnClicked += OnTileClicked;
                 tile.OnMouseEntered += OnTileMouseEntered;
@@ -61,7 +62,9 @@ public class Board : MonoBehaviour
             for (var j = 0; j < _height; j++)
             {
                 GamePiece gamePiece = Instantiate(_gamePiecePrefab, Vector3.zero, Quaternion.identity);
-                gamePiece.Init(GetRandomGamePieceColor(), i, j, _gameDataRepository);
+                gamePiece.Init(GetRandomGamePieceColor(), i, j, _gameDataRepository, transform);
+
+                gamePiece.OnPositionChanged += OnGamePiecePositionChanged;
 
                 _gamePieces[i, j] = gamePiece;
             }
@@ -75,6 +78,11 @@ public class Board : MonoBehaviour
         return _gameDataRepository.Colors[color];
     }
 
+    private void OnGamePiecePositionChanged(GamePiece gamePiece)
+    {
+        _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = gamePiece;
+    }
+
     private void OnTileClicked(Tile tile)
     {
         if (_clickedTile == null)
@@ -85,7 +93,7 @@ public class Board : MonoBehaviour
 
     private void OnTileMouseEntered(Tile tile)
     {
-        if (_clickedTile != null)
+        if (_clickedTile != null && TileHelper.IsNeighbours(_clickedTile, tile))
         {
             _targetTile = tile;
         }
@@ -95,13 +103,19 @@ public class Board : MonoBehaviour
     {
         if (_clickedTile != null && _targetTile != null)
         {
-            SwitchTiles(_clickedTile, _targetTile);
+            SwitchGamePieces(_clickedTile, _targetTile);
         }
-    }
 
-    private void SwitchTiles(Tile clickedTile, Tile targetTile)
-    {
         _clickedTile = null;
         _targetTile = null;
+    }
+
+    private void SwitchGamePieces(Tile clickedTile, Tile targetTile)
+    {
+        GamePiece clickedGamePiece = _gamePieces[clickedTile.Position.x, clickedTile.Position.y];
+        GamePiece targetGamePiece = _gamePieces[targetTile.Position.x, targetTile.Position.y];
+
+        clickedGamePiece.Move(targetTile.Position);
+        targetGamePiece.Move(clickedTile.Position);
     }
 }

@@ -5,21 +5,18 @@ namespace Entities
 {
     public class Tile : MonoBehaviour
     {
+        public Vector2Int Position { get; private set; }
+
         public event Action<Tile> OnClicked;
         public event Action<Tile> OnMouseEntered;
         public event Action OnMouseReleased;
 
-        private Vector2Int _position;
-
-        private Board _board;
-
-        public void Init(int x, int y, Board board)
+        public void Init(int x, int y, Transform parentTransform)
         {
-            _position = new Vector2Int(x, y);
-            _board = board;
+            Position = new Vector2Int(x, y);
 
-            name = $"Tile {_position}";
-            transform.SetParent(board.transform);
+            name = $"Tile {Position}";
+            transform.SetParent(parentTransform);
         }
 
         private void OnMouseDown()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Data;
 using Helpers;
@@ -10,11 +11,25 @@ namespace Entities
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
         private GameDataRepository _gameDataRepository;
-
-        private Vector2Int _position;
         private bool _isMoving;
+        private Vector2Int _position;
 
-        public void Init(Color color, int x, int y, GameDataRepository gameDataRepository)
+        public Vector2Int Position
+        {
+            get => _position;
+            private set
+            {
+                if (_position != value)
+                {
+                    _position = value;
+                    OnPositionChanged?.Invoke(this);
+                }
+            }
+        }
+
+        public event Action<GamePiece> OnPositionChanged;
+
+        public void Init(Color color, int x, int y, GameDataRepository gameDataRepository, Transform parentTransform)
         {
             _gameDataRepository = gameDataRepository;
 
@@ -24,13 +39,14 @@ namespace Entities
             Transform trm = transform;
             trm.position = new Vector3(x, y, 0f);
             trm.rotation = Quaternion.identity;
+            trm.SetParent(parentTransform);
         }
 
-        private void Move(Vector2Int destination, float timeToMove)
+        public void Move(Vector2Int destination)
         {
             if (!_isMoving)
             {
-                StartCoroutine(MoveRoutine(destination, timeToMove));
+                StartCoroutine(MoveRoutine(destination, Constants.TimeToMoveGamePiece));
             }
         }
 
@@ -66,7 +82,7 @@ namespace Entities
 
         private void SetPosition(Vector2Int position)
         {
-            _position = position;
+            Position = position;
         }
 
         private void SetColor(Color color)

@@ -16,5 +16,20 @@ namespace Entities
             name = $"Tile {_position}";
             transform.SetParent(board.transform);
         }
+
+        private void OnMouseDown()
+        {
+            _board.ClickTile(this);
+        }
+
+        private void OnMouseEnter()
+        {
+            _board.DragToTile(this);
+        }
+
+        private void OnMouseUp()
+        {
+            _board.ReleaseTile();
+        }
     }
 }

@@ -26,21 +26,6 @@ namespace Entities
             trm.rotation = Quaternion.identity;
         }
 
-        private void Update()
-        {
-            // Debug
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                Move(new Vector2Int(_position.x + 1, _position.y), Constants.TimeToMoveGamePiece);
-            }
-
-            // Debug
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                Move(new Vector2Int(_position.x - 1, _position.y), Constants.TimeToMoveGamePiece);
-            }
-        }
-
         private void Move(Vector2Int destination, float timeToMove)
         {
             if (!_isMoving)

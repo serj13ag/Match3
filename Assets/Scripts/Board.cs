@@ -20,6 +20,9 @@ public class Board : MonoBehaviour
     private Tile[,] _tiles;
     private GamePiece[,] _gamePieces;
 
+    private Tile _clickedTile;
+    private Tile _targetTile;
+
     public int Width => _width;
     public int Height => _height;
 
@@ -66,5 +69,35 @@ public class Board : MonoBehaviour
         int randomColorIndex = _random.Next(_gameDataRepository.Colors.Count - 1);
         GamePieceColor color = _gamePieceColors[randomColorIndex];
         return _gameDataRepository.Colors[color];
+    }
+
+    public void ClickTile(Tile tile)
+    {
+        if (_clickedTile == null)
+        {
+            _clickedTile = tile;
+        }
+    }
+
+    public void DragToTile(Tile tile)
+    {
+        if (_clickedTile != null)
+        {
+            _targetTile = tile;
+        }
+    }
+
+    public void ReleaseTile()
+    {
+        if (_clickedTile != null && _targetTile != null)
+        {
+            SwitchTiles(_clickedTile, _targetTile);
+        }
+    }
+
+    private void SwitchTiles(Tile clickedTile, Tile targetTile)
+    {
+        _clickedTile = null;
+        _targetTile = null;
     }
 }

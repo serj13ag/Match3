@@ -49,28 +49,20 @@ namespace Entities
             Vector3 startPosition = transform.position;
             Vector3 destinationPosition = new Vector3(destination.x, destination.y, 0f);
 
-            var destinationReached = false;
-            var elapsedTime = 0f;
+            float timeLeft = timeToMove;
 
-            while (!destinationReached)
+            while (timeLeft > 0f)
             {
-                if (Vector3.Distance(transform.position, destinationPosition) < 0.01f)
-                {
-                    destinationReached = true;
-                    transform.position = destinationPosition;
-                    SetPosition(destination);
-                }
-                else
-                {
-                    elapsedTime += Time.deltaTime;
-                    float t = elapsedTime / timeToMove;
+                timeLeft -= Time.deltaTime;
+                float t = (timeToMove - timeLeft) / timeToMove;
 
-                    transform.position = Vector3.Lerp(startPosition, destinationPosition, t);
+                transform.position = Vector3.Lerp(startPosition, destinationPosition, t);
 
-                    yield return new WaitForEndOfFrame();
-                }
+                yield return new WaitForEndOfFrame();
             }
 
+            SetPosition(destination);
+            transform.position = destinationPosition;
             _isMoving = false;
         }
 

@@ -45,8 +45,7 @@ public class Board : MonoBehaviour
             for (var j = 0; j < _height; j++)
             {
                 GamePiece gamePiece = Instantiate(_gamePiecePrefab, Vector3.zero, Quaternion.identity);
-                gamePiece.Init(GetRandomGamePieceColor(random, gameDataRepository));
-                gamePiece.MoveToPosition(i, j);
+                gamePiece.Init(GetRandomGamePieceColor(random, gameDataRepository), i, j);
 
                 _gamePieces[i, j] = gamePiece;
             }

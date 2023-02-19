@@ -2,6 +2,8 @@
 
 public class CameraController : MonoBehaviour
 {
+    private const float CameraPositionZ = -10f;
+
     [SerializeField] private Camera _camera;
 
     [SerializeField] private int _borderSize;
@@ -17,7 +19,7 @@ public class CameraController : MonoBehaviour
         float boardCenterX = (boardWidth - 1) / 2f;
         float boardCenterY = (boardHeight - 1) / 2f;
 
-        _camera.transform.position = new Vector3(boardCenterX, boardCenterY, Constants.CameraPositionZ);
+        _camera.transform.position = new Vector3(boardCenterX, boardCenterY, CameraPositionZ);
     }
 
     private void SetCameraAspectRatio(int boardWidth, int boardHeight)

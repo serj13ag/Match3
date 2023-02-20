@@ -58,7 +58,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    public void FillBoardWithRandomGamePieces()
+    public void FillBoard()
     {
         _gamePieces = new GamePiece[_width, _height];
 
@@ -66,14 +66,27 @@ public class Board : MonoBehaviour
         {
             for (var j = 0; j < _height; j++)
             {
-                GamePiece gamePiece = Instantiate(_gamePiecePrefab, Vector3.zero, Quaternion.identity);
-                gamePiece.Init(GetRandomGamePieceColor(), i, j, _gameDataRepository, transform);
+                GamePiece gamePiece = CreateRandomGamePieceAt(i, j);
 
-                gamePiece.OnPositionChanged += OnGamePiecePositionChanged;
-
-                _gamePieces[i, j] = gamePiece;
+                while (HasMatchAtFillBoard(new Vector2Int(i, j)))
+                {
+                    ClearGamePieceAt(gamePiece.Position);
+                    gamePiece = CreateRandomGamePieceAt(i, j);
+                }
             }
         }
+    }
+
+    private GamePiece CreateRandomGamePieceAt(int x, int y)
+    {
+        GamePiece gamePiece = Instantiate(_gamePiecePrefab, Vector3.zero, Quaternion.identity);
+        gamePiece.Init(GetRandomGamePieceColor(), x, y, _gameDataRepository, transform);
+
+        gamePiece.OnPositionChanged += OnGamePiecePositionChanged;
+
+        _gamePieces[x, y] = gamePiece;
+
+        return gamePiece;
     }
 
     private void OnGamePiecePositionChanged(GamePiece gamePiece)
@@ -103,8 +116,8 @@ public class Board : MonoBehaviour
     {
         if (_clickedTile != null
             && _targetTile != null
-            && HasGamePieceAtTile(_clickedTile)
-            && HasGamePieceAtTile(_targetTile))
+            && HasGamePieceAt(_clickedTile.Position)
+            && HasGamePieceAt(_targetTile.Position))
         {
             SwitchGamePieces(_clickedTile, _targetTile);
         }
@@ -152,6 +165,49 @@ public class Board : MonoBehaviour
         }
     }
 
+    private void RevertMovedGamePieces(GamePiece[] movedGamePieces)
+    {
+        _revertingPieces = true;
+        movedGamePieces[0].Move(movedGamePieces[1].Position);
+        movedGamePieces[1].Move(movedGamePieces[0].Position);
+    }
+
+    private void ClearGamePieces(IEnumerable<GamePiece> gamePieces)
+    {
+        foreach (GamePiece gamePiece in gamePieces)
+        {
+            ClearGamePieceAt(gamePiece.Position);
+        }
+    }
+
+    private void ClearGamePieceAt(Vector2Int position)
+    {
+        GamePiece gamePiece = _gamePieces[position.x, position.y];
+        _gamePieces[position.x, position.y] = null;
+        Destroy(gamePiece.gameObject);
+    }
+
+    private GamePieceColor GetRandomGamePieceColor()
+    {
+        int randomColorIndex = _random.Next(_gameDataRepository.Colors.Count - 1);
+        return _gamePieceColors[randomColorIndex];
+    }
+
+    private bool HasMatchAtFillBoard(Vector2Int position)
+    {
+        if (TryFindMatchesByDirection(position, Vector2Int.left, out _, Constants.MinMatchesCount))
+        {
+            return true;
+        }
+
+        if (TryFindMatchesByDirection(position, Vector2Int.down, out _, Constants.MinMatchesCount))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     private bool HasMatches(IEnumerable<GamePiece> gamePieces, out HashSet<GamePiece> allMatches)
     {
         allMatches = new HashSet<GamePiece>();
@@ -165,28 +221,6 @@ public class Board : MonoBehaviour
         }
 
         return allMatches.Count > 0;
-    }
-
-    private void RevertMovedGamePieces(GamePiece[] movedGamePieces)
-    {
-        _revertingPieces = true;
-        movedGamePieces[0].Move(movedGamePieces[1].Position);
-        movedGamePieces[1].Move(movedGamePieces[0].Position);
-    }
-
-    private void ClearGamePieces(IEnumerable<GamePiece> gamePieces)
-    {
-        foreach (GamePiece gamePiece in gamePieces)
-        {
-            _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = null;
-            Destroy(gamePiece.gameObject);
-        }
-    }
-
-    private GamePieceColor GetRandomGamePieceColor()
-    {
-        int randomColorIndex = _random.Next(_gameDataRepository.Colors.Count - 1);
-        return _gamePieceColors[randomColorIndex];
     }
 
     private bool TryFindMatches(Vector2Int startPosition, int minMatchesCount, out HashSet<GamePiece> matches)
@@ -282,32 +316,14 @@ public class Board : MonoBehaviour
         return matches.Count >= minMatchesCount;
     }
 
-    private bool HasGamePieceAtTile(Tile targetTile)
+    private bool HasGamePieceAt(Vector2Int position)
     {
-        return _gamePieces[targetTile.Position.x, targetTile.Position.y] != null;
+        return _gamePieces[position.x, position.y] != null;
     }
 
     private bool IsOutOfBounds(Vector2Int position)
     {
         return position.x < 0 || position.x > _width - 1 ||
                position.y < 0 || position.y > _height - 1;
-    }
-
-    private void DebugHighlightTiles(int x, int y)
-    {
-        if (TryFindMatches(new Vector2Int(x, y), Constants.MinMatchesCount, out HashSet<GamePiece> matches))
-        {
-            foreach (var gamePiece in matches)
-            {
-                DebugHighlightTileOn(gamePiece.Position.x, gamePiece.Position.y,
-                    gamePiece.GetComponent<SpriteRenderer>().color);
-            }
-        }
-    }
-
-    private void DebugHighlightTileOn(int x, int y, Color color)
-    {
-        SpriteRenderer spriteRenderer = _tiles[x, y].GetComponent<SpriteRenderer>();
-        spriteRenderer.color = color;
     }
 }

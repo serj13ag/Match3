@@ -22,6 +22,6 @@ public class MainController : MonoBehaviour
         
         _board.SetupTiles();
         _cameraController.SetupCamera(_board.Width, _board.Height);
-        _board.FillBoardWithRandomGamePieces();
+        _board.FillBoard();
     }
 }

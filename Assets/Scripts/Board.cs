@@ -101,7 +101,10 @@ public class Board : MonoBehaviour
 
     private void OnTileMouseReleased()
     {
-        if (_clickedTile != null && _targetTile != null)
+        if (_clickedTile != null
+            && _targetTile != null
+            && HasGamePieceAtTile(_clickedTile)
+            && HasGamePieceAtTile(_targetTile))
         {
             SwitchGamePieces(_clickedTile, _targetTile);
         }
@@ -138,12 +141,9 @@ public class Board : MonoBehaviour
                 _movedPieces.Pop(),
             };
 
-            if (HasMatches(movedGamePieces))
+            if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
             {
-                foreach (GamePiece piece in movedGamePieces)
-                {
-                    DebugHighlightTiles(piece.Position.x, piece.Position.y);
-                }
+                ClearGamePieces(allMatches);
             }
             else
             {
@@ -152,17 +152,19 @@ public class Board : MonoBehaviour
         }
     }
 
-    private bool HasMatches(IEnumerable<GamePiece> gamePieces)
+    private bool HasMatches(IEnumerable<GamePiece> gamePieces, out HashSet<GamePiece> allMatches)
     {
+        allMatches = new HashSet<GamePiece>();
+
         foreach (GamePiece gamePiece in gamePieces)
         {
-            if (TryFindMatches(gamePiece.Position, 3, out _))
+            if (TryFindMatches(gamePiece.Position, 3, out HashSet<GamePiece> matches))
             {
-                return true;
+                allMatches.UnionWith(matches);
             }
         }
 
-        return false;
+        return allMatches.Count > 0;
     }
 
     private void RevertMovedGamePieces(GamePiece[] movedGamePieces)
@@ -170,6 +172,15 @@ public class Board : MonoBehaviour
         _revertingPieces = true;
         movedGamePieces[0].Move(movedGamePieces[1].Position);
         movedGamePieces[1].Move(movedGamePieces[0].Position);
+    }
+
+    private void ClearGamePieces(IEnumerable<GamePiece> gamePieces)
+    {
+        foreach (GamePiece gamePiece in gamePieces)
+        {
+            _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = null;
+            Destroy(gamePiece.gameObject);
+        }
     }
 
     private GamePieceColor GetRandomGamePieceColor()
@@ -255,17 +266,25 @@ public class Board : MonoBehaviour
 
             GamePiece gamePieceToCheck = _gamePieces[nextPosition.x, nextPosition.y];
 
-            if (gamePieceToCheck.Color == startGamePiece.Color)
-            {
-                matches.Add(gamePieceToCheck);
-            }
-            else
+            if (gamePieceToCheck == null)
             {
                 break;
             }
+
+            if (gamePieceToCheck.Color != startGamePiece.Color)
+            {
+                break;
+            }
+
+            matches.Add(gamePieceToCheck);
         }
 
         return matches.Count >= minMatchesCount;
+    }
+
+    private bool HasGamePieceAtTile(Tile targetTile)
+    {
+        return _gamePieces[targetTile.Position.x, targetTile.Position.y] != null;
     }
 
     private bool IsOutOfBounds(Vector2Int position)

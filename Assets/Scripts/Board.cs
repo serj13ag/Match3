@@ -27,10 +27,7 @@ public class Board : MonoBehaviour
     private Stack<GamePiece> _movedPieces;
     private bool _revertingPieces;
 
-    private Vector2Int BoardSize => new Vector2Int(_width, _height);
-
-    public int Width => _width;
-    public int Height => _height;
+    public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
     public void Init(GameDataRepository gameDataRepository, Random random)
     {

@@ -8,26 +8,26 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private int _borderSize;
 
-    public void SetupCamera(int boardWidth, int boardHeight)
+    public void SetupCamera(Vector2Int boardSize)
     {
-        SetCameraPosition(boardWidth, boardHeight);
-        SetCameraAspectRatio(boardWidth, boardHeight);
+        SetCameraPosition(boardSize);
+        SetCameraAspectRatio(boardSize);
     }
 
-    private void SetCameraPosition(int boardWidth, int boardHeight)
+    private void SetCameraPosition(Vector2Int boardSize)
     {
-        float boardCenterX = (boardWidth - 1) / 2f;
-        float boardCenterY = (boardHeight - 1) / 2f;
+        float boardCenterX = (boardSize.x - 1) / 2f;
+        float boardCenterY = (boardSize.y - 1) / 2f;
 
         _camera.transform.position = new Vector3(boardCenterX, boardCenterY, CameraPositionZ);
     }
 
-    private void SetCameraAspectRatio(int boardWidth, int boardHeight)
+    private void SetCameraAspectRatio(Vector2Int boardSize)
     {
         float screenAspectRatio = (float)Screen.width / Screen.height;
 
-        float verticalSize = boardHeight / 2f + _borderSize;
-        float horizontalSize = (boardWidth / 2f + _borderSize) / screenAspectRatio;
+        float verticalSize = boardSize.y / 2f + _borderSize;
+        float horizontalSize = (boardSize.x / 2f + _borderSize) / screenAspectRatio;
 
         _camera.orthographicSize = Mathf.Max(verticalSize, horizontalSize);
     }

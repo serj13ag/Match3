@@ -15,6 +15,8 @@ namespace Entities
         private bool _isMoving;
         private Vector2Int _position;
 
+        public bool IsLastMoveMadeByPlayer { get; private set; }
+
         public GamePieceColor Color { get; private set; }
 
         public Vector2Int Position
@@ -46,10 +48,16 @@ namespace Entities
             trm.SetParent(parentTransform);
         }
 
-        public void Move(Vector2Int destination)
+        public void MoveDown(int distance)
+        {
+            Move(new Vector2Int(Position.x, Position.y - distance));
+        }
+
+        public void Move(Vector2Int destination, bool movedByPlayerInput = false)
         {
             if (!_isMoving)
             {
+                IsLastMoveMadeByPlayer = movedByPlayerInput;
                 StartCoroutine(MoveRoutine(destination, Constants.TimeToMoveGamePiece));
             }
         }

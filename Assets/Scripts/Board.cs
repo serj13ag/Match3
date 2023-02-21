@@ -25,7 +25,6 @@ public class Board : MonoBehaviour
     private Tile _clickedTile;
     private Tile _targetTile;
     private Stack<GamePiece> _movedPieces;
-    private bool _revertingPieces;
 
     public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
@@ -92,7 +91,10 @@ public class Board : MonoBehaviour
     {
         _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = gamePiece;
 
-        HandleMovedPieces(gamePiece);
+        if (gamePiece.IsLastMoveMadeByPlayer)
+        {
+            HandlePieceMovedByPlayer(gamePiece);
+        }
     }
 
     private void OnTileClicked(Tile tile)
@@ -115,8 +117,8 @@ public class Board : MonoBehaviour
     {
         if (_clickedTile != null
             && _targetTile != null
-            && HasGamePieceAt(_clickedTile.Position)
-            && HasGamePieceAt(_targetTile.Position))
+            && TryGetGamePieceAt(_clickedTile.Position, out _)
+            && TryGetGamePieceAt(_targetTile.Position, out _))
         {
             SwitchGamePieces(_clickedTile, _targetTile);
         }
@@ -130,23 +132,16 @@ public class Board : MonoBehaviour
         GamePiece clickedGamePiece = _gamePieces[clickedTile.Position.x, clickedTile.Position.y];
         GamePiece targetGamePiece = _gamePieces[targetTile.Position.x, targetTile.Position.y];
 
-        clickedGamePiece.Move(targetTile.Position);
-        targetGamePiece.Move(clickedTile.Position);
+        clickedGamePiece.Move(targetTile.Position, true);
+        targetGamePiece.Move(clickedTile.Position, true);
     }
 
-    private void HandleMovedPieces(GamePiece gamePiece)
+    private void HandlePieceMovedByPlayer(GamePiece gamePiece)
     {
         _movedPieces.Push(gamePiece);
 
         if (_movedPieces.Count == 2)
         {
-            if (_revertingPieces)
-            {
-                _movedPieces.Clear();
-                _revertingPieces = false;
-                return;
-            }
-
             var movedGamePieces = new GamePiece[]
             {
                 _movedPieces.Pop(),
@@ -156,6 +151,7 @@ public class Board : MonoBehaviour
             if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
             {
                 ClearGamePieces(allMatches);
+                CollapseColumns(BoardHelper.GetColumns(allMatches));
             }
             else
             {
@@ -166,7 +162,6 @@ public class Board : MonoBehaviour
 
     private void RevertMovedGamePieces(GamePiece[] movedGamePieces)
     {
-        _revertingPieces = true;
         movedGamePieces[0].Move(movedGamePieces[1].Position);
         movedGamePieces[1].Move(movedGamePieces[0].Position);
     }
@@ -186,15 +181,47 @@ public class Board : MonoBehaviour
         Destroy(gamePiece.gameObject);
     }
 
+    private void CollapseColumns(HashSet<int> columns)
+    {
+        foreach (int column in columns)
+        {
+            CollapseColumn(column);
+        }
+    }
+
+    private void CollapseColumn(int column)
+    {
+        var encounteredEmptyTiles = 0;
+
+        for (var row = 0; row < _height; row++)
+        {
+            Vector2Int position = new Vector2Int(column, row);
+
+            if (TryGetGamePieceAt(position, out GamePiece gamePiece))
+            {
+                if (encounteredEmptyTiles > 0)
+                {
+                    gamePiece.MoveDown(encounteredEmptyTiles);
+                }
+            }
+            else
+            {
+                encounteredEmptyTiles++;
+            }
+        }
+    }
+
     private GamePieceColor GetRandomGamePieceColor()
     {
         int randomColorIndex = _random.Next(_gameDataRepository.Colors.Count - 1);
         return _gamePieceColors[randomColorIndex];
     }
 
-    private bool HasGamePieceAt(Vector2Int position)
+    private bool TryGetGamePieceAt(Vector2Int position, out GamePiece gamePiece)
     {
-        return _gamePieces[position.x, position.y] != null;
+        gamePiece = _gamePieces[position.x, position.y];
+
+        return gamePiece != null;
     }
 
     private bool HasMatches(IEnumerable<GamePiece> gamePieces, out HashSet<GamePiece> allMatches)

@@ -27,6 +27,8 @@ public class Board : MonoBehaviour
     private Stack<GamePiece> _movedPieces;
     private bool _revertingPieces;
 
+    private Vector2Int BoardSize => new Vector2Int(_width, _height);
+
     public int Width => _width;
     public int Height => _height;
 
@@ -68,7 +70,7 @@ public class Board : MonoBehaviour
             {
                 GamePiece gamePiece = CreateRandomGamePieceAt(i, j);
 
-                while (HasMatchAtFillBoard(new Vector2Int(i, j)))
+                while (GamePieceMatchHelper.HasMatchAtFillBoard(new Vector2Int(i, j), _gamePieces, BoardSize))
                 {
                     ClearGamePieceAt(gamePiece.Position);
                     gamePiece = CreateRandomGamePieceAt(i, j);
@@ -193,19 +195,9 @@ public class Board : MonoBehaviour
         return _gamePieceColors[randomColorIndex];
     }
 
-    private bool HasMatchAtFillBoard(Vector2Int position)
+    private bool HasGamePieceAt(Vector2Int position)
     {
-        if (TryFindMatchesByDirection(position, Vector2Int.left, out _, Constants.MinMatchesCount))
-        {
-            return true;
-        }
-
-        if (TryFindMatchesByDirection(position, Vector2Int.down, out _, Constants.MinMatchesCount))
-        {
-            return true;
-        }
-
-        return false;
+        return _gamePieces[position.x, position.y] != null;
     }
 
     private bool HasMatches(IEnumerable<GamePiece> gamePieces, out HashSet<GamePiece> allMatches)
@@ -214,116 +206,13 @@ public class Board : MonoBehaviour
 
         foreach (GamePiece gamePiece in gamePieces)
         {
-            if (TryFindMatches(gamePiece.Position, 3, out HashSet<GamePiece> matches))
+            if (GamePieceMatchHelper.TryFindMatches(gamePiece.Position, 3, _gamePieces,
+                    BoardSize, out HashSet<GamePiece> matches))
             {
                 allMatches.UnionWith(matches);
             }
         }
 
         return allMatches.Count > 0;
-    }
-
-    private bool TryFindMatches(Vector2Int startPosition, int minMatchesCount, out HashSet<GamePiece> matches)
-    {
-        matches = new HashSet<GamePiece>();
-
-        if (TryFindHorizontalMatches(startPosition, out HashSet<GamePiece> horizontalMatches, minMatchesCount))
-        {
-            matches.UnionWith(horizontalMatches);
-        }
-
-        if (TryFindVerticalMatches(startPosition, out HashSet<GamePiece> verticalMatches, minMatchesCount))
-        {
-            matches.UnionWith(verticalMatches);
-        }
-
-        return matches.Count >= minMatchesCount;
-    }
-
-    private bool TryFindHorizontalMatches(Vector2Int startPosition, out HashSet<GamePiece> horizontalMatches,
-        int minMatchesCount)
-    {
-        horizontalMatches = new HashSet<GamePiece>();
-
-        if (TryFindMatchesByDirection(startPosition, Vector2Int.right, out HashSet<GamePiece> upMatches, 2))
-        {
-            horizontalMatches.UnionWith(upMatches);
-        }
-
-        if (TryFindMatchesByDirection(startPosition, Vector2Int.left, out HashSet<GamePiece> downMatches, 2))
-        {
-            horizontalMatches.UnionWith(downMatches);
-        }
-
-        return horizontalMatches.Count >= minMatchesCount;
-    }
-
-    private bool TryFindVerticalMatches(Vector2Int startPosition, out HashSet<GamePiece> verticalMatches,
-        int minMatchesCount)
-    {
-        verticalMatches = new HashSet<GamePiece>();
-
-        if (TryFindMatchesByDirection(startPosition, Vector2Int.up, out HashSet<GamePiece> upMatches, 2))
-        {
-            verticalMatches.UnionWith(upMatches);
-        }
-
-        if (TryFindMatchesByDirection(startPosition, Vector2Int.down, out HashSet<GamePiece> downMatches, 2))
-        {
-            verticalMatches.UnionWith(downMatches);
-        }
-
-        return verticalMatches.Count >= minMatchesCount;
-    }
-
-    private bool TryFindMatchesByDirection(Vector2Int startPosition, Vector2Int searchDirection,
-        out HashSet<GamePiece> matches, int minMatchesCount)
-    {
-        matches = new HashSet<GamePiece>();
-
-        GamePiece startGamePiece = _gamePieces[startPosition.x, startPosition.y];
-        matches.Add(startGamePiece);
-
-        Vector2Int nextPosition = Vector2Int.zero;
-
-        int maxSearches = Mathf.Max(_width, _height);
-
-        for (var i = 0; i < maxSearches - 1; i++)
-        {
-            nextPosition.x = startPosition.x + searchDirection.x * i;
-            nextPosition.y = startPosition.y + searchDirection.y * i;
-
-            if (IsOutOfBounds(nextPosition))
-            {
-                break;
-            }
-
-            GamePiece gamePieceToCheck = _gamePieces[nextPosition.x, nextPosition.y];
-
-            if (gamePieceToCheck == null)
-            {
-                break;
-            }
-
-            if (gamePieceToCheck.Color != startGamePiece.Color)
-            {
-                break;
-            }
-
-            matches.Add(gamePieceToCheck);
-        }
-
-        return matches.Count >= minMatchesCount;
-    }
-
-    private bool HasGamePieceAt(Vector2Int position)
-    {
-        return _gamePieces[position.x, position.y] != null;
-    }
-
-    private bool IsOutOfBounds(Vector2Int position)
-    {
-        return position.x < 0 || position.x > _width - 1 ||
-               position.y < 0 || position.y > _height - 1;
     }
 }

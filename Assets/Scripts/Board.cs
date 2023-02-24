@@ -80,11 +80,17 @@ public class Board : MonoBehaviour
         GamePiece gamePiece = Instantiate(_gamePiecePrefab, Vector3.zero, Quaternion.identity);
         gamePiece.Init(GetRandomGamePieceColor(), x, y, _gameDataRepository, transform);
 
+        gamePiece.OnStartMoving += OnGamePieceStartMoving;
         gamePiece.OnPositionChanged += OnGamePiecePositionChanged;
 
         _gamePieces[x, y] = gamePiece;
 
         return gamePiece;
+    }
+
+    private void OnGamePieceStartMoving(GamePiece gamePiece)
+    {
+        _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = null;
     }
 
     private void OnGamePiecePositionChanged(GamePiece gamePiece)
@@ -177,7 +183,12 @@ public class Board : MonoBehaviour
     private void ClearGamePieceAt(Vector2Int position)
     {
         GamePiece gamePiece = _gamePieces[position.x, position.y];
+
         _gamePieces[position.x, position.y] = null;
+
+        gamePiece.OnStartMoving -= OnGamePieceStartMoving;
+        gamePiece.OnPositionChanged -= OnGamePiecePositionChanged;
+
         Destroy(gamePiece.gameObject);
     }
 

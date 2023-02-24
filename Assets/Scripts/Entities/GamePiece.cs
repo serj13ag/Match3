@@ -33,6 +33,7 @@ namespace Entities
         }
 
         public event Action<GamePiece> OnPositionChanged;
+        public event Action<GamePiece> OnStartMoving;
 
         public void Init(GamePieceColor color, int x, int y, GameDataRepository gameDataRepository,
             Transform parentTransform)
@@ -58,6 +59,7 @@ namespace Entities
             if (!_isMoving)
             {
                 IsLastMoveMadeByPlayer = movedByPlayerInput;
+                OnStartMoving?.Invoke(this);
                 StartCoroutine(MoveRoutine(destination, Constants.TimeToMoveGamePiece));
             }
         }

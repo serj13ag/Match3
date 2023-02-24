@@ -173,7 +173,7 @@ public class Board : MonoBehaviour
 
             if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
             {
-                _collapsedGamePieces = ClearAndCollapse(allMatches);
+                ClearAndCollapseAndRefill(allMatches);
             }
             else
             {
@@ -198,7 +198,11 @@ public class Board : MonoBehaviour
 
             if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
             {
-                _collapsedGamePieces = ClearAndCollapse(allMatches);
+                ClearAndCollapseAndRefill(allMatches);
+            }
+            else
+            {
+                FillBoard();
             }
         }
     }
@@ -209,10 +213,16 @@ public class Board : MonoBehaviour
         movedGamePieces[1].Move(movedGamePieces[0].Position);
     }
 
-    private int ClearAndCollapse(HashSet<GamePiece> allMatches)
+    private void ClearAndCollapseAndRefill(HashSet<GamePiece> allMatches)
     {
         ClearGamePieces(allMatches);
-        return CollapseColumns(BoardHelper.GetColumnIndexes(allMatches));
+
+        _collapsedGamePieces = CollapseColumns(BoardHelper.GetColumnIndexes(allMatches));
+
+        if (_collapsedGamePieces == 0)
+        {
+            FillBoard();
+        }
     }
 
     private void ClearGamePieces(IEnumerable<GamePiece> gamePieces)

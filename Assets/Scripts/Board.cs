@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data;
+using DTO;
 using Entities;
 using Enums;
 using Helpers;
@@ -157,7 +158,7 @@ public class Board : MonoBehaviour
             if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
             {
                 ClearGamePieces(allMatches);
-                CollapseColumns(BoardHelper.GetColumns(allMatches));
+                CollapseColumns(BoardHelper.GetColumnIndexes(allMatches));
             }
             else
             {
@@ -192,17 +193,25 @@ public class Board : MonoBehaviour
         Destroy(gamePiece.gameObject);
     }
 
-    private void CollapseColumns(HashSet<int> columns)
+    private void CollapseColumns(HashSet<int> columnIndexes)
     {
-        foreach (int column in columns)
+        var gamePiecesToMoveData = new List<GamePieceMoveData>();
+
+        foreach (int columnIndex in columnIndexes)
         {
-            CollapseColumn(column);
+            gamePiecesToMoveData.AddRange(GetGamePiecesToCollapseMoveData(columnIndex));
+        }
+
+        foreach (GamePieceMoveData gamePieceMoveData in gamePiecesToMoveData)
+        {
+            gamePieceMoveData.GamePiece.Move(gamePieceMoveData.Direction, gamePieceMoveData.Distance);
         }
     }
 
-    private void CollapseColumn(int column)
+    private List<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
     {
         var encounteredEmptyTiles = 0;
+        var moveDataEntries = new List<GamePieceMoveData>();
 
         for (var row = 0; row < _height; row++)
         {
@@ -212,7 +221,8 @@ public class Board : MonoBehaviour
             {
                 if (encounteredEmptyTiles > 0)
                 {
-                    gamePiece.MoveDown(encounteredEmptyTiles);
+                    GamePieceMoveData gamePieceMoveData = new GamePieceMoveData(gamePiece, Vector2Int.down, encounteredEmptyTiles);
+                    moveDataEntries.Add(gamePieceMoveData);
                 }
             }
             else
@@ -220,6 +230,8 @@ public class Board : MonoBehaviour
                 encounteredEmptyTiles++;
             }
         }
+
+        return moveDataEntries;
     }
 
     private GamePieceColor GetRandomGamePieceColor()

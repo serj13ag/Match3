@@ -49,9 +49,10 @@ namespace Entities
             trm.SetParent(parentTransform);
         }
 
-        public void MoveDown(int distance)
+        public void Move(Vector2Int direction, int distance)
         {
-            Move(new Vector2Int(Position.x, Position.y - distance));
+            Vector2Int destination = Position + direction * distance;
+            Move(destination);
         }
 
         public void Move(Vector2Int destination, bool movedByPlayerInput = false)

@@ -5,7 +5,7 @@ namespace Helpers
 {
     public static class BoardHelper
     {
-        public static HashSet<int> GetColumns(HashSet<GamePiece> gamePieces)
+        public static HashSet<int> GetColumnIndexes(HashSet<GamePiece> gamePieces)
         {
             var columns = new HashSet<int>();
 

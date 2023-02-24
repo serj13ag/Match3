@@ -58,20 +58,28 @@ public class Board : MonoBehaviour
         }
     }
 
-    public void FillBoard()
+    public void SetupGamePieces()
     {
         _gamePieces = new GamePiece[_width, _height];
 
+        FillBoard();
+    }
+
+    private void FillBoard()
+    {
         for (var i = 0; i < _width; i++)
         {
             for (var j = 0; j < _height; j++)
             {
-                GamePiece gamePiece = CreateRandomGamePieceAt(i, j);
-
-                while (GamePieceMatchHelper.HasMatchAtFillBoard(new Vector2Int(i, j), _gamePieces, BoardSize))
+                if (_gamePieces[i, j] == null)
                 {
-                    ClearGamePieceAt(gamePiece.Position);
-                    gamePiece = CreateRandomGamePieceAt(i, j);
+                    GamePiece gamePiece = CreateRandomGamePieceAt(i, j);
+
+                    while (GamePieceMatchHelper.HasMatchAtFillBoard(new Vector2Int(i, j), _gamePieces, BoardSize))
+                    {
+                        ClearGamePieceAt(gamePiece.Position);
+                        gamePiece = CreateRandomGamePieceAt(i, j);
+                    }
                 }
             }
         }

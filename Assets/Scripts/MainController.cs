@@ -19,9 +19,9 @@ public class MainController : MonoBehaviour
         _gameDataRepository = new GameDataRepository(_colorData, _moveData);
 
         _board.Init(_gameDataRepository, _random);
-        
+
         _board.SetupTiles();
         _cameraController.SetupCamera(_board.BoardSize);
-        _board.FillBoard();
+        _board.SetupGamePieces();
     }
 }

@@ -26,6 +26,7 @@ public class Board : MonoBehaviour
     private Tile _clickedTile;
     private Tile _targetTile;
     private Stack<GamePiece> _movedPieces;
+    private int _collapsedGamePieces;
 
     public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
@@ -102,6 +103,13 @@ public class Board : MonoBehaviour
         {
             HandlePieceMovedByPlayer(gamePiece);
         }
+        else
+        {
+            if (_collapsedGamePieces > 0)
+            {
+                HandlePieceCollapsed(gamePiece);
+            }
+        }
     }
 
     private void OnTileClicked(Tile tile)
@@ -157,8 +165,7 @@ public class Board : MonoBehaviour
 
             if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
             {
-                ClearGamePieces(allMatches);
-                CollapseColumns(BoardHelper.GetColumnIndexes(allMatches));
+                _collapsedGamePieces = ClearAndCollapse(allMatches);
             }
             else
             {
@@ -167,10 +174,37 @@ public class Board : MonoBehaviour
         }
     }
 
+    private void HandlePieceCollapsed(GamePiece gamePiece)
+    {
+        _movedPieces.Push(gamePiece);
+
+        if (_movedPieces.Count == _collapsedGamePieces)
+        {
+            _collapsedGamePieces = 0;
+
+            var movedGamePieces = new List<GamePiece>();
+            while (_movedPieces.Count > 0)
+            {
+                movedGamePieces.Add(_movedPieces.Pop());
+            }
+
+            if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
+            {
+                _collapsedGamePieces = ClearAndCollapse(allMatches);
+            }
+        }
+    }
+
     private void RevertMovedGamePieces(GamePiece[] movedGamePieces)
     {
         movedGamePieces[0].Move(movedGamePieces[1].Position);
         movedGamePieces[1].Move(movedGamePieces[0].Position);
+    }
+
+    private int ClearAndCollapse(HashSet<GamePiece> allMatches)
+    {
+        ClearGamePieces(allMatches);
+        return CollapseColumns(BoardHelper.GetColumnIndexes(allMatches));
     }
 
     private void ClearGamePieces(IEnumerable<GamePiece> gamePieces)
@@ -193,7 +227,7 @@ public class Board : MonoBehaviour
         Destroy(gamePiece.gameObject);
     }
 
-    private void CollapseColumns(HashSet<int> columnIndexes)
+    private int CollapseColumns(HashSet<int> columnIndexes)
     {
         var gamePiecesToMoveData = new List<GamePieceMoveData>();
 
@@ -206,6 +240,8 @@ public class Board : MonoBehaviour
         {
             gamePieceMoveData.GamePiece.Move(gamePieceMoveData.Direction, gamePieceMoveData.Distance);
         }
+
+        return gamePiecesToMoveData.Count;
     }
 
     private List<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
@@ -221,7 +257,8 @@ public class Board : MonoBehaviour
             {
                 if (encounteredEmptyTiles > 0)
                 {
-                    GamePieceMoveData gamePieceMoveData = new GamePieceMoveData(gamePiece, Vector2Int.down, encounteredEmptyTiles);
+                    GamePieceMoveData gamePieceMoveData =
+                        new GamePieceMoveData(gamePiece, Vector2Int.down, encounteredEmptyTiles);
                     moveDataEntries.Add(gamePieceMoveData);
                 }
             }

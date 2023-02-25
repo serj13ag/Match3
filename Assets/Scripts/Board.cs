@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Commands;
 using Data;
@@ -296,36 +295,29 @@ public class Board : MonoBehaviour
 
     private List<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
     {
-        var stack = new Stack<int>();
+        var availableRows = new Queue<int>();
         var moveDataEntries = new List<GamePieceMoveData>();
 
         for (var row = 0; row < _height; row++)
         {
             Vector2Int position = new Vector2Int(column, row);
-
-            var distance = 0;
-            
             if (TryGetGamePieceAt(position, out GamePiece gamePiece))
             {
-                distance = stack.Count > 0
-                    ? row - stack.Pop()
+                int distanceToMove = availableRows.Count > 0
+                    ? row - availableRows.Dequeue()
                     : 0;
 
-                GamePieceMoveData gamePieceMoveData =
-                    new GamePieceMoveData(gamePiece, Vector2Int.down, distance);
-                moveDataEntries.Add(gamePieceMoveData);
-                
-                if (distance > 0)
+                if (distanceToMove > 0)
                 {
-                    stack.Push(row);
+                    GamePieceMoveData gamePieceMoveData =
+                        new GamePieceMoveData(gamePiece, Vector2Int.down, distanceToMove);
+                    moveDataEntries.Add(gamePieceMoveData);
+                    availableRows.Enqueue(row);
                 }
             }
-            else
+            else if (_tiles[column, row].TileType != TileType.Obstacle)
             {
-                if (_tiles[column, row].TileType != TileType.Obstacle)
-                {
-                    stack.Push(row);
-                }
+                availableRows.Enqueue(row);
             }
         }
 

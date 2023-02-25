@@ -1,11 +1,15 @@
 using System;
+using Enums;
 using UnityEngine;
 
 namespace Entities
 {
     public class Tile : MonoBehaviour
     {
+        [SerializeField] private TileType _tileType = TileType.Normal;
+
         public Vector2Int Position { get; private set; }
+        public TileType TileType => _tileType;
 
         public event Action<Tile> OnClicked;
         public event Action<Tile> OnMouseEntered;

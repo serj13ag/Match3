@@ -4,5 +4,6 @@
     {
         Normal,
         Obstacle,
+        Breakable,
     }
 }

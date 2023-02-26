@@ -21,3 +21,19 @@ MonoBehaviour:
     X: 4
     Y: 4
     Z: 0
+  - TilePrefab: {fileID: 8639118720009340608, guid: 3f9cdbdd3bf040c47a399c739beb7578, type: 3}
+    X: 1
+    Y: 3
+    Z: 0
+  - TilePrefab: {fileID: 8639118720009340608, guid: 3f9cdbdd3bf040c47a399c739beb7578, type: 3}
+    X: 5
+    Y: 3
+    Z: 0
+  - TilePrefab: {fileID: 8639118720009340608, guid: 16f7180f492848a4382ba108027a8688, type: 3}
+    X: 1
+    Y: 4
+    Z: 0
+  - TilePrefab: {fileID: 8639118720009340608, guid: 16f7180f492848a4382ba108027a8688, type: 3}
+    X: 5
+    Y: 4
+    Z: 0

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8639118720009340608}
   - component: {fileID: 7584967224322675454}
   m_Layer: 0
-  m_Name: TileNormal
+  m_Name: TileObstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,8 +75,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 91501a398367f96449195ac4c6140bc1, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 318afb6e1ecb8244884db637b28dd3f9, type: 3}
+  m_Color: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -98,6 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72603b2481979794b9b2314197f84e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tileType: 1
+  _spriteRenderer: {fileID: 1908415108861199717}
+  _matchesTillBreak: 0
+  _breakableSprites: []
 --- !u!61 &7584967224322675454
 BoxCollider2D:
   m_ObjectHideFlags: 0

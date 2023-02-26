@@ -242,17 +242,18 @@ public class Board : MonoBehaviour
 
     private void ClearAndCollapseAndRefill(HashSet<GamePiece> allMatches)
     {
-        _commandBlock.AddCommand(new Command(() => ClearGamePieces(allMatches), Constants.ClearGamePiecesTimeout));
+        _commandBlock.AddCommand(new Command(() => BreakOnMatch(allMatches), Constants.ClearGamePiecesTimeout));
 
         HashSet<int> columnIndexes = BoardHelper.GetColumnIndexes(allMatches);
         _commandBlock.AddCommand(new Command(() => CollapseColumns(columnIndexes), Constants.CollapseColumnsTimeout));
     }
 
-    private void ClearGamePieces(IEnumerable<GamePiece> gamePieces)
+    private void BreakOnMatch(IEnumerable<GamePiece> gamePieces)
     {
         foreach (GamePiece gamePiece in gamePieces)
         {
             ClearGamePieceAt(gamePiece.Position);
+            ProcessTileMatchAt(gamePiece.Position);
         }
     }
 
@@ -266,6 +267,14 @@ public class Board : MonoBehaviour
         gamePiece.OnPositionChanged -= OnGamePiecePositionChanged;
 
         Destroy(gamePiece.gameObject);
+    }
+
+    private void ProcessTileMatchAt(Vector2Int position)
+    {
+        if (TryGetTileAt(position.x, position.y, out Tile tile))
+        {
+            tile.ProcessMatch();
+        }
     }
 
     private void CollapseColumns(HashSet<int> columnIndexes)

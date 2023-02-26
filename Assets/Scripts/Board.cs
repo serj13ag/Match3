@@ -21,6 +21,7 @@ public class Board : MonoBehaviour
 
     private GameDataRepository _gameDataRepository;
     private Random _random;
+    private ParticleController _particleController;
 
     private Tile[,] _tiles;
     private GamePiece[,] _gamePieces;
@@ -34,8 +35,9 @@ public class Board : MonoBehaviour
 
     public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
-    public void Init(GameDataRepository gameDataRepository, Random random)
+    public void Init(GameDataRepository gameDataRepository, Random random, ParticleController particleController)
     {
+        _particleController = particleController;
         _random = random;
         _gameDataRepository = gameDataRepository;
 
@@ -80,7 +82,7 @@ public class Board : MonoBehaviour
     private void MakeTile(Tile tilePrefab, int x, int y, int z = 0)
     {
         Tile tile = Instantiate(tilePrefab, new Vector3(x, y, z), Quaternion.identity);
-        tile.Init(x, y, transform);
+        tile.Init(x, y, transform, _particleController);
 
         tile.OnClicked += OnTileClicked;
         tile.OnMouseEntered += OnTileMouseEntered;
@@ -252,12 +254,12 @@ public class Board : MonoBehaviour
     {
         foreach (GamePiece gamePiece in gamePieces)
         {
-            ClearGamePieceAt(gamePiece.Position);
+            ClearGamePieceAt(gamePiece.Position, true);
             ProcessTileMatchAt(gamePiece.Position);
         }
     }
 
-    private void ClearGamePieceAt(Vector2Int position)
+    private void ClearGamePieceAt(Vector2Int position, bool breakOnMatch = false)
     {
         GamePiece gamePiece = _gamePieces[position.x, position.y];
 
@@ -267,6 +269,11 @@ public class Board : MonoBehaviour
         gamePiece.OnPositionChanged -= OnGamePiecePositionChanged;
 
         Destroy(gamePiece.gameObject);
+
+        if (breakOnMatch)
+        {
+            _particleController.PlayParticleEffectAt(position, ParticleEffectType.Clear);
+        }
     }
 
     private void ProcessTileMatchAt(Vector2Int position)

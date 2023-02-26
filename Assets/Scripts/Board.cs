@@ -13,9 +13,10 @@ public class Board : MonoBehaviour
     [SerializeField] private int _width;
     [SerializeField] private int _height;
 
-    [SerializeField] private Tile _tilePrefab;
-    [SerializeField] private GamePiece _gamePiecePrefab;
+    [SerializeField] private Tile _tilePrefabNormal;
+    [SerializeField] private StartingTilesData _startingTilesData;
 
+    [SerializeField] private GamePiece _gamePiecePrefab;
     [SerializeField] private GamePieceColor[] _gamePieceColors;
 
     private GameDataRepository _gameDataRepository;
@@ -52,18 +53,19 @@ public class Board : MonoBehaviour
     {
         _tiles = new Tile[_width, _height];
 
+        foreach (StartingTileEntry startingTile in _startingTilesData.StartingTiles)
+        {
+            MakeTile(startingTile.TilePrefab, startingTile.X, startingTile.Y, startingTile.Z);
+        }
+
         for (var i = 0; i < _width; i++)
         {
             for (var j = 0; j < _height; j++)
             {
-                Tile tile = Instantiate(_tilePrefab, new Vector3(i, j, 0), Quaternion.identity);
-                tile.Init(i, j, transform);
-
-                tile.OnClicked += OnTileClicked;
-                tile.OnMouseEntered += OnTileMouseEntered;
-                tile.OnMouseReleased += OnTileMouseReleased;
-
-                _tiles[i, j] = tile;
+                if (!TryGetTileAt(i, j, out _))
+                {
+                    MakeTile(_tilePrefabNormal, i, j);
+                }
             }
         }
     }
@@ -75,21 +77,35 @@ public class Board : MonoBehaviour
         FillBoard();
     }
 
+    private void MakeTile(Tile tilePrefab, int x, int y, int z = 0)
+    {
+        Tile tile = Instantiate(tilePrefab, new Vector3(x, y, z), Quaternion.identity);
+        tile.Init(x, y, transform);
+
+        tile.OnClicked += OnTileClicked;
+        tile.OnMouseEntered += OnTileMouseEntered;
+        tile.OnMouseReleased += OnTileMouseReleased;
+
+        _tiles[x, y] = tile;
+    }
+
     private void FillBoard()
     {
         for (var i = 0; i < _width; i++)
         {
             for (var j = 0; j < _height; j++)
             {
-                if (_gamePieces[i, j] == null)
+                if (_gamePieces[i, j] != null || _tiles[i, j].TileType == TileType.Obstacle)
                 {
-                    GamePiece gamePiece = CreateRandomGamePieceAt(i, j);
+                    continue;
+                }
 
-                    while (GamePieceMatchHelper.HasMatchAtFillBoard(new Vector2Int(i, j), _gamePieces, BoardSize))
-                    {
-                        ClearGamePieceAt(gamePiece.Position);
-                        gamePiece = CreateRandomGamePieceAt(i, j);
-                    }
+                GamePiece gamePiece = CreateRandomGamePieceAt(i, j);
+
+                while (GamePieceMatchHelper.HasMatchAtFillBoard(new Vector2Int(i, j), _gamePieces, BoardSize))
+                {
+                    ClearGamePieceAt(gamePiece.Position);
+                    gamePiece = CreateRandomGamePieceAt(i, j);
                 }
             }
         }
@@ -213,7 +229,7 @@ public class Board : MonoBehaviour
             }
             else
             {
-                _commandBlock.AddCommand(new Command(() => FillBoard(), Constants.FillBoardTimeout));
+                _commandBlock.AddCommand(new Command(FillBoard, Constants.FillBoardTimeout));
             }
         }
     }
@@ -270,31 +286,35 @@ public class Board : MonoBehaviour
 
         if (gamePiecesToMoveData.Count == 0)
         {
-            _commandBlock.AddCommand(new Command(() => FillBoard(), Constants.FillBoardTimeout));
+            _commandBlock.AddCommand(new Command(FillBoard, Constants.FillBoardTimeout));
         }
     }
 
     private List<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
     {
-        var encounteredEmptyTiles = 0;
+        var availableRows = new Queue<int>();
         var moveDataEntries = new List<GamePieceMoveData>();
 
         for (var row = 0; row < _height; row++)
         {
             Vector2Int position = new Vector2Int(column, row);
-
             if (TryGetGamePieceAt(position, out GamePiece gamePiece))
             {
-                if (encounteredEmptyTiles > 0)
+                int distanceToMove = availableRows.Count > 0
+                    ? row - availableRows.Dequeue()
+                    : 0;
+
+                if (distanceToMove > 0)
                 {
                     GamePieceMoveData gamePieceMoveData =
-                        new GamePieceMoveData(gamePiece, Vector2Int.down, encounteredEmptyTiles);
+                        new GamePieceMoveData(gamePiece, Vector2Int.down, distanceToMove);
                     moveDataEntries.Add(gamePieceMoveData);
+                    availableRows.Enqueue(row);
                 }
             }
-            else
+            else if (_tiles[column, row].TileType != TileType.Obstacle)
             {
-                encounteredEmptyTiles++;
+                availableRows.Enqueue(row);
             }
         }
 
@@ -312,6 +332,13 @@ public class Board : MonoBehaviour
         gamePiece = _gamePieces[position.x, position.y];
 
         return gamePiece != null;
+    }
+
+    private bool TryGetTileAt(int x, int y, out Tile tile)
+    {
+        tile = _tiles[x, y];
+
+        return tile != null;
     }
 
     private bool HasMatches(IEnumerable<GamePiece> gamePieces, out HashSet<GamePiece> allMatches)

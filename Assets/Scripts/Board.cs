@@ -13,13 +13,10 @@ public class Board : MonoBehaviour
     [SerializeField] private int _width;
     [SerializeField] private int _height;
 
-    [Header("Tiles")] [SerializeField] private Tile _tilePrefabNormal;
-    [SerializeField] private Tile _tilePrefabObstacle;
+    [SerializeField] private Tile _tilePrefabNormal;
     [SerializeField] private StartingTile[] _startingTiles;
 
-    [Header("Game Pieces")] [SerializeField]
-    private GamePiece _gamePiecePrefab;
-
+    [SerializeField] private GamePiece _gamePiecePrefab;
     [SerializeField] private GamePieceColor[] _gamePieceColors;
 
     private GameDataRepository _gameDataRepository;
@@ -232,7 +229,7 @@ public class Board : MonoBehaviour
             }
             else
             {
-                _commandBlock.AddCommand(new Command(() => FillBoard(), Constants.FillBoardTimeout));
+                _commandBlock.AddCommand(new Command(FillBoard, Constants.FillBoardTimeout));
             }
         }
     }
@@ -289,7 +286,7 @@ public class Board : MonoBehaviour
 
         if (gamePiecesToMoveData.Count == 0)
         {
-            _commandBlock.AddCommand(new Command(() => FillBoard(), Constants.FillBoardTimeout));
+            _commandBlock.AddCommand(new Command(FillBoard, Constants.FillBoardTimeout));
         }
     }
 

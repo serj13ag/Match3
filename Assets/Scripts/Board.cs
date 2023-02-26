@@ -14,7 +14,7 @@ public class Board : MonoBehaviour
     [SerializeField] private int _height;
 
     [SerializeField] private Tile _tilePrefabNormal;
-    [SerializeField] private StartingTile[] _startingTiles;
+    [SerializeField] private StartingTilesData _startingTilesData;
 
     [SerializeField] private GamePiece _gamePiecePrefab;
     [SerializeField] private GamePieceColor[] _gamePieceColors;
@@ -53,7 +53,7 @@ public class Board : MonoBehaviour
     {
         _tiles = new Tile[_width, _height];
 
-        foreach (StartingTile startingTile in _startingTiles)
+        foreach (StartingTileEntry startingTile in _startingTilesData.StartingTiles)
         {
             MakeTile(startingTile.TilePrefab, startingTile.X, startingTile.Y, startingTile.Z);
         }

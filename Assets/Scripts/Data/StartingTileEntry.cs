@@ -1,9 +1,10 @@
 ﻿using System;
+using Entities;
 
-namespace Entities
+namespace Data
 {
     [Serializable]
-    public class StartingTile
+    public class StartingTileEntry
     {
         public Tile TilePrefab;
         public int X;

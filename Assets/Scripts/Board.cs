@@ -206,7 +206,7 @@ public class Board : MonoBehaviour
 
         if (_movedPieces.Count == 2)
         {
-            var movedGamePieces = new GamePiece[]
+            GamePiece[] movedGamePieces =
             {
                 _movedPieces.Pop(),
                 _movedPieces.Pop(),
@@ -357,6 +357,13 @@ public class Board : MonoBehaviour
 
     private bool TryGetGamePieceAt(Vector2Int position, out GamePiece gamePiece)
     {
+        gamePiece = null;
+
+        if (BoardHelper.IsOutOfBounds(position, new Vector2Int(_width, _height)))
+        {
+            return false;
+        }
+
         gamePiece = _gamePieces[position.x, position.y];
 
         return gamePiece != null;
@@ -383,5 +390,64 @@ public class Board : MonoBehaviour
         }
 
         return allMatches.Count > 0;
+    }
+
+    private List<GamePiece> GetRowGamePieces(int row)
+    {
+        var rowGamePieces = new List<GamePiece>();
+
+        for (var column = 0; column < _width; column++)
+        {
+            if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece))
+            {
+                rowGamePieces.Add(gamePiece);
+            }
+        }
+
+        return rowGamePieces;
+    }
+
+    private List<GamePiece> GetColumnGamePieces(int column)
+    {
+        var rowGamePieces = new List<GamePiece>();
+
+        for (var row = 0; row < _height; row++)
+        {
+            if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece))
+            {
+                rowGamePieces.Add(gamePiece);
+            }
+        }
+
+        return rowGamePieces;
+    }
+
+    private List<GamePiece> GetAdjacentGamePieces(Vector2Int position, int range)
+    {
+        var rowGamePieces = new List<GamePiece>();
+
+        int startColumn = position.x - range;
+        int endColumn = position.x + range;
+        int startRow = position.y - range;
+        int endRow = position.y + range;
+
+        for (int column = startColumn; column <= endColumn; column++)
+        {
+            for (int row = startRow; row <= endRow; row++)
+            {
+                if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece))
+                {
+                    rowGamePieces.Add(gamePiece);
+                }
+            }
+        }
+
+        return rowGamePieces;
+    }
+
+    private bool IsOutOfBounds(Vector2Int position)
+    {
+        return position.x < 0 || position.x > _width - 1 ||
+               position.y < 0 || position.y > _height - 1;
     }
 }

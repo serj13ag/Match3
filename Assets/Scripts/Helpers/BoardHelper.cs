@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Entities;
+using UnityEngine;
 
 namespace Helpers
 {
@@ -15,6 +16,12 @@ namespace Helpers
             }
 
             return columns;
+        }
+
+        public static bool IsOutOfBounds(Vector2Int position, Vector2Int boardSize)
+        {
+            return position.x < 0 || position.x > boardSize.x - 1 ||
+                   position.y < 0 || position.y > boardSize.y - 1;
         }
     }
 }

@@ -99,7 +99,7 @@ namespace Helpers
                 nextPosition.x = startPosition.x + searchDirection.x * i;
                 nextPosition.y = startPosition.y + searchDirection.y * i;
 
-                if (IsOutOfBounds(nextPosition, boardSize))
+                if (BoardHelper.IsOutOfBounds(nextPosition, boardSize))
                 {
                     break;
                 }
@@ -120,12 +120,6 @@ namespace Helpers
             }
 
             return matches.Count >= minMatchesCount;
-        }
-
-        private static bool IsOutOfBounds(Vector2Int position, Vector2Int boardSize)
-        {
-            return position.x < 0 || position.x > boardSize.x - 1 ||
-                   position.y < 0 || position.y > boardSize.y - 1;
         }
     }
 }

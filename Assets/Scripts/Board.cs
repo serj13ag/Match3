@@ -15,6 +15,7 @@ public class Board : MonoBehaviour
 
     [SerializeField] private Tile _tilePrefabNormal;
     [SerializeField] private StartingTilesData _startingTilesData;
+    [SerializeField] private StartingGamePiecesData _startingGamePiecesData;
 
     [SerializeField] private GamePiece _gamePiecePrefab;
     [SerializeField] private GamePieceColor[] _gamePieceColors;
@@ -76,7 +77,13 @@ public class Board : MonoBehaviour
     {
         _gamePieces = new GamePiece[_width, _height];
 
-        FillBoard();
+        foreach (StartingGamePieceEntry startingGamePieceEntry in _startingGamePiecesData.StartingGamePieces)
+        {
+            CreateGamePiece(startingGamePieceEntry.GamePiecePrefab, startingGamePieceEntry.X, startingGamePieceEntry.Y,
+                startingGamePieceEntry.GamePieceColor);
+        }
+
+        FillBoardWithRandomGamePieces();
     }
 
     private void MakeTile(Tile tilePrefab, int x, int y, int z = 0)
@@ -91,7 +98,7 @@ public class Board : MonoBehaviour
         _tiles[x, y] = tile;
     }
 
-    private void FillBoard()
+    private void FillBoardWithRandomGamePieces()
     {
         for (var i = 0; i < _width; i++)
         {
@@ -115,8 +122,13 @@ public class Board : MonoBehaviour
 
     private GamePiece CreateRandomGamePieceAt(int x, int y)
     {
-        GamePiece gamePiece = Instantiate(_gamePiecePrefab, Vector3.zero, Quaternion.identity);
-        gamePiece.Init(GetRandomGamePieceColor(), x, y, _gameDataRepository, transform);
+        return CreateGamePiece(_gamePiecePrefab, x, y, GetRandomGamePieceColor());
+    }
+
+    private GamePiece CreateGamePiece(GamePiece gamePiecePrefab, int x, int y, GamePieceColor color)
+    {
+        GamePiece gamePiece = Instantiate(gamePiecePrefab, Vector3.zero, Quaternion.identity);
+        gamePiece.Init(color, x, y, _gameDataRepository, transform);
 
         gamePiece.OnStartMoving += OnGamePieceStartMoving;
         gamePiece.OnPositionChanged += OnGamePiecePositionChanged;
@@ -231,7 +243,7 @@ public class Board : MonoBehaviour
             }
             else
             {
-                _commandBlock.AddCommand(new Command(FillBoard, Constants.FillBoardTimeout));
+                _commandBlock.AddCommand(new Command(FillBoardWithRandomGamePieces, Constants.FillBoardTimeout));
             }
         }
     }
@@ -302,7 +314,7 @@ public class Board : MonoBehaviour
 
         if (gamePiecesToMoveData.Count == 0)
         {
-            _commandBlock.AddCommand(new Command(FillBoard, Constants.FillBoardTimeout));
+            _commandBlock.AddCommand(new Command(FillBoardWithRandomGamePieces, Constants.FillBoardTimeout));
         }
     }
 

@@ -427,6 +427,7 @@ MonoBehaviour:
   _height: 9
   _tilePrefabNormal: {fileID: 8639118720009340608, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
   _startingTilesData: {fileID: 11400000, guid: 526be9f96f70e8c45b9ef5c8eba588c7, type: 2}
+  _startingGamePiecesData: {fileID: 11400000, guid: 4fbabc702ad90b24b97e97a5e06918ab, type: 2}
   _gamePiecePrefab: {fileID: 4546735267292664957, guid: 6c52fc19e30d8164c96e747707315a49, type: 3}
   _gamePieceColors: 00000000010000000200000004000000050000000600000007000000
 --- !u!1 &1929346699

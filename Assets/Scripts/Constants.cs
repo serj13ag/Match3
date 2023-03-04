@@ -6,4 +6,6 @@
     public const float FillBoardTimeout = 0.5f;
     public const float ClearGamePiecesTimeout = 0.5f;
     public const float CollapseColumnsTimeout = 0.5f;
+
+    public const int BombAdjacentGamePiecesRange = 2;
 }

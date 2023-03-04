@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Commands;
 using Data;
@@ -243,7 +244,7 @@ public class Board : MonoBehaviour
             }
             else
             {
-                _commandBlock.AddCommand(new Command(FillBoardWithRandomGamePieces, Constants.FillBoardTimeout));
+                AddFillBoardCommand();
             }
         }
     }
@@ -256,13 +257,67 @@ public class Board : MonoBehaviour
 
     private void ClearAndCollapseAndRefill(HashSet<GamePiece> allMatches)
     {
-        _commandBlock.AddCommand(new Command(() => BreakOnMatch(allMatches), Constants.ClearGamePiecesTimeout));
+        HashSet<GamePiece> gamePiecesToBreak = GetGamePiecesToBreak(allMatches);
 
-        HashSet<int> columnIndexes = BoardHelper.GetColumnIndexes(allMatches);
-        _commandBlock.AddCommand(new Command(() => CollapseColumns(columnIndexes), Constants.CollapseColumnsTimeout));
+        AddBreakGamePiecesCommand(gamePiecesToBreak);
+        AddCollapseColumnsCommand(gamePiecesToBreak);
     }
 
-    private void BreakOnMatch(IEnumerable<GamePiece> gamePieces)
+    private HashSet<GamePiece> GetGamePiecesToBreak(HashSet<GamePiece> matchedGamePieces)
+    {
+        var gamePiecesToBreak = new HashSet<GamePiece>();
+
+        foreach (GamePiece matchedGamePiece in matchedGamePieces)
+        {
+            if (matchedGamePiece is BombGamePiece bombGamePiece)
+            {
+                switch (bombGamePiece.BombType)
+                {
+                    case BombType.Column:
+                        gamePiecesToBreak.UnionWith(GetColumnGamePieces(matchedGamePiece.Position.x));
+                        break;
+                    case BombType.Row:
+                        gamePiecesToBreak.UnionWith(GetRowGamePieces(matchedGamePiece.Position.y));
+                        break;
+                    case BombType.Adjacent:
+                        gamePiecesToBreak.UnionWith(GetAdjacentGamePieces(matchedGamePiece.Position,
+                            Constants.BombAdjacentGamePiecesRange));
+                        break;
+                    case BombType.Color:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            else
+            {
+                gamePiecesToBreak.Add(matchedGamePiece);
+            }
+        }
+
+        return gamePiecesToBreak;
+    }
+
+    private void AddBreakGamePiecesCommand(HashSet<GamePiece> gamePiecesToBreak)
+    {
+        var breakCommand = new Command(() => BreakGamePieces(gamePiecesToBreak), Constants.ClearGamePiecesTimeout);
+        _commandBlock.AddCommand(breakCommand);
+    }
+
+    private void AddCollapseColumnsCommand(HashSet<GamePiece> gamePiecesToBreak)
+    {
+        HashSet<int> columnIndexes = BoardHelper.GetColumnIndexes(gamePiecesToBreak);
+        var collapseCommand = new Command(() => CollapseColumns(columnIndexes), Constants.CollapseColumnsTimeout);
+        _commandBlock.AddCommand(collapseCommand);
+    }
+
+    private void AddFillBoardCommand()
+    {
+        var fillBoardCommand = new Command(FillBoardWithRandomGamePieces, Constants.FillBoardTimeout);
+        _commandBlock.AddCommand(fillBoardCommand);
+    }
+
+    private void BreakGamePieces(IEnumerable<GamePiece> gamePieces)
     {
         foreach (GamePiece gamePiece in gamePieces)
         {
@@ -314,18 +369,18 @@ public class Board : MonoBehaviour
 
         if (gamePiecesToMoveData.Count == 0)
         {
-            _commandBlock.AddCommand(new Command(FillBoardWithRandomGamePieces, Constants.FillBoardTimeout));
+            AddFillBoardCommand();
         }
     }
 
-    private List<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
+    private IEnumerable<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
     {
         var availableRows = new Queue<int>();
         var moveDataEntries = new List<GamePieceMoveData>();
 
         for (var row = 0; row < _height; row++)
         {
-            Vector2Int position = new Vector2Int(column, row);
+            var position = new Vector2Int(column, row);
             if (TryGetGamePieceAt(position, out GamePiece gamePiece))
             {
                 int distanceToMove = availableRows.Count > 0
@@ -334,8 +389,7 @@ public class Board : MonoBehaviour
 
                 if (distanceToMove > 0)
                 {
-                    GamePieceMoveData gamePieceMoveData =
-                        new GamePieceMoveData(gamePiece, Vector2Int.down, distanceToMove);
+                    var gamePieceMoveData = new GamePieceMoveData(gamePiece, Vector2Int.down, distanceToMove);
                     moveDataEntries.Add(gamePieceMoveData);
                     availableRows.Enqueue(row);
                 }
@@ -392,7 +446,7 @@ public class Board : MonoBehaviour
         return allMatches.Count > 0;
     }
 
-    private List<GamePiece> GetRowGamePieces(int row)
+    private IEnumerable<GamePiece> GetRowGamePieces(int row)
     {
         var rowGamePieces = new List<GamePiece>();
 
@@ -407,7 +461,7 @@ public class Board : MonoBehaviour
         return rowGamePieces;
     }
 
-    private List<GamePiece> GetColumnGamePieces(int column)
+    private IEnumerable<GamePiece> GetColumnGamePieces(int column)
     {
         var rowGamePieces = new List<GamePiece>();
 
@@ -422,7 +476,7 @@ public class Board : MonoBehaviour
         return rowGamePieces;
     }
 
-    private List<GamePiece> GetAdjacentGamePieces(Vector2Int position, int range)
+    private IEnumerable<GamePiece> GetAdjacentGamePieces(Vector2Int position, int range)
     {
         var rowGamePieces = new List<GamePiece>();
 
@@ -443,11 +497,5 @@ public class Board : MonoBehaviour
         }
 
         return rowGamePieces;
-    }
-
-    private bool IsOutOfBounds(Vector2Int position)
-    {
-        return position.x < 0 || position.x > _width - 1 ||
-               position.y < 0 || position.y > _height - 1;
     }
 }

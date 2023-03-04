@@ -33,3 +33,13 @@ MonoBehaviour:
     Z: 0
     GamePiecePrefab: {fileID: 4004659540058359006, guid: 6014bb0f12910774197fd5321abd102a, type: 3}
     GamePieceColor: 1
+  - X: 4
+    Y: 3
+    Z: 0
+    GamePiecePrefab: {fileID: 4004659540058359006, guid: 132d8997be8fe33479a5f1792f3a253a, type: 3}
+    GamePieceColor: 0
+  - X: 4
+    Y: 6
+    Z: 0
+    GamePiecePrefab: {fileID: 4004659540058359006, guid: 64c60a6eb991de547b6dccf874651fcd, type: 3}
+    GamePieceColor: 6

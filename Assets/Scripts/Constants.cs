@@ -8,4 +8,5 @@
     public const float CollapseColumnsTimeout = 0.5f;
 
     public const int BombAdjacentGamePiecesRange = 2;
+    public const int MatchesToSpawnBomb = 4;
 }

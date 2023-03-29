@@ -430,6 +430,9 @@ MonoBehaviour:
   _startingGamePiecesData: {fileID: 11400000, guid: 4fbabc702ad90b24b97e97a5e06918ab, type: 2}
   _gamePiecePrefab: {fileID: 4546735267292664957, guid: 6c52fc19e30d8164c96e747707315a49, type: 3}
   _gamePieceColors: 00000000010000000200000004000000050000000600000007000000
+  _adjacentBombPrefab: {fileID: 4004659540058359006, guid: 64c60a6eb991de547b6dccf874651fcd, type: 3}
+  _columnBombPrefab: {fileID: 4004659540058359006, guid: 132d8997be8fe33479a5f1792f3a253a, type: 3}
+  _rowBombPrefab: {fileID: 4004659540058359006, guid: 6014bb0f12910774197fd5321abd102a, type: 3}
 --- !u!1 &1929346699
 GameObject:
   m_ObjectHideFlags: 0

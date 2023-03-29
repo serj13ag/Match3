@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Commands;
 using Data;
 using DTO;
@@ -20,6 +21,10 @@ public class Board : MonoBehaviour
 
     [SerializeField] private GamePiece _gamePiecePrefab;
     [SerializeField] private GamePieceColor[] _gamePieceColors;
+
+    [SerializeField] private BombGamePiece _adjacentBombPrefab;
+    [SerializeField] private BombGamePiece _columnBombPrefab;
+    [SerializeField] private BombGamePiece _rowBombPrefab;
 
     private GameDataRepository _gameDataRepository;
     private Random _random;
@@ -215,7 +220,7 @@ public class Board : MonoBehaviour
 
             if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
             {
-                ClearAndCollapseAndRefill(allMatches);
+                CreateBombAndClearAndCollapseAndRefill(movedGamePieces, allMatches);
             }
             else
             {
@@ -253,6 +258,31 @@ public class Board : MonoBehaviour
     {
         movedGamePieces[0].Move(movedGamePieces[1].Position);
         movedGamePieces[1].Move(movedGamePieces[0].Position);
+    }
+
+    private void CreateBombAndClearAndCollapseAndRefill(GamePiece[] movedGamePieces, HashSet<GamePiece> allMatches)
+    {
+        HashSet<GamePiece> gamePiecesToBreak = GetGamePiecesToBreak(allMatches);
+
+        if (allMatches.Count >= Constants.MatchesToSpawnBomb)
+        {
+            var matchType = GamePieceMatchHelper.GetMatchType(allMatches);
+            var matchedMovedGamePieces = movedGamePieces
+                .Where(allMatches.Contains)
+                .ToList();
+
+            foreach (var matchedMovedGamePiece in matchedMovedGamePieces)
+            {
+                ClearGamePieceAt(matchedMovedGamePiece.Position);
+                CreateGamePiece(GetBombPrefabOnMatch(matchType), matchedMovedGamePiece.Position.x,
+                    matchedMovedGamePiece.Position.y, matchedMovedGamePiece.Color);
+
+                gamePiecesToBreak.Remove(matchedMovedGamePiece);
+            }
+        }
+
+        AddBreakGamePiecesCommand(gamePiecesToBreak);
+        AddCollapseColumnsCommand(gamePiecesToBreak);
     }
 
     private void ClearAndCollapseAndRefill(HashSet<GamePiece> allMatches)
@@ -497,5 +527,20 @@ public class Board : MonoBehaviour
         }
 
         return rowGamePieces;
+    }
+
+    private GamePiece GetBombPrefabOnMatch(MatchType matchType)
+    {
+        switch (matchType)
+        {
+            case MatchType.Horizontal:
+                return _rowBombPrefab;
+            case MatchType.Vertical:
+                return _columnBombPrefab;
+            case MatchType.Corner:
+                return _adjacentBombPrefab;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(matchType), matchType, null);
+        }
     }
 }

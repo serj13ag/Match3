@@ -1,11 +1,49 @@
 ﻿using System.Collections.Generic;
 using Entities;
+using Enums;
 using UnityEngine;
 
 namespace Helpers
 {
     public static class GamePieceMatchHelper
     {
+        public static MatchType GetMatchType(HashSet<GamePiece> gamePieces)
+        {
+            var horizontalMatches = false;
+            var verticalMatches = false;
+
+            var isFirstGamePiece = true;
+            var firstGamePiecePosition = Vector2Int.zero;
+
+            foreach (var gamePiece in gamePieces)
+            {
+                if (isFirstGamePiece)
+                {
+                    firstGamePiecePosition = gamePiece.Position;
+                    isFirstGamePiece = false;
+                }
+
+                if (firstGamePiecePosition.x != gamePiece.Position.x
+                    && firstGamePiecePosition.y == gamePiece.Position.y)
+                {
+                    horizontalMatches = true;
+                }
+
+                if (firstGamePiecePosition.x == gamePiece.Position.x
+                    && firstGamePiecePosition.y != gamePiece.Position.y)
+                {
+                    verticalMatches = true;
+                }
+            }
+
+            return horizontalMatches switch
+            {
+                true when verticalMatches => MatchType.Corner,
+                true => MatchType.Horizontal,
+                _ => MatchType.Vertical,
+            };
+        }
+
         public static bool HasMatchAtFillBoard(Vector2Int position, GamePiece[,] gamePieces, Vector2Int boardSize)
         {
             if (TryFindMatchesByDirection(position, Vector2Int.left, Constants.MinMatchesCount, gamePieces,

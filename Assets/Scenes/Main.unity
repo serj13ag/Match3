@@ -157,6 +157,7 @@ MonoBehaviour:
   _adjacentBombPrefab: {fileID: 4004659540058359006, guid: 64c60a6eb991de547b6dccf874651fcd, type: 3}
   _columnBombPrefab: {fileID: 4004659540058359006, guid: 132d8997be8fe33479a5f1792f3a253a, type: 3}
   _rowBombPrefab: {fileID: 4004659540058359006, guid: 6014bb0f12910774197fd5321abd102a, type: 3}
+  _basicTilePrefab: {fileID: 8639118720009340608, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
 --- !u!4 &159697163
 Transform:
   m_ObjectHideFlags: 0
@@ -475,7 +476,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _width: 7
   _height: 9
-  _tilePrefabNormal: {fileID: 8639118720009340608, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
   _startingTilesData: {fileID: 11400000, guid: 526be9f96f70e8c45b9ef5c8eba588c7, type: 2}
   _startingGamePiecesData: {fileID: 11400000, guid: 4fbabc702ad90b24b97e97a5e06918ab, type: 2}
 --- !u!1 &1929346699

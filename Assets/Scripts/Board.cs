@@ -14,7 +14,6 @@ public class Board : MonoBehaviour
     [SerializeField] private int _width;
     [SerializeField] private int _height;
 
-    [SerializeField] private Tile _tilePrefabNormal;
     [SerializeField] private StartingTilesData _startingTilesData;
     [SerializeField] private StartingGamePiecesData _startingGamePiecesData;
 
@@ -54,7 +53,7 @@ public class Board : MonoBehaviour
 
         foreach (StartingTileEntry startingTile in _startingTilesData.StartingTiles)
         {
-            MakeTile(startingTile.TilePrefab, startingTile.X, startingTile.Y, startingTile.Z);
+            SpawnCustomTile(startingTile.TilePrefab, startingTile.X, startingTile.Y, startingTile.Z);
         }
 
         for (var i = 0; i < _width; i++)
@@ -63,7 +62,7 @@ public class Board : MonoBehaviour
             {
                 if (!TryGetTileAt(i, j, out _))
                 {
-                    MakeTile(_tilePrefabNormal, i, j);
+                    SpawnBasicTile(i, j);
                 }
             }
         }
@@ -82,11 +81,20 @@ public class Board : MonoBehaviour
         FillBoardWithRandomGamePieces();
     }
 
-    private void MakeTile(Tile tilePrefab, int x, int y, int z = 0)
+    private void SpawnBasicTile(int x, int y)
     {
-        Tile tile = Instantiate(tilePrefab, new Vector3(x, y, z), Quaternion.identity);
-        tile.Init(x, y, transform, _particleController);
+        Tile tile = _factory.CreateBasicTile(x, y, transform);
+        RegisterTile(x, y, tile);
+    }
 
+    private void SpawnCustomTile(Tile tilePrefab, int x, int y, int z)
+    {
+        Tile tile = _factory.CreateCustomTile(tilePrefab, x, y, z, transform);
+        RegisterTile(x, y, tile);
+    }
+
+    private void RegisterTile(int x, int y, Tile tile)
+    {
         tile.OnClicked += OnTileClicked;
         tile.OnMouseEntered += OnTileMouseEntered;
         tile.OnMouseReleased += OnTileMouseReleased;

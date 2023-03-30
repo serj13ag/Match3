@@ -14,13 +14,31 @@ public class Factory : MonoBehaviour
     [SerializeField] private BombGamePiece _columnBombPrefab;
     [SerializeField] private BombGamePiece _rowBombPrefab;
 
+    [SerializeField] private Tile _basicTilePrefab;
+
     private Random _random;
     private GameDataRepository _gameDataRepository;
+    private ParticleController _particleController;
 
-    public void Init(Random random, GameDataRepository gameDataRepository)
+    public void Init(Random random, GameDataRepository gameDataRepository, ParticleController particleController)
     {
-        _gameDataRepository = gameDataRepository;
         _random = random;
+        _gameDataRepository = gameDataRepository;
+        _particleController = particleController;
+    }
+
+    public Tile CreateBasicTile(int x, int y, Transform parentTransform)
+    {
+        Tile tile = Instantiate(_basicTilePrefab, new Vector3(x, y, 0), Quaternion.identity);
+        tile.Init(x, y, parentTransform, _particleController);
+        return tile;
+    }
+
+    public Tile CreateCustomTile(Tile tilePrefab, int x, int y, int z, Transform parentTransform)
+    {
+        Tile tile = Instantiate(tilePrefab, new Vector3(x, y, z), Quaternion.identity);
+        tile.Init(x, y, parentTransform, _particleController);
+        return tile;
     }
 
     public GamePiece CreateBasicGamePieceWithRandomColor(int x, int y, Transform parentTransform)

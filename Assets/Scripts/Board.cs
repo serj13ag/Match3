@@ -306,25 +306,9 @@ public class Board : MonoBehaviour
 
         foreach (GamePiece matchedGamePiece in matchedGamePieces)
         {
-            if (matchedGamePiece is BombGamePiece bombGamePiece)
+            if (TryGetBombedGamePieces(matchedGamePiece, out HashSet<GamePiece> bombedGamePieces))
             {
-                switch (bombGamePiece.BombType)
-                {
-                    case BombType.Column:
-                        gamePiecesToBreak.UnionWith(GetColumnGamePieces(matchedGamePiece.Position.x));
-                        break;
-                    case BombType.Row:
-                        gamePiecesToBreak.UnionWith(GetRowGamePieces(matchedGamePiece.Position.y));
-                        break;
-                    case BombType.Adjacent:
-                        gamePiecesToBreak.UnionWith(GetAdjacentGamePieces(matchedGamePiece.Position,
-                            Constants.BombAdjacentGamePiecesRange));
-                        break;
-                    case BombType.Color:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                gamePiecesToBreak.UnionWith(bombedGamePieces);
             }
             else
             {
@@ -333,6 +317,62 @@ public class Board : MonoBehaviour
         }
 
         return gamePiecesToBreak;
+    }
+
+    private bool TryGetBombedGamePieces(GamePiece matchedGamePiece, out HashSet<GamePiece> bombedGamePieces,
+        HashSet<GamePiece> gamePiecesToExclude = null)
+    {
+        bombedGamePieces = new HashSet<GamePiece>();
+
+        if (matchedGamePiece is not BombGamePiece bombGamePiece)
+        {
+            return false;
+        }
+
+        bombedGamePieces = GetBombedGamePieces(bombGamePiece.BombType, matchedGamePiece);
+
+        if (bombedGamePieces == null)
+        {
+            return false;
+        }
+
+        if (gamePiecesToExclude != null)
+        {
+            bombedGamePieces.ExceptWith(gamePiecesToExclude);
+        }
+
+        foreach (var bombedGamePiece in bombedGamePieces.ToArray())
+        {
+            if (TryGetBombedGamePieces(bombedGamePiece, out var pieces, bombedGamePieces))
+            {
+                bombedGamePieces.UnionWith(pieces);
+            }
+        }
+
+        return true;
+    }
+
+    private HashSet<GamePiece> GetBombedGamePieces(BombType bombType, GamePiece matchedGamePiece)
+    {
+        HashSet<GamePiece> additionalGamePieces = null;
+        switch (bombType)
+        {
+            case BombType.Column:
+                additionalGamePieces = GetColumnGamePieces(matchedGamePiece.Position.x);
+                break;
+            case BombType.Row:
+                additionalGamePieces = GetRowGamePieces(matchedGamePiece.Position.y);
+                break;
+            case BombType.Adjacent:
+                additionalGamePieces = GetAdjacentGamePieces(matchedGamePiece.Position, Constants.BombAdjacentGamePiecesRange);
+                break;
+            case BombType.Color:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        return additionalGamePieces;
     }
 
     private void AddBreakGamePiecesCommand(HashSet<GamePiece> gamePiecesToBreak)
@@ -477,9 +517,9 @@ public class Board : MonoBehaviour
         return allMatches.Count > 0;
     }
 
-    private IEnumerable<GamePiece> GetRowGamePieces(int row)
+    private HashSet<GamePiece> GetRowGamePieces(int row)
     {
-        var rowGamePieces = new List<GamePiece>();
+        var rowGamePieces = new HashSet<GamePiece>();
 
         for (var column = 0; column < _width; column++)
         {
@@ -492,9 +532,9 @@ public class Board : MonoBehaviour
         return rowGamePieces;
     }
 
-    private IEnumerable<GamePiece> GetColumnGamePieces(int column)
+    private HashSet<GamePiece> GetColumnGamePieces(int column)
     {
-        var rowGamePieces = new List<GamePiece>();
+        var rowGamePieces = new HashSet<GamePiece>();
 
         for (var row = 0; row < _height; row++)
         {
@@ -507,9 +547,9 @@ public class Board : MonoBehaviour
         return rowGamePieces;
     }
 
-    private IEnumerable<GamePiece> GetAdjacentGamePieces(Vector2Int position, int range)
+    private HashSet<GamePiece> GetAdjacentGamePieces(Vector2Int position, int range)
     {
-        var rowGamePieces = new List<GamePiece>();
+        var rowGamePieces = new HashSet<GamePiece>();
 
         int startColumn = position.x - range;
         int endColumn = position.x + range;

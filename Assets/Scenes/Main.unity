@@ -123,6 +123,55 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &159697161
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 159697163}
+  - component: {fileID: 159697162}
+  m_Layer: 0
+  m_Name: Factory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &159697162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159697161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 256662a0154a22446ae335b80f84a18a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gamePiecePrefab: {fileID: 4546735267292664957, guid: 6c52fc19e30d8164c96e747707315a49, type: 3}
+  _gamePieceColors: 00000000010000000200000004000000050000000600000007000000
+  _adjacentBombPrefab: {fileID: 4004659540058359006, guid: 64c60a6eb991de547b6dccf874651fcd, type: 3}
+  _columnBombPrefab: {fileID: 4004659540058359006, guid: 132d8997be8fe33479a5f1792f3a253a, type: 3}
+  _rowBombPrefab: {fileID: 4004659540058359006, guid: 6014bb0f12910774197fd5321abd102a, type: 3}
+--- !u!4 &159697163
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159697161}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &221243258
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,6 +425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cameraController: {fileID: 2108273087}
   _particleController: {fileID: 221243259}
+  _factory: {fileID: 159697162}
   _board: {fileID: 1728171552}
   _colorData: {fileID: 11400000, guid: 5783d67eebb527c46b48ba2e0cef3a70, type: 2}
   _moveData: {fileID: 11400000, guid: 387edab6fdc57f24eb11178c2004c0dd, type: 2}
@@ -409,7 +459,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1728171552
 MonoBehaviour:
@@ -428,11 +478,6 @@ MonoBehaviour:
   _tilePrefabNormal: {fileID: 8639118720009340608, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
   _startingTilesData: {fileID: 11400000, guid: 526be9f96f70e8c45b9ef5c8eba588c7, type: 2}
   _startingGamePiecesData: {fileID: 11400000, guid: 4fbabc702ad90b24b97e97a5e06918ab, type: 2}
-  _gamePiecePrefab: {fileID: 4546735267292664957, guid: 6c52fc19e30d8164c96e747707315a49, type: 3}
-  _gamePieceColors: 00000000010000000200000004000000050000000600000007000000
-  _adjacentBombPrefab: {fileID: 4004659540058359006, guid: 64c60a6eb991de547b6dccf874651fcd, type: 3}
-  _columnBombPrefab: {fileID: 4004659540058359006, guid: 132d8997be8fe33479a5f1792f3a253a, type: 3}
-  _rowBombPrefab: {fileID: 4004659540058359006, guid: 6014bb0f12910774197fd5321abd102a, type: 3}
 --- !u!1 &1929346699
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,7 +639,7 @@ RectTransform:
   m_Children:
   - {fileID: 271712081}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

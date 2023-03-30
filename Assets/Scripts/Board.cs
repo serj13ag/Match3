@@ -8,7 +8,6 @@ using Entities;
 using Enums;
 using Helpers;
 using UnityEngine;
-using Random = System.Random;
 
 public class Board : MonoBehaviour
 {
@@ -19,16 +18,8 @@ public class Board : MonoBehaviour
     [SerializeField] private StartingTilesData _startingTilesData;
     [SerializeField] private StartingGamePiecesData _startingGamePiecesData;
 
-    [SerializeField] private GamePiece _gamePiecePrefab;
-    [SerializeField] private GamePieceColor[] _gamePieceColors;
-
-    [SerializeField] private BombGamePiece _adjacentBombPrefab;
-    [SerializeField] private BombGamePiece _columnBombPrefab;
-    [SerializeField] private BombGamePiece _rowBombPrefab;
-
-    private GameDataRepository _gameDataRepository;
-    private Random _random;
     private ParticleController _particleController;
+    private Factory _factory;
 
     private Tile[,] _tiles;
     private GamePiece[,] _gamePieces;
@@ -42,11 +33,10 @@ public class Board : MonoBehaviour
 
     public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
-    public void Init(GameDataRepository gameDataRepository, Random random, ParticleController particleController)
+    public void Init(ParticleController particleController, Factory factory)
     {
         _particleController = particleController;
-        _random = random;
-        _gameDataRepository = gameDataRepository;
+        _factory = factory;
 
         _movedPieces = new Stack<GamePiece>();
 
@@ -85,8 +75,8 @@ public class Board : MonoBehaviour
 
         foreach (StartingGamePieceEntry startingGamePieceEntry in _startingGamePiecesData.StartingGamePieces)
         {
-            CreateGamePiece(startingGamePieceEntry.GamePiecePrefab, startingGamePieceEntry.X, startingGamePieceEntry.Y,
-                startingGamePieceEntry.GamePieceColor);
+            SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y,
+                startingGamePieceEntry.GamePiecePrefab, startingGamePieceEntry.GamePieceColor);
         }
 
         FillBoardWithRandomGamePieces();
@@ -115,33 +105,42 @@ public class Board : MonoBehaviour
                     continue;
                 }
 
-                GamePiece gamePiece = CreateRandomGamePieceAt(i, j);
+                GamePiece gamePiece = SpawnBasicGamePieceWithRandomColor(i, j);
 
                 while (GamePieceMatchHelper.HasMatchAtFillBoard(new Vector2Int(i, j), _gamePieces, BoardSize))
                 {
                     ClearGamePieceAt(gamePiece.Position);
-                    gamePiece = CreateRandomGamePieceAt(i, j);
+                    gamePiece = SpawnBasicGamePieceWithRandomColor(i, j);
                 }
             }
         }
     }
 
-    private GamePiece CreateRandomGamePieceAt(int x, int y)
+    private GamePiece SpawnBasicGamePieceWithRandomColor(int x, int y)
     {
-        return CreateGamePiece(_gamePiecePrefab, x, y, GetRandomGamePieceColor());
+        GamePiece gamePiece = _factory.CreateBasicGamePieceWithRandomColor(x, y, transform);
+        RegisterGamePiece(gamePiece, x, y);
+        return gamePiece;
     }
 
-    private GamePiece CreateGamePiece(GamePiece gamePiecePrefab, int x, int y, GamePieceColor color)
+    private void SpawnCustomGamePiece(int x, int y, GamePiece gamePiecePrefab, GamePieceColor gamePieceColor)
     {
-        GamePiece gamePiece = Instantiate(gamePiecePrefab, Vector3.zero, Quaternion.identity);
-        gamePiece.Init(color, x, y, _gameDataRepository, transform);
+        GamePiece gamePiece = _factory.CreateCustomGamePiece(x, y, transform, gamePiecePrefab, gamePieceColor);
+        RegisterGamePiece(gamePiece, x, y);
+    }
 
+    private void SpawnBombGamePiece(int x, int y, MatchType matchType, GamePieceColor color)
+    {
+        GamePiece gamePiece = _factory.CreateBombGamePiece(x, y, transform, matchType, color);
+        RegisterGamePiece(gamePiece, x, y);
+    }
+
+    private void RegisterGamePiece(GamePiece gamePiece, int x, int y)
+    {
         gamePiece.OnStartMoving += OnGamePieceStartMoving;
         gamePiece.OnPositionChanged += OnGamePiecePositionChanged;
 
         _gamePieces[x, y] = gamePiece;
-
-        return gamePiece;
     }
 
     private void OnGamePieceStartMoving(GamePiece gamePiece)
@@ -266,16 +265,16 @@ public class Board : MonoBehaviour
 
         if (allMatches.Count >= Constants.MatchesToSpawnBomb)
         {
-            var matchType = GamePieceMatchHelper.GetMatchType(allMatches);
-            var matchedMovedGamePieces = movedGamePieces
+            MatchType matchType = GamePieceMatchHelper.GetMatchType(allMatches);
+            List<GamePiece> matchedMovedGamePieces = movedGamePieces
                 .Where(allMatches.Contains)
                 .ToList();
 
-            foreach (var matchedMovedGamePiece in matchedMovedGamePieces)
+            foreach (GamePiece matchedMovedGamePiece in matchedMovedGamePieces)
             {
                 ClearGamePieceAt(matchedMovedGamePiece.Position);
-                CreateGamePiece(GetBombPrefabOnMatch(matchType), matchedMovedGamePiece.Position.x,
-                    matchedMovedGamePiece.Position.y, matchedMovedGamePiece.Color);
+                SpawnBombGamePiece(matchedMovedGamePiece.Position.x, matchedMovedGamePiece.Position.y,
+                    matchType, matchedMovedGamePiece.Color);
 
                 gamePiecesToBreak.Remove(matchedMovedGamePiece);
             }
@@ -433,12 +432,6 @@ public class Board : MonoBehaviour
         return moveDataEntries;
     }
 
-    private GamePieceColor GetRandomGamePieceColor()
-    {
-        int randomColorIndex = _random.Next(_gameDataRepository.Colors.Count - 1);
-        return _gamePieceColors[randomColorIndex];
-    }
-
     private bool TryGetGamePieceAt(Vector2Int position, out GamePiece gamePiece)
     {
         gamePiece = null;
@@ -527,20 +520,5 @@ public class Board : MonoBehaviour
         }
 
         return rowGamePieces;
-    }
-
-    private GamePiece GetBombPrefabOnMatch(MatchType matchType)
-    {
-        switch (matchType)
-        {
-            case MatchType.Horizontal:
-                return _rowBombPrefab;
-            case MatchType.Vertical:
-                return _columnBombPrefab;
-            case MatchType.Corner:
-                return _adjacentBombPrefab;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(matchType), matchType, null);
-        }
     }
 }

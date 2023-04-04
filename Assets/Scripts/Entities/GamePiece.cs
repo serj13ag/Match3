@@ -32,6 +32,9 @@ namespace Entities
             }
         }
 
+        // FIX LATER
+        public bool Bombed { get; set; }
+
         public event Action<GamePiece> OnPositionChanged;
         public event Action<GamePiece> OnStartMoving;
 

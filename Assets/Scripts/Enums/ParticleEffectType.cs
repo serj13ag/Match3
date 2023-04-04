@@ -5,5 +5,6 @@
         Clear,
         Break,
         DoubleBreak,
+        Bomb,
     }
 }

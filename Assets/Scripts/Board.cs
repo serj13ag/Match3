@@ -331,6 +331,12 @@ public class Board : MonoBehaviour
 
         bombedGamePieces = GetBombedGamePieces(bombGamePiece.BombType, matchedGamePiece);
 
+        // FIX LATER
+        foreach (var bombedGamePiece in bombedGamePieces)
+        {
+            bombedGamePiece.Bombed = true;
+        }
+
         if (bombedGamePieces == null)
         {
             return false;
@@ -416,7 +422,10 @@ public class Board : MonoBehaviour
 
         if (breakOnMatch)
         {
-            _particleController.PlayParticleEffectAt(position, ParticleEffectType.Clear);
+            var particleEffectType = gamePiece.Bombed
+                ? ParticleEffectType.Bomb
+                : ParticleEffectType.Clear;
+            _particleController.PlayParticleEffectAt(position, particleEffectType);
         }
     }
 

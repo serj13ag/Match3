@@ -8,6 +8,7 @@ public class ParticleController : MonoBehaviour
     [SerializeField] private ParticleEffect _clearVFX;
     [SerializeField] private ParticleEffect _breakVFX;
     [SerializeField] private ParticleEffect _breakDoubleVFX;
+    [SerializeField] private ParticleEffect _bombVFX;
 
     public void PlayParticleEffectAt(Vector2Int position, ParticleEffectType particleEffectType, int z = 0)
     {
@@ -25,6 +26,7 @@ public class ParticleController : MonoBehaviour
             ParticleEffectType.Clear => _clearVFX,
             ParticleEffectType.Break => _breakVFX,
             ParticleEffectType.DoubleBreak => _breakDoubleVFX,
+            ParticleEffectType.Bomb => _bombVFX,
             _ => throw new ArgumentOutOfRangeException(nameof(particleEffectType), particleEffectType, null)
         };
     }

@@ -205,6 +205,7 @@ MonoBehaviour:
   _clearVFX: {fileID: 1895834081504828337, guid: 1edc02ed832d892459dfb220e2caaafa, type: 3}
   _breakVFX: {fileID: 1066908054501586196, guid: 45a9e6b3204d3ac438d208e74d18ddb0, type: 3}
   _breakDoubleVFX: {fileID: 7643373790698149596, guid: a511891983476d04cae5ec4cd105565f, type: 3}
+  _bombVFX: {fileID: 1895834081504828337, guid: 8b60c83933ad961419d5a84145b37512, type: 3}
 --- !u!4 &221243260
 Transform:
   m_ObjectHideFlags: 0

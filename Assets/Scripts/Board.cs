@@ -331,15 +331,15 @@ public class Board : MonoBehaviour
 
         bombedGamePieces = GetBombedGamePieces(bombGamePiece.BombType, matchedGamePiece);
 
+        if (bombedGamePieces == null)
+        {
+            return false;
+        }
+
         // FIX LATER
         foreach (var bombedGamePiece in bombedGamePieces)
         {
             bombedGamePiece.Bombed = true;
-        }
-
-        if (bombedGamePieces == null)
-        {
-            return false;
         }
 
         if (gamePiecesToExclude != null)
@@ -360,25 +360,14 @@ public class Board : MonoBehaviour
 
     private HashSet<GamePiece> GetBombedGamePieces(BombType bombType, GamePiece matchedGamePiece)
     {
-        HashSet<GamePiece> additionalGamePieces = null;
-        switch (bombType)
+        return bombType switch
         {
-            case BombType.Column:
-                additionalGamePieces = GetColumnGamePieces(matchedGamePiece.Position.x);
-                break;
-            case BombType.Row:
-                additionalGamePieces = GetRowGamePieces(matchedGamePiece.Position.y);
-                break;
-            case BombType.Adjacent:
-                additionalGamePieces = GetAdjacentGamePieces(matchedGamePiece.Position, Constants.BombAdjacentGamePiecesRange);
-                break;
-            case BombType.Color:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        return additionalGamePieces;
+            BombType.Column => GetColumnGamePieces(matchedGamePiece.Position.x),
+            BombType.Row => GetRowGamePieces(matchedGamePiece.Position.y),
+            BombType.Adjacent => GetAdjacentGamePieces(matchedGamePiece.Position, Constants.BombAdjacentGamePiecesRange),
+            BombType.Color => null,
+            _ => throw new ArgumentOutOfRangeException(),
+        };
     }
 
     private void AddBreakGamePiecesCommand(HashSet<GamePiece> gamePiecesToBreak)

@@ -2,6 +2,7 @@
 {
     public enum GamePieceColor
     {
+        Undefined,
         Yellow,
         Blue,
         Magenta,

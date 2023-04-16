@@ -13,6 +13,7 @@ public class Factory : MonoBehaviour
     [SerializeField] private BombGamePiece _adjacentBombPrefab;
     [SerializeField] private BombGamePiece _columnBombPrefab;
     [SerializeField] private BombGamePiece _rowBombPrefab;
+    [SerializeField] private BombGamePiece _colorBombPrefab;
 
     [SerializeField] private Tile _basicTilePrefab;
 
@@ -60,7 +61,11 @@ public class Factory : MonoBehaviour
         GamePieceColor color)
     {
         GamePiece gamePiece = Instantiate(GetBombPrefabOnMatch(bombType), Vector3.zero, Quaternion.identity);
-        gamePiece.Init(color, x, y, _gameDataRepository, parentTransform);
+
+        GamePieceColor gamePieceColor = bombType == BombType.Color
+            ? GamePieceColor.Undefined
+            : color;
+        gamePiece.Init(gamePieceColor, x, y, _gameDataRepository, parentTransform);
         return gamePiece;
     }
 
@@ -71,7 +76,7 @@ public class Factory : MonoBehaviour
             BombType.Row => _rowBombPrefab,
             BombType.Column => _columnBombPrefab,
             BombType.Adjacent => _adjacentBombPrefab,
-            BombType.Color => throw new NotImplementedException(),
+            BombType.Color => _colorBombPrefab,
             _ => throw new ArgumentOutOfRangeException(nameof(bombType), bombType, null)
         };
     }

@@ -10,7 +10,11 @@ namespace Helpers
         public static BombType GetBombTypeOnMatch(HashSet<GamePiece> allMatches, Direction playerSwitchGamePiecesDirection)
         {
             BombType bombType;
-            if (IsCornerMatch(allMatches))
+            if (allMatches.Count >= Constants.MatchesToSpawnColorBomb)
+            {
+                bombType = BombType.Color;
+            }
+            else if (IsCornerMatch(allMatches))
             {
                 bombType = BombType.Adjacent;
             }

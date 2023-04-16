@@ -9,4 +9,5 @@
 
     public const int BombAdjacentGamePiecesRange = 2;
     public const int MatchesToSpawnBomb = 4;
+    public const int MatchesToSpawnColorBomb = 5;
 }

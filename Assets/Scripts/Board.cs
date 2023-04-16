@@ -29,6 +29,7 @@ public class Board : MonoBehaviour
     private int _collapsedGamePieces;
 
     private CommandBlock _commandBlock;
+    private Direction _playerSwitchGamePiecesDirection;
 
     public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
@@ -137,9 +138,9 @@ public class Board : MonoBehaviour
         RegisterGamePiece(gamePiece, x, y);
     }
 
-    private void SpawnBombGamePiece(int x, int y, MatchType matchType, GamePieceColor color)
+    private void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)
     {
-        GamePiece gamePiece = _factory.CreateBombGamePiece(x, y, transform, matchType, color);
+        GamePiece gamePiece = _factory.CreateBombGamePiece(x, y, transform, bombType, color);
         RegisterGamePiece(gamePiece, x, y);
     }
 
@@ -209,6 +210,10 @@ public class Board : MonoBehaviour
         GamePiece clickedGamePiece = _gamePieces[clickedTile.Position.x, clickedTile.Position.y];
         GamePiece targetGamePiece = _gamePieces[targetTile.Position.x, targetTile.Position.y];
 
+        _playerSwitchGamePiecesDirection = clickedGamePiece.Position.x != targetGamePiece.Position.x
+            ? Direction.Horizontal
+            : Direction.Vertical;
+
         clickedGamePiece.Move(targetTile.Position, true);
         targetGamePiece.Move(clickedTile.Position, true);
     }
@@ -271,21 +276,15 @@ public class Board : MonoBehaviour
     {
         HashSet<GamePiece> gamePiecesToBreak = GetGamePiecesToBreak(allMatches);
 
-        if (allMatches.Count >= Constants.MatchesToSpawnBomb)
+        var clickedGamePiece = movedGamePieces[1];
+        if (allMatches.Count >= Constants.MatchesToSpawnBomb && allMatches.Contains(clickedGamePiece))
         {
-            MatchType matchType = GamePieceMatchHelper.GetMatchType(allMatches);
-            List<GamePiece> matchedMovedGamePieces = movedGamePieces
-                .Where(allMatches.Contains)
-                .ToList();
+            var bombType = GamePieceMatchHelper.GetBombTypeOnMatch(allMatches, _playerSwitchGamePiecesDirection);
+            ClearGamePieceAt(clickedGamePiece.Position);
+            SpawnBombGamePiece(clickedGamePiece.Position.x, clickedGamePiece.Position.y, bombType,
+                clickedGamePiece.Color);
 
-            foreach (GamePiece matchedMovedGamePiece in matchedMovedGamePieces)
-            {
-                ClearGamePieceAt(matchedMovedGamePiece.Position);
-                SpawnBombGamePiece(matchedMovedGamePiece.Position.x, matchedMovedGamePiece.Position.y,
-                    matchType, matchedMovedGamePiece.Color);
-
-                gamePiecesToBreak.Remove(matchedMovedGamePiece);
-            }
+            gamePiecesToBreak.Remove(clickedGamePiece);
         }
 
         AddBreakGamePiecesCommand(gamePiecesToBreak);

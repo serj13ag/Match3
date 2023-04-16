@@ -7,7 +7,24 @@ namespace Helpers
 {
     public static class GamePieceMatchHelper
     {
-        public static MatchType GetMatchType(HashSet<GamePiece> gamePieces)
+        public static BombType GetBombTypeOnMatch(HashSet<GamePiece> allMatches, Direction playerSwitchGamePiecesDirection)
+        {
+            BombType bombType;
+            if (GamePieceMatchHelper.IsCornerMatch(allMatches))
+            {
+                bombType = BombType.Adjacent;
+            }
+            else
+            {
+                bombType = playerSwitchGamePiecesDirection == Direction.Vertical
+                    ? BombType.Column
+                    : BombType.Row;
+            }
+
+            return bombType;
+        }
+        
+        public static bool IsCornerMatch(HashSet<GamePiece> gamePieces)
         {
             var horizontalMatches = false;
             var verticalMatches = false;
@@ -36,12 +53,7 @@ namespace Helpers
                 }
             }
 
-            return horizontalMatches switch
-            {
-                true when verticalMatches => MatchType.Corner,
-                true => MatchType.Horizontal,
-                _ => MatchType.Vertical,
-            };
+            return horizontalMatches && verticalMatches;
         }
 
         public static bool HasMatchAtFillBoard(Vector2Int position, GamePiece[,] gamePieces, Vector2Int boardSize)

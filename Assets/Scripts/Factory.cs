@@ -56,22 +56,23 @@ public class Factory : MonoBehaviour
         return gamePiece;
     }
 
-    public GamePiece CreateBombGamePiece(int x, int y, Transform parentTransform, MatchType matchType,
+    public GamePiece CreateBombGamePiece(int x, int y, Transform parentTransform, BombType bombType,
         GamePieceColor color)
     {
-        GamePiece gamePiece = Instantiate(GetBombPrefabOnMatch(matchType), Vector3.zero, Quaternion.identity);
+        GamePiece gamePiece = Instantiate(GetBombPrefabOnMatch(bombType), Vector3.zero, Quaternion.identity);
         gamePiece.Init(color, x, y, _gameDataRepository, parentTransform);
         return gamePiece;
     }
 
-    private GamePiece GetBombPrefabOnMatch(MatchType matchType)
+    private GamePiece GetBombPrefabOnMatch(BombType bombType)
     {
-        return matchType switch
+        return bombType switch
         {
-            MatchType.Horizontal => _rowBombPrefab,
-            MatchType.Vertical => _columnBombPrefab,
-            MatchType.Corner => _adjacentBombPrefab,
-            _ => throw new ArgumentOutOfRangeException(nameof(matchType), matchType, null)
+            BombType.Row => _rowBombPrefab,
+            BombType.Column => _columnBombPrefab,
+            BombType.Adjacent => _adjacentBombPrefab,
+            BombType.Color => throw new NotImplementedException(),
+            _ => throw new ArgumentOutOfRangeException(nameof(bombType), bombType, null)
         };
     }
 

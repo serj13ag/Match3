@@ -8,6 +8,7 @@ using Entities;
 using Enums;
 using Helpers;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Board : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class Board : MonoBehaviour
 
     private CommandBlock _commandBlock;
     private Direction _playerSwitchGamePiecesDirection;
+    private int _collectibleGamePieces;
 
     public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
@@ -146,6 +148,12 @@ public class Board : MonoBehaviour
 
     private void RegisterGamePiece(GamePiece gamePiece, int x, int y)
     {
+        if (gamePiece is CollectibleGamePiece)
+        {
+            _collectibleGamePieces++;
+            Assert.IsTrue(_collectibleGamePieces <= Constants.MaxCollectibles);
+        }
+
         gamePiece.OnStartMoving += OnGamePieceStartMoving;
         gamePiece.OnPositionChanged += OnGamePiecePositionChanged;
 

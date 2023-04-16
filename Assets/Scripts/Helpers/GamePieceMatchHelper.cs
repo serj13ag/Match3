@@ -133,7 +133,8 @@ namespace Helpers
                     break;
                 }
 
-                if (gamePieceToCheck.Color != startGamePiece.Color)
+                if (gamePieceToCheck.Color == GamePieceColor.Undefined
+                    || gamePieceToCheck.Color != startGamePiece.Color)
                 {
                     break;
                 }

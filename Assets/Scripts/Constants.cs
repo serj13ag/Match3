@@ -10,4 +10,7 @@
     public const int BombAdjacentGamePiecesRange = 2;
     public const int MatchesToSpawnBomb = 4;
     public const int MatchesToSpawnColorBomb = 5;
+
+    public const int MaxCollectibles = 3;
+    public const float ChanceForCollectible = 0.1f;
 }

@@ -10,7 +10,7 @@ namespace Helpers
         public static BombType GetBombTypeOnMatch(HashSet<GamePiece> allMatches, Direction playerSwitchGamePiecesDirection)
         {
             BombType bombType;
-            if (GamePieceMatchHelper.IsCornerMatch(allMatches))
+            if (IsCornerMatch(allMatches))
             {
                 bombType = BombType.Adjacent;
             }
@@ -22,38 +22,6 @@ namespace Helpers
             }
 
             return bombType;
-        }
-        
-        public static bool IsCornerMatch(HashSet<GamePiece> gamePieces)
-        {
-            var horizontalMatches = false;
-            var verticalMatches = false;
-
-            var isFirstGamePiece = true;
-            var firstGamePiecePosition = Vector2Int.zero;
-
-            foreach (var gamePiece in gamePieces)
-            {
-                if (isFirstGamePiece)
-                {
-                    firstGamePiecePosition = gamePiece.Position;
-                    isFirstGamePiece = false;
-                }
-
-                if (firstGamePiecePosition.x != gamePiece.Position.x
-                    && firstGamePiecePosition.y == gamePiece.Position.y)
-                {
-                    horizontalMatches = true;
-                }
-
-                if (firstGamePiecePosition.x == gamePiece.Position.x
-                    && firstGamePiecePosition.y != gamePiece.Position.y)
-                {
-                    verticalMatches = true;
-                }
-            }
-
-            return horizontalMatches && verticalMatches;
         }
 
         public static bool HasMatchAtFillBoard(Vector2Int position, GamePiece[,] gamePieces, Vector2Int boardSize)
@@ -170,6 +138,38 @@ namespace Helpers
             }
 
             return matches.Count >= minMatchesCount;
+        }
+
+        private static bool IsCornerMatch(HashSet<GamePiece> gamePieces)
+        {
+            var horizontalMatches = false;
+            var verticalMatches = false;
+
+            var isFirstGamePiece = true;
+            var firstGamePiecePosition = Vector2Int.zero;
+
+            foreach (var gamePiece in gamePieces)
+            {
+                if (isFirstGamePiece)
+                {
+                    firstGamePiecePosition = gamePiece.Position;
+                    isFirstGamePiece = false;
+                }
+
+                if (firstGamePiecePosition.x != gamePiece.Position.x
+                    && firstGamePiecePosition.y == gamePiece.Position.y)
+                {
+                    horizontalMatches = true;
+                }
+
+                if (firstGamePiecePosition.x == gamePiece.Position.x
+                    && firstGamePiecePosition.y != gamePiece.Position.y)
+                {
+                    verticalMatches = true;
+                }
+            }
+
+            return horizontalMatches && verticalMatches;
         }
     }
 }

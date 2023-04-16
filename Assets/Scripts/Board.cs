@@ -230,7 +230,11 @@ public class Board : MonoBehaviour
                 _movedPieces.Pop(),
             };
 
-            if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
+            if (PlayerMovedColorBomb(movedGamePieces[1], movedGamePieces[0], out var gamePiecesToClear))
+            {
+                ClearAndCollapseAndRefill(gamePiecesToClear);
+            }
+            else if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
             {
                 CreateBombAndClearAndCollapseAndRefill(movedGamePieces, allMatches);
             }
@@ -401,6 +405,11 @@ public class Board : MonoBehaviour
     {
         GamePiece gamePiece = _gamePieces[position.x, position.y];
 
+        if (gamePiece == null)
+        {
+            return;
+        }
+
         _gamePieces[position.x, position.y] = null;
 
         gamePiece.OnStartMoving -= OnGamePieceStartMoving;
@@ -514,6 +523,28 @@ public class Board : MonoBehaviour
         return allMatches.Count > 0;
     }
 
+    private bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece, out HashSet<GamePiece> gamePiecesToClear)
+    {
+        gamePiecesToClear = new HashSet<GamePiece>();
+
+        if (clickedGamePiece is BombGamePiece { BombType: BombType.Color })
+        {
+            if (targetGamePiece is BombGamePiece { BombType: BombType.Color })
+            {
+                gamePiecesToClear = GetAllGamePieces();
+            }
+            else
+            {
+                gamePiecesToClear = GetGamePiecesByColor(targetGamePiece.Color);
+                gamePiecesToClear.Add(clickedGamePiece);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     private HashSet<GamePiece> GetRowGamePieces(int row)
     {
         var rowGamePieces = new HashSet<GamePiece>();
@@ -565,5 +596,35 @@ public class Board : MonoBehaviour
         }
 
         return rowGamePieces;
+    }
+
+    private HashSet<GamePiece> GetGamePiecesByColor(GamePieceColor color)
+    {
+        HashSet<GamePiece> result = new HashSet<GamePiece>();
+
+        foreach (var gamePiece in _gamePieces)
+        {
+            if (gamePiece != null && gamePiece.Color == color)
+            {
+                result.Add(gamePiece);
+            }
+        }
+
+        return result;
+    }
+
+    private HashSet<GamePiece> GetAllGamePieces()
+    {
+        HashSet<GamePiece> result = new HashSet<GamePiece>();
+
+        foreach (var gamePiece in _gamePieces)
+        {
+            if (gamePiece != null)
+            {
+                result.Add(gamePiece);
+            }
+        }
+
+        return result;
     }
 }

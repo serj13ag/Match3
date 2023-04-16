@@ -107,7 +107,10 @@ namespace Entities
         {
             Color = color;
 
-            _spriteRenderer.color = _gameDataRepository.Colors[color];
+            if (color != GamePieceColor.Undefined)
+            {
+                _spriteRenderer.color = _gameDataRepository.Colors[color];
+            }
         }
     }
 }

@@ -15,6 +15,8 @@ public class Factory : MonoBehaviour
     [SerializeField] private BombGamePiece _rowBombPrefab;
     [SerializeField] private BombGamePiece _colorBombPrefab;
 
+    [SerializeField] private CollectibleGamePiece[] _collectibleGamePieces;
+
     [SerializeField] private Tile _basicTilePrefab;
 
     private Random _random;
@@ -69,6 +71,13 @@ public class Factory : MonoBehaviour
         return gamePiece;
     }
 
+    public GamePiece CreateRandomCollectibleGamePiece(int x, int y, Transform parentTransform)
+    {
+        GamePiece gamePiece = Instantiate(GetRandomCollectibleGamePiecePrefab(), Vector3.zero, Quaternion.identity);
+        gamePiece.Init(GamePieceColor.Undefined, x, y, _gameDataRepository, parentTransform);
+        return gamePiece;
+    }
+
     private GamePiece GetBombPrefabOnMatch(BombType bombType)
     {
         return bombType switch
@@ -85,5 +94,11 @@ public class Factory : MonoBehaviour
     {
         int randomColorIndex = _random.Next(_gameDataRepository.Colors.Count - 1);
         return _gamePieceColors[randomColorIndex];
+    }
+
+    private CollectibleGamePiece GetRandomCollectibleGamePiecePrefab()
+    {
+        int randomIndex = _random.Next(_collectibleGamePieces.Length);
+        return _collectibleGamePieces[randomIndex];
     }
 }

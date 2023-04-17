@@ -21,7 +21,7 @@ public class MainController : MonoBehaviour
         _gameDataRepository = new GameDataRepository(_colorData, _moveData);
         _factory.Init(_random, _gameDataRepository, _particleController);
 
-        _board.Init(_particleController, _factory);
+        _board.Init(_particleController, _factory, _random);
 
         _board.SetupTiles();
         _cameraController.SetupCamera(_board.BoardSize);

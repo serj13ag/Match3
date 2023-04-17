@@ -9,6 +9,7 @@ using Enums;
 using Helpers;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Random = System.Random;
 
 public class Board : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class Board : MonoBehaviour
 
     private ParticleController _particleController;
     private Factory _factory;
+    private Random _random;
 
     private Tile[,] _tiles;
     private GamePiece[,] _gamePieces;
@@ -35,10 +37,11 @@ public class Board : MonoBehaviour
 
     public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
-    public void Init(ParticleController particleController, Factory factory)
+    public void Init(ParticleController particleController, Factory factory, Random random)
     {
         _particleController = particleController;
         _factory = factory;
+        _random = random;
 
         _movedPieces = new Stack<GamePiece>();
 
@@ -116,6 +119,11 @@ public class Board : MonoBehaviour
                     continue;
                 }
 
+                if (TrySpawnCollectibleGamePiece(i, j))
+                {
+                    continue;
+                }
+
                 GamePiece gamePiece = SpawnBasicGamePieceWithRandomColor(i, j);
 
                 while (GamePieceMatchHelper.HasMatchAtFillBoard(new Vector2Int(i, j), _gamePieces, BoardSize))
@@ -125,6 +133,19 @@ public class Board : MonoBehaviour
                 }
             }
         }
+    }
+
+    private bool TrySpawnCollectibleGamePiece(int x, int y)
+    {
+        if (y == _height - 1
+            && _collectibleGamePieces < Constants.MaxCollectibles
+            && _random.Next(100) <= Constants.PercentChanceToSpawnCollectible)
+        {
+            SpawnRandomCollectibleGamePiece(x, y);
+            return true;
+        }
+
+        return false;
     }
 
     private GamePiece SpawnBasicGamePieceWithRandomColor(int x, int y)
@@ -143,6 +164,12 @@ public class Board : MonoBehaviour
     private void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)
     {
         GamePiece gamePiece = _factory.CreateBombGamePiece(x, y, transform, bombType, color);
+        RegisterGamePiece(gamePiece, x, y);
+    }
+
+    private void SpawnRandomCollectibleGamePiece(int x, int y)
+    {
+        GamePiece gamePiece = _factory.CreateRandomCollectibleGamePiece(x, y, transform);
         RegisterGamePiece(gamePiece, x, y);
     }
 
@@ -270,6 +297,10 @@ public class Board : MonoBehaviour
             if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
             {
                 ClearAndCollapseAndRefill(allMatches);
+            }
+            else if (HasCollectiblesToBreak(out HashSet<GamePiece> collectiblesToBreak))
+            {
+                ClearAndCollapseAndRefill(collectiblesToBreak);
             }
             else
             {
@@ -418,6 +449,11 @@ public class Board : MonoBehaviour
             return;
         }
 
+        if (gamePiece is CollectibleGamePiece)
+        {
+            _collectibleGamePieces--;
+        }
+
         _gamePieces[position.x, position.y] = null;
 
         gamePiece.OnStartMoving -= OnGamePieceStartMoving;
@@ -529,6 +565,22 @@ public class Board : MonoBehaviour
         }
 
         return allMatches.Count > 0;
+    }
+
+    private bool HasCollectiblesToBreak(out HashSet<GamePiece> collectiblesToBreak)
+    {
+        collectiblesToBreak = new HashSet<GamePiece>();
+
+        for (int column = 0; column < _width; column++)
+        {
+            var bottomGamePiece = _gamePieces[column, 0];
+            if (bottomGamePiece != null && bottomGamePiece is CollectibleGamePiece)
+            {
+                collectiblesToBreak.Add(bottomGamePiece);
+            }
+        }
+
+        return collectiblesToBreak.Count > 0;
     }
 
     private bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece, out HashSet<GamePiece> gamePiecesToClear)

@@ -404,9 +404,9 @@ public class Board : MonoBehaviour
     {
         return bombType switch
         {
-            BombType.Column => GetColumnGamePieces(matchedGamePiece.Position.x),
-            BombType.Row => GetRowGamePieces(matchedGamePiece.Position.y),
-            BombType.Adjacent => GetAdjacentGamePieces(matchedGamePiece.Position, Constants.BombAdjacentGamePiecesRange),
+            BombType.Column => GetBombedColumnGamePieces(matchedGamePiece.Position.x),
+            BombType.Row => GetBombedRowGamePieces(matchedGamePiece.Position.y),
+            BombType.Adjacent => GetBombedAdjacentGamePieces(matchedGamePiece.Position, Constants.BombAdjacentGamePiecesRange),
             BombType.Color => null,
             _ => throw new ArgumentOutOfRangeException(),
         };
@@ -587,6 +587,11 @@ public class Board : MonoBehaviour
     {
         gamePiecesToClear = new HashSet<GamePiece>();
 
+        if (targetGamePiece.Color == GamePieceColor.Undefined)
+        {
+            return false;
+        }
+
         if (clickedGamePiece is BombGamePiece { BombType: BombType.Color })
         {
             if (targetGamePiece is BombGamePiece { BombType: BombType.Color })
@@ -605,13 +610,14 @@ public class Board : MonoBehaviour
         return false;
     }
 
-    private HashSet<GamePiece> GetRowGamePieces(int row)
+    private HashSet<GamePiece> GetBombedRowGamePieces(int row)
     {
         var rowGamePieces = new HashSet<GamePiece>();
 
         for (var column = 0; column < _width; column++)
         {
-            if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece))
+            if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
+                && CanBombGamePiece(gamePiece))
             {
                 rowGamePieces.Add(gamePiece);
             }
@@ -620,13 +626,14 @@ public class Board : MonoBehaviour
         return rowGamePieces;
     }
 
-    private HashSet<GamePiece> GetColumnGamePieces(int column)
+    private HashSet<GamePiece> GetBombedColumnGamePieces(int column)
     {
         var rowGamePieces = new HashSet<GamePiece>();
 
         for (var row = 0; row < _height; row++)
         {
-            if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece))
+            if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
+                && CanBombGamePiece(gamePiece))
             {
                 rowGamePieces.Add(gamePiece);
             }
@@ -635,7 +642,7 @@ public class Board : MonoBehaviour
         return rowGamePieces;
     }
 
-    private HashSet<GamePiece> GetAdjacentGamePieces(Vector2Int position, int range)
+    private HashSet<GamePiece> GetBombedAdjacentGamePieces(Vector2Int position, int range)
     {
         var rowGamePieces = new HashSet<GamePiece>();
 
@@ -648,7 +655,8 @@ public class Board : MonoBehaviour
         {
             for (int row = startRow; row <= endRow; row++)
             {
-                if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece))
+                if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
+                    && CanBombGamePiece(gamePiece))
                 {
                     rowGamePieces.Add(gamePiece);
                 }
@@ -656,6 +664,12 @@ public class Board : MonoBehaviour
         }
 
         return rowGamePieces;
+    }
+
+    private bool CanBombGamePiece(GamePiece gamePiece)
+    {
+        return gamePiece is not CollectibleGamePiece collectibleGamePiece
+               || collectibleGamePiece.CollectibleType == CollectibleType.ClearedByBomb;
     }
 
     private HashSet<GamePiece> GetGamePiecesByColor(GamePieceColor color)

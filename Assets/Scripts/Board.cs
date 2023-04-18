@@ -574,7 +574,7 @@ public class Board : MonoBehaviour
         for (int column = 0; column < _width; column++)
         {
             var bottomGamePiece = _gamePieces[column, 0];
-            if (bottomGamePiece != null && bottomGamePiece is CollectibleGamePiece)
+            if (bottomGamePiece != null && bottomGamePiece is CollectibleGamePiece { CollectibleType: CollectibleType.ClearedAtBottomRow })
             {
                 collectiblesToBreak.Add(bottomGamePiece);
             }

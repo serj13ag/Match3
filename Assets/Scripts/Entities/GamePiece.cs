@@ -32,8 +32,8 @@ namespace Entities
             }
         }
 
-        // FIX LATER
-        public bool Bombed { get; set; }
+        public bool Bombed { get; set; } // TODO: fix later
+        public int Score => 10; // TODO: add to data
 
         public event Action<GamePiece> OnPositionChanged;
         public event Action<GamePiece> OnStartMoving;

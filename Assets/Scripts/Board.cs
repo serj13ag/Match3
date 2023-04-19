@@ -22,6 +22,7 @@ public class Board : MonoBehaviour
     private ParticleController _particleController;
     private Factory _factory;
     private Random _random;
+    private ScoreController _scoreController;
 
     private Tile[,] _tiles;
     private GamePiece[,] _gamePieces;
@@ -35,10 +36,14 @@ public class Board : MonoBehaviour
     private Direction _playerSwitchGamePiecesDirection;
     private int _collectibleGamePieces;
 
+    private int _completedBreakIterationsAfterSwitchedGamePieces;
+
     public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
-    public void Init(ParticleController particleController, Factory factory, Random random)
+    public void Init(ParticleController particleController, Factory factory, Random random,
+        ScoreController scoreController)
     {
+        _scoreController = scoreController;
         _particleController = particleController;
         _factory = factory;
         _random = random;
@@ -249,6 +254,8 @@ public class Board : MonoBehaviour
             ? Direction.Horizontal
             : Direction.Vertical;
 
+        _completedBreakIterationsAfterSwitchedGamePieces = 0;
+
         clickedGamePiece.Move(targetTile.Position, true);
         targetGamePiece.Move(clickedTile.Position, true);
     }
@@ -378,7 +385,7 @@ public class Board : MonoBehaviour
             return false;
         }
 
-        // FIX LATER
+        // TODO: fix later
         foreach (var bombedGamePiece in bombedGamePieces)
         {
             bombedGamePiece.Bombed = true;
@@ -406,7 +413,8 @@ public class Board : MonoBehaviour
         {
             BombType.Column => GetBombedColumnGamePieces(matchedGamePiece.Position.x),
             BombType.Row => GetBombedRowGamePieces(matchedGamePiece.Position.y),
-            BombType.Adjacent => GetBombedAdjacentGamePieces(matchedGamePiece.Position, Constants.BombAdjacentGamePiecesRange),
+            BombType.Adjacent => GetBombedAdjacentGamePieces(matchedGamePiece.Position,
+                Constants.BombAdjacentGamePiecesRange),
             BombType.Color => null,
             _ => throw new ArgumentOutOfRangeException(),
         };
@@ -431,13 +439,18 @@ public class Board : MonoBehaviour
         _commandBlock.AddCommand(fillBoardCommand);
     }
 
-    private void BreakGamePieces(IEnumerable<GamePiece> gamePieces)
+    private void BreakGamePieces(HashSet<GamePiece> gamePieces)
     {
         foreach (GamePiece gamePiece in gamePieces)
         {
+            _scoreController.AddScore(gamePiece.Score, gamePieces.Count,
+                _completedBreakIterationsAfterSwitchedGamePieces);
+
             ClearGamePieceAt(gamePiece.Position, true);
             ProcessTileMatchAt(gamePiece.Position);
         }
+
+        _completedBreakIterationsAfterSwitchedGamePieces++;
     }
 
     private void ClearGamePieceAt(Vector2Int position, bool breakOnMatch = false)
@@ -574,7 +587,9 @@ public class Board : MonoBehaviour
         for (int column = 0; column < _width; column++)
         {
             var bottomGamePiece = _gamePieces[column, 0];
-            if (bottomGamePiece != null && bottomGamePiece is CollectibleGamePiece { CollectibleType: CollectibleType.ClearedAtBottomRow })
+            if (bottomGamePiece != null
+                && bottomGamePiece is CollectibleGamePiece piece
+                && piece.CollectibleType == CollectibleType.ClearedAtBottomRow)
             {
                 collectiblesToBreak.Add(bottomGamePiece);
             }
@@ -583,7 +598,8 @@ public class Board : MonoBehaviour
         return collectiblesToBreak.Count > 0;
     }
 
-    private bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece, out HashSet<GamePiece> gamePiecesToClear)
+    private bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece,
+        out HashSet<GamePiece> gamePiecesToClear)
     {
         gamePiecesToClear = new HashSet<GamePiece>();
 

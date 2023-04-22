@@ -88,7 +88,7 @@ public class Board : MonoBehaviour
         foreach (StartingGamePieceEntry startingGamePieceEntry in _startingGamePiecesData.StartingGamePieces)
         {
             SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y,
-                startingGamePieceEntry.GamePiecePrefab, startingGamePieceEntry.GamePieceColor);
+                startingGamePieceEntry.GamePieceType, startingGamePieceEntry.GamePieceColor);
         }
 
         FillBoardWithRandomGamePieces();
@@ -151,14 +151,14 @@ public class Board : MonoBehaviour
 
     private GamePiece SpawnBasicGamePieceWithRandomColor(int x, int y)
     {
-        GamePiece gamePiece = _factory.CreateBasicGamePieceWithRandomColor(x, y, transform);
+        GamePiece gamePiece = _factory.CreateNormalGamePieceWithRandomColor(x, y, transform);
         RegisterGamePiece(gamePiece, x, y);
         return gamePiece;
     }
 
-    private void SpawnCustomGamePiece(int x, int y, GamePiece gamePiecePrefab, GamePieceColor gamePieceColor)
+    private void SpawnCustomGamePiece(int x, int y, GamePieceType gamePieceType, GamePieceColor gamePieceColor)
     {
-        GamePiece gamePiece = _factory.CreateCustomGamePiece(x, y, transform, gamePiecePrefab, gamePieceColor);
+        GamePiece gamePiece = _factory.CreateGamePiece(gamePieceType, gamePieceColor, x, y, transform);
         RegisterGamePiece(gamePiece, x, y);
     }
 
@@ -382,7 +382,7 @@ public class Board : MonoBehaviour
         }
 
         // TODO: fix later
-        foreach (var bombedGamePiece in bombedGamePieces)
+        foreach (GamePiece bombedGamePiece in bombedGamePieces)
         {
             bombedGamePiece.Bombed = true;
         }
@@ -582,7 +582,7 @@ public class Board : MonoBehaviour
 
         for (int column = 0; column < _width; column++)
         {
-            var bottomGamePiece = _gamePieces[column, 0];
+            GamePiece bottomGamePiece = _gamePieces[column, 0];
             if (bottomGamePiece != null
                 && bottomGamePiece is CollectibleGamePiece piece
                 && piece.CollectibleType == CollectibleType.ClearedAtBottomRow)

@@ -13,6 +13,7 @@ namespace Controllers
         [SerializeField] private Board _board;
 
         [SerializeField] private TilesData _tilesData;
+        [SerializeField] private GamePiecesData _gamePiecesData;
         [SerializeField] private ColorData _colorData;
         [SerializeField] private MoveData _moveData;
 
@@ -22,7 +23,7 @@ namespace Controllers
         private void Start()
         {
             _random = new Random();
-            _gameDataRepository = new GameDataRepository(_tilesData, _colorData, _moveData);
+            _gameDataRepository = new GameDataRepository(_tilesData, _gamePiecesData, _colorData, _moveData);
             _factory.Init(_random, _gameDataRepository, _particleController);
 
             _board.Init(_particleController, _factory, _random, _scoreController);

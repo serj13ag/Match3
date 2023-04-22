@@ -15,56 +15,45 @@ MonoBehaviour:
   StartingGamePieces:
   - X: 0
     Y: 0
-    Z: 0
-    GamePiecePrefab: {fileID: 4546735267292664957, guid: 6c52fc19e30d8164c96e747707315a49, type: 3}
+    GamePieceType: 0
     GamePieceColor: 6
   - X: 0
     Y: 1
-    Z: 0
-    GamePiecePrefab: {fileID: 4546735267292664957, guid: 6c52fc19e30d8164c96e747707315a49, type: 3}
+    GamePieceType: 0
     GamePieceColor: 2
   - X: 0
     Y: 2
-    Z: 0
-    GamePiecePrefab: {fileID: 4546735267292664957, guid: 6c52fc19e30d8164c96e747707315a49, type: 3}
+    GamePieceType: 1
     GamePieceColor: 4
   - X: 4
     Y: 2
-    Z: 0
-    GamePiecePrefab: {fileID: 4004659540058359006, guid: 6014bb0f12910774197fd5321abd102a, type: 3}
+    GamePieceType: 1
     GamePieceColor: 1
   - X: 4
     Y: 3
-    Z: 0
-    GamePiecePrefab: {fileID: 4004659540058359006, guid: 132d8997be8fe33479a5f1792f3a253a, type: 3}
+    GamePieceType: 2
     GamePieceColor: 5
   - X: 4
     Y: 6
-    Z: 0
-    GamePiecePrefab: {fileID: 4004659540058359006, guid: 64c60a6eb991de547b6dccf874651fcd, type: 3}
+    GamePieceType: 3
     GamePieceColor: 6
   - X: 3
     Y: 2
-    Z: 0
-    GamePiecePrefab: {fileID: 4004659540058359006, guid: 09d8710733dc7f146b9701b3e57b2777, type: 3}
+    GamePieceType: 4
     GamePieceColor: 0
   - X: 3
     Y: 3
-    Z: 0
-    GamePiecePrefab: {fileID: 4004659540058359006, guid: 09d8710733dc7f146b9701b3e57b2777, type: 3}
+    GamePieceType: 4
     GamePieceColor: 0
   - X: 2
     Y: 7
-    Z: 0
-    GamePiecePrefab: {fileID: 8217402636200117308, guid: d167ee4b6519e5844a83185f6bd61caf, type: 3}
+    GamePieceType: 6
     GamePieceColor: 0
   - X: 4
     Y: 7
-    Z: 0
-    GamePiecePrefab: {fileID: 8217402636200117308, guid: a0b39665ae0c6b5498a16204c73b3162, type: 3}
+    GamePieceType: 5
     GamePieceColor: 0
   - X: 3
     Y: 6
-    Z: 0
-    GamePiecePrefab: {fileID: 8217402636200117308, guid: a0b39665ae0c6b5498a16204c73b3162, type: 3}
+    GamePieceType: 6
     GamePieceColor: 0

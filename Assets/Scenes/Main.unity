@@ -842,6 +842,7 @@ MonoBehaviour:
   _factory: {fileID: 159697162}
   _board: {fileID: 1728171552}
   _tilesData: {fileID: 11400000, guid: 58d5b5bf443016740987e05305399443, type: 2}
+  _gamePiecesData: {fileID: 11400000, guid: 1fdddf5471a10694c8c6e1c7e18ea8a6, type: 2}
   _colorData: {fileID: 11400000, guid: 5783d67eebb527c46b48ba2e0cef3a70, type: 2}
   _moveData: {fileID: 11400000, guid: 387edab6fdc57f24eb11178c2004c0dd, type: 2}
 --- !u!1 &1728171550

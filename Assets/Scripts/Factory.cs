@@ -10,15 +10,7 @@ using Random = System.Random;
 
 public class Factory : MonoBehaviour
 {
-    [SerializeField] private GamePiece _gamePiecePrefab;
     [SerializeField] private GamePieceColor[] _gamePieceColors;
-
-    [SerializeField] private BombGamePiece _adjacentBombPrefab;
-    [SerializeField] private BombGamePiece _columnBombPrefab;
-    [SerializeField] private BombGamePiece _rowBombPrefab;
-    [SerializeField] private BombGamePiece _colorBombPrefab;
-
-    [SerializeField] private CollectibleGamePiece[] _collectibleGamePieces;
 
     private Random _random;
     private GameDataRepository _gameDataRepository;
@@ -39,48 +31,44 @@ public class Factory : MonoBehaviour
         return tile;
     }
 
-    public GamePiece CreateBasicGamePieceWithRandomColor(int x, int y, Transform parentTransform)
+    public GamePiece CreateNormalGamePieceWithRandomColor(int x, int y, Transform parentTransform)
     {
-        GamePiece gamePiece = Instantiate(_gamePiecePrefab, Vector3.zero, Quaternion.identity);
-        gamePiece.Init(GetRandomGamePieceColor(), x, y, _gameDataRepository, parentTransform);
-        return gamePiece;
-    }
-
-    public GamePiece CreateCustomGamePiece(int x, int y, Transform parentTransform,
-        GamePiece gamePiecePrefab, GamePieceColor color)
-    {
-        GamePiece gamePiece = Instantiate(gamePiecePrefab, Vector3.zero, Quaternion.identity);
-        gamePiece.Init(color, x, y, _gameDataRepository, parentTransform);
-        return gamePiece;
+        return CreateGamePiece(GamePieceType.Normal, GetRandomGamePieceColor(), x, y, parentTransform);
     }
 
     public GamePiece CreateBombGamePiece(int x, int y, Transform parentTransform, BombType bombType,
         GamePieceColor color)
     {
-        GamePiece gamePiece = Instantiate(GetBombPrefabOnMatch(bombType), Vector3.zero, Quaternion.identity);
+        if (bombType == BombType.Color)
+        {
+            color = GamePieceColor.Undefined;
+        }
 
-        GamePieceColor gamePieceColor = bombType == BombType.Color
-            ? GamePieceColor.Undefined
-            : color;
-        gamePiece.Init(gamePieceColor, x, y, _gameDataRepository, parentTransform);
-        return gamePiece;
+        return CreateGamePiece(GetGamePieceType(bombType), color, x, y, parentTransform);
     }
 
     public GamePiece CreateRandomCollectibleGamePiece(int x, int y, Transform parentTransform)
     {
-        GamePiece gamePiece = Instantiate(GetRandomCollectibleGamePiecePrefab(), Vector3.zero, Quaternion.identity);
-        gamePiece.Init(GamePieceColor.Undefined, x, y, _gameDataRepository, parentTransform);
+        return CreateGamePiece(GetRandomCollectibleGamePieceType(), GamePieceColor.Undefined, x, y, parentTransform);
+    }
+
+    public GamePiece CreateGamePiece(GamePieceType gamePieceType, GamePieceColor color, int x, int y,
+        Transform parentTransform)
+    {
+        GamePieceModel gamePieceModel = _gameDataRepository.GamePieces[gamePieceType];
+        GamePiece gamePiece = Instantiate(gamePieceModel.GamePiecePrefab, Vector3.zero, Quaternion.identity);
+        gamePiece.Init(color, x, y, _gameDataRepository, parentTransform);
         return gamePiece;
     }
 
-    private GamePiece GetBombPrefabOnMatch(BombType bombType)
+    private static GamePieceType GetGamePieceType(BombType bombType)
     {
         return bombType switch
         {
-            BombType.Row => _rowBombPrefab,
-            BombType.Column => _columnBombPrefab,
-            BombType.Adjacent => _adjacentBombPrefab,
-            BombType.Color => _colorBombPrefab,
+            BombType.Row => GamePieceType.BombRow,
+            BombType.Column => GamePieceType.BombColumn,
+            BombType.Adjacent => GamePieceType.BombAdjacent,
+            BombType.Color => GamePieceType.BombColor,
             _ => throw new ArgumentOutOfRangeException(nameof(bombType), bombType, null)
         };
     }
@@ -91,9 +79,14 @@ public class Factory : MonoBehaviour
         return _gamePieceColors[randomColorIndex];
     }
 
-    private CollectibleGamePiece GetRandomCollectibleGamePiecePrefab()
+    private GamePieceType GetRandomCollectibleGamePieceType()
     {
-        int randomIndex = _random.Next(_collectibleGamePieces.Length);
-        return _collectibleGamePieces[randomIndex];
+        GamePieceType[] collectibleGamePieceTypes = new[]
+        {
+            GamePieceType.CollectibleByBomb,
+            GamePieceType.CollectibleByBottomRow,
+        };
+
+        return collectibleGamePieceTypes[_random.Next(collectibleGamePieceTypes.Length)];
     }
 }

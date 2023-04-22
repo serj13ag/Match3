@@ -8,6 +8,7 @@ namespace Controllers
     {
         [SerializeField] private CameraController _cameraController;
         [SerializeField] private ParticleController _particleController;
+        [SerializeField] private ScreenFaderController _screenFaderController;
         [SerializeField] private ScoreController _scoreController;
         [SerializeField] private Factory _factory;
         [SerializeField] private Board _board;
@@ -24,6 +25,8 @@ namespace Controllers
 
         private void Start()
         {
+            _screenFaderController.FadeOff();
+
             _random = new Random();
             _gameDataRepository = new GameDataRepository(_tilesData, _gamePiecesData, _colorData, _moveData, _levelData);
             _factory.Init(_random, _gameDataRepository, _particleController);

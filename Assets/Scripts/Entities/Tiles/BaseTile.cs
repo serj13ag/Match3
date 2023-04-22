@@ -6,7 +6,7 @@ using PersistentData;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Entities
+namespace Entities.Tiles
 {
     public abstract class BaseTile : MonoBehaviour, ITile
     {

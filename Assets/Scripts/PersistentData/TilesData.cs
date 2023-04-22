@@ -1,5 +1,5 @@
 ﻿using System;
-using Entities;
+using Entities.Tiles;
 using Enums;
 using UnityEngine;
 
@@ -15,7 +15,7 @@ namespace PersistentData
     public class TileModel
     {
         public TileType Type;
-        public BasicTile TilePrefab;
+        public BaseTile TilePrefab;
         public int MatchesTillBreak;
         public BreakableSpriteData[] BreakableSpriteData;
     }

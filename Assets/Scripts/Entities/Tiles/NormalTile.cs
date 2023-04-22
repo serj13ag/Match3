@@ -1,6 +1,6 @@
-namespace Entities
+namespace Entities.Tiles
 {
-    public class BasicTile : BaseTile
+    public class NormalTile : BaseTile
     {
         public override bool IsObstacle => false;
     }

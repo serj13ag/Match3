@@ -1,6 +1,7 @@
 using System;
 using Controllers;
 using Entities;
+using Entities.Tiles;
 using Enums;
 using Interfaces;
 using PersistentData;
@@ -33,7 +34,7 @@ public class Factory : MonoBehaviour
     public ITile CreateTile(TileType tileType, int x, int y, Transform parentTransform)
     {
         TileModel tileModel = _gameDataRepository.Tiles[tileType];
-        BasicTile tile = Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
+        BaseTile tile = Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
         tile.Init(x, y, parentTransform, _particleController, tileModel);
         return tile;
     }

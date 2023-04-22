@@ -6,12 +6,6 @@ namespace Controllers
 {
     public class ScoreController : MonoBehaviour
     {
-        private const int UpdateScoreTextIncrement = 5;
-
-        private const float ScoreTextUpdateIntervalInSeconds = 0.01f;
-        private const int MinNumberOfBreakGamePiecesToGrantBonus = 4;
-        private const int BonusScore = 20;
-
         [SerializeField] private TMP_Text _scoreText;
 
         private int _score;
@@ -25,8 +19,8 @@ namespace Controllers
         public void AddScore(int gamePieceScore, int numberOfBreakGamePieces,
             int completedBreakIterationsAfterSwitchedGamePieces)
         {
-            int bonusScore = numberOfBreakGamePieces >= MinNumberOfBreakGamePiecesToGrantBonus
-                ? BonusScore
+            int bonusScore = numberOfBreakGamePieces >= Constants.Score.MinNumberOfBreakGamePiecesToGrantBonus
+                ? Constants.Score.BonusScore
                 : 0;
             int scoreMultiplier = completedBreakIterationsAfterSwitchedGamePieces + 1;
             int totalScore = gamePieceScore * scoreMultiplier + bonusScore;
@@ -49,12 +43,12 @@ namespace Controllers
 
             while (counterValue < _score)
             {
-                counterValue += UpdateScoreTextIncrement;
+                counterValue += Constants.Score.UpdateScoreTextIncrement;
                 counterValue = Mathf.Min(counterValue, _score);
 
                 UpdateScoreText(counterValue);
 
-                yield return new WaitForSeconds(ScoreTextUpdateIntervalInSeconds);
+                yield return new WaitForSeconds(Constants.Score.ScoreTextUpdateIntervalInSeconds);
             }
 
             UpdateScoreText(_score);

@@ -29,8 +29,8 @@ namespace Controllers
 
             _random = new Random();
             _gameDataRepository = new GameDataRepository(_tilesData, _gamePiecesData, _colorData, _moveData, _levelData);
-            _factory.Init(_random, _gameDataRepository, _particleController);
 
+            _factory.Init(_random, _gameDataRepository, _particleController);
             _board.Init(_particleController, _factory, _random, _scoreController, _gameDataRepository);
 
             _board.SetupTiles();

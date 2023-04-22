@@ -4,8 +4,6 @@ namespace Controllers
 {
     public class CameraController : MonoBehaviour
     {
-        private const float CameraPositionZ = -10f;
-
         [SerializeField] private Camera _camera;
 
         [SerializeField] private int _borderSize;
@@ -21,7 +19,7 @@ namespace Controllers
             float boardCenterX = (boardSize.x - 1) / 2f;
             float boardCenterY = (boardSize.y - 1) / 2f;
 
-            _camera.transform.position = new Vector3(boardCenterX, boardCenterY, CameraPositionZ);
+            _camera.transform.position = new Vector3(boardCenterX, boardCenterY, Constants.CameraPositionZ);
         }
 
         private void SetCameraAspectRatio(Vector2Int boardSize)

@@ -1,11 +1,9 @@
 ﻿public static class Constants
 {
+    public const float CameraPositionZ = -10f;
+
     public const float TimeToMoveGamePiece = 0.5f;
     public const int MinMatchesCount = 3;
-
-    public const float FillBoardTimeout = 0.5f;
-    public const float ClearGamePiecesTimeout = 0.5f;
-    public const float CollapseColumnsTimeout = 0.5f;
 
     public const int BombAdjacentGamePiecesRange = 2;
     public const int MatchesToSpawnBomb = 4;
@@ -13,4 +11,27 @@
 
     public const int MaxCollectibles = 5;
     public const int PercentChanceToSpawnCollectible = 50;
+
+    public static class Commands
+    {
+        public const float FillBoardTimeout = 0.5f;
+        public const float ClearGamePiecesTimeout = 0.5f;
+        public const float CollapseColumnsTimeout = 0.5f;
+    }
+
+    public static class ScreenFader
+    {
+        public const float SolidAlpha = 1;
+        public const float ClearAlpha = 0;
+        public const float Delay = 1f;
+        public const float TimeToFade = 1f;
+    }
+
+    public static class Score
+    {
+        public const int UpdateScoreTextIncrement = 5;
+        public const float ScoreTextUpdateIntervalInSeconds = 0.01f;
+        public const int MinNumberOfBreakGamePiecesToGrantBonus = 4;
+        public const int BonusScore = 20;
+    }
 }

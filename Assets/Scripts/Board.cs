@@ -84,7 +84,8 @@ public class Board : MonoBehaviour
     {
         _gamePieces = new GamePiece[_width, _height];
 
-        foreach (StartingGamePieceModel startingGamePieceEntry in _gameDataRepository.LevelData.StartingGamePiecesData.StartingGamePieces)
+        foreach (StartingGamePieceModel startingGamePieceEntry in _gameDataRepository.LevelData.StartingGamePiecesData
+                     .StartingGamePieces)
         {
             SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y,
                 startingGamePieceEntry.GamePieceType, startingGamePieceEntry.GamePieceColor);
@@ -211,10 +212,7 @@ public class Board : MonoBehaviour
 
     private void OnTileClicked(ITile tile)
     {
-        if (_clickedTile == null)
-        {
-            _clickedTile = tile;
-        }
+        _clickedTile ??= tile;
     }
 
     private void OnTileMouseEntered(ITile tile)
@@ -417,20 +415,22 @@ public class Board : MonoBehaviour
 
     private void AddBreakGamePiecesCommand(HashSet<GamePiece> gamePiecesToBreak)
     {
-        var breakCommand = new Command(() => BreakGamePieces(gamePiecesToBreak), Constants.ClearGamePiecesTimeout);
+        Command breakCommand =
+            new Command(() => BreakGamePieces(gamePiecesToBreak), Constants.Commands.ClearGamePiecesTimeout);
         _commandBlock.AddCommand(breakCommand);
     }
 
     private void AddCollapseColumnsCommand(HashSet<GamePiece> gamePiecesToBreak)
     {
         HashSet<int> columnIndexes = BoardHelper.GetColumnIndexes(gamePiecesToBreak);
-        var collapseCommand = new Command(() => CollapseColumns(columnIndexes), Constants.CollapseColumnsTimeout);
+        Command collapseCommand =
+            new Command(() => CollapseColumns(columnIndexes), Constants.Commands.CollapseColumnsTimeout);
         _commandBlock.AddCommand(collapseCommand);
     }
 
     private void AddFillBoardCommand()
     {
-        var fillBoardCommand = new Command(FillBoardWithRandomGamePieces, Constants.FillBoardTimeout);
+        Command fillBoardCommand = new Command(FillBoardWithRandomGamePieces, Constants.Commands.FillBoardTimeout);
         _commandBlock.AddCommand(fillBoardCommand);
     }
 

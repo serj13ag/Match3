@@ -6,29 +6,23 @@ namespace Controllers
 {
     public class ScreenFaderController : MonoBehaviour
     {
-        private const float SolidAlpha = 1;
-        private const float ClearAlpha = 0;
-
-        private const float Delay = 1f;
-        private const float TimeToFade = 1f;
-
         [SerializeField] private MaskableGraphic _fadeMaskableGraphic;
 
         public void FadeOn()
         {
-            StartCoroutine(FadeRoutine(SolidAlpha));
+            StartCoroutine(FadeRoutine(Constants.ScreenFader.SolidAlpha));
         }
 
         public void FadeOff()
         {
-            StartCoroutine(FadeRoutine(ClearAlpha));
+            StartCoroutine(FadeRoutine(Constants.ScreenFader.ClearAlpha));
         }
 
         private IEnumerator FadeRoutine(float alpha)
         {
-            yield return new WaitForSeconds(Delay);
+            yield return new WaitForSeconds(Constants.ScreenFader.Delay);
 
-            _fadeMaskableGraphic.CrossFadeAlpha(alpha, TimeToFade, true);
+            _fadeMaskableGraphic.CrossFadeAlpha(alpha, Constants.ScreenFader.TimeToFade, true);
         }
     }
 }

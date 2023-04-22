@@ -2,14 +2,14 @@
 {
     public enum GamePieceColor
     {
-        Undefined,
-        Yellow,
-        Blue,
-        Magenta,
-        Indigo,
-        Green,
-        Teal,
-        Red,
-        Cyan,
+        Undefined = 0,
+        Yellow = 1,
+        Blue = 2,
+        Magenta = 3,
+        Indigo = 4,
+        Green = 5,
+        Teal = 6,
+        Red = 7,
+        Cyan = 8,
     }
 }

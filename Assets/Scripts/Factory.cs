@@ -55,7 +55,7 @@ public class Factory : MonoBehaviour
     {
         GamePieceModel gamePieceModel = _gameDataRepository.GamePieces[gamePieceType];
         GamePiece gamePiece = Instantiate(gamePieceModel.GamePiecePrefab, Vector3.zero, Quaternion.identity);
-        gamePiece.Init(color, x, y, _gameDataRepository, parentTransform);
+        gamePiece.Init(color, x, y, _gameDataRepository, parentTransform, gamePieceModel);
         return gamePiece;
     }
 

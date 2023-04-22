@@ -25,18 +25,18 @@ namespace Controllers
         public void AddScore(int gamePieceScore, int numberOfBreakGamePieces,
             int completedBreakIterationsAfterSwitchedGamePieces)
         {
-            var bonusScore = numberOfBreakGamePieces >= MinNumberOfBreakGamePiecesToGrantBonus
+            int bonusScore = numberOfBreakGamePieces >= MinNumberOfBreakGamePiecesToGrantBonus
                 ? BonusScore
                 : 0;
-            var scoreMultiplier = completedBreakIterationsAfterSwitchedGamePieces + 1;
-            var totalScore = gamePieceScore * scoreMultiplier + bonusScore;
+            int scoreMultiplier = completedBreakIterationsAfterSwitchedGamePieces + 1;
+            int totalScore = gamePieceScore * scoreMultiplier + bonusScore;
 
             AddScoreInner(totalScore);
         }
 
         private void AddScoreInner(int score)
         {
-            var oldScore = _score;
+            int oldScore = _score;
 
             _score += score;
 
@@ -45,7 +45,7 @@ namespace Controllers
 
         private IEnumerator UpdateScoreTextRoutine(int oldScore)
         {
-            var counterValue = oldScore;
+            int counterValue = oldScore;
 
             while (counterValue < _score)
             {

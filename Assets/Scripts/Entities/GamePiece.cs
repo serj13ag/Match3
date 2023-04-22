@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Enums;
 using Helpers;
+using PersistentData.Models;
 using UnityEngine;
 
 namespace Entities
@@ -13,6 +14,7 @@ namespace Entities
         private GameDataRepository _gameDataRepository;
         private bool _isMoving;
         private Vector2Int _position;
+        private int _score;
 
         public bool IsLastMoveMadeByPlayer { get; private set; }
 
@@ -32,15 +34,17 @@ namespace Entities
         }
 
         public bool Bombed { get; set; } // TODO: fix later
-        public int Score => 10; // TODO: add to data
+        public int Score => _score;
 
         public event Action<GamePiece> OnPositionChanged;
         public event Action<GamePiece> OnStartMoving;
 
         public void Init(GamePieceColor color, int x, int y, GameDataRepository gameDataRepository,
-            Transform parentTransform)
+            Transform parentTransform, GamePieceModel gamePieceModel)
         {
             _gameDataRepository = gameDataRepository;
+
+            _score = gamePieceModel.Score;
 
             SetColor(color);
             SetPosition(x, y);

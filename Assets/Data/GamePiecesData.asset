@@ -15,15 +15,22 @@ MonoBehaviour:
   GamePieces:
   - Type: 0
     GamePiecePrefab: {fileID: 4546735267292664957, guid: 6c52fc19e30d8164c96e747707315a49, type: 3}
+    Score: 10
   - Type: 1
     GamePiecePrefab: {fileID: 4004659540058359006, guid: 6014bb0f12910774197fd5321abd102a, type: 3}
+    Score: 20
   - Type: 2
     GamePiecePrefab: {fileID: 4004659540058359006, guid: 132d8997be8fe33479a5f1792f3a253a, type: 3}
+    Score: 20
   - Type: 3
     GamePiecePrefab: {fileID: 4004659540058359006, guid: 64c60a6eb991de547b6dccf874651fcd, type: 3}
+    Score: 30
   - Type: 4
     GamePiecePrefab: {fileID: 4004659540058359006, guid: 09d8710733dc7f146b9701b3e57b2777, type: 3}
+    Score: 500
   - Type: 5
     GamePiecePrefab: {fileID: 8217402636200117308, guid: d167ee4b6519e5844a83185f6bd61caf, type: 3}
+    Score: 200
   - Type: 6
     GamePiecePrefab: {fileID: 8217402636200117308, guid: a0b39665ae0c6b5498a16204c73b3162, type: 3}
+    Score: 100

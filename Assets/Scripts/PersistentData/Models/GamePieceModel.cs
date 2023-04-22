@@ -9,5 +9,6 @@ namespace PersistentData.Models
     {
         public GamePieceType Type;
         public GamePiece GamePiecePrefab;
+        public int Score;
     }
 }

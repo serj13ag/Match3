@@ -1,7 +1,7 @@
 ﻿using System;
 using Entities;
 
-namespace Data
+namespace PersistentData
 {
     [Serializable]
     public class StartingTileEntry : StartingObjectEntry

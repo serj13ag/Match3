@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Data
+namespace PersistentData
 {
     [Serializable]
     public abstract class StartingObjectEntry

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Data
+namespace PersistentData
 {
     [CreateAssetMenu(fileName = "ColorData", menuName = "Create Color Data")]
     public class ColorData : ScriptableObject

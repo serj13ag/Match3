@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Data
+namespace PersistentData
 {
     [Serializable]
     public class BreakableSpriteData

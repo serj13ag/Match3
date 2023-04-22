@@ -1,6 +1,5 @@
 using System;
 using Controllers;
-using Data;
 using Entities;
 using Enums;
 using UnityEngine;

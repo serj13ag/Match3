@@ -2,7 +2,7 @@
 using Entities;
 using Enums;
 
-namespace Data
+namespace PersistentData
 {
     [Serializable]
     public class StartingGamePieceEntry : StartingObjectEntry

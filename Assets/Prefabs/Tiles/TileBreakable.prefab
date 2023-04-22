@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1908415108861199716}
   - component: {fileID: 1908415108861199717}
-  - component: {fileID: 8639118720009340608}
+  - component: {fileID: 8487373601145870775}
   - component: {fileID: 7584967224322675454}
   m_Layer: 0
   m_Name: TileBreakable
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8639118720009340608
+--- !u!114 &8487373601145870775
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1908415108861199723}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72603b2481979794b9b2314197f84e73, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c3831ff94df41699c0ec665982c2489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 1908415108861199717}

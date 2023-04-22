@@ -10,8 +10,6 @@ using Random = System.Random;
 
 public class Factory : MonoBehaviour
 {
-    [SerializeField] private GamePieceColor[] _gamePieceColors;
-
     private Random _random;
     private GameDataRepository _gameDataRepository;
     private ParticleController _particleController;
@@ -75,8 +73,8 @@ public class Factory : MonoBehaviour
 
     private GamePieceColor GetRandomGamePieceColor()
     {
-        int randomColorIndex = _random.Next(_gameDataRepository.Colors.Count - 1);
-        return _gamePieceColors[randomColorIndex];
+        int randomIndex = _random.Next(_gameDataRepository.LevelData.AvailableColors.Length);
+        return _gameDataRepository.LevelData.AvailableColors[randomIndex];
     }
 
     private GamePieceType GetRandomCollectibleGamePieceType()

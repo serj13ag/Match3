@@ -273,15 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 256662a0154a22446ae335b80f84a18a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gamePiecePrefab: {fileID: 4546735267292664957, guid: 6c52fc19e30d8164c96e747707315a49, type: 3}
   _gamePieceColors: 01000000020000000400000005000000060000000700000008000000
-  _adjacentBombPrefab: {fileID: 4004659540058359006, guid: 64c60a6eb991de547b6dccf874651fcd, type: 3}
-  _columnBombPrefab: {fileID: 4004659540058359006, guid: 132d8997be8fe33479a5f1792f3a253a, type: 3}
-  _rowBombPrefab: {fileID: 4004659540058359006, guid: 6014bb0f12910774197fd5321abd102a, type: 3}
-  _colorBombPrefab: {fileID: 4004659540058359006, guid: 09d8710733dc7f146b9701b3e57b2777, type: 3}
-  _collectibleGamePieces:
-  - {fileID: 8217402636200117308, guid: d167ee4b6519e5844a83185f6bd61caf, type: 3}
-  - {fileID: 8217402636200117308, guid: a0b39665ae0c6b5498a16204c73b3162, type: 3}
 --- !u!4 &159697163
 Transform:
   m_ObjectHideFlags: 0
@@ -845,6 +837,7 @@ MonoBehaviour:
   _gamePiecesData: {fileID: 11400000, guid: 1fdddf5471a10694c8c6e1c7e18ea8a6, type: 2}
   _colorData: {fileID: 11400000, guid: 5783d67eebb527c46b48ba2e0cef3a70, type: 2}
   _moveData: {fileID: 11400000, guid: 387edab6fdc57f24eb11178c2004c0dd, type: 2}
+  _levelData: {fileID: 11400000, guid: 46c025938f1ca5742bbad5313049e3f5, type: 2}
 --- !u!1 &1728171550
 GameObject:
   m_ObjectHideFlags: 0

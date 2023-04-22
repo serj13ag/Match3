@@ -10,15 +10,17 @@ public class GameDataRepository
     public Dictionary<GamePieceType, GamePieceModel> GamePieces { get; private set; }
     public Dictionary<GamePieceColor, Color> Colors { get; private set; }
 
+    public LevelData LevelData { get; }
     public MoveInterpolationType MoveInterpolationType { get; }
 
     public GameDataRepository(TilesData tilesData, GamePiecesData gamePiecesData, ColorData colorData,
-        MoveData moveData)
+        MoveData moveData, LevelData levelData)
     {
         SetupTiles(tilesData);
         SetupGamePieces(gamePiecesData);
         SetupColors(colorData);
 
+        LevelData = levelData;
         MoveInterpolationType = moveData.MoveInterpolationType;
     }
 

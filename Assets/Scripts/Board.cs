@@ -8,7 +8,6 @@ using Entities;
 using Enums;
 using Helpers;
 using Interfaces;
-using PersistentData;
 using PersistentData.Models;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -19,13 +18,11 @@ public class Board : MonoBehaviour
     [SerializeField] private int _width;
     [SerializeField] private int _height;
 
-    [SerializeField] private StartingTilesData _startingTilesData;
-    [SerializeField] private StartingGamePiecesData _startingGamePiecesData;
-
     private ParticleController _particleController;
     private Factory _factory;
     private Random _random;
     private ScoreController _scoreController;
+    private GameDataRepository _gameDataRepository;
 
     private ITile[,] _tiles;
     private GamePiece[,] _gamePieces;
@@ -44,8 +41,9 @@ public class Board : MonoBehaviour
     public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
     public void Init(ParticleController particleController, Factory factory, Random random,
-        ScoreController scoreController)
+        ScoreController scoreController, GameDataRepository gameDataRepository)
     {
+        _gameDataRepository = gameDataRepository;
         _scoreController = scoreController;
         _particleController = particleController;
         _factory = factory;
@@ -65,7 +63,7 @@ public class Board : MonoBehaviour
     {
         _tiles = new ITile[_width, _height];
 
-        foreach (StartingTileModel startingTile in _startingTilesData.StartingTiles)
+        foreach (StartingTileModel startingTile in _gameDataRepository.LevelData.StartingTilesData.StartingTiles)
         {
             SpawnTile(startingTile.TileType, startingTile.X, startingTile.Y);
         }
@@ -86,7 +84,7 @@ public class Board : MonoBehaviour
     {
         _gamePieces = new GamePiece[_width, _height];
 
-        foreach (StartingGamePieceModel startingGamePieceEntry in _startingGamePiecesData.StartingGamePieces)
+        foreach (StartingGamePieceModel startingGamePieceEntry in _gameDataRepository.LevelData.StartingGamePiecesData.StartingGamePieces)
         {
             SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y,
                 startingGamePieceEntry.GamePieceType, startingGamePieceEntry.GamePieceColor);

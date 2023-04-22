@@ -1,13 +1,14 @@
-using System;
+﻿using System;
 using Controllers;
 using Enums;
+using Interfaces;
 using PersistentData;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Entities
 {
-    public class Tile : MonoBehaviour
+    public abstract class BaseTile : MonoBehaviour, ITile
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
@@ -16,13 +17,14 @@ namespace Entities
         private TileType _tileType;
         private int _matchesTillBreak;
         private BreakableSpriteData[] _breakableSpriteData;
+
         private Vector2Int _position;
 
-        public TileType TileType => _tileType;
         public Vector2Int Position => _position;
+        public abstract bool IsObstacle { get; }
 
-        public event Action<Tile> OnClicked;
-        public event Action<Tile> OnMouseEntered;
+        public event Action<ITile> OnClicked;
+        public event Action<ITile> OnMouseEntered;
         public event Action OnMouseReleased;
 
         public void Init(int x, int y, Transform parentTransform, ParticleController particleController,
@@ -36,7 +38,7 @@ namespace Entities
 
             _position = new Vector2Int(x, y);
 
-            name = $"Tile {Position}";
+            name = $"Tile {_position}";
             transform.SetParent(parentTransform);
 
             if (_tileType is TileType.Breakable or TileType.DoubleBreakable)
@@ -91,7 +93,7 @@ namespace Entities
                 ? ParticleEffectType.DoubleBreak
                 : ParticleEffectType.Break;
 
-            _particleController.PlayParticleEffectAt(Position, effectType);
+            _particleController.PlayParticleEffectAt(_position, effectType);
         }
     }
 }

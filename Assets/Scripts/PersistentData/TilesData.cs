@@ -15,7 +15,7 @@ namespace PersistentData
     public class TileModel
     {
         public TileType Type;
-        public Tile TilePrefab;
+        public BasicTile TilePrefab;
         public int MatchesTillBreak;
         public BreakableSpriteData[] BreakableSpriteData;
     }

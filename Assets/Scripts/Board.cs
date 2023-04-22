@@ -7,6 +7,7 @@ using DTO;
 using Entities;
 using Enums;
 using Helpers;
+using Interfaces;
 using PersistentData;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -25,11 +26,11 @@ public class Board : MonoBehaviour
     private Random _random;
     private ScoreController _scoreController;
 
-    private Tile[,] _tiles;
+    private ITile[,] _tiles;
     private GamePiece[,] _gamePieces;
 
-    private Tile _clickedTile;
-    private Tile _targetTile;
+    private ITile _clickedTile;
+    private ITile _targetTile;
     private Stack<GamePiece> _movedPieces;
     private int _collapsedGamePieces;
 
@@ -61,7 +62,7 @@ public class Board : MonoBehaviour
 
     public void SetupTiles()
     {
-        _tiles = new Tile[_width, _height];
+        _tiles = new ITile[_width, _height];
 
         foreach (StartingTileEntry startingTile in _startingTilesData.StartingTiles)
         {
@@ -95,11 +96,11 @@ public class Board : MonoBehaviour
 
     private void SpawnTile(TileType tileType, int x, int y)
     {
-        Tile tile = _factory.CreateTile(tileType, x, y, transform);
+        ITile tile = _factory.CreateTile(tileType, x, y, transform);
         RegisterTile(x, y, tile);
     }
 
-    private void RegisterTile(int x, int y, Tile tile)
+    private void RegisterTile(int x, int y, ITile tile)
     {
         tile.OnClicked += OnTileClicked;
         tile.OnMouseEntered += OnTileMouseEntered;
@@ -114,7 +115,7 @@ public class Board : MonoBehaviour
         {
             for (var j = 0; j < _height; j++)
             {
-                if (_gamePieces[i, j] != null || _tiles[i, j].TileType == TileType.Obstacle)
+                if (_gamePieces[i, j] != null || _tiles[i, j].IsObstacle)
                 {
                     continue;
                 }
@@ -209,7 +210,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    private void OnTileClicked(Tile tile)
+    private void OnTileClicked(ITile tile)
     {
         if (_clickedTile == null)
         {
@@ -217,7 +218,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    private void OnTileMouseEntered(Tile tile)
+    private void OnTileMouseEntered(ITile tile)
     {
         if (_clickedTile != null && TileHelper.IsNeighbours(_clickedTile, tile))
         {
@@ -240,7 +241,7 @@ public class Board : MonoBehaviour
         _targetTile = null;
     }
 
-    private void SwitchGamePieces(Tile clickedTile, Tile targetTile)
+    private void SwitchGamePieces(ITile clickedTile, ITile targetTile)
     {
         GamePiece clickedGamePiece = _gamePieces[clickedTile.Position.x, clickedTile.Position.y];
         GamePiece targetGamePiece = _gamePieces[targetTile.Position.x, targetTile.Position.y];
@@ -480,7 +481,7 @@ public class Board : MonoBehaviour
 
     private void ProcessTileMatchAt(Vector2Int position)
     {
-        if (TryGetTileAt(position.x, position.y, out Tile tile))
+        if (TryGetTileAt(position.x, position.y, out ITile tile))
         {
             tile.ProcessMatch();
         }
@@ -529,7 +530,7 @@ public class Board : MonoBehaviour
                     availableRows.Enqueue(row);
                 }
             }
-            else if (_tiles[column, row].TileType != TileType.Obstacle)
+            else if (!_tiles[column, row].IsObstacle)
             {
                 availableRows.Enqueue(row);
             }
@@ -552,7 +553,7 @@ public class Board : MonoBehaviour
         return gamePiece != null;
     }
 
-    private bool TryGetTileAt(int x, int y, out Tile tile)
+    private bool TryGetTileAt(int x, int y, out ITile tile)
     {
         tile = _tiles[x, y];
 

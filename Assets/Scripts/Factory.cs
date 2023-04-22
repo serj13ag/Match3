@@ -2,6 +2,7 @@ using System;
 using Controllers;
 using Entities;
 using Enums;
+using Interfaces;
 using PersistentData;
 using UnityEngine;
 using Random = System.Random;
@@ -29,10 +30,10 @@ public class Factory : MonoBehaviour
         _particleController = particleController;
     }
 
-    public Tile CreateTile(TileType tileType, int x, int y, Transform parentTransform)
+    public ITile CreateTile(TileType tileType, int x, int y, Transform parentTransform)
     {
         TileModel tileModel = _gameDataRepository.Tiles[tileType];
-        Tile tile = Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
+        BasicTile tile = Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
         tile.Init(x, y, parentTransform, _particleController, tileModel);
         return tile;
     }

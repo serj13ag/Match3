@@ -9,6 +9,7 @@ using Enums;
 using Helpers;
 using Interfaces;
 using PersistentData;
+using PersistentData.Models;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = System.Random;
@@ -64,7 +65,7 @@ public class Board : MonoBehaviour
     {
         _tiles = new ITile[_width, _height];
 
-        foreach (StartingTileEntry startingTile in _startingTilesData.StartingTiles)
+        foreach (StartingTileModel startingTile in _startingTilesData.StartingTiles)
         {
             SpawnTile(startingTile.TileType, startingTile.X, startingTile.Y);
         }
@@ -85,7 +86,7 @@ public class Board : MonoBehaviour
     {
         _gamePieces = new GamePiece[_width, _height];
 
-        foreach (StartingGamePieceEntry startingGamePieceEntry in _startingGamePiecesData.StartingGamePieces)
+        foreach (StartingGamePieceModel startingGamePieceEntry in _startingGamePiecesData.StartingGamePieces)
         {
             SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y,
                 startingGamePieceEntry.GamePieceType, startingGamePieceEntry.GamePieceColor);

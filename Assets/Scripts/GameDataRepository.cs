@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Enums;
 using PersistentData;
+using PersistentData.Models;
 using UnityEngine;
 
 public class GameDataRepository
@@ -45,7 +46,7 @@ public class GameDataRepository
     {
         Colors = new Dictionary<GamePieceColor, Color>();
 
-        foreach (ColorDataEntry colorDataEntry in colorData.GamePieceColors)
+        foreach (ColorDataModel colorDataEntry in colorData.GamePieceColors)
         {
             Colors.Add(colorDataEntry.Type, colorDataEntry.Color);
         }

@@ -4,7 +4,7 @@ using Entities;
 using Entities.Tiles;
 using Enums;
 using Interfaces;
-using PersistentData;
+using PersistentData.Models;
 using UnityEngine;
 using Random = System.Random;
 

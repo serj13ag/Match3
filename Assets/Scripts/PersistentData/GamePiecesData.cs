@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using PersistentData.Models;
+using UnityEngine;
 
 namespace PersistentData
 {

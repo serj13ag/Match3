@@ -2,7 +2,7 @@
 using Entities.Tiles;
 using Enums;
 
-namespace PersistentData
+namespace PersistentData.Models
 {
     [Serializable]
     public class TileModel
@@ -10,6 +10,6 @@ namespace PersistentData
         public TileType Type;
         public BaseTile TilePrefab;
         public int MatchesTillBreak;
-        public BreakableSpriteData[] BreakableSpriteData;
+        public BreakableSpriteModel[] BreakableSpriteData;
     }
 }

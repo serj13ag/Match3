@@ -1,7 +1,7 @@
 ﻿using System;
 using Controllers;
 using Interfaces;
-using PersistentData;
+using PersistentData.Models;
 using UnityEngine;
 
 namespace Entities.Tiles

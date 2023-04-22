@@ -1,10 +1,10 @@
 ﻿using System;
 using Enums;
 
-namespace PersistentData
+namespace PersistentData.Models
 {
     [Serializable]
-    public class StartingGamePieceEntry : StartingObjectEntry
+    public class StartingGamePieceModel : StartingObjectModel
     {
         public GamePieceType GamePieceType;
         public GamePieceColor GamePieceColor;

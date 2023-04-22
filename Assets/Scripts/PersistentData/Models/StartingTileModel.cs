@@ -1,10 +1,10 @@
 ﻿using System;
 using Enums;
 
-namespace PersistentData
+namespace PersistentData.Models
 {
     [Serializable]
-    public class StartingTileEntry : StartingObjectEntry
+    public class StartingTileModel : StartingObjectModel
     {
         public TileType TileType;
     }

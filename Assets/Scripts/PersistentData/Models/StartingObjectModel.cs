@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace PersistentData
+namespace PersistentData.Models
 {
     [Serializable]
-    public abstract class StartingObjectEntry
+    public abstract class StartingObjectModel
     {
         public int X;
         public int Y;

@@ -1,6 +1,6 @@
 ﻿using Controllers;
 using Enums;
-using PersistentData;
+using PersistentData.Models;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -11,7 +11,7 @@ namespace Entities.Tiles
         private ParticleController _particleController;
 
         private int _matchesTillBreak;
-        private BreakableSpriteData[] _breakableSpriteData;
+        private BreakableSpriteModel[] _breakableSpriteData;
 
         public override bool IsObstacle => false;
 

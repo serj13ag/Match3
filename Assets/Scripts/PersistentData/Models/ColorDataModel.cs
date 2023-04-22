@@ -2,10 +2,10 @@
 using Enums;
 using UnityEngine;
 
-namespace PersistentData
+namespace PersistentData.Models
 {
     [Serializable]
-    public class ColorDataEntry
+    public class ColorDataModel
     {
         public GamePieceColor Type;
         public Color Color;

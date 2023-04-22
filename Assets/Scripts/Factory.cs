@@ -2,6 +2,7 @@ using System;
 using Controllers;
 using Entities;
 using Enums;
+using PersistentData;
 using UnityEngine;
 using Random = System.Random;
 
@@ -17,8 +18,6 @@ public class Factory : MonoBehaviour
 
     [SerializeField] private CollectibleGamePiece[] _collectibleGamePieces;
 
-    [SerializeField] private Tile _basicTilePrefab;
-
     private Random _random;
     private GameDataRepository _gameDataRepository;
     private ParticleController _particleController;
@@ -30,17 +29,11 @@ public class Factory : MonoBehaviour
         _particleController = particleController;
     }
 
-    public Tile CreateBasicTile(int x, int y, Transform parentTransform)
+    public Tile CreateTile(TileType tileType, int x, int y, Transform parentTransform)
     {
-        Tile tile = Instantiate(_basicTilePrefab, new Vector3(x, y, 0), Quaternion.identity);
-        tile.Init(x, y, parentTransform, _particleController);
-        return tile;
-    }
-
-    public Tile CreateCustomTile(Tile tilePrefab, int x, int y, int z, Transform parentTransform)
-    {
-        Tile tile = Instantiate(tilePrefab, new Vector3(x, y, z), Quaternion.identity);
-        tile.Init(x, y, parentTransform, _particleController);
+        TileModel tileModel = _gameDataRepository.Tiles[tileType];
+        Tile tile = Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
+        tile.Init(x, y, parentTransform, _particleController, tileModel);
         return tile;
     }
 

@@ -282,7 +282,6 @@ MonoBehaviour:
   _collectibleGamePieces:
   - {fileID: 8217402636200117308, guid: d167ee4b6519e5844a83185f6bd61caf, type: 3}
   - {fileID: 8217402636200117308, guid: a0b39665ae0c6b5498a16204c73b3162, type: 3}
-  _basicTilePrefab: {fileID: 8639118720009340608, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
 --- !u!4 &159697163
 Transform:
   m_ObjectHideFlags: 0
@@ -842,6 +841,7 @@ MonoBehaviour:
   _scoreController: {fileID: 84518575}
   _factory: {fileID: 159697162}
   _board: {fileID: 1728171552}
+  _tilesData: {fileID: 11400000, guid: 58d5b5bf443016740987e05305399443, type: 2}
   _colorData: {fileID: 11400000, guid: 5783d67eebb527c46b48ba2e0cef3a70, type: 2}
   _moveData: {fileID: 11400000, guid: 387edab6fdc57f24eb11178c2004c0dd, type: 2}
 --- !u!1 &1728171550

@@ -2,8 +2,9 @@
 {
     public enum TileType
     {
-        Normal,
-        Obstacle,
-        Breakable,
+        Normal = 0,
+        Obstacle = 1,
+        Breakable = 2,
+        DoubleBreakable = 3,
     }
 }

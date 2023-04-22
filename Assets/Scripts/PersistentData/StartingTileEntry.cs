@@ -1,11 +1,11 @@
 ﻿using System;
-using Entities;
+using Enums;
 
 namespace PersistentData
 {
     [Serializable]
     public class StartingTileEntry : StartingObjectEntry
     {
-        public Tile TilePrefab;
+        public TileType TileType;
     }
 }

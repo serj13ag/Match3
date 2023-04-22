@@ -65,7 +65,7 @@ public class Board : MonoBehaviour
 
         foreach (StartingTileEntry startingTile in _startingTilesData.StartingTiles)
         {
-            SpawnCustomTile(startingTile.TilePrefab, startingTile.X, startingTile.Y, startingTile.Z);
+            SpawnTile(startingTile.TileType, startingTile.X, startingTile.Y);
         }
 
         for (var i = 0; i < _width; i++)
@@ -74,7 +74,7 @@ public class Board : MonoBehaviour
             {
                 if (!TryGetTileAt(i, j, out _))
                 {
-                    SpawnBasicTile(i, j);
+                    SpawnTile(TileType.Normal, i, j);
                 }
             }
         }
@@ -93,15 +93,9 @@ public class Board : MonoBehaviour
         FillBoardWithRandomGamePieces();
     }
 
-    private void SpawnBasicTile(int x, int y)
+    private void SpawnTile(TileType tileType, int x, int y)
     {
-        Tile tile = _factory.CreateBasicTile(x, y, transform);
-        RegisterTile(x, y, tile);
-    }
-
-    private void SpawnCustomTile(Tile tilePrefab, int x, int y, int z)
-    {
-        Tile tile = _factory.CreateCustomTile(tilePrefab, x, y, z, transform);
+        Tile tile = _factory.CreateTile(tileType, x, y, transform);
         RegisterTile(x, y, tile);
     }
 

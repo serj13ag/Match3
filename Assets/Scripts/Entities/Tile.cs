@@ -9,32 +9,37 @@ namespace Entities
 {
     public class Tile : MonoBehaviour
     {
-        [SerializeField] private TileType _tileType = TileType.Normal;
-
         [SerializeField] private SpriteRenderer _spriteRenderer;
-
-        [SerializeField] private int _matchesTillBreak;
-        [SerializeField] private BreakableSpriteData[] _breakableSpriteData;
 
         private ParticleController _particleController;
 
-        public Vector2Int Position { get; private set; }
+        private TileType _tileType;
+        private int _matchesTillBreak;
+        private BreakableSpriteData[] _breakableSpriteData;
+        private Vector2Int _position;
+
         public TileType TileType => _tileType;
+        public Vector2Int Position => _position;
 
         public event Action<Tile> OnClicked;
         public event Action<Tile> OnMouseEntered;
         public event Action OnMouseReleased;
 
-        public void Init(int x, int y, Transform parentTransform, ParticleController particleController)
+        public void Init(int x, int y, Transform parentTransform, ParticleController particleController,
+            TileModel tileModel)
         {
             _particleController = particleController;
 
-            Position = new Vector2Int(x, y);
+            _tileType = tileModel.Type;
+            _matchesTillBreak = tileModel.MatchesTillBreak;
+            _breakableSpriteData = tileModel.BreakableSpriteData;
+
+            _position = new Vector2Int(x, y);
 
             name = $"Tile {Position}";
             transform.SetParent(parentTransform);
 
-            if (_tileType == TileType.Breakable)
+            if (_tileType is TileType.Breakable or TileType.DoubleBreakable)
             {
                 UpdateSprite();
             }
@@ -44,20 +49,18 @@ namespace Entities
         {
             Assert.IsTrue(_tileType != TileType.Obstacle);
 
-            if (_tileType != TileType.Breakable)
+            if (_tileType is TileType.Breakable or TileType.DoubleBreakable)
             {
-                return;
-            }
+                PlayVFX();
 
-            PlayVFX();
+                _matchesTillBreak--;
 
-            _matchesTillBreak--;
+                UpdateSprite();
 
-            UpdateSprite();
-
-            if (_matchesTillBreak == 0)
-            {
-                _tileType = TileType.Normal;
+                if (_matchesTillBreak == 0)
+                {
+                    _tileType = TileType.Normal;
+                }
             }
         }
 

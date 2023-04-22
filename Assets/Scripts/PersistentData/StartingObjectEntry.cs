@@ -7,6 +7,5 @@ namespace PersistentData
     {
         public int X;
         public int Y;
-        public int Z;
     }
 }

@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class GameDataRepository
 {
+    public Dictionary<TileType, TileModel> Tiles { get; private set; }
     public Dictionary<GamePieceColor, Color> Colors { get; private set; }
 
     public MoveInterpolationType MoveInterpolationType { get; }
 
-    public GameDataRepository(ColorData colorData, MoveData moveData)
+    public GameDataRepository(TilesData tilesData, ColorData colorData, MoveData moveData)
     {
+        SetupTiles(tilesData);
         SetupColors(colorData);
 
         MoveInterpolationType = moveData.MoveInterpolationType;
@@ -23,6 +25,16 @@ public class GameDataRepository
         foreach (ColorDataEntry colorDataEntry in colorData.GamePieceColors)
         {
             Colors.Add(colorDataEntry.Type, colorDataEntry.Color);
+        }
+    }
+
+    private void SetupTiles(TilesData tilesData)
+    {
+        Tiles = new Dictionary<TileType, TileModel>();
+
+        foreach (TileModel tileModel in tilesData.Tiles)
+        {
+            Tiles.Add(tileModel.Type, tileModel);
         }
     }
 }

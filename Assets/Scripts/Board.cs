@@ -40,6 +40,8 @@ public class Board : MonoBehaviour
 
     public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
+    public event Action OnGamePiecesSwitched;
+
     public void Init(ParticleController particleController, Factory factory, Random random,
         ScoreController scoreController, GameDataRepository gameDataRepository)
     {
@@ -267,10 +269,14 @@ public class Board : MonoBehaviour
 
             if (PlayerMovedColorBomb(movedGamePieces[1], movedGamePieces[0], out var gamePiecesToClear))
             {
+                OnGamePiecesSwitched?.Invoke(); // TODO one invocation
+
                 ClearAndCollapseAndRefill(gamePiecesToClear);
             }
             else if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
             {
+                OnGamePiecesSwitched?.Invoke(); // TODO one invocation
+
                 CreateBombAndClearAndCollapseAndRefill(movedGamePieces, allMatches);
             }
             else

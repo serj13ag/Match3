@@ -37,7 +37,7 @@ namespace Controllers
 
             _factory.Init(_random, _gameDataRepository, _particleController);
             _board.Init(_particleController, _factory, _random, _scoreController, _gameDataRepository);
-            _gameStateController.Init(_board, _cameraController);
+            _gameStateController.Init(_screenFaderController, _board, _cameraController);
 
             _gameStateController.StartGame();
         }

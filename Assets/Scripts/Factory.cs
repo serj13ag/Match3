@@ -6,17 +6,16 @@ using Enums;
 using Interfaces;
 using PersistentData.Models;
 using UnityEngine;
-using Random = System.Random;
 
 public class Factory : MonoBehaviour
 {
-    private Random _random;
+    private RandomService _randomService;
     private GameDataRepository _gameDataRepository;
     private ParticleController _particleController;
 
-    public void Init(Random random, GameDataRepository gameDataRepository, ParticleController particleController)
+    public void Init(RandomService randomService, GameDataRepository gameDataRepository, ParticleController particleController)
     {
-        _random = random;
+        _randomService = randomService;
         _gameDataRepository = gameDataRepository;
         _particleController = particleController;
     }
@@ -73,7 +72,7 @@ public class Factory : MonoBehaviour
 
     private GamePieceColor GetRandomGamePieceColor()
     {
-        int randomIndex = _random.Next(_gameDataRepository.LevelData.AvailableColors.Length);
+        int randomIndex = _randomService.Next(_gameDataRepository.LevelData.AvailableColors.Length);
         return _gameDataRepository.LevelData.AvailableColors[randomIndex];
     }
 
@@ -85,6 +84,6 @@ public class Factory : MonoBehaviour
             GamePieceType.CollectibleByBottomRow,
         };
 
-        return collectibleGamePieceTypes[_random.Next(collectibleGamePieceTypes.Length)];
+        return collectibleGamePieceTypes[_randomService.Next(collectibleGamePieceTypes.Length)];
     }
 }

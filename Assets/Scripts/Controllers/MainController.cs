@@ -23,19 +23,19 @@ namespace Controllers
         [SerializeField] private LevelData _levelData;
         [SerializeField] private MoveData _moveData;
 
-        private Random _random;
+        private RandomService _randomService;
         private GameDataRepository _gameDataRepository;
 
         private void Start()
         {
             _sceneController.UpdateSceneNameText();
 
-            _random = new Random();
+            _randomService = new RandomService();
             _gameDataRepository =
                 new GameDataRepository(_tilesData, _gamePiecesData, _colorData, _moveData, _levelData);
 
-            _factory.Init(_random, _gameDataRepository, _particleController);
-            _board.Init(_particleController, _factory, _random, _scoreController, _gameDataRepository);
+            _factory.Init(_randomService, _gameDataRepository, _particleController);
+            _board.Init(_particleController, _factory, _randomService, _scoreController, _gameDataRepository);
             _uiController.Init(_screenFaderController);
             _gameStateController.Init(_uiController, _board, _cameraController, _sceneController, _scoreController);
 

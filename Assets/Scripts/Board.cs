@@ -11,7 +11,6 @@ using Interfaces;
 using PersistentData.Models;
 using UnityEngine;
 using UnityEngine.Assertions;
-using Random = System.Random;
 
 public class Board : MonoBehaviour
 {
@@ -20,7 +19,7 @@ public class Board : MonoBehaviour
 
     private ParticleController _particleController;
     private Factory _factory;
-    private Random _random;
+    private RandomService _randomService;
     private ScoreController _scoreController;
     private GameDataRepository _gameDataRepository;
 
@@ -42,14 +41,14 @@ public class Board : MonoBehaviour
 
     public event Action OnGamePiecesSwitched;
 
-    public void Init(ParticleController particleController, Factory factory, Random random,
+    public void Init(ParticleController particleController, Factory factory, RandomService randomService,
         ScoreController scoreController, GameDataRepository gameDataRepository)
     {
         _gameDataRepository = gameDataRepository;
         _scoreController = scoreController;
         _particleController = particleController;
         _factory = factory;
-        _random = random;
+        _randomService = randomService;
 
         _movedPieces = new Stack<GamePiece>();
 
@@ -142,7 +141,7 @@ public class Board : MonoBehaviour
     {
         if (y == _height - 1
             && _collectibleGamePieces < Constants.MaxCollectibles
-            && _random.Next(100) <= Constants.PercentChanceToSpawnCollectible)
+            && _randomService.Next(100) <= Constants.PercentChanceToSpawnCollectible)
         {
             SpawnRandomCollectibleGamePiece(x, y);
             return true;

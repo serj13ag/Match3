@@ -7,11 +7,12 @@ namespace Controllers
 {
     public class GameStateController : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _movesLeftText;
+        [SerializeField] private TMP_Text _movesLeftText; // TODO move to IU controller
 
         private Board _board;
         private CameraController _cameraController;
-        private ScreenFaderController _screenFaderController;
+        private UIController _uiController;
+        private SceneController _sceneController;
 
         private GameState _gameState;
 
@@ -45,28 +46,27 @@ namespace Controllers
             }
         }
 
-        public void Init(ScreenFaderController screenFaderController, Board board, CameraController cameraController)
+        public void Init(UIController uiController, Board board, CameraController cameraController,
+            SceneController sceneController)
         {
-            _screenFaderController = screenFaderController;
+            _sceneController = sceneController;
+            _uiController = uiController;
             _cameraController = cameraController;
             _board = board;
-
-            _movesLeft = 3;
-            _scoreGoal = 10000;
 
             _board.OnGamePiecesSwitched += OnGamePiecesSwitched;
         }
 
-        public void StartGame()
+        public void InitializeLevel(int movesLeft, int scoreGoal)
         {
+            _movesLeft = movesLeft;
+            _scoreGoal = scoreGoal;
+
             ChangeState(GameState.Initialization);
+        }
 
-            _board.SetupTiles();
-            _cameraController.SetupCamera(_board.BoardSize);
-            _board.SetupGamePieces();
-
-            UpdateMovesLeftText();
-
+        private void ChangeStateToPlaying()
+        {
             ChangeState(GameState.Playing);
         }
 
@@ -77,15 +77,36 @@ namespace Controllers
             switch (state)
             {
                 case GameState.Initialization:
+                {
+                    _board.SetupTiles();
+                    _cameraController.SetupCamera(_board.BoardSize);
+                    _board.SetupGamePieces();
+
+                    UpdateMovesLeftText();
+
+                    _uiController.ShowStartGameMessageWindow(_scoreGoal, ChangeStateToPlaying);
                     break;
+                }
                 case GameState.Playing:
+                {
+                    _uiController.FadeOff();
                     break;
+                }
                 case GameState.GameOver:
-                    _screenFaderController.FadeOn();
+                {
+                    _uiController.FadeOn();
+
+                    _uiController.ShowGameOverMessageWindow(ReloadLevel);
                     break;
+                }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
+        }
+
+        private void ReloadLevel()
+        {
+            _sceneController.ReloadCurrentScene();
         }
 
         private void OnGamePiecesSwitched()

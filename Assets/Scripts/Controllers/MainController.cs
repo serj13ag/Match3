@@ -10,6 +10,7 @@ namespace Controllers
         [SerializeField] private ParticleController _particleController;
         [SerializeField] private ScreenFaderController _screenFaderController;
         [SerializeField] private SceneController _sceneController;
+        [SerializeField] private UIController _uiController;
         [SerializeField] private GameStateController _gameStateController;
         [SerializeField] private ScoreController _scoreController;
 
@@ -29,17 +30,16 @@ namespace Controllers
         {
             _sceneController.UpdateSceneNameText();
 
-            _screenFaderController.FadeOff();
-
             _random = new Random();
             _gameDataRepository =
                 new GameDataRepository(_tilesData, _gamePiecesData, _colorData, _moveData, _levelData);
 
             _factory.Init(_random, _gameDataRepository, _particleController);
             _board.Init(_particleController, _factory, _random, _scoreController, _gameDataRepository);
-            _gameStateController.Init(_screenFaderController, _board, _cameraController);
+            _uiController.Init(_screenFaderController);
+            _gameStateController.Init(_uiController, _board, _cameraController, _sceneController);
 
-            _gameStateController.StartGame();
+            _gameStateController.InitializeLevel(3, 10000); // TODO move to levelData
         }
     }
 }

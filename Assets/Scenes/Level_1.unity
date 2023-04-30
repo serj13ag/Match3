@@ -877,7 +877,6 @@ GameObject:
   m_Component:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
-  - component: {fileID: 519420029}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -885,14 +884,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &519420029
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -962,6 +953,7 @@ GameObject:
   - component: {fileID: 680941925}
   - component: {fileID: 680941926}
   - component: {fileID: 680941927}
+  - component: {fileID: 680941928}
   m_Layer: 0
   m_Name: SoundController
   m_TagString: Untagged
@@ -1000,19 +992,12 @@ MonoBehaviour:
   _musicClips:
   - {fileID: 8300000, guid: e75e89afb6e1648e7a4a2ac64328a7c0, type: 3}
   - {fileID: 8300000, guid: e5e029a21fda14206a9ff1423a1302a9, type: 3}
-  _winClips:
-  - {fileID: 8300000, guid: 5f9fb0bfcf06e4304aab13b97645fe13, type: 3}
-  - {fileID: 8300000, guid: b43b2e7180aa04f788c269504edc72de, type: 3}
-  _loseClips:
-  - {fileID: 8300000, guid: ed4ad50d33af142e6be4b65f4d37e37c, type: 3}
-  _bonusClips:
-  - {fileID: 8300000, guid: 3235eb35ca4de45b9901ea9ccbff8d77, type: 3}
-  - {fileID: 8300000, guid: 8743038399aa64c5db230df6c26f4b71, type: 3}
-  - {fileID: 8300000, guid: b1e6e75baf8f04ae59f52e341161f1a9, type: 3}
-  - {fileID: 8300000, guid: 6d894f08d52a44322a56f6afc48f59e0, type: 3}
-  - {fileID: 8300000, guid: 6dce900c6b57748dbb2ee112588b2bd9, type: 3}
-  - {fileID: 8300000, guid: 56e813bd88354448fb9f0a52536449a1, type: 3}
-  - {fileID: 8300000, guid: eadcfb9a0c2cb4bea8112ac470640c8e, type: 3}
+  _winClip: {fileID: 8300000, guid: 5f9fb0bfcf06e4304aab13b97645fe13, type: 3}
+  _loseClip: {fileID: 8300000, guid: ed4ad50d33af142e6be4b65f4d37e37c, type: 3}
+  _bonusClip: {fileID: 8300000, guid: eadcfb9a0c2cb4bea8112ac470640c8e, type: 3}
+  _breakGamePieceClip: {fileID: 8300000, guid: 6dce900c6b57748dbb2ee112588b2bd9, type: 3}
+  _bombGamePieceClip: {fileID: 8300000, guid: 8743038399aa64c5db230df6c26f4b71, type: 3}
+  _breakCollectibleClip: {fileID: 8300000, guid: eadcfb9a0c2cb4bea8112ac470640c8e, type: 3}
 --- !u!82 &680941927
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1109,6 +1094,14 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!81 &680941928
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680941924}
+  m_Enabled: 1
 --- !u!1 &819594484
 GameObject:
   m_ObjectHideFlags: 0

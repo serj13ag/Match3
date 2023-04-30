@@ -6,12 +6,15 @@ namespace Controllers
 {
     public class SoundController : MonoBehaviour
     {
-        [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private AudioSource _audioSource; // TODO spawn multiple sources
 
         [SerializeField] private AudioClip[] _musicClips;
-        [SerializeField] private AudioClip[] _winClips;
-        [SerializeField] private AudioClip[] _loseClips;
-        [SerializeField] private AudioClip[] _bonusClips;
+        [SerializeField] private AudioClip _winClip;
+        [SerializeField] private AudioClip _loseClip;
+        [SerializeField] private AudioClip _bonusClip;
+        [SerializeField] private AudioClip _breakGamePieceClip;
+        [SerializeField] private AudioClip _bombGamePieceClip;
+        [SerializeField] private AudioClip _breakCollectibleClip;
 
         private RandomService _randomService;
 
@@ -33,22 +36,26 @@ namespace Controllers
                 SoundType.Win => Constants.Sound.FxVolume,
                 SoundType.Lose => Constants.Sound.FxVolume,
                 SoundType.Bonus => Constants.Sound.FxVolume,
+                SoundType.BreakGamePieces => Constants.Sound.FxVolume,
+                SoundType.BombGamePieces => Constants.Sound.FxVolume,
+                SoundType.BreakCollectible => Constants.Sound.FxVolume,
                 _ => throw new ArgumentOutOfRangeException(nameof(soundType), soundType, null)
             };
         }
 
         private AudioClip GetClip(SoundType soundType)
         {
-            AudioClip[] clips = soundType switch
+            return soundType switch
             {
-                SoundType.Music => _musicClips,
-                SoundType.Win => _winClips,
-                SoundType.Lose => _loseClips,
-                SoundType.Bonus => _bonusClips,
+                SoundType.Music => GetRandomClip(_musicClips),
+                SoundType.Win => _winClip,
+                SoundType.Lose => _loseClip,
+                SoundType.BreakGamePieces => _breakGamePieceClip,
+                SoundType.Bonus => _bonusClip,
+                SoundType.BombGamePieces => _bombGamePieceClip,
+                SoundType.BreakCollectible => _breakCollectibleClip,
                 _ => throw new ArgumentOutOfRangeException(nameof(soundType), soundType, null)
             };
-
-            return GetRandomClip(clips);
         }
 
         private AudioClip GetRandomClip(AudioClip[] musicClips)

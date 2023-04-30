@@ -14,6 +14,7 @@ namespace Controllers
         private UIController _uiController;
         private SceneController _sceneController;
         private ScoreController _scoreController;
+        private SoundController _soundController;
 
         private GameState _gameState;
 
@@ -48,8 +49,9 @@ namespace Controllers
         }
 
         public void Init(UIController uiController, Board board, CameraController cameraController,
-            SceneController sceneController, ScoreController scoreController)
+            SceneController sceneController, ScoreController scoreController, SoundController soundController)
         {
+            _soundController = soundController;
             _scoreController = scoreController;
             _sceneController = sceneController;
             _uiController = uiController;
@@ -87,6 +89,7 @@ namespace Controllers
 
                     UpdateMovesLeftText();
 
+                    _soundController.PlaySound(SoundType.Music);
                     _uiController.ShowStartGameMessageWindow(_scoreGoal, ChangeStateToPlaying);
                     break;
                 }
@@ -101,10 +104,12 @@ namespace Controllers
 
                     if (ScoreGoalReached())
                     {
+                        _soundController.PlaySound(SoundType.Win);
                         _uiController.ShowGameWinMessageWindow(ReloadLevel);
                     }
                     else
                     {
+                        _soundController.PlaySound(SoundType.Lose);
                         _uiController.ShowGameOverMessageWindow(ReloadLevel);
                     }
 

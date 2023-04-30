@@ -21,6 +21,7 @@ public class Board : MonoBehaviour
     private Factory _factory;
     private RandomService _randomService;
     private ScoreController _scoreController;
+    private SoundController _soundController;
     private GameDataRepository _gameDataRepository;
 
     private ITile[,] _tiles;
@@ -42,13 +43,14 @@ public class Board : MonoBehaviour
     public event Action OnGamePiecesSwitched;
 
     public void Init(ParticleController particleController, Factory factory, RandomService randomService,
-        ScoreController scoreController, GameDataRepository gameDataRepository)
+        ScoreController scoreController, GameDataRepository gameDataRepository, SoundController soundController)
     {
         _gameDataRepository = gameDataRepository;
         _scoreController = scoreController;
         _particleController = particleController;
         _factory = factory;
         _randomService = randomService;
+        _soundController = soundController;
 
         _movedPieces = new Stack<GamePiece>();
 
@@ -355,6 +357,7 @@ public class Board : MonoBehaviour
         {
             if (TryGetBombedGamePieces(matchedGamePiece, out HashSet<GamePiece> bombedGamePieces))
             {
+                _soundController.PlaySound(SoundType.BombGamePieces);
                 gamePiecesToBreak.UnionWith(bombedGamePieces);
             }
             else
@@ -450,6 +453,12 @@ public class Board : MonoBehaviour
             ProcessTileMatchAt(gamePiece.Position);
         }
 
+        _soundController.PlaySound(SoundType.BreakGamePieces);
+        if (_completedBreakIterationsAfterSwitchedGamePieces > 1)
+        {
+            _soundController.PlaySound(SoundType.Bonus);
+        }
+
         _completedBreakIterationsAfterSwitchedGamePieces++;
     }
 
@@ -464,6 +473,8 @@ public class Board : MonoBehaviour
 
         if (gamePiece is CollectibleGamePiece)
         {
+            _soundController.PlaySound(SoundType.BreakCollectible);
+
             _collectibleGamePieces--;
         }
 

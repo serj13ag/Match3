@@ -36,11 +36,11 @@ namespace Controllers
 
             _soundController.Init(_randomService);
             _factory.Init(_randomService, _gameDataRepository, _particleController);
-            _board.Init(_particleController, _factory, _randomService, _scoreController, _gameDataRepository);
+            _board.Init(_particleController, _factory, _randomService, _scoreController, _gameDataRepository, _soundController);
             _uiController.Init(_screenFaderController);
-            _gameStateController.Init(_uiController, _board, _cameraController, _sceneController, _scoreController);
+            _gameStateController.Init(_uiController, _board, _cameraController, _sceneController, _scoreController, _soundController);
 
-            _gameStateController.InitializeLevel(3, 100); // TODO move to levelData
+            _gameStateController.InitializeLevel(10, 3000); // TODO move to levelData
         }
     }
 }

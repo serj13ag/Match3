@@ -37,9 +37,9 @@ namespace Controllers
             _factory.Init(_random, _gameDataRepository, _particleController);
             _board.Init(_particleController, _factory, _random, _scoreController, _gameDataRepository);
             _uiController.Init(_screenFaderController);
-            _gameStateController.Init(_uiController, _board, _cameraController, _sceneController);
+            _gameStateController.Init(_uiController, _board, _cameraController, _sceneController, _scoreController);
 
-            _gameStateController.InitializeLevel(3, 10000); // TODO move to levelData
+            _gameStateController.InitializeLevel(3, 100); // TODO move to levelData
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -6,10 +7,30 @@ namespace Controllers
 {
     public class ScoreController : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _scoreText;
+        [SerializeField] private TMP_Text _scoreText; // TODO move to ui
 
         private int _score;
         private Coroutine _updateScoreRoutine;
+
+        public int Score
+        {
+            get => _score;
+            private set
+            {
+                if (_score != value)
+                {
+                    int oldScore = Score;
+
+                    _score = value;
+
+                    _updateScoreRoutine ??= StartCoroutine(UpdateScoreTextRoutine(oldScore));
+
+                    OnScoreChanged?.Invoke();
+                }
+            }
+        }
+
+        public event Action OnScoreChanged;
 
         private void Awake()
         {
@@ -25,16 +46,7 @@ namespace Controllers
             int scoreMultiplier = completedBreakIterationsAfterSwitchedGamePieces + 1;
             int totalScore = gamePieceScore * scoreMultiplier + bonusScore;
 
-            AddScoreInner(totalScore);
-        }
-
-        private void AddScoreInner(int score)
-        {
-            int oldScore = _score;
-
-            _score += score;
-
-            _updateScoreRoutine ??= StartCoroutine(UpdateScoreTextRoutine(oldScore));
+            Score += totalScore;
         }
 
         private IEnumerator UpdateScoreTextRoutine(int oldScore)

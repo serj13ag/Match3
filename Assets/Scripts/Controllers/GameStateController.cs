@@ -13,6 +13,7 @@ namespace Controllers
         private CameraController _cameraController;
         private UIController _uiController;
         private SceneController _sceneController;
+        private ScoreController _scoreController;
 
         private GameState _gameState;
 
@@ -47,14 +48,16 @@ namespace Controllers
         }
 
         public void Init(UIController uiController, Board board, CameraController cameraController,
-            SceneController sceneController)
+            SceneController sceneController, ScoreController scoreController)
         {
+            _scoreController = scoreController;
             _sceneController = sceneController;
             _uiController = uiController;
             _cameraController = cameraController;
             _board = board;
 
             _board.OnGamePiecesSwitched += OnGamePiecesSwitched;
+            _scoreController.OnScoreChanged += OnScoreChanged;
         }
 
         public void InitializeLevel(int movesLeft, int scoreGoal)
@@ -96,7 +99,15 @@ namespace Controllers
                 {
                     _uiController.FadeOn();
 
-                    _uiController.ShowGameOverMessageWindow(ReloadLevel);
+                    if (ScoreGoalReached())
+                    {
+                        _uiController.ShowGameWinMessageWindow(ReloadLevel);
+                    }
+                    else
+                    {
+                        _uiController.ShowGameOverMessageWindow(ReloadLevel);
+                    }
+
                     break;
                 }
                 default:
@@ -112,6 +123,24 @@ namespace Controllers
         private void OnGamePiecesSwitched()
         {
             MovesLeft--;
+        }
+
+        private void OnScoreChanged()
+        {
+            if (_gameState == GameState.GameOver)
+            {
+                return;
+            }
+
+            if (ScoreGoalReached())
+            {
+                ChangeState(GameState.GameOver);
+            }
+        }
+
+        private bool ScoreGoalReached()
+        {
+            return _scoreController.Score >= _scoreGoal;
         }
 
         private void UpdateMovesLeftText()

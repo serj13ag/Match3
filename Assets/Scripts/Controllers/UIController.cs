@@ -38,5 +38,10 @@ namespace Controllers
         {
             _messageWindow.ShowMessage(_loseIcon, "you lose!", "ok", onButtonClickCallback);
         }
+
+        public void ShowGameWinMessageWindow(Action onButtonClickCallback)
+        {
+            _messageWindow.ShowMessage(_winIcon, "you win!", "ok", onButtonClickCallback);
+        }
     }
 }

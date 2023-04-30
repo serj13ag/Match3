@@ -27,6 +27,14 @@
         public const float TimeToFade = 1f;
     }
 
+    public static class Sound
+    {
+        public const float LowPitch = 0.95f;
+        public const float HighPitch = 1.05f;
+        public const float MusicVolume = 0.5f;
+        public const float FxVolume = 0.5f;
+    }
+
     public static class Score
     {
         public const int UpdateScoreTextIncrement = 5;

@@ -1,6 +1,5 @@
 using PersistentData;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Controllers
 {
@@ -8,6 +7,7 @@ namespace Controllers
     {
         [SerializeField] private CameraController _cameraController;
         [SerializeField] private ParticleController _particleController;
+        [SerializeField] private SoundController _soundController;
         [SerializeField] private ScreenFaderController _screenFaderController;
         [SerializeField] private SceneController _sceneController;
         [SerializeField] private UIController _uiController;
@@ -34,6 +34,7 @@ namespace Controllers
             _gameDataRepository =
                 new GameDataRepository(_tilesData, _gamePiecesData, _colorData, _moveData, _levelData);
 
+            _soundController.Init(_randomService);
             _factory.Init(_randomService, _gameDataRepository, _particleController);
             _board.Init(_particleController, _factory, _randomService, _scoreController, _gameDataRepository);
             _uiController.Init(_screenFaderController);

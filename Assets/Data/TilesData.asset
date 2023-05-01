@@ -18,11 +18,11 @@ MonoBehaviour:
     MatchesTillBreak: 0
     BreakableSpriteData: []
   - Type: 1
-    TilePrefab: {fileID: 7336881642203019522, guid: 2b74954204e783948977a0e3bd2ba0d0, type: 3}
+    TilePrefab: {fileID: 4476970825586917187, guid: 94ae10c3b422c084d89c16708a2ef87b, type: 3}
     MatchesTillBreak: 0
     BreakableSpriteData: []
   - Type: 2
-    TilePrefab: {fileID: 8487373601145870775, guid: 16f7180f492848a4382ba108027a8688, type: 3}
+    TilePrefab: {fileID: 7021313371351854394, guid: 3a597b7839884f04a9c2ed6ba02d041c, type: 3}
     MatchesTillBreak: 1
     BreakableSpriteData:
     - BreakableSprite: {fileID: 21300000, guid: 91501a398367f96449195ac4c6140bc1, type: 3}
@@ -32,7 +32,7 @@ MonoBehaviour:
     - BreakableSprite: {fileID: 21300000, guid: 66ddf6f0940599a4285ef7ea4ff45d95, type: 3}
       BreakableColor: {r: 1, g: 1, b: 1, a: 1}
   - Type: 3
-    TilePrefab: {fileID: 8487373601145870775, guid: 16f7180f492848a4382ba108027a8688, type: 3}
+    TilePrefab: {fileID: 7021313371351854394, guid: 3a597b7839884f04a9c2ed6ba02d041c, type: 3}
     MatchesTillBreak: 2
     BreakableSpriteData:
     - BreakableSprite: {fileID: 21300000, guid: 91501a398367f96449195ac4c6140bc1, type: 3}

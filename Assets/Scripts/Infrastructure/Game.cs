@@ -6,10 +6,10 @@
 
         public GameStateMachine GameStateMachine => _gameStateMachine;
 
-        public Game(ICoroutineRunner coroutineRunner)
+        public Game(ICoroutineRunner coroutineRunner, LevelLoadingCurtain levelLoadingCurtain)
         {
             SceneLoader sceneLoader = new SceneLoader(coroutineRunner);
-            _gameStateMachine = new GameStateMachine(sceneLoader);
+            _gameStateMachine = new GameStateMachine(sceneLoader, levelLoadingCurtain);
         }
     }
 }

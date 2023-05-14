@@ -8,12 +8,13 @@ namespace Infrastructure
         private readonly Dictionary<Type, IExitableState> _states;
         private IExitableState _currentState;
 
-        public GameStateMachine(SceneLoader sceneLoader)
+        public GameStateMachine(SceneLoader sceneLoader, LevelLoadingCurtain levelLoadingCurtain)
         {
             _states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
-                [typeof(LoadLevelState)] = new LoadLevelState(sceneLoader),
+                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, levelLoadingCurtain),
+                [typeof(GameLoopState)] = new GameLoopState(),
             };
         }
 

@@ -1,29 +1,38 @@
-﻿using Mono.Cecil;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Infrastructure
 {
     public class LoadLevelState : IPayloadedState<string>
     {
-        private readonly SceneLoader _sceneLoader;
+        private const string CorePrefabPath = "Prefabs/Core";
 
-        public LoadLevelState(SceneLoader sceneLoader)
+        private readonly GameStateMachine _gameStateMachine;
+        private readonly SceneLoader _sceneLoader;
+        private readonly LevelLoadingCurtain _levelLoadingCurtain;
+
+        public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, LevelLoadingCurtain levelLoadingCurtain)
         {
+            _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
+            _levelLoadingCurtain = levelLoadingCurtain;
         }
 
         public void Enter(string sceneName)
         {
+            _levelLoadingCurtain.FadeOnInstantly();
             _sceneLoader.LoadScene(sceneName, OnLevelLoaded);
         }
 
         public void Exit()
         {
+            _levelLoadingCurtain.FadeOffWithDelay();
         }
 
         private void OnLevelLoaded()
         {
-            GameObject core = Instantiate("Prefabs/Core");
+            GameObject core = Instantiate(CorePrefabPath);
+
+            _gameStateMachine.Enter<GameLoopState>();
         }
 
         private static GameObject Instantiate(string path)

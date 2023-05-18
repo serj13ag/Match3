@@ -2,11 +2,9 @@
 
 namespace Controllers
 {
-    public class CameraController : MonoBehaviour
+    public class CameraService
     {
-        [SerializeField] private Camera _camera;
-
-        [SerializeField] private int _borderSize;
+        private const int BorderSize = 2;
 
         public void SetupCamera(Vector2Int boardSize)
         {
@@ -19,17 +17,17 @@ namespace Controllers
             float boardCenterX = (boardSize.x - 1) / 2f;
             float boardCenterY = (boardSize.y - 1) / 2f;
 
-            _camera.transform.position = new Vector3(boardCenterX, boardCenterY, Constants.CameraPositionZ);
+            Camera.main.transform.position = new Vector3(boardCenterX, boardCenterY, Constants.CameraPositionZ);
         }
 
         private void SetCameraAspectRatio(Vector2Int boardSize)
         {
             float screenAspectRatio = (float)Screen.width / Screen.height;
 
-            float verticalSize = boardSize.y / 2f + _borderSize;
-            float horizontalSize = (boardSize.x / 2f + _borderSize) / screenAspectRatio;
+            float verticalSize = boardSize.y / 2f + BorderSize;
+            float horizontalSize = (boardSize.x / 2f + BorderSize) / screenAspectRatio;
 
-            _camera.orthographicSize = Mathf.Max(verticalSize, horizontalSize);
+            Camera.main.orthographicSize = Mathf.Max(verticalSize, horizontalSize);
         }
     }
 }

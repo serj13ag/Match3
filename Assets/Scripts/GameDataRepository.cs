@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Enums;
+using Infrastructure;
 using PersistentData;
 using PersistentData.Models;
 using UnityEngine;
@@ -13,15 +14,14 @@ public class GameDataRepository
     public LevelData LevelData { get; }
     public MoveInterpolationType MoveInterpolationType { get; }
 
-    public GameDataRepository(TilesData tilesData, GamePiecesData gamePiecesData, ColorData colorData,
-        MoveData moveData, LevelData levelData)
+    public GameDataRepository(GameData gameData)
     {
-        SetupTiles(tilesData);
-        SetupGamePieces(gamePiecesData);
-        SetupColors(colorData);
+        SetupTiles(gameData.TilesData);
+        SetupGamePieces(gameData.GamePiecesData);
+        SetupColors(gameData.ColorData);
 
-        LevelData = levelData;
-        MoveInterpolationType = moveData.MoveInterpolationType;
+        LevelData = gameData.LevelData;
+        MoveInterpolationType = gameData.MoveData.MoveInterpolationType;
     }
 
     private void SetupTiles(TilesData tilesData)

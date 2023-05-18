@@ -8,6 +8,11 @@ namespace Controllers
     {
         [SerializeField] private MaskableGraphic _fadeMaskableGraphic;
 
+        private void Awake()
+        {
+            DontDestroyOnLoad(this);
+        }
+
         public void FadeOn()
         {
             StartCoroutine(FadeRoutine(Constants.ScreenFader.SolidAlpha));

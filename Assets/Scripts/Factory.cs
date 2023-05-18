@@ -6,14 +6,16 @@ using Enums;
 using Interfaces;
 using PersistentData.Models;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class Factory : MonoBehaviour
+public class Factory : IFactory
 {
-    private RandomService _randomService;
-    private GameDataRepository _gameDataRepository;
-    private ParticleController _particleController;
+    private readonly RandomService _randomService;
+    private readonly GameDataRepository _gameDataRepository;
+    private readonly ParticleController _particleController;
 
-    public void Init(RandomService randomService, GameDataRepository gameDataRepository, ParticleController particleController)
+    public Factory(RandomService randomService, GameDataRepository gameDataRepository,
+        ParticleController particleController)
     {
         _randomService = randomService;
         _gameDataRepository = gameDataRepository;
@@ -23,7 +25,7 @@ public class Factory : MonoBehaviour
     public ITile CreateTile(TileType tileType, int x, int y, Transform parentTransform)
     {
         TileModel tileModel = _gameDataRepository.Tiles[tileType];
-        BaseTile tile = Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
+        BaseTile tile = Object.Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
         tile.Init(x, y, parentTransform, _particleController, tileModel);
         return tile;
     }
@@ -53,7 +55,7 @@ public class Factory : MonoBehaviour
         Transform parentTransform)
     {
         GamePieceModel gamePieceModel = _gameDataRepository.GamePieces[gamePieceType];
-        GamePiece gamePiece = Instantiate(gamePieceModel.GamePiecePrefab, Vector3.zero, Quaternion.identity);
+        GamePiece gamePiece = Object.Instantiate(gamePieceModel.GamePiecePrefab, Vector3.zero, Quaternion.identity);
         gamePiece.Init(color, x, y, _gameDataRepository, parentTransform, gamePieceModel);
         return gamePiece;
     }

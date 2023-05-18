@@ -1,18 +1,14 @@
 ﻿using System;
 using Enums;
-using TMPro;
 using UnityEngine;
 
 namespace Controllers
 {
     public class GameStateController : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _movesLeftText; // TODO move to IU controller
-
         private Board _board;
-        private CameraController _cameraController;
+        private CameraService _cameraService;
         private UIController _uiController;
-        private SceneController _sceneController;
         private ScoreController _scoreController;
         private SoundController _soundController;
 
@@ -48,14 +44,13 @@ namespace Controllers
             }
         }
 
-        public void Init(UIController uiController, Board board, CameraController cameraController,
-            SceneController sceneController, ScoreController scoreController, SoundController soundController)
+        public void Init(UIController uiController, Board board, CameraService cameraService,
+            ScoreController scoreController, SoundController soundController)
         {
             _soundController = soundController;
             _scoreController = scoreController;
-            _sceneController = sceneController;
             _uiController = uiController;
-            _cameraController = cameraController;
+            _cameraService = cameraService;
             _board = board;
 
             _board.OnGamePiecesSwitched += OnGamePiecesSwitched;
@@ -84,7 +79,7 @@ namespace Controllers
                 case GameState.Initialization:
                 {
                     _board.SetupTiles();
-                    _cameraController.SetupCamera(_board.BoardSize);
+                    _cameraService.SetupCamera(_board.BoardSize);
                     _board.SetupGamePieces();
 
                     UpdateMovesLeftText();
@@ -122,7 +117,7 @@ namespace Controllers
 
         private void ReloadLevel()
         {
-            _sceneController.ReloadCurrentScene();
+            //AllServices.Instance.GameStateMachine.ReloadLevel(); //TODO
         }
 
         private void OnGamePiecesSwitched()
@@ -150,7 +145,7 @@ namespace Controllers
 
         private void UpdateMovesLeftText()
         {
-            _movesLeftText.text = _movesLeft.ToString();
+            //_movesLeftText.text = _movesLeft.ToString(); //TODO
         }
     }
 }

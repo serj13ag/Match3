@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using Controllers;
 
-namespace Infrastructure
+namespace Infrastructure.StateMachine
 {
     public class GameStateMachine
     {
         private readonly Dictionary<Type, IExitableState> _states;
+
         private IExitableState _currentState;
 
-        public GameStateMachine(SceneLoader sceneLoader, LevelLoadingCurtain levelLoadingCurtain)
+        public GameStateMachine(GameData gameData, SceneLoader sceneLoader, LevelLoadingCurtain levelLoadingCurtain,
+            ParticleController particleController, SoundController soundController,
+            ScreenFaderController screenFaderController, SceneController sceneController)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
+                [typeof(BootstrapState)] = new BootstrapState(this, gameData, sceneLoader, particleController,
+                    soundController, screenFaderController, sceneController),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, levelLoadingCurtain),
                 [typeof(GameLoopState)] = new GameLoopState(),
             };

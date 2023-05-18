@@ -18,6 +18,11 @@ namespace Controllers
 
         private RandomService _randomService;
 
+        private void Awake()
+        {
+            DontDestroyOnLoad(this);
+        }
+
         public void Init(RandomService randomService)
         {
             _randomService = randomService;

@@ -18,7 +18,7 @@ public class Board : MonoBehaviour
     [SerializeField] private int _height;
 
     private ParticleController _particleController;
-    private Factory _factory;
+    private IFactory _factory;
     private RandomService _randomService;
     private ScoreController _scoreController;
     private SoundController _soundController;
@@ -42,7 +42,7 @@ public class Board : MonoBehaviour
 
     public event Action OnGamePiecesSwitched;
 
-    public void Init(ParticleController particleController, Factory factory, RandomService randomService,
+    public void Init(ParticleController particleController, IFactory factory, RandomService randomService,
         ScoreController scoreController, GameDataRepository gameDataRepository, SoundController soundController)
     {
         _gameDataRepository = gameDataRepository;

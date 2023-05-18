@@ -1,15 +1,20 @@
-﻿namespace Infrastructure
+﻿using Controllers;
+using Infrastructure.StateMachine;
+
+namespace Infrastructure
 {
     public class Game
     {
-        private readonly GameStateMachine _gameStateMachine;
+        public GameStateMachine GameStateMachine { get; }
 
-        public GameStateMachine GameStateMachine => _gameStateMachine;
-
-        public Game(ICoroutineRunner coroutineRunner, LevelLoadingCurtain levelLoadingCurtain)
+        public Game(GameData gameData, ICoroutineRunner coroutineRunner, LevelLoadingCurtain levelLoadingCurtain,
+            ParticleController particleController, SoundController soundController,
+            ScreenFaderController screenFaderController, SceneController sceneController)
         {
             SceneLoader sceneLoader = new SceneLoader(coroutineRunner);
-            _gameStateMachine = new GameStateMachine(sceneLoader, levelLoadingCurtain);
+
+            GameStateMachine = new GameStateMachine(gameData, sceneLoader, levelLoadingCurtain, particleController,
+                soundController, screenFaderController, sceneController);
         }
     }
 }

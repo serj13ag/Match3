@@ -12,21 +12,21 @@ namespace Controllers
         [SerializeField] private Sprite _loseIcon;
         [SerializeField] private Sprite _goalIcon;
 
-        private ScreenFaderController _screenFaderController;
+        private LevelLoadingCurtain _levelLoadingCurtain;
 
-        public void Init(ScreenFaderController screenFaderController)
+        public void Init(LevelLoadingCurtain levelLoadingCurtain)
         {
-            _screenFaderController = screenFaderController;
+            _levelLoadingCurtain = levelLoadingCurtain;
         }
 
         public void FadeOn()
         {
-            _screenFaderController.FadeOn();
+            _levelLoadingCurtain.FadeOnWithDelay();
         }
 
         public void FadeOff()
         {
-            _screenFaderController.FadeOff();
+            _levelLoadingCurtain.FadeOffWithDelay();
         }
 
         public void ShowStartGameMessageWindow(int scoreGoal, Action onButtonClickCallback)

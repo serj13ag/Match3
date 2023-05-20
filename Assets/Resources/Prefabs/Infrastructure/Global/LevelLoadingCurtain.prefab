@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3137296185523201254}
   - component: {fileID: 7586027358598621370}
   m_Layer: 0
-  m_Name: Curtain
+  m_Name: LevelLoadingCurtain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &1504082246015937504
 MonoBehaviour:

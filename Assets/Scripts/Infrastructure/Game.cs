@@ -1,5 +1,4 @@
-﻿using Controllers;
-using Infrastructure.StateMachine;
+﻿using Infrastructure.StateMachine;
 
 namespace Infrastructure
 {
@@ -7,14 +6,11 @@ namespace Infrastructure
     {
         public GameStateMachine GameStateMachine { get; }
 
-        public Game(GameData gameData, ICoroutineRunner coroutineRunner, LevelLoadingCurtain levelLoadingCurtain,
-            ParticleController particleController, SoundController soundController,
-            ScreenFaderController screenFaderController, SceneController sceneController)
+        public Game(GameData gameData, ICoroutineRunner coroutineRunner)
         {
             SceneLoader sceneLoader = new SceneLoader(coroutineRunner);
 
-            GameStateMachine = new GameStateMachine(gameData, sceneLoader, levelLoadingCurtain, particleController,
-                soundController, screenFaderController, sceneController);
+            GameStateMachine = new GameStateMachine(gameData, sceneLoader);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Controllers;
 
 namespace Infrastructure.StateMachine
 {
@@ -10,15 +9,12 @@ namespace Infrastructure.StateMachine
 
         private IExitableState _currentState;
 
-        public GameStateMachine(GameData gameData, SceneLoader sceneLoader, LevelLoadingCurtain levelLoadingCurtain,
-            ParticleController particleController, SoundController soundController,
-            ScreenFaderController screenFaderController, SceneController sceneController)
+        public GameStateMachine(GameData gameData, SceneLoader sceneLoader)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, gameData, sceneLoader, particleController,
-                    soundController, screenFaderController, sceneController),
-                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, levelLoadingCurtain),
+                [typeof(BootstrapState)] = new BootstrapState(this, gameData, sceneLoader),
+                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader),
                 [typeof(GameLoopState)] = new GameLoopState(),
             };
         }

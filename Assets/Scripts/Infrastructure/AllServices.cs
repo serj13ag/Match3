@@ -4,47 +4,39 @@ namespace Infrastructure
 {
     public class AllServices
     {
-        private static AllServices _instance;
+        private const string SoundControllerPath = "Prefabs/Infrastructure/Global/SoundController";
+        private const string ParticleControllerPath = "Prefabs/Infrastructure/Global/ParticleController";
+        private const string LevelLoadingCurtainPath = "Prefabs/Infrastructure/Global/LevelLoadingCurtain";
 
-        private SoundController _soundController;
-        private ScreenFaderController _screenFaderController;
-        private SceneController _sceneController;
-        private ParticleController _particleController;
-        private RandomService _randomService;
-        private GameDataRepository _gameDataRepository;
-        private CameraService _cameraService;
+        private static AllServices _instance;
 
         public static AllServices Instance => _instance ??= new AllServices();
 
+        // Global
+        public RandomService RandomService { get; private set; }
+        public AssetProviderService AssetProviderService { get; private set; }
+        public CameraService CameraService { get; private set; } // Global?
+        public SoundController SoundController { get; private set; }
+        public ParticleController ParticleController { get; private set; } // Global?
+        public LevelLoadingCurtain LevelLoadingCurtain { get; private set; }
+        public GameDataRepository GameDataRepository { get; private set; }
         public IFactory Factory { get; private set; }
 
-        public SceneController SceneController => _sceneController;
-        public RandomService RandomService => _randomService;
-        public GameDataRepository GameDataRepository => _gameDataRepository;
-        public SoundController SoundController => _soundController;
-        public CameraService CameraService => _cameraService;
-        public ParticleController ParticleController => _particleController;
-        public ScreenFaderController ScreenFaderController => _screenFaderController;
-
-        public void Register(ParticleController particleController, SoundController soundController,
-            ScreenFaderController screenFaderController, SceneController sceneController)
+        public void InitGlobalServices(GameData gameData)
         {
-            _sceneController = sceneController;
-            _screenFaderController = screenFaderController;
-            _soundController = soundController;
-            _particleController = particleController;
-        }
+            RandomService = new RandomService();
+            AssetProviderService = new AssetProviderService();
+            CameraService = new CameraService();
 
-        public void Init(GameData gameData)
-        {
-            _randomService = new RandomService();
-            _gameDataRepository = new GameDataRepository(gameData);
+            SoundController = AssetProviderService.Instantiate<SoundController>(SoundControllerPath);
+            SoundController.Init(RandomService);
 
-            Factory = new Factory(_randomService, _gameDataRepository, _particleController);
+            ParticleController = AssetProviderService.Instantiate<ParticleController>(ParticleControllerPath); // Global?
+            LevelLoadingCurtain = AssetProviderService.Instantiate<LevelLoadingCurtain>(LevelLoadingCurtainPath);
 
-            _cameraService = new CameraService();
+            GameDataRepository = new GameDataRepository(gameData);
 
-            _soundController.Init(_randomService);
+            Factory = new Factory(RandomService, GameDataRepository, ParticleController);
         }
     }
 }

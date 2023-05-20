@@ -16,8 +16,7 @@ namespace Infrastructure.StateMachine
                 [typeof(BootstrapState)] = new BootstrapState(this, gameData, globalServices),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, globalServices.SceneLoader,
                     globalServices.LevelLoadingCurtain, globalServices.AssetProviderService,
-                    globalServices.RandomService, globalServices.GameDataRepository, globalServices.SoundController,
-                    globalServices.Factory, globalServices.CameraService, globalServices.ParticleController),
+                    globalServices.RandomService, globalServices.GameDataRepository, globalServices.SoundController),
                 [typeof(GameLoopState)] = new GameLoopState(),
             };
         }

@@ -18,7 +18,7 @@ public class Board : MonoBehaviour
     [SerializeField] private int _height;
 
     private ParticleController _particleController;
-    private IFactory _factory;
+    private IGameFactory _gameFactory;
     private RandomService _randomService;
     private ScoreController _scoreController;
     private SoundController _soundController;
@@ -42,13 +42,13 @@ public class Board : MonoBehaviour
 
     public event Action OnGamePiecesSwitched;
 
-    public void Init(ParticleController particleController, IFactory factory, RandomService randomService,
+    public void Init(ParticleController particleController, IGameFactory gameFactory, RandomService randomService,
         ScoreController scoreController, GameDataRepository gameDataRepository, SoundController soundController)
     {
         _gameDataRepository = gameDataRepository;
         _scoreController = scoreController;
         _particleController = particleController;
-        _factory = factory;
+        _gameFactory = gameFactory;
         _randomService = randomService;
         _soundController = soundController;
 
@@ -99,7 +99,7 @@ public class Board : MonoBehaviour
 
     private void SpawnTile(TileType tileType, int x, int y)
     {
-        ITile tile = _factory.CreateTile(tileType, x, y, transform);
+        ITile tile = _gameFactory.CreateTile(tileType, x, y, transform);
         RegisterTile(x, y, tile);
     }
 
@@ -154,26 +154,26 @@ public class Board : MonoBehaviour
 
     private GamePiece SpawnBasicGamePieceWithRandomColor(int x, int y)
     {
-        GamePiece gamePiece = _factory.CreateNormalGamePieceWithRandomColor(x, y, transform);
+        GamePiece gamePiece = _gameFactory.CreateNormalGamePieceWithRandomColor(x, y, transform);
         RegisterGamePiece(gamePiece, x, y);
         return gamePiece;
     }
 
     private void SpawnCustomGamePiece(int x, int y, GamePieceType gamePieceType, GamePieceColor gamePieceColor)
     {
-        GamePiece gamePiece = _factory.CreateGamePiece(gamePieceType, gamePieceColor, x, y, transform);
+        GamePiece gamePiece = _gameFactory.CreateGamePiece(gamePieceType, gamePieceColor, x, y, transform);
         RegisterGamePiece(gamePiece, x, y);
     }
 
     private void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)
     {
-        GamePiece gamePiece = _factory.CreateBombGamePiece(x, y, transform, bombType, color);
+        GamePiece gamePiece = _gameFactory.CreateBombGamePiece(x, y, transform, bombType, color);
         RegisterGamePiece(gamePiece, x, y);
     }
 
     private void SpawnRandomCollectibleGamePiece(int x, int y)
     {
-        GamePiece gamePiece = _factory.CreateRandomCollectibleGamePiece(x, y, transform);
+        GamePiece gamePiece = _gameFactory.CreateRandomCollectibleGamePiece(x, y, transform);
         RegisterGamePiece(gamePiece, x, y);
     }
 

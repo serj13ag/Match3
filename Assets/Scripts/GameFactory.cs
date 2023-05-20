@@ -8,13 +8,13 @@ using PersistentData.Models;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public class Factory : IFactory
+public class GameFactory : IGameFactory
 {
     private readonly RandomService _randomService;
     private readonly GameDataRepository _gameDataRepository;
     private readonly ParticleController _particleController;
 
-    public Factory(RandomService randomService, GameDataRepository gameDataRepository,
+    public GameFactory(RandomService randomService, GameDataRepository gameDataRepository,
         ParticleController particleController)
     {
         _randomService = randomService;

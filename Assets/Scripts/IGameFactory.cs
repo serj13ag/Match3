@@ -3,7 +3,7 @@ using Enums;
 using Interfaces;
 using UnityEngine;
 
-public interface IFactory
+public interface IGameFactory
 {
     ITile CreateTile(TileType tileType, int x, int y, Transform parentTransform);
     GamePiece CreateNormalGamePieceWithRandomColor(int x, int y, Transform parentTransform);

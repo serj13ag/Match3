@@ -12,11 +12,6 @@ namespace Controllers
         [SerializeField] private ParticleEffect _breakDoubleVFX;
         [SerializeField] private ParticleEffect _bombVFX;
 
-        private void Awake()
-        {
-            DontDestroyOnLoad(this);
-        }
-
         public void PlayParticleEffectAt(Vector2Int position, ParticleEffectType particleEffectType, int z = 0)
         {
             ParticleEffect effectPrefab = GetEffectPrefab(particleEffectType);

@@ -9,8 +9,9 @@ namespace Infrastructure
         public Game(GameData gameData, ICoroutineRunner coroutineRunner)
         {
             SceneLoader sceneLoader = new SceneLoader(coroutineRunner);
+            GlobalServices globalServices = new GlobalServices(sceneLoader);
 
-            GameStateMachine = new GameStateMachine(gameData, sceneLoader);
+            GameStateMachine = new GameStateMachine(gameData, globalServices);
         }
     }
 }

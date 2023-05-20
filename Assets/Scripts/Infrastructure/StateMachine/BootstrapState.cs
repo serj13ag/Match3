@@ -7,13 +7,13 @@
 
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
-        private readonly GameData _gameData;
 
-        public BootstrapState(GameStateMachine gameStateMachine, GameData gameData, SceneLoader sceneLoader)
+        public BootstrapState(GameStateMachine gameStateMachine, GameData gameData, GlobalServices services)
         {
             _gameStateMachine = gameStateMachine;
-            _sceneLoader = sceneLoader;
-            _gameData = gameData;
+            _sceneLoader = services.SceneLoader;
+
+            services.InitGlobalServices(gameData);
         }
 
         public void Enter()
@@ -27,8 +27,6 @@
 
         private void OnBootstrapSceneLoaded()
         {
-            AllServices.Instance.InitGlobalServices(_gameData);
-
             _gameStateMachine.Enter<LoadLevelState, string>(Level1SceneName);
         }
     }

@@ -12,43 +12,62 @@ namespace Infrastructure.StateMachine
 
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
+        private readonly LevelLoadingCurtain _levelLoadingCurtain;
+        private readonly AssetProviderService _assetProviderService;
+        private readonly RandomService _randomService;
+        private readonly GameDataRepository _gameDataRepository;
+        private readonly SoundController _soundController;
+        private readonly IFactory _factory;
+        private readonly CameraService _cameraService;
+        private readonly ParticleController _particleController;
 
-        public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader)
+        public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
+            LevelLoadingCurtain levelLoadingCurtain, AssetProviderService assetProviderService,
+            RandomService randomService, GameDataRepository gameDataRepository,
+            SoundController soundController, IFactory factory,
+            CameraService cameraService, ParticleController particleController)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
+            _levelLoadingCurtain = levelLoadingCurtain;
+            _assetProviderService = assetProviderService;
+            _randomService = randomService;
+            _gameDataRepository = gameDataRepository;
+            _soundController = soundController;
+            _factory = factory;
+            _cameraService = cameraService;
+            _particleController = particleController;
         }
 
         public void Enter(string sceneName)
         {
-            AllServices.Instance.LevelLoadingCurtain.FadeOnInstantly();
+            _levelLoadingCurtain.FadeOnInstantly();
             _sceneLoader.LoadScene(sceneName, OnLevelLoaded);
         }
 
         public void Exit()
         {
-            AllServices.Instance.LevelLoadingCurtain.FadeOffWithDelay();
+            _levelLoadingCurtain.FadeOffWithDelay();
         }
 
         private void OnLevelLoaded()
         {
-            ScoreController scoreController = AllServices.Instance.AssetProviderService.Instantiate<ScoreController>(ScoreControllerPath);
-            Board board = AllServices.Instance.AssetProviderService.Instantiate<Board>(BoardPath);
-            UIController uiController = AllServices.Instance.AssetProviderService.Instantiate<UIController>(UiControllerPath);
-            GameStateController gameStateController = AllServices.Instance.AssetProviderService.Instantiate<GameStateController>(GameStateControllerPath);
-            BackgroundUi backgroundUi = AllServices.Instance.AssetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
+            ScoreController scoreController = _assetProviderService.Instantiate<ScoreController>(ScoreControllerPath);
 
-            board.Init(AllServices.Instance.ParticleController, AllServices.Instance.Factory,
-                AllServices.Instance.RandomService, scoreController, AllServices.Instance.GameDataRepository,
-                AllServices.Instance.SoundController);
+            Board board = _assetProviderService.Instantiate<Board>(BoardPath);
+            board.Init(_particleController, _factory, _randomService, scoreController, _gameDataRepository,
+                _soundController);
 
-            uiController.Init(AllServices.Instance.LevelLoadingCurtain);
-            gameStateController.Init(uiController, board, AllServices.Instance.CameraService, scoreController,
-                AllServices.Instance.SoundController);
+            UIController uiController = _assetProviderService.Instantiate<UIController>(UiControllerPath);
+            uiController.Init(_levelLoadingCurtain);
+
+            GameStateController gameStateController = _assetProviderService.Instantiate<GameStateController>(GameStateControllerPath);
+            gameStateController.Init(uiController, board, _cameraService, scoreController, _soundController);
+
+            BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
+            backgroundUi.Init();
 
             gameStateController.InitializeLevel(10, 3000); // TODO move to levelData
-            
-            backgroundUi.Init();
 
             _gameStateMachine.Enter<GameLoopState>();
         }

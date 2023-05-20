@@ -2,15 +2,13 @@
 
 namespace Infrastructure
 {
-    public class AllServices
+    public class GlobalServices
     {
         private const string SoundControllerPath = "Prefabs/Infrastructure/Global/SoundController";
         private const string ParticleControllerPath = "Prefabs/Infrastructure/Global/ParticleController";
         private const string LevelLoadingCurtainPath = "Prefabs/Infrastructure/Global/LevelLoadingCurtain";
 
-        private static AllServices _instance;
-
-        public static AllServices Instance => _instance ??= new AllServices();
+        public SceneLoader SceneLoader { get; }
 
         // Global
         public RandomService RandomService { get; private set; }
@@ -21,6 +19,11 @@ namespace Infrastructure
         public LevelLoadingCurtain LevelLoadingCurtain { get; private set; }
         public GameDataRepository GameDataRepository { get; private set; }
         public IFactory Factory { get; private set; }
+
+        public GlobalServices(SceneLoader sceneLoader)
+        {
+            SceneLoader = sceneLoader;
+        }
 
         public void InitGlobalServices(GameData gameData)
         {

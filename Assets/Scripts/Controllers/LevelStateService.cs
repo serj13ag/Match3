@@ -6,7 +6,7 @@ namespace Controllers
 {
     public class LevelStateService
     {
-        private readonly Board _board;
+        private readonly BoardService _boardService;
         private readonly CameraService _cameraService;
         private readonly UIController _uiController;
         private readonly ScoreController _scoreController;
@@ -43,16 +43,16 @@ namespace Controllers
             }
         }
 
-        public LevelStateService(UIController uiController, Board board, CameraService cameraService,
+        public LevelStateService(UIController uiController, BoardService boardService, CameraService cameraService,
             ScoreController scoreController, SoundController soundController)
         {
             _soundController = soundController;
             _scoreController = scoreController;
             _uiController = uiController;
             _cameraService = cameraService;
-            _board = board;
+            _boardService = boardService;
 
-            _board.OnGamePiecesSwitched += OnGamePiecesSwitched;
+            _boardService.OnGamePiecesSwitched += OnGamePiecesSwitched;
             _scoreController.OnScoreChanged += OnScoreChanged;
         }
 
@@ -77,9 +77,9 @@ namespace Controllers
             {
                 case LevelState.Initialization:
                 {
-                    _board.SetupTiles();
-                    _cameraService.SetupCamera(_board.BoardSize);
-                    _board.SetupGamePieces();
+                    _boardService.SetupTiles();
+                    _cameraService.SetupCamera(BoardService.BoardSize);
+                    _boardService.SetupGamePieces();
 
                     UpdateMovesLeftText();
 

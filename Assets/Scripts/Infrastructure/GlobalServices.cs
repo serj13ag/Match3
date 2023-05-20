@@ -6,6 +6,7 @@ namespace Infrastructure
     {
         private const string SoundControllerPath = "Prefabs/Infrastructure/Global/SoundController";
         private const string LevelLoadingCurtainPath = "Prefabs/Infrastructure/Global/LevelLoadingCurtain";
+        private const string UpdateControllerPath = "Prefabs/Infrastructure/Global/UpdateController";
 
         public SceneLoader SceneLoader { get; }
 
@@ -15,6 +16,7 @@ namespace Infrastructure
 
         public SoundController SoundController { get; private set; }
         public LoadingCurtainController LoadingCurtainController { get; private set; }
+        public UpdateController UpdateController { get; private set; }
 
         public GlobalServices(SceneLoader sceneLoader)
         {
@@ -27,10 +29,13 @@ namespace Infrastructure
             AssetProviderService = new AssetProviderService();
             GameDataRepository = new GameDataRepository(gameData);
 
+            LoadingCurtainController = AssetProviderService.Instantiate<LoadingCurtainController>(LevelLoadingCurtainPath);
+
             SoundController = AssetProviderService.Instantiate<SoundController>(SoundControllerPath);
             SoundController.Init(RandomService);
 
-            LoadingCurtainController = AssetProviderService.Instantiate<LoadingCurtainController>(LevelLoadingCurtainPath);
+            UpdateController = AssetProviderService.Instantiate<UpdateController>(UpdateControllerPath);
+            UpdateController.Init();
         }
     }
 }

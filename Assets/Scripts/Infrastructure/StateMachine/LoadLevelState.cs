@@ -5,7 +5,6 @@ namespace Infrastructure.StateMachine
     public class LoadLevelState : IPayloadedState<string>
     {
         private const string ScoreControllerPath = "Prefabs/Infrastructure/Level/ScoreController";
-        private const string BoardPath = "Prefabs/Infrastructure/Level/Board";
         private const string UiControllerPath = "Prefabs/Infrastructure/Level/UIController";
         private const string BackgroundUiPath = "Prefabs/Infrastructure/Level/BackgroundUi";
         private const string ParticleControllerPath = "Prefabs/Infrastructure/Level/ParticleController";
@@ -17,10 +16,12 @@ namespace Infrastructure.StateMachine
         private readonly RandomService _randomService;
         private readonly GameDataRepository _gameDataRepository;
         private readonly SoundController _soundController;
+        private readonly UpdateController _updateController;
 
         public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             LoadingCurtainController loadingCurtainController, AssetProviderService assetProviderService,
-            RandomService randomService, GameDataRepository gameDataRepository, SoundController soundController)
+            RandomService randomService, GameDataRepository gameDataRepository, SoundController soundController,
+            UpdateController updateController)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
@@ -29,6 +30,7 @@ namespace Infrastructure.StateMachine
             _randomService = randomService;
             _gameDataRepository = gameDataRepository;
             _soundController = soundController;
+            _updateController = updateController;
         }
 
         public void Enter(string sceneName)
@@ -49,9 +51,8 @@ namespace Infrastructure.StateMachine
             GameFactory gameFactory = new GameFactory(_randomService, _gameDataRepository, particleController);
             ScoreController scoreController = _assetProviderService.Instantiate<ScoreController>(ScoreControllerPath);
 
-            Board board = _assetProviderService.Instantiate<Board>(BoardPath);
-            board.Init(particleController, gameFactory, _randomService, scoreController, _gameDataRepository,
-                _soundController);
+            BoardService boardService = new BoardService(particleController, gameFactory, _randomService, scoreController,
+                _gameDataRepository, _soundController, _updateController);
 
             UIController uiController = _assetProviderService.Instantiate<UIController>(UiControllerPath);
             uiController.Init(_loadingCurtainController);
@@ -59,7 +60,7 @@ namespace Infrastructure.StateMachine
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
             backgroundUi.Init(cameraService);
 
-            LevelStateService levelStateService = new LevelStateService(uiController, board, cameraService, scoreController, _soundController);
+            LevelStateService levelStateService = new LevelStateService(uiController, boardService, cameraService, scoreController, _soundController);
 
             levelStateService.InitializeLevel(10, 3000); // TODO move to levelData
 

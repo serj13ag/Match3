@@ -1,18 +1,15 @@
 ﻿using Entities;
 using Enums;
 using Interfaces;
-using UnityEngine;
 
 public interface IGameFactory
 {
-    ITile CreateTile(TileType tileType, int x, int y, Transform parentTransform);
-    GamePiece CreateNormalGamePieceWithRandomColor(int x, int y, Transform parentTransform);
+    ITile CreateTile(TileType tileType, int x, int y);
+    GamePiece CreateNormalGamePieceWithRandomColor(int x, int y);
 
-    GamePiece CreateBombGamePiece(int x, int y, Transform parentTransform, BombType bombType,
-        GamePieceColor color);
+    GamePiece CreateBombGamePiece(int x, int y, BombType bombType, GamePieceColor color);
 
-    GamePiece CreateRandomCollectibleGamePiece(int x, int y, Transform parentTransform);
+    GamePiece CreateRandomCollectibleGamePiece(int x, int y);
 
-    GamePiece CreateGamePiece(GamePieceType gamePieceType, GamePieceColor color, int x, int y,
-        Transform parentTransform);
+    GamePiece CreateGamePiece(GamePieceType gamePieceType, GamePieceColor color, int x, int y);
 }

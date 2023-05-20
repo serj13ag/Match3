@@ -71,6 +71,12 @@ namespace Entities
             }
         }
 
+        // TODO move out
+        public void Destroy()
+        {
+            Destroy(gameObject);
+        }
+
         private IEnumerator MoveRoutine(Vector2Int destination, float timeToMove)
         {
             _isMoving = true;

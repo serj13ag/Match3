@@ -7,43 +7,45 @@ using DTO;
 using Entities;
 using Enums;
 using Helpers;
+using Infrastructure;
 using Interfaces;
 using PersistentData.Models;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class Board : MonoBehaviour
+public class BoardService : IUpdatable
 {
-    [SerializeField] private int _width;
-    [SerializeField] private int _height;
+    private const int Width = 7;
+    private const int Height = 9;
 
-    private ParticleController _particleController;
-    private IGameFactory _gameFactory;
-    private RandomService _randomService;
-    private ScoreController _scoreController;
-    private SoundController _soundController;
-    private GameDataRepository _gameDataRepository;
+    private readonly ParticleController _particleController;
+    private readonly IGameFactory _gameFactory;
+    private readonly RandomService _randomService;
+    private readonly ScoreController _scoreController;
+    private readonly SoundController _soundController;
+    private readonly GameDataRepository _gameDataRepository;
 
     private ITile[,] _tiles;
     private GamePiece[,] _gamePieces;
 
     private ITile _clickedTile;
     private ITile _targetTile;
-    private Stack<GamePiece> _movedPieces;
+    private readonly Stack<GamePiece> _movedPieces;
     private int _collapsedGamePieces;
 
-    private CommandBlock _commandBlock;
+    private readonly CommandBlock _commandBlock;
     private Direction _playerSwitchGamePiecesDirection;
     private int _collectibleGamePieces;
 
     private int _completedBreakIterationsAfterSwitchedGamePieces;
 
-    public Vector2Int BoardSize => new Vector2Int(_width, _height);
+    public static Vector2Int BoardSize => new Vector2Int(Width, Height);
 
     public event Action OnGamePiecesSwitched;
 
-    public void Init(ParticleController particleController, IGameFactory gameFactory, RandomService randomService,
-        ScoreController scoreController, GameDataRepository gameDataRepository, SoundController soundController)
+    public BoardService(ParticleController particleController, IGameFactory gameFactory, RandomService randomService,
+        ScoreController scoreController, GameDataRepository gameDataRepository, SoundController soundController,
+        UpdateController updateController)
     {
         _gameDataRepository = gameDataRepository;
         _scoreController = scoreController;
@@ -55,25 +57,27 @@ public class Board : MonoBehaviour
         _movedPieces = new Stack<GamePiece>();
 
         _commandBlock = new CommandBlock();
+
+        updateController.Register(this);
     }
 
-    private void Update()
+    public void OnUpdate(float deltaTime)
     {
-        _commandBlock.Update(Time.deltaTime);
+        _commandBlock.Update(deltaTime);
     }
 
     public void SetupTiles()
     {
-        _tiles = new ITile[_width, _height];
+        _tiles = new ITile[Width, Height];
 
         foreach (StartingTileModel startingTile in _gameDataRepository.LevelData.StartingTilesData.StartingTiles)
         {
             SpawnTile(startingTile.TileType, startingTile.X, startingTile.Y);
         }
 
-        for (var i = 0; i < _width; i++)
+        for (var i = 0; i < Width; i++)
         {
-            for (var j = 0; j < _height; j++)
+            for (var j = 0; j < Height; j++)
             {
                 if (!TryGetTileAt(i, j, out _))
                 {
@@ -85,7 +89,7 @@ public class Board : MonoBehaviour
 
     public void SetupGamePieces()
     {
-        _gamePieces = new GamePiece[_width, _height];
+        _gamePieces = new GamePiece[Width, Height];
 
         foreach (StartingGamePieceModel startingGamePieceEntry in _gameDataRepository.LevelData.StartingGamePiecesData
                      .StartingGamePieces)
@@ -99,7 +103,7 @@ public class Board : MonoBehaviour
 
     private void SpawnTile(TileType tileType, int x, int y)
     {
-        ITile tile = _gameFactory.CreateTile(tileType, x, y, transform);
+        ITile tile = _gameFactory.CreateTile(tileType, x, y);
         RegisterTile(x, y, tile);
     }
 
@@ -114,9 +118,9 @@ public class Board : MonoBehaviour
 
     private void FillBoardWithRandomGamePieces()
     {
-        for (var i = 0; i < _width; i++)
+        for (var i = 0; i < Width; i++)
         {
-            for (var j = 0; j < _height; j++)
+            for (var j = 0; j < Height; j++)
             {
                 if (_gamePieces[i, j] != null || _tiles[i, j].IsObstacle)
                 {
@@ -141,7 +145,7 @@ public class Board : MonoBehaviour
 
     private bool TrySpawnCollectibleGamePiece(int x, int y)
     {
-        if (y == _height - 1
+        if (y == Height - 1
             && _collectibleGamePieces < Constants.MaxCollectibles
             && _randomService.Next(100) <= Constants.PercentChanceToSpawnCollectible)
         {
@@ -154,26 +158,26 @@ public class Board : MonoBehaviour
 
     private GamePiece SpawnBasicGamePieceWithRandomColor(int x, int y)
     {
-        GamePiece gamePiece = _gameFactory.CreateNormalGamePieceWithRandomColor(x, y, transform);
+        GamePiece gamePiece = _gameFactory.CreateNormalGamePieceWithRandomColor(x, y);
         RegisterGamePiece(gamePiece, x, y);
         return gamePiece;
     }
 
     private void SpawnCustomGamePiece(int x, int y, GamePieceType gamePieceType, GamePieceColor gamePieceColor)
     {
-        GamePiece gamePiece = _gameFactory.CreateGamePiece(gamePieceType, gamePieceColor, x, y, transform);
+        GamePiece gamePiece = _gameFactory.CreateGamePiece(gamePieceType, gamePieceColor, x, y);
         RegisterGamePiece(gamePiece, x, y);
     }
 
     private void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)
     {
-        GamePiece gamePiece = _gameFactory.CreateBombGamePiece(x, y, transform, bombType, color);
+        GamePiece gamePiece = _gameFactory.CreateBombGamePiece(x, y, bombType, color);
         RegisterGamePiece(gamePiece, x, y);
     }
 
     private void SpawnRandomCollectibleGamePiece(int x, int y)
     {
-        GamePiece gamePiece = _gameFactory.CreateRandomCollectibleGamePiece(x, y, transform);
+        GamePiece gamePiece = _gameFactory.CreateRandomCollectibleGamePiece(x, y);
         RegisterGamePiece(gamePiece, x, y);
     }
 
@@ -483,7 +487,7 @@ public class Board : MonoBehaviour
         gamePiece.OnStartMoving -= OnGamePieceStartMoving;
         gamePiece.OnPositionChanged -= OnGamePiecePositionChanged;
 
-        Destroy(gamePiece.gameObject);
+        gamePiece.Destroy();
 
         if (breakOnMatch)
         {
@@ -529,7 +533,7 @@ public class Board : MonoBehaviour
         var availableRows = new Queue<int>();
         var moveDataEntries = new List<GamePieceMoveData>();
 
-        for (var row = 0; row < _height; row++)
+        for (var row = 0; row < Height; row++)
         {
             var position = new Vector2Int(column, row);
             if (TryGetGamePieceAt(position, out GamePiece gamePiece))
@@ -558,7 +562,7 @@ public class Board : MonoBehaviour
     {
         gamePiece = null;
 
-        if (BoardHelper.IsOutOfBounds(position, new Vector2Int(_width, _height)))
+        if (BoardHelper.IsOutOfBounds(position, new Vector2Int(Width, Height)))
         {
             return false;
         }
@@ -595,7 +599,7 @@ public class Board : MonoBehaviour
     {
         collectiblesToBreak = new HashSet<GamePiece>();
 
-        for (int column = 0; column < _width; column++)
+        for (int column = 0; column < Width; column++)
         {
             GamePiece bottomGamePiece = _gamePieces[column, 0];
             if (bottomGamePiece != null
@@ -641,7 +645,7 @@ public class Board : MonoBehaviour
     {
         var rowGamePieces = new HashSet<GamePiece>();
 
-        for (var column = 0; column < _width; column++)
+        for (var column = 0; column < Width; column++)
         {
             if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
                 && CanBombGamePiece(gamePiece))
@@ -657,7 +661,7 @@ public class Board : MonoBehaviour
     {
         var rowGamePieces = new HashSet<GamePiece>();
 
-        for (var row = 0; row < _height; row++)
+        for (var row = 0; row < Height; row++)
         {
             if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
                 && CanBombGamePiece(gamePiece))

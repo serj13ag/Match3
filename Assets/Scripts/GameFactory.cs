@@ -10,11 +10,15 @@ using Object = UnityEngine.Object;
 
 public class GameFactory : IGameFactory
 {
+    private const string TilesContainerName = "Tiles";
+    private const string GamePiecesContainerName = "GamePieces";
+
     private readonly RandomService _randomService;
     private readonly GameDataRepository _gameDataRepository;
     private readonly ParticleController _particleController;
 
-    private readonly Transform _parentTransform;
+    private readonly Transform _tilesContainerTransform;
+    private readonly Transform _gamePiecesContainerTransform;
 
     public GameFactory(RandomService randomService, GameDataRepository gameDataRepository,
         ParticleController particleController)
@@ -23,15 +27,18 @@ public class GameFactory : IGameFactory
         _gameDataRepository = gameDataRepository;
         _particleController = particleController;
 
-        GameObject boardGameObject = new GameObject("Board");
-        _parentTransform = boardGameObject.transform;
+        GameObject tilesContainer = new GameObject(TilesContainerName);
+        _tilesContainerTransform = tilesContainer.transform;
+
+        GameObject gamePiecesContainer = new GameObject(GamePiecesContainerName);
+        _gamePiecesContainerTransform = gamePiecesContainer.transform;
     }
 
     public ITile CreateTile(TileType tileType, int x, int y)
     {
         TileModel tileModel = _gameDataRepository.Tiles[tileType];
         BaseTile tile = Object.Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
-        tile.Init(x, y, _parentTransform, _particleController, tileModel);
+        tile.Init(x, y, _tilesContainerTransform, _particleController, tileModel);
         return tile;
     }
 
@@ -59,7 +66,7 @@ public class GameFactory : IGameFactory
     {
         GamePieceModel gamePieceModel = _gameDataRepository.GamePieces[gamePieceType];
         GamePiece gamePiece = Object.Instantiate(gamePieceModel.GamePiecePrefab, Vector3.zero, Quaternion.identity);
-        gamePiece.Init(color, x, y, _gameDataRepository, _parentTransform, gamePieceModel);
+        gamePiece.Init(color, x, y, _gameDataRepository, _gamePiecesContainerTransform, gamePieceModel);
         return gamePiece;
     }
 

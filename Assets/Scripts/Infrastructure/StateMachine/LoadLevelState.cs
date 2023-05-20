@@ -4,28 +4,27 @@ namespace Infrastructure.StateMachine
 {
     public class LoadLevelState : IPayloadedState<string>
     {
-        private const string ScoreControllerPath = "Prefabs/ScoreController";
-        private const string BoardPath = "Prefabs/Board";
-        private const string UiControllerPath = "Prefabs/UIController";
-        private const string GameStateControllerPath = "Prefabs/GameStateController";
-        private const string BackgroundUiPath = "Prefabs/BackgroundUi";
-        private const string ParticleControllerPath = "Prefabs/Infrastructure/Global/ParticleController";
+        private const string ScoreControllerPath = "Prefabs/Infrastructure/Level/ScoreController";
+        private const string BoardPath = "Prefabs/Infrastructure/Level/Board";
+        private const string UiControllerPath = "Prefabs/Infrastructure/Level/UIController";
+        private const string BackgroundUiPath = "Prefabs/Infrastructure/Level/BackgroundUi";
+        private const string ParticleControllerPath = "Prefabs/Infrastructure/Level/ParticleController";
 
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
-        private readonly LevelLoadingCurtain _levelLoadingCurtain;
+        private readonly LoadingCurtainController _loadingCurtainController;
         private readonly AssetProviderService _assetProviderService;
         private readonly RandomService _randomService;
         private readonly GameDataRepository _gameDataRepository;
         private readonly SoundController _soundController;
 
         public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
-            LevelLoadingCurtain levelLoadingCurtain, AssetProviderService assetProviderService,
+            LoadingCurtainController loadingCurtainController, AssetProviderService assetProviderService,
             RandomService randomService, GameDataRepository gameDataRepository, SoundController soundController)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
-            _levelLoadingCurtain = levelLoadingCurtain;
+            _loadingCurtainController = loadingCurtainController;
             _assetProviderService = assetProviderService;
             _randomService = randomService;
             _gameDataRepository = gameDataRepository;
@@ -34,13 +33,13 @@ namespace Infrastructure.StateMachine
 
         public void Enter(string sceneName)
         {
-            _levelLoadingCurtain.FadeOnInstantly();
+            _loadingCurtainController.FadeOnInstantly();
             _sceneLoader.LoadScene(sceneName, OnLevelLoaded);
         }
 
         public void Exit()
         {
-            _levelLoadingCurtain.FadeOffWithDelay();
+            _loadingCurtainController.FadeOffWithDelay();
         }
 
         private void OnLevelLoaded()
@@ -55,15 +54,14 @@ namespace Infrastructure.StateMachine
                 _soundController);
 
             UIController uiController = _assetProviderService.Instantiate<UIController>(UiControllerPath);
-            uiController.Init(_levelLoadingCurtain);
-
-            GameStateController gameStateController = _assetProviderService.Instantiate<GameStateController>(GameStateControllerPath);
-            gameStateController.Init(uiController, board, cameraService, scoreController, _soundController);
+            uiController.Init(_loadingCurtainController);
 
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
-            backgroundUi.Init();
+            backgroundUi.Init(cameraService);
 
-            gameStateController.InitializeLevel(10, 3000); // TODO move to levelData
+            GameStateService gameStateService = new GameStateService(uiController, board, cameraService, scoreController, _soundController);
+
+            gameStateService.InitializeLevel(10, 3000); // TODO move to levelData
 
             _gameStateMachine.Enter<GameLoopState>();
         }

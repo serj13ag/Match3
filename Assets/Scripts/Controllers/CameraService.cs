@@ -6,6 +6,13 @@ namespace Controllers
     {
         private const int BorderSize = 2;
 
+        public Camera MainCamera { get; }
+
+        public CameraService()
+        {
+            MainCamera = Camera.main;
+        }
+
         public void SetupCamera(Vector2Int boardSize)
         {
             SetCameraPosition(boardSize);
@@ -17,7 +24,7 @@ namespace Controllers
             float boardCenterX = (boardSize.x - 1) / 2f;
             float boardCenterY = (boardSize.y - 1) / 2f;
 
-            Camera.main.transform.position = new Vector3(boardCenterX, boardCenterY, Constants.CameraPositionZ);
+            MainCamera.transform.position = new Vector3(boardCenterX, boardCenterY, Constants.CameraPositionZ);
         }
 
         private void SetCameraAspectRatio(Vector2Int boardSize)
@@ -27,7 +34,7 @@ namespace Controllers
             float verticalSize = boardSize.y / 2f + BorderSize;
             float horizontalSize = (boardSize.x / 2f + BorderSize) / screenAspectRatio;
 
-            Camera.main.orthographicSize = Mathf.Max(verticalSize, horizontalSize);
+            MainCamera.orthographicSize = Mathf.Max(verticalSize, horizontalSize);
         }
     }
 }

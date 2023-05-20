@@ -1,3 +1,4 @@
+using Controllers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,9 +8,9 @@ public class BackgroundUi : MonoBehaviour
     [SerializeField] private Canvas _canvas;
     [SerializeField] private TMP_Text _levelNameText; // TODO move to ui controller
 
-    public void Init()
+    public void Init(CameraService cameraService)
     {
-        _canvas.worldCamera = Camera.main;
+        _canvas.worldCamera = cameraService.MainCamera;
 
         UpdateSceneNameText();
     }

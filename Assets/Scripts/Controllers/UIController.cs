@@ -12,21 +12,21 @@ namespace Controllers
         [SerializeField] private Sprite _loseIcon;
         [SerializeField] private Sprite _goalIcon;
 
-        private LevelLoadingCurtain _levelLoadingCurtain;
+        private LoadingCurtainController _loadingCurtainController;
 
-        public void Init(LevelLoadingCurtain levelLoadingCurtain)
+        public void Init(LoadingCurtainController loadingCurtainController)
         {
-            _levelLoadingCurtain = levelLoadingCurtain;
+            _loadingCurtainController = loadingCurtainController;
         }
 
         public void FadeOn()
         {
-            _levelLoadingCurtain.FadeOnWithDelay();
+            _loadingCurtainController.FadeOnWithDelay();
         }
 
         public void FadeOff()
         {
-            _levelLoadingCurtain.FadeOffWithDelay();
+            _loadingCurtainController.FadeOffWithDelay();
         }
 
         public void ShowStartGameMessageWindow(int scoreGoal, Action onButtonClickCallback)

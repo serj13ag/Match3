@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelLoadingCurtain : MonoBehaviour
+public class LoadingCurtainController : MonoBehaviour
 {
     [SerializeField] private MaskableGraphic _fadeMaskableGraphic;
 

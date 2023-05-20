@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Controllers
 {
-    public class GameStateController : MonoBehaviour
+    public class GameStateService
     {
         private Board _board;
         private CameraService _cameraService;
@@ -30,7 +30,7 @@ namespace Controllers
                 if (_movesLeft < 0)
                 {
                     Debug.LogError(
-                        $"{nameof(GameStateController)} : Attempt to set {nameof(MovesLeft)} a negative value!");
+                        $"{nameof(GameStateService)} : Attempt to set {nameof(MovesLeft)} a negative value!");
                     _movesLeft = 0;
                 }
 
@@ -44,7 +44,7 @@ namespace Controllers
             }
         }
 
-        public void Init(UIController uiController, Board board, CameraService cameraService,
+        public GameStateService(UIController uiController, Board board, CameraService cameraService,
             ScoreController scoreController, SoundController soundController)
         {
             _soundController = soundController;

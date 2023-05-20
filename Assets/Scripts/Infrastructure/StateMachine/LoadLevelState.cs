@@ -59,9 +59,9 @@ namespace Infrastructure.StateMachine
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
             backgroundUi.Init(cameraService);
 
-            GameStateService gameStateService = new GameStateService(uiController, board, cameraService, scoreController, _soundController);
+            LevelStateService levelStateService = new LevelStateService(uiController, board, cameraService, scoreController, _soundController);
 
-            gameStateService.InitializeLevel(10, 3000); // TODO move to levelData
+            levelStateService.InitializeLevel(10, 3000); // TODO move to levelData
 
             _gameStateMachine.Enter<GameLoopState>();
         }

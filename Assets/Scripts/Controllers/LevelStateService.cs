@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace Controllers
 {
-    public class GameStateService
+    public class LevelStateService
     {
-        private Board _board;
-        private CameraService _cameraService;
-        private UIController _uiController;
-        private ScoreController _scoreController;
-        private SoundController _soundController;
+        private readonly Board _board;
+        private readonly CameraService _cameraService;
+        private readonly UIController _uiController;
+        private readonly ScoreController _scoreController;
+        private readonly SoundController _soundController;
 
-        private GameState _gameState;
+        private LevelState _levelState;
 
         private int _movesLeft;
         private int _scoreGoal;
@@ -29,8 +29,7 @@ namespace Controllers
 
                 if (_movesLeft < 0)
                 {
-                    Debug.LogError(
-                        $"{nameof(GameStateService)} : Attempt to set {nameof(MovesLeft)} a negative value!");
+                    Debug.LogError($"{nameof(LevelStateService)} : Attempt to set {nameof(MovesLeft)} a negative value!");
                     _movesLeft = 0;
                 }
 
@@ -39,12 +38,12 @@ namespace Controllers
 
                 if (_movesLeft == 0)
                 {
-                    ChangeState(GameState.GameOver);
+                    ChangeState(LevelState.GameOver);
                 }
             }
         }
 
-        public GameStateService(UIController uiController, Board board, CameraService cameraService,
+        public LevelStateService(UIController uiController, Board board, CameraService cameraService,
             ScoreController scoreController, SoundController soundController)
         {
             _soundController = soundController;
@@ -62,21 +61,21 @@ namespace Controllers
             _movesLeft = movesLeft;
             _scoreGoal = scoreGoal;
 
-            ChangeState(GameState.Initialization);
+            ChangeState(LevelState.Initialization);
         }
 
         private void ChangeStateToPlaying()
         {
-            ChangeState(GameState.Playing);
+            ChangeState(LevelState.Playing);
         }
 
-        private void ChangeState(GameState state)
+        private void ChangeState(LevelState state)
         {
-            _gameState = state;
+            _levelState = state;
 
             switch (state)
             {
-                case GameState.Initialization:
+                case LevelState.Initialization:
                 {
                     _board.SetupTiles();
                     _cameraService.SetupCamera(_board.BoardSize);
@@ -88,12 +87,12 @@ namespace Controllers
                     _uiController.ShowStartGameMessageWindow(_scoreGoal, ChangeStateToPlaying);
                     break;
                 }
-                case GameState.Playing:
+                case LevelState.Playing:
                 {
                     _uiController.FadeOff();
                     break;
                 }
-                case GameState.GameOver:
+                case LevelState.GameOver:
                 {
                     _uiController.FadeOn();
 
@@ -127,14 +126,14 @@ namespace Controllers
 
         private void OnScoreChanged()
         {
-            if (_gameState == GameState.GameOver)
+            if (_levelState == LevelState.GameOver)
             {
                 return;
             }
 
             if (ScoreGoalReached())
             {
-                ChangeState(GameState.GameOver);
+                ChangeState(LevelState.GameOver);
             }
         }
 

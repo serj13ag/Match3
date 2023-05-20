@@ -1,6 +1,6 @@
 ﻿namespace Enums
 {
-    internal enum GameState
+    internal enum LevelState
     {
         Initialization = 0,
         Playing = 1,

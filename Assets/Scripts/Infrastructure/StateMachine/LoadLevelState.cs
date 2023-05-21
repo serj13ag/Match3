@@ -52,25 +52,27 @@ namespace Infrastructure.StateMachine
 
         private void OnLevelLoaded()
         {
-            CameraService cameraService = new CameraService();
+            
             ParticleController particleController = _assetProviderService.Instantiate<ParticleController>(ParticleControllerPath);
             GameFactory gameFactory = new GameFactory(_randomService, _gameDataRepository, particleController);
             ScoreController scoreController = _assetProviderService.Instantiate<ScoreController>(ScoreControllerPath);
 
+            int width = 7; //TODO to data
+            int height = 9; //TODO to data
             BoardService boardService = new BoardService(particleController, gameFactory, _randomService, scoreController,
-                _gameDataRepository, _soundController, _updateController, _persistentProgressService);
+                _gameDataRepository, _soundController, _updateController, _persistentProgressService, width, height);
 
             UIController uiController = _assetProviderService.Instantiate<UIController>(UiControllerPath);
             uiController.Init(_loadingCurtainController);
 
-            BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
-            backgroundUi.Init(cameraService);
-
-            int scoreGoal = 3000;
-            int movesLeft = 10;
+            int scoreGoal = 3000; //TODO to data
+            int movesLeft = 10; //TODO to data
             LevelStateService levelStateService = new LevelStateService(uiController, boardService, scoreController, _soundController, scoreGoal, movesLeft);
 
-            cameraService.SetupCamera(BoardService.BoardSize);
+            CameraService cameraService = new CameraService(boardService.BoardSize);
+
+            BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
+            backgroundUi.Init(cameraService);
 
             _soundController.PlaySound(SoundType.Music);
             uiController.ShowStartGameMessageWindow(scoreGoal, levelStateService.ChangeStateToPlaying);

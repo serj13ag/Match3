@@ -8,13 +8,10 @@ namespace Controllers
 
         public Camera MainCamera { get; }
 
-        public CameraService()
+        public CameraService(Vector2Int boardSize)
         {
             MainCamera = Camera.main;
-        }
 
-        public void SetupCamera(Vector2Int boardSize)
-        {
             SetCameraPosition(boardSize);
             SetCameraAspectRatio(boardSize);
         }

@@ -20,15 +20,15 @@ namespace Services
 {
     public class BoardService : IUpdatable
     {
-        private const int Width = 7;
-        private const int Height = 9;
-
         private readonly ParticleController _particleController;
         private readonly IGameFactory _gameFactory;
         private readonly RandomService _randomService;
         private readonly ScoreController _scoreController;
         private readonly SoundController _soundController;
         private readonly GameDataRepository _gameDataRepository;
+
+        private readonly int _width;
+        private readonly int _height;
 
         private ITile[,] _tiles;
         private GamePiece[,] _gamePieces;
@@ -44,14 +44,14 @@ namespace Services
 
         private int _completedBreakIterationsAfterSwitchedGamePieces;
 
-        public static Vector2Int BoardSize => new Vector2Int(Width, Height);
+        public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
         public event Action OnGamePiecesSwitched;
 
         public BoardService(ParticleController particleController, IGameFactory gameFactory,
             RandomService randomService, ScoreController scoreController, GameDataRepository gameDataRepository,
             SoundController soundController, UpdateController updateController,
-            PersistentProgressService persistentProgressService)
+            PersistentProgressService persistentProgressService, int width, int height)
         {
             _gameDataRepository = gameDataRepository;
             _scoreController = scoreController;
@@ -63,6 +63,9 @@ namespace Services
             _movedPieces = new Stack<GamePiece>();
 
             _commandBlock = new CommandBlock();
+
+            _width = width;
+            _height = height;
 
             updateController.Register(this);
 
@@ -88,16 +91,16 @@ namespace Services
 
         private void SetupTiles()
         {
-            _tiles = new ITile[Width, Height];
+            _tiles = new ITile[_width, _height];
 
             foreach (StartingTileModel startingTile in _gameDataRepository.LevelData.StartingTilesData.StartingTiles)
             {
                 SpawnTile(startingTile.TileType, startingTile.X, startingTile.Y);
             }
 
-            for (var i = 0; i < Width; i++)
+            for (var i = 0; i < _width; i++)
             {
-                for (var j = 0; j < Height; j++)
+                for (var j = 0; j < _height; j++)
                 {
                     if (!TryGetTileAt(i, j, out _))
                     {
@@ -109,7 +112,7 @@ namespace Services
 
         private void SetupGamePieces()
         {
-            _gamePieces = new GamePiece[Width, Height];
+            _gamePieces = new GamePiece[_width, _height];
 
             foreach (StartingGamePieceModel startingGamePieceEntry in _gameDataRepository.LevelData.StartingGamePiecesData
                          .StartingGamePieces)
@@ -138,9 +141,9 @@ namespace Services
 
         private void FillBoardWithRandomGamePieces()
         {
-            for (var i = 0; i < Width; i++)
+            for (var i = 0; i < _width; i++)
             {
-                for (var j = 0; j < Height; j++)
+                for (var j = 0; j < _height; j++)
                 {
                     if (_gamePieces[i, j] != null || _tiles[i, j].IsObstacle)
                     {
@@ -165,7 +168,7 @@ namespace Services
 
         private bool TrySpawnCollectibleGamePiece(int x, int y)
         {
-            if (y == Height - 1
+            if (y == _height - 1
                 && _collectibleGamePieces < Constants.MaxCollectibles
                 && _randomService.Next(100) <= Constants.PercentChanceToSpawnCollectible)
             {
@@ -553,7 +556,7 @@ namespace Services
             var availableRows = new Queue<int>();
             var moveDataEntries = new List<GamePieceMoveData>();
 
-            for (var row = 0; row < Height; row++)
+            for (var row = 0; row < _height; row++)
             {
                 var position = new Vector2Int(column, row);
                 if (TryGetGamePieceAt(position, out GamePiece gamePiece))
@@ -582,7 +585,7 @@ namespace Services
         {
             gamePiece = null;
 
-            if (BoardHelper.IsOutOfBounds(position, new Vector2Int(Width, Height)))
+            if (BoardHelper.IsOutOfBounds(position, new Vector2Int(_width, _height)))
             {
                 return false;
             }
@@ -619,7 +622,7 @@ namespace Services
         {
             collectiblesToBreak = new HashSet<GamePiece>();
 
-            for (int column = 0; column < Width; column++)
+            for (int column = 0; column < _width; column++)
             {
                 GamePiece bottomGamePiece = _gamePieces[column, 0];
                 if (bottomGamePiece != null
@@ -665,7 +668,7 @@ namespace Services
         {
             var rowGamePieces = new HashSet<GamePiece>();
 
-            for (var column = 0; column < Width; column++)
+            for (var column = 0; column < _width; column++)
             {
                 if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
                     && CanBombGamePiece(gamePiece))
@@ -681,7 +684,7 @@ namespace Services
         {
             var rowGamePieces = new HashSet<GamePiece>();
 
-            for (var row = 0; row < Height; row++)
+            for (var row = 0; row < _height; row++)
             {
                 if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
                     && CanBombGamePiece(gamePiece))

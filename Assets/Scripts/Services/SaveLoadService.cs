@@ -1,4 +1,5 @@
 ﻿using Data;
+using Services.PersistentProgress;
 using UnityEngine;
 
 namespace Services
@@ -6,6 +7,13 @@ namespace Services
     public class SaveLoadService
     {
         private const string ProgressKey = "ProgressKey";
+
+        private readonly PersistentProgressService _persistentProgressService;
+
+        public SaveLoadService(PersistentProgressService persistentProgressService)
+        {
+            _persistentProgressService = persistentProgressService;
+        }
 
         public PlayerProgress LoadProgress()
         {
@@ -17,6 +25,12 @@ namespace Services
 
         public void SaveProgress()
         {
+            PlayerPrefs.SetString(ProgressKey, ToJson(_persistentProgressService.Progress));
+        }
+
+        private static string ToJson(object obj)
+        {
+            return JsonUtility.ToJson(obj);
         }
 
         private static T DeserializeJson<T>(string json)

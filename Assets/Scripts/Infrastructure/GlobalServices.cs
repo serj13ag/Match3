@@ -32,8 +32,8 @@ namespace Infrastructure
             RandomService = new RandomService();
             AssetProviderService = new AssetProviderService();
             GameDataRepository = new GameDataRepository(gameData);
-            SaveLoadService = new SaveLoadService();
             PersistentProgressService = new PersistentProgressService();
+            SaveLoadService = new SaveLoadService(PersistentProgressService);
 
             LoadingCurtainController = AssetProviderService.Instantiate<LoadingCurtainController>(LevelLoadingCurtainPath);
 

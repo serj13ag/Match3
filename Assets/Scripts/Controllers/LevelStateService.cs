@@ -7,8 +7,6 @@ namespace Controllers
 {
     public class LevelStateService
     {
-        private readonly BoardService _boardService;
-        private readonly CameraService _cameraService;
         private readonly UIController _uiController;
         private readonly ScoreController _scoreController;
         private readonly SoundController _soundController;
@@ -16,7 +14,7 @@ namespace Controllers
         private LevelState _levelState;
 
         private int _movesLeft;
-        private int _scoreGoal;
+        private readonly int _scoreGoal;
 
         public int MovesLeft
         {
@@ -44,28 +42,23 @@ namespace Controllers
             }
         }
 
-        public LevelStateService(UIController uiController, BoardService boardService, CameraService cameraService,
-            ScoreController scoreController, SoundController soundController)
+        public LevelStateService(UIController uiController, BoardService boardService, ScoreController scoreController,
+            SoundController soundController, int scoreGoal, int movesLeft)
         {
             _soundController = soundController;
             _scoreController = scoreController;
             _uiController = uiController;
-            _cameraService = cameraService;
-            _boardService = boardService;
 
-            _boardService.OnGamePiecesSwitched += OnGamePiecesSwitched;
+            boardService.OnGamePiecesSwitched += OnGamePiecesSwitched;
             _scoreController.OnScoreChanged += OnScoreChanged;
-        }
 
-        public void InitializeLevel(int movesLeft, int scoreGoal)
-        {
-            _movesLeft = movesLeft;
             _scoreGoal = scoreGoal;
-
-            ChangeState(LevelState.Initialization);
+            _movesLeft = movesLeft;
+            
+            UpdateMovesLeftText();
         }
 
-        private void ChangeStateToPlaying()
+        public void ChangeStateToPlaying()
         {
             ChangeState(LevelState.Playing);
         }
@@ -76,18 +69,6 @@ namespace Controllers
 
             switch (state)
             {
-                case LevelState.Initialization:
-                {
-                    _boardService.SetupTiles();
-                    _cameraService.SetupCamera(BoardService.BoardSize);
-                    _boardService.SetupGamePieces();
-
-                    UpdateMovesLeftText();
-
-                    _soundController.PlaySound(SoundType.Music);
-                    _uiController.ShowStartGameMessageWindow(_scoreGoal, ChangeStateToPlaying);
-                    break;
-                }
                 case LevelState.Playing:
                 {
                     _uiController.FadeOff();

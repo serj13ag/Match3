@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Commands;
 using Controllers;
+using Data;
 using DTO;
 using Entities;
 using Enums;
@@ -10,8 +11,10 @@ using Helpers;
 using Infrastructure;
 using Interfaces;
 using PersistentData.Models;
+using Services.PersistentProgress;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 namespace Services
 {
@@ -45,9 +48,10 @@ namespace Services
 
         public event Action OnGamePiecesSwitched;
 
-        public BoardService(ParticleController particleController, IGameFactory gameFactory, RandomService randomService,
-            ScoreController scoreController, GameDataRepository gameDataRepository, SoundController soundController,
-            UpdateController updateController)
+        public BoardService(ParticleController particleController, IGameFactory gameFactory,
+            RandomService randomService, ScoreController scoreController, GameDataRepository gameDataRepository,
+            SoundController soundController, UpdateController updateController,
+            PersistentProgressService persistentProgressService)
         {
             _gameDataRepository = gameDataRepository;
             _scoreController = scoreController;
@@ -61,6 +65,8 @@ namespace Services
             _commandBlock = new CommandBlock();
 
             updateController.Register(this);
+
+            Setup(persistentProgressService.Progress);
         }
 
         public void OnUpdate(float deltaTime)
@@ -68,7 +74,19 @@ namespace Services
             _commandBlock.Update(deltaTime);
         }
 
-        public void SetupTiles()
+        private void Setup(PlayerProgress progress)
+        {
+            LevelBoardData levelBoardData = progress.BoardData.LevelBoardData;
+            if (SceneManager.GetActiveScene().name == levelBoardData.LevelName)
+            {
+                //_savedTiles = levelBoardData.Tiles; TODO add load
+            }
+
+            SetupTiles();
+            SetupGamePieces();
+        }
+
+        private void SetupTiles()
         {
             _tiles = new ITile[Width, Height];
 
@@ -89,7 +107,7 @@ namespace Services
             }
         }
 
-        public void SetupGamePieces()
+        private void SetupGamePieces()
         {
             _gamePieces = new GamePiece[Width, Height];
 

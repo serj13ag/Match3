@@ -3,7 +3,6 @@
     public class BootstrapState : IState
     {
         private const string BootstrapSceneName = "BootstrapScene";
-        private const string Level1SceneName = "Level_1";
 
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -27,7 +26,7 @@
 
         private void OnBootstrapSceneLoaded()
         {
-            _gameStateMachine.Enter<LoadLevelState, string>(Level1SceneName);
+            _gameStateMachine.Enter<LoadProgressState>();
         }
     }
 }

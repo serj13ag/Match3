@@ -14,10 +14,12 @@ namespace Infrastructure.StateMachine
             _states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, gameData, globalServices),
+                [typeof(LoadProgressState)] = new LoadProgressState(this,
+                    globalServices.PersistentProgressService, globalServices.SaveLoadService),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, globalServices.SceneLoader,
                     globalServices.LoadingCurtainController, globalServices.AssetProviderService,
                     globalServices.RandomService, globalServices.GameDataRepository, globalServices.SoundController,
-                    globalServices.UpdateController),
+                    globalServices.UpdateController, globalServices.PersistentProgressService),
                 [typeof(GameLoopState)] = new GameLoopState(),
             };
         }

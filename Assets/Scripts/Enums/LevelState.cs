@@ -2,8 +2,7 @@
 {
     internal enum LevelState
     {
-        Initialization = 0,
-        Playing = 1,
-        GameOver = 2,
+        Playing,
+        GameOver,
     }
 }

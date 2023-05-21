@@ -1,5 +1,7 @@
 ﻿using Controllers;
+using Enums;
 using Services;
+using Services.PersistentProgress;
 using UI;
 
 namespace Infrastructure.StateMachine
@@ -19,11 +21,12 @@ namespace Infrastructure.StateMachine
         private readonly GameDataRepository _gameDataRepository;
         private readonly SoundController _soundController;
         private readonly UpdateController _updateController;
+        private readonly PersistentProgressService _persistentProgressService;
 
         public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             LoadingCurtainController loadingCurtainController, AssetProviderService assetProviderService,
             RandomService randomService, GameDataRepository gameDataRepository, SoundController soundController,
-            UpdateController updateController)
+            UpdateController updateController, PersistentProgressService persistentProgressService)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
@@ -33,6 +36,7 @@ namespace Infrastructure.StateMachine
             _gameDataRepository = gameDataRepository;
             _soundController = soundController;
             _updateController = updateController;
+            _persistentProgressService = persistentProgressService;
         }
 
         public void Enter(string sceneName)
@@ -54,7 +58,7 @@ namespace Infrastructure.StateMachine
             ScoreController scoreController = _assetProviderService.Instantiate<ScoreController>(ScoreControllerPath);
 
             BoardService boardService = new BoardService(particleController, gameFactory, _randomService, scoreController,
-                _gameDataRepository, _soundController, _updateController);
+                _gameDataRepository, _soundController, _updateController, _persistentProgressService);
 
             UIController uiController = _assetProviderService.Instantiate<UIController>(UiControllerPath);
             uiController.Init(_loadingCurtainController);
@@ -62,9 +66,14 @@ namespace Infrastructure.StateMachine
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
             backgroundUi.Init(cameraService);
 
-            LevelStateService levelStateService = new LevelStateService(uiController, boardService, cameraService, scoreController, _soundController);
+            int scoreGoal = 3000;
+            int movesLeft = 10;
+            LevelStateService levelStateService = new LevelStateService(uiController, boardService, scoreController, _soundController, scoreGoal, movesLeft);
 
-            levelStateService.InitializeLevel(10, 3000); // TODO move to levelData
+            cameraService.SetupCamera(BoardService.BoardSize);
+
+            _soundController.PlaySound(SoundType.Music);
+            uiController.ShowStartGameMessageWindow(scoreGoal, levelStateService.ChangeStateToPlaying);
 
             _gameStateMachine.Enter<GameLoopState>();
         }

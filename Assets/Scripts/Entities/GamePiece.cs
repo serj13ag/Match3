@@ -3,7 +3,7 @@ using System.Collections;
 using Enums;
 using Helpers;
 using Services;
-using StaticData.Models;
+using StaticData;
 using UnityEngine;
 
 namespace Entities
@@ -40,12 +40,12 @@ namespace Entities
         public event Action<GamePiece> OnPositionChanged;
         public event Action<GamePiece> OnStartMoving;
 
-        public void Init(GamePieceColor color, int x, int y, StaticDataService staticDataService,
-            Transform parentTransform, GamePieceModel gamePieceModel)
+        public void Init(GamePieceStaticData gamePieceData, GamePieceColor color, int x, int y,
+            Transform parentTransform, StaticDataService staticDataService)
         {
             _staticDataService = staticDataService;
 
-            _score = gamePieceModel.Score;
+            _score = gamePieceData.Score;
 
             SetColor(color);
             SetPosition(x, y);

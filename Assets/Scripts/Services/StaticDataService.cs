@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Enums;
 using StaticData;
 using StaticData.Models;
@@ -9,13 +10,13 @@ namespace Services
     public class StaticDataService
     {
         private const string TilesDataPath = "GameData/TilesData";
-        private const string GamePiecesDataPath = "GameData/GamePiecesData";
+        private const string GamePiecesDataPath = "GameData/GamePieces";
         private const string ColorDataPath = "GameData/ColorData";
         private const string LevelDataPath = "GameData/LevelData";
         private const string MoveDataPath = "GameData/MoveData";
 
         public Dictionary<TileType, TileModel> Tiles { get; private set; }
-        public Dictionary<GamePieceType, GamePieceModel> GamePieces { get; private set; }
+        public Dictionary<GamePieceType, GamePieceStaticData> GamePieces { get; private set; }
         public Dictionary<GamePieceColor, Color> Colors { get; private set; }
 
         public LevelData LevelData { get; }
@@ -27,13 +28,13 @@ namespace Services
             SetupGamePieces();
             SetupColors();
 
-            LevelData = LoadFromResources<LevelData>(LevelDataPath);
-            MoveInterpolationType = LoadFromResources<MoveData>(MoveDataPath).MoveInterpolationType;
+            LevelData = LoadFileFromResources<LevelData>(LevelDataPath);
+            MoveInterpolationType = LoadFileFromResources<MoveData>(MoveDataPath).MoveInterpolationType;
         }
 
         private void SetupTiles()
         {
-            TilesData tilesData = LoadFromResources<TilesData>(TilesDataPath);
+            TilesData tilesData = LoadFileFromResources<TilesData>(TilesDataPath);
             Tiles = new Dictionary<TileType, TileModel>();
 
             foreach (TileModel tileModel in tilesData.Tiles)
@@ -44,18 +45,13 @@ namespace Services
 
         private void SetupGamePieces()
         {
-            GamePiecesData gamePiecesData = LoadFromResources<GamePiecesData>(GamePiecesDataPath);
-            GamePieces = new Dictionary<GamePieceType, GamePieceModel>();
-
-            foreach (GamePieceModel gamePieceModel in gamePiecesData.GamePieces)
-            {
-                GamePieces.Add(gamePieceModel.Type, gamePieceModel);
-            }
+            GamePieces = LoadFilesFromResources<GamePieceStaticData>(GamePiecesDataPath)
+                .ToDictionary(x => x.Type, x => x);
         }
 
         private void SetupColors()
         {
-            ColorData colorData = LoadFromResources<ColorData>(ColorDataPath);
+            ColorData colorData = LoadFileFromResources<ColorData>(ColorDataPath);
             Colors = new Dictionary<GamePieceColor, Color>();
 
             foreach (ColorDataModel colorDataEntry in colorData.GamePieceColors)
@@ -64,9 +60,14 @@ namespace Services
             }
         }
 
-        private static T LoadFromResources<T>(string path) where T : Object
+        private static T LoadFileFromResources<T>(string path) where T : Object
         {
             return Resources.Load<T>(path);
+        }
+
+        private static T[] LoadFilesFromResources<T>(string path) where T : Object
+        {
+            return Resources.LoadAll<T>(path);
         }
     }
 }

@@ -4,6 +4,7 @@ using Entities.Tiles;
 using Enums;
 using Interfaces;
 using Services.Mono;
+using StaticData;
 using StaticData.Models;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -66,9 +67,9 @@ namespace Services
 
         public GamePiece CreateGamePiece(GamePieceType gamePieceType, GamePieceColor color, int x, int y)
         {
-            GamePieceModel gamePieceModel = _staticDataService.GamePieces[gamePieceType];
-            GamePiece gamePiece = Object.Instantiate(gamePieceModel.GamePiecePrefab, Vector3.zero, Quaternion.identity);
-            gamePiece.Init(color, x, y, _staticDataService, _gamePiecesContainerTransform, gamePieceModel);
+            GamePieceStaticData gamePieceData = _staticDataService.GamePieces[gamePieceType];
+            GamePiece gamePiece = Object.Instantiate(gamePieceData.Prefab, Vector3.zero, Quaternion.identity);
+            gamePiece.Init(gamePieceData, color, x, y, _gamePiecesContainerTransform, _staticDataService);
             return gamePiece;
         }
 

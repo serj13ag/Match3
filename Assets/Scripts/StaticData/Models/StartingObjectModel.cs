@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PersistentData.Models
+namespace StaticData.Models
 {
     [Serializable]
     public abstract class StartingObjectModel

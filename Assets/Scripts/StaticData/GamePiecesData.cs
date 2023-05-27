@@ -1,7 +1,7 @@
-﻿using PersistentData.Models;
+﻿using StaticData.Models;
 using UnityEngine;
 
-namespace PersistentData
+namespace StaticData
 {
     [CreateAssetMenu(fileName = "GamePiecesData", menuName = "Create Game Pieces")]
     public class GamePiecesData : ScriptableObject

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace PersistentData.Models
+namespace StaticData.Models
 {
     [Serializable]
     public class BreakableSpriteModel

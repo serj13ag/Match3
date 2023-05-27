@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using Enums;
-using PersistentData;
-using PersistentData.Models;
+using StaticData;
+using StaticData.Models;
 using UnityEngine;
 
 namespace Services
 {
-    public class GameDataService
+    public class StaticDataService
     {
         private const string TilesDataPath = "GameData/TilesData";
         private const string GamePiecesDataPath = "GameData/GamePiecesData";
@@ -21,7 +21,7 @@ namespace Services
         public LevelData LevelData { get; }
         public MoveInterpolationType MoveInterpolationType { get; }
 
-        public GameDataService()
+        public StaticDataService()
         {
             SetupTiles();
             SetupGamePieces();

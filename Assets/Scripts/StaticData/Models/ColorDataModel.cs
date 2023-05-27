@@ -2,7 +2,7 @@
 using Enums;
 using UnityEngine;
 
-namespace PersistentData.Models
+namespace StaticData.Models
 {
     [Serializable]
     public class ColorDataModel

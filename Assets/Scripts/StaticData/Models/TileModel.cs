@@ -2,7 +2,7 @@
 using Entities.Tiles;
 using Enums;
 
-namespace PersistentData.Models
+namespace StaticData.Models
 {
     [Serializable]
     public class TileModel

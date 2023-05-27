@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using Enums;
 using Helpers;
-using PersistentData.Models;
 using Services;
+using StaticData.Models;
 using UnityEngine;
 
 namespace Entities
@@ -12,7 +12,7 @@ namespace Entities
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
-        private GameDataService _gameDataService;
+        private StaticDataService _staticDataService;
         private bool _isMoving;
         private Vector2Int _position;
         private int _score;
@@ -40,10 +40,10 @@ namespace Entities
         public event Action<GamePiece> OnPositionChanged;
         public event Action<GamePiece> OnStartMoving;
 
-        public void Init(GamePieceColor color, int x, int y, GameDataService gameDataService,
+        public void Init(GamePieceColor color, int x, int y, StaticDataService staticDataService,
             Transform parentTransform, GamePieceModel gamePieceModel)
         {
-            _gameDataService = gameDataService;
+            _staticDataService = staticDataService;
 
             _score = gamePieceModel.Score;
 
@@ -91,7 +91,7 @@ namespace Entities
             {
                 timeLeft -= Time.deltaTime;
                 float t = (timeToMove - timeLeft) / timeToMove;
-                t = MovementHelper.ApplyInterpolation(t, _gameDataService.MoveInterpolationType);
+                t = MovementHelper.ApplyInterpolation(t, _staticDataService.MoveInterpolationType);
 
                 transform.position = Vector3.Lerp(startPosition, destinationPosition, t);
 
@@ -119,7 +119,7 @@ namespace Entities
 
             if (color != GamePieceColor.Undefined)
             {
-                _spriteRenderer.color = _gameDataService.Colors[color];
+                _spriteRenderer.color = _staticDataService.Colors[color];
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Infrastructure
 
         public RandomService RandomService { get; private set; }
         public AssetProviderService AssetProviderService { get; private set; }
-        public GameDataService GameDataService { get; private set; }
+        public StaticDataService StaticDataService { get; private set; }
         public PersistentProgressService PersistentProgressService { get; private set; }
 
         public SoundController SoundController { get; private set; }
@@ -31,7 +31,7 @@ namespace Infrastructure
         {
             RandomService = new RandomService();
             AssetProviderService = new AssetProviderService();
-            GameDataService = new GameDataService();
+            StaticDataService = new StaticDataService();
             PersistentProgressService = new PersistentProgressService();
             SaveLoadService = new SaveLoadService(PersistentProgressService);
 

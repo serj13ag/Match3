@@ -1,7 +1,7 @@
 ﻿using Enums;
 using UnityEngine;
 
-namespace PersistentData
+namespace StaticData
 {
     [CreateAssetMenu(fileName = "LevelData", menuName = "Create Level")]
     public class LevelData : ScriptableObject

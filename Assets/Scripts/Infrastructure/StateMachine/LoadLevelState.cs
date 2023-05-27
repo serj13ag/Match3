@@ -18,14 +18,14 @@ namespace Infrastructure.StateMachine
         private readonly LoadingCurtainController _loadingCurtainController;
         private readonly AssetProviderService _assetProviderService;
         private readonly RandomService _randomService;
-        private readonly GameDataService _gameDataService;
+        private readonly StaticDataService _staticDataService;
         private readonly SoundController _soundController;
         private readonly UpdateController _updateController;
         private readonly PersistentProgressService _persistentProgressService;
 
         public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             LoadingCurtainController loadingCurtainController, AssetProviderService assetProviderService,
-            RandomService randomService, GameDataService gameDataService, SoundController soundController,
+            RandomService randomService, StaticDataService staticDataService, SoundController soundController,
             UpdateController updateController, PersistentProgressService persistentProgressService)
         {
             _gameStateMachine = gameStateMachine;
@@ -33,7 +33,7 @@ namespace Infrastructure.StateMachine
             _loadingCurtainController = loadingCurtainController;
             _assetProviderService = assetProviderService;
             _randomService = randomService;
-            _gameDataService = gameDataService;
+            _staticDataService = staticDataService;
             _soundController = soundController;
             _updateController = updateController;
             _persistentProgressService = persistentProgressService;
@@ -54,13 +54,13 @@ namespace Infrastructure.StateMachine
         {
             
             ParticleController particleController = _assetProviderService.Instantiate<ParticleController>(ParticleControllerPath);
-            GameFactory gameFactory = new GameFactory(_randomService, _gameDataService, particleController);
+            GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleController);
             ScoreController scoreController = _assetProviderService.Instantiate<ScoreController>(ScoreControllerPath);
 
             int width = 7; //TODO to data
             int height = 9; //TODO to data
             BoardService boardService = new BoardService(particleController, gameFactory, _randomService, scoreController,
-                _gameDataService, _soundController, _updateController, _persistentProgressService, width, height);
+                _staticDataService, _soundController, _updateController, _persistentProgressService, width, height);
 
             UIController uiController = _assetProviderService.Instantiate<UIController>(UiControllerPath);
             uiController.Init(_loadingCurtainController);

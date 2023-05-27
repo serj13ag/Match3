@@ -2,7 +2,7 @@
 using Entities;
 using Enums;
 
-namespace PersistentData.Models
+namespace StaticData.Models
 {
     [Serializable]
     public class GamePieceModel

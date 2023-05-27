@@ -1,7 +1,7 @@
 ﻿using Enums;
 using UnityEngine;
 
-namespace PersistentData
+namespace StaticData
 {
     [CreateAssetMenu(fileName = "MoveData", menuName = "Create Move Data")]
     public class MoveData : ScriptableObject

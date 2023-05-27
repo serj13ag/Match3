@@ -10,8 +10,8 @@ using Enums;
 using Helpers;
 using Infrastructure;
 using Interfaces;
-using PersistentData.Models;
 using Services.PersistentProgress;
+using StaticData.Models;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -25,7 +25,7 @@ namespace Services
         private readonly RandomService _randomService;
         private readonly ScoreController _scoreController;
         private readonly SoundController _soundController;
-        private readonly GameDataService _gameDataService;
+        private readonly StaticDataService _staticDataService;
 
         private readonly int _width;
         private readonly int _height;
@@ -49,11 +49,11 @@ namespace Services
         public event Action OnGamePiecesSwitched;
 
         public BoardService(ParticleController particleController, IGameFactory gameFactory,
-            RandomService randomService, ScoreController scoreController, GameDataService gameDataService,
+            RandomService randomService, ScoreController scoreController, StaticDataService staticDataService,
             SoundController soundController, UpdateController updateController,
             PersistentProgressService persistentProgressService, int width, int height)
         {
-            _gameDataService = gameDataService;
+            _staticDataService = staticDataService;
             _scoreController = scoreController;
             _particleController = particleController;
             _gameFactory = gameFactory;
@@ -93,7 +93,7 @@ namespace Services
         {
             _tiles = new ITile[_width, _height];
 
-            foreach (StartingTileModel startingTile in _gameDataService.LevelData.StartingTilesData.StartingTiles)
+            foreach (StartingTileModel startingTile in _staticDataService.LevelData.StartingTilesData.StartingTiles)
             {
                 SpawnTile(startingTile.TileType, startingTile.X, startingTile.Y);
             }
@@ -114,7 +114,7 @@ namespace Services
         {
             _gamePieces = new GamePiece[_width, _height];
 
-            foreach (StartingGamePieceModel startingGamePieceEntry in _gameDataService.LevelData.StartingGamePiecesData
+            foreach (StartingGamePieceModel startingGamePieceEntry in _staticDataService.LevelData.StartingGamePiecesData
                          .StartingGamePieces)
             {
                 SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y,

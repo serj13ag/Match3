@@ -1,7 +1,7 @@
 ﻿using System;
 using Enums;
 
-namespace PersistentData.Models
+namespace StaticData.Models
 {
     [Serializable]
     public class StartingGamePieceModel : StartingObjectModel

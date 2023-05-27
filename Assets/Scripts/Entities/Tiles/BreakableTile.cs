@@ -1,6 +1,6 @@
 ﻿using Controllers;
 using Enums;
-using PersistentData.Models;
+using StaticData.Models;
 using UnityEngine;
 using UnityEngine.Assertions;
 

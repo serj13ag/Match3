@@ -13,7 +13,7 @@ namespace Services
         private const string LevelsDataPath = "GameData/Levels/";
 
         private const string ColorsDataPath = "GameData/ColorsData";
-        private const string MoveDataPath = "GameData/MoveData";
+        private const string SettingsDataPath = "GameData/SettingsData";
 
         public Dictionary<TileType, TileStaticData> Tiles { get; }
         public Dictionary<GamePieceType, GamePieceStaticData> GamePieces { get; }
@@ -21,7 +21,7 @@ namespace Services
 
         public Dictionary<string, LevelStaticData> Levels { get; }
 
-        public MoveInterpolationType MoveInterpolationType { get; }
+        public SettingsStaticData Settings { get; }
 
         public StaticDataService()
         {
@@ -38,7 +38,7 @@ namespace Services
             Levels = LoadFilesFromResources<LevelStaticData>(LevelsDataPath)
                 .ToDictionary(x => x.LevelName, x => x);
 
-            MoveInterpolationType = LoadFileFromResources<MoveData>(MoveDataPath).MoveInterpolationType;
+            Settings = LoadFileFromResources<SettingsStaticData>(SettingsDataPath);
         }
 
         private static T LoadFileFromResources<T>(string path) where T : Object

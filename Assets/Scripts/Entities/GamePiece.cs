@@ -91,7 +91,7 @@ namespace Entities
             {
                 timeLeft -= Time.deltaTime;
                 float t = (timeToMove - timeLeft) / timeToMove;
-                t = MovementHelper.ApplyInterpolation(t, _staticDataService.MoveInterpolationType);
+                t = MovementHelper.ApplyInterpolation(t, _staticDataService.Settings.MoveInterpolationType);
 
                 transform.position = Vector3.Lerp(startPosition, destinationPosition, t);
 

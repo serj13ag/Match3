@@ -5,7 +5,6 @@ using Enums;
 using Interfaces;
 using Services.Mono;
 using StaticData;
-using StaticData.Models;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -39,9 +38,9 @@ namespace Services
 
         public ITile CreateTile(TileType tileType, int x, int y)
         {
-            TileModel tileModel = _staticDataService.Tiles[tileType];
-            BaseTile tile = Object.Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
-            tile.Init(x, y, _tilesContainerTransform, _particleMonoService, tileModel);
+            TileStaticData tileData = _staticDataService.Tiles[tileType];
+            BaseTile tile = Object.Instantiate(tileData.Prefab, new Vector3(x, y, 0), Quaternion.identity);
+            tile.Init(tileData, x, y, _tilesContainerTransform, _particleMonoService);
             return tile;
         }
 

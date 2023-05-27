@@ -1,6 +1,6 @@
 ﻿using Enums;
 using Services.Mono;
-using StaticData.Models;
+using StaticData;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -11,21 +11,21 @@ namespace Entities.Tiles
         private ParticleMonoService _particleMonoService;
 
         private int _matchesTillBreak;
-        private BreakableSpriteModel[] _breakableSpriteData;
+        private BreakableSpriteStaticData[] _breakableSpriteData;
 
         public override bool IsObstacle => false;
 
-        public override void Init(int x, int y, Transform parentTransform, ParticleMonoService particleMonoService,
-            TileModel tileModel)
+        public override void Init(TileStaticData tileData, int x, int y, Transform parentTransform,
+            ParticleMonoService particleMonoService)
         {
-            base.Init(x, y, parentTransform, particleMonoService, tileModel);
+            base.Init(tileData, x, y, parentTransform, particleMonoService);
 
             _particleMonoService = particleMonoService;
 
-            Assert.IsTrue(tileModel.MatchesTillBreak > 0);
+            Assert.IsTrue(tileData.MatchesTillBreak > 0);
 
-            _matchesTillBreak = tileModel.MatchesTillBreak;
-            _breakableSpriteData = tileModel.BreakableSpriteData;
+            _matchesTillBreak = tileData.MatchesTillBreak;
+            _breakableSpriteData = tileData.BreakableSpriteData;
 
             UpdateSprite();
         }

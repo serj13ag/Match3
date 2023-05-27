@@ -1,7 +1,7 @@
 ﻿using System;
 using Interfaces;
 using Services.Mono;
-using StaticData.Models;
+using StaticData;
 using UnityEngine;
 
 namespace Entities.Tiles
@@ -21,8 +21,8 @@ namespace Entities.Tiles
         public event Action<ITile> OnMouseEntered;
         public event Action OnMouseReleased;
 
-        public virtual void Init(int x, int y, Transform parentTransform, ParticleMonoService particleMonoService,
-            TileModel tileModel)
+        public virtual void Init(TileStaticData tileData, int x, int y, Transform parentTransform,
+            ParticleMonoService particleMonoService)
         {
             _position = new Vector2Int(x, y);
 

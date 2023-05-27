@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-namespace StaticData.Models
+namespace StaticData
 {
     [Serializable]
-    public class BreakableSpriteModel
+    public class BreakableSpriteStaticData
     {
         public Sprite BreakableSprite;
         public Color BreakableColor;

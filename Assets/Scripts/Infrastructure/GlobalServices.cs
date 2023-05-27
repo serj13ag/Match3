@@ -16,11 +16,11 @@ namespace Infrastructure
         public AssetProviderService AssetProviderService { get; private set; }
         public StaticDataService StaticDataService { get; private set; }
         public PersistentProgressService PersistentProgressService { get; private set; }
+        public SaveLoadService SaveLoadService { get; private set; }
 
         public SoundMonoService SoundMonoService { get; private set; }
         public LoadingCurtainMonoService LoadingCurtainMonoService { get; private set; }
         public UpdateMonoService UpdateMonoService { get; private set; }
-        public SaveLoadService SaveLoadService { get; private set; }
 
         public GlobalServices(SceneLoader sceneLoader)
         {

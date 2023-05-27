@@ -68,7 +68,6 @@ namespace Infrastructure.StateMachine
             int movesLeft = levelStaticData.MovesLeft;
 
             LevelStateService levelStateService = new LevelStateService(uiMonoService, boardService, scoreMonoService, _soundMonoService, scoreGoal, movesLeft);
-
             CameraService cameraService = new CameraService(boardService.BoardSize);
 
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);

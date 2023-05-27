@@ -13,47 +13,15 @@ MonoBehaviour:
   m_Name: Level1StartingGamePieces
   m_EditorClassIdentifier: 
   StartingGamePieces:
-  - X: 0
-    Y: 0
-    GamePieceType: 0
-    GamePieceColor: 6
-  - X: 0
-    Y: 1
-    GamePieceType: 0
-    GamePieceColor: 2
-  - X: 0
-    Y: 2
-    GamePieceType: 1
-    GamePieceColor: 4
-  - X: 4
-    Y: 2
-    GamePieceType: 1
-    GamePieceColor: 1
-  - X: 4
-    Y: 3
-    GamePieceType: 2
-    GamePieceColor: 5
-  - X: 4
-    Y: 6
-    GamePieceType: 3
-    GamePieceColor: 6
-  - X: 3
-    Y: 2
-    GamePieceType: 4
-    GamePieceColor: 0
-  - X: 3
-    Y: 3
-    GamePieceType: 4
-    GamePieceColor: 0
   - X: 2
-    Y: 7
-    GamePieceType: 6
-    GamePieceColor: 0
-  - X: 4
-    Y: 7
-    GamePieceType: 5
-    GamePieceColor: 0
+    Y: 0
+    Type: 4
+    Color: 0
   - X: 3
-    Y: 6
-    GamePieceType: 6
-    GamePieceColor: 0
+    Y: 0
+    Type: 4
+    Color: 0
+  - X: 4
+    Y: 0
+    Type: 4
+    Color: 0

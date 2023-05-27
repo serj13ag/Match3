@@ -10,7 +10,7 @@ namespace StaticData
         public string LevelName;
         public GamePieceColor[] AvailableColors;
 
-        public StartingTilesStaticData StartingTilesData;
-        public StartingGamePiecesStaticData StartingGamePiecesData;
+        public StartingTilesStaticData StartingTiles;
+        public StartingGamePiecesStaticData StartingGamePieces;
     }
 }

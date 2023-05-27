@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelName: Level1
   AvailableColors: 0100000002000000070000000400000005000000
-  StartingTilesData: {fileID: 11400000, guid: 526be9f96f70e8c45b9ef5c8eba588c7, type: 2}
-  StartingGamePiecesData: {fileID: 11400000, guid: 4fbabc702ad90b24b97e97a5e06918ab, type: 2}
+  StartingTiles: {fileID: 11400000, guid: 526be9f96f70e8c45b9ef5c8eba588c7, type: 2}
+  StartingGamePieces: {fileID: 11400000, guid: 4fbabc702ad90b24b97e97a5e06918ab, type: 2}

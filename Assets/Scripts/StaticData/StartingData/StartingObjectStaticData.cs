@@ -6,14 +6,14 @@ namespace StaticData.StartingData
     [Serializable]
     public class StartingTileStaticData : StartingObjectStaticData
     {
-        public TileType TileType;
+        public TileType Type;
     }
 
     [Serializable]
     public class StartingGamePieceStaticData : StartingObjectStaticData
     {
-        public GamePieceType GamePieceType;
-        public GamePieceColor GamePieceColor;
+        public GamePieceType Type;
+        public GamePieceColor Color;
     }
 
     [Serializable]

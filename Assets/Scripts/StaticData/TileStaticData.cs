@@ -11,13 +11,13 @@ namespace StaticData
         public TileType Type;
         public BaseTile Prefab;
         public int MatchesTillBreak;
-        public BreakableSpriteStaticData[] BreakableSpriteData;
+        public BreakableSpriteStaticData[] BreakableSprites;
     }
 
     [Serializable]
     public class BreakableSpriteStaticData
     {
-        public Sprite BreakableSprite;
-        public Color BreakableColor;
+        public Sprite Sprite;
+        public Color Color;
     }
 }

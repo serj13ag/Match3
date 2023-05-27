@@ -94,9 +94,9 @@ namespace Services
         {
             _tiles = new ITile[_width, _height];
 
-            foreach (StartingTileStaticData startingTile in _staticDataService.Levels[_levelName].StartingTilesData.StartingTiles)
+            foreach (StartingTileStaticData startingTile in _staticDataService.Levels[_levelName].StartingTiles.StartingTiles)
             {
-                SpawnTile(startingTile.TileType, startingTile.X, startingTile.Y);
+                SpawnTile(startingTile.Type, startingTile.X, startingTile.Y);
             }
 
             for (var i = 0; i < _width; i++)
@@ -115,11 +115,11 @@ namespace Services
         {
             _gamePieces = new GamePiece[_width, _height];
 
-            foreach (StartingGamePieceStaticData startingGamePieceEntry in _staticDataService.Levels[_levelName].StartingGamePiecesData
+            foreach (StartingGamePieceStaticData startingGamePieceEntry in _staticDataService.Levels[_levelName].StartingGamePieces
                          .StartingGamePieces)
             {
                 SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y,
-                    startingGamePieceEntry.GamePieceType, startingGamePieceEntry.GamePieceColor);
+                    startingGamePieceEntry.Type, startingGamePieceEntry.Color);
             }
 
             FillBoardWithRandomGamePieces();

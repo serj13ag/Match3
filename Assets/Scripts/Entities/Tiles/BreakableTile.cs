@@ -25,7 +25,7 @@ namespace Entities.Tiles
             Assert.IsTrue(tileData.MatchesTillBreak > 0);
 
             _matchesTillBreak = tileData.MatchesTillBreak;
-            _breakableSpriteData = tileData.BreakableSpriteData;
+            _breakableSpriteData = tileData.BreakableSprites;
 
             UpdateSprite();
         }
@@ -46,8 +46,8 @@ namespace Entities.Tiles
 
         private void UpdateSprite()
         {
-            SpriteRenderer.sprite = _breakableSpriteData[_matchesTillBreak].BreakableSprite;
-            SpriteRenderer.color = _breakableSpriteData[_matchesTillBreak].BreakableColor;
+            SpriteRenderer.sprite = _breakableSpriteData[_matchesTillBreak].Sprite;
+            SpriteRenderer.color = _breakableSpriteData[_matchesTillBreak].Color;
         }
 
         private void PlayVFX()

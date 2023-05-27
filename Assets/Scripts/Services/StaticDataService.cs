@@ -2,7 +2,6 @@
 using System.Linq;
 using Enums;
 using StaticData;
-using StaticData.Models;
 using UnityEngine;
 
 namespace Services
@@ -11,7 +10,7 @@ namespace Services
     {
         private const string TilesDataPath = "GameData/Tiles";
         private const string GamePiecesDataPath = "GameData/GamePieces";
-        private const string ColorDataPath = "GameData/ColorData";
+        private const string ColorsDataPath = "GameData/ColorsData";
         private const string LevelDataPath = "GameData/LevelData";
         private const string MoveDataPath = "GameData/MoveData";
 
@@ -46,13 +45,8 @@ namespace Services
 
         private void SetupColors()
         {
-            ColorData colorData = LoadFileFromResources<ColorData>(ColorDataPath);
-            Colors = new Dictionary<GamePieceColor, Color>();
-
-            foreach (ColorDataModel colorDataEntry in colorData.GamePieceColors)
-            {
-                Colors.Add(colorDataEntry.Type, colorDataEntry.Color);
-            }
+            Colors = LoadFileFromResources<ColorsStaticData>(ColorsDataPath).GamePieceColors
+                .ToDictionary(x => x.Type, x => x.Color);
         }
 
         private static T LoadFileFromResources<T>(string path) where T : Object

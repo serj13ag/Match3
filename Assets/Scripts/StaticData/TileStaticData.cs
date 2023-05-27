@@ -1,4 +1,5 @@
-﻿using Entities.Tiles;
+﻿using System;
+using Entities.Tiles;
 using Enums;
 using UnityEngine;
 
@@ -11,5 +12,12 @@ namespace StaticData
         public BaseTile Prefab;
         public int MatchesTillBreak;
         public BreakableSpriteStaticData[] BreakableSpriteData;
+    }
+
+    [Serializable]
+    public class BreakableSpriteStaticData
+    {
+        public Sprite BreakableSprite;
+        public Color BreakableColor;
     }
 }

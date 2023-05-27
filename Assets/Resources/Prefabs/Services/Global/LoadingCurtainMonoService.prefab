@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3137296185523201254}
   - component: {fileID: 7586027358598621370}
   m_Layer: 0
-  m_Name: LevelLoadingCurtain
+  m_Name: LoadingCurtainMonoService
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

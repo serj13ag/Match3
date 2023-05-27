@@ -21,7 +21,7 @@ namespace Entities.Tiles
         public event Action<ITile> OnMouseEntered;
         public event Action OnMouseReleased;
 
-        public virtual void Init(int x, int y, Transform parentTransform, ParticleController particleController,
+        public virtual void Init(int x, int y, Transform parentTransform, ParticleMonoService particleMonoService,
             TileModel tileModel)
         {
             _position = new Vector2Int(x, y);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Services.Mono
 {
-    public class ScoreController : MonoBehaviour
+    public class ScoreMonoService : MonoBehaviour
     {
         private int _score;
         private Coroutine _updateScoreRoutine;

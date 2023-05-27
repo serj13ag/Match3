@@ -6,9 +6,9 @@ namespace Infrastructure
 {
     public class GlobalServices
     {
-        private const string SoundControllerPath = "Prefabs/Infrastructure/Global/SoundController";
-        private const string LevelLoadingCurtainPath = "Prefabs/Infrastructure/Global/LevelLoadingCurtain";
-        private const string UpdateControllerPath = "Prefabs/Infrastructure/Global/UpdateController";
+        private const string SoundMonoServicePath = "Prefabs/Services/Global/SoundMonoService";
+        private const string LoadingCurtainMonoServicePath = "Prefabs/Services/Global/LoadingCurtainMonoService";
+        private const string UpdateMonoServicePath = "Prefabs/Services/Global/UpdateMonoService";
 
         public SceneLoader SceneLoader { get; }
 
@@ -17,9 +17,9 @@ namespace Infrastructure
         public StaticDataService StaticDataService { get; private set; }
         public PersistentProgressService PersistentProgressService { get; private set; }
 
-        public SoundController SoundController { get; private set; }
-        public LoadingCurtainController LoadingCurtainController { get; private set; }
-        public UpdateController UpdateController { get; private set; }
+        public SoundMonoService SoundMonoService { get; private set; }
+        public LoadingCurtainMonoService LoadingCurtainMonoService { get; private set; }
+        public UpdateMonoService UpdateMonoService { get; private set; }
         public SaveLoadService SaveLoadService { get; private set; }
 
         public GlobalServices(SceneLoader sceneLoader)
@@ -35,13 +35,13 @@ namespace Infrastructure
             PersistentProgressService = new PersistentProgressService();
             SaveLoadService = new SaveLoadService(PersistentProgressService);
 
-            LoadingCurtainController = AssetProviderService.Instantiate<LoadingCurtainController>(LevelLoadingCurtainPath);
+            LoadingCurtainMonoService = AssetProviderService.Instantiate<LoadingCurtainMonoService>(LoadingCurtainMonoServicePath);
 
-            SoundController = AssetProviderService.Instantiate<SoundController>(SoundControllerPath);
-            SoundController.Init(RandomService);
+            SoundMonoService = AssetProviderService.Instantiate<SoundMonoService>(SoundMonoServicePath);
+            SoundMonoService.Init(RandomService);
 
-            UpdateController = AssetProviderService.Instantiate<UpdateController>(UpdateControllerPath);
-            UpdateController.Init();
+            UpdateMonoService = AssetProviderService.Instantiate<UpdateMonoService>(UpdateMonoServicePath);
+            UpdateMonoService.Init();
         }
     }
 }

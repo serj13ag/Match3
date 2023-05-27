@@ -17,9 +17,9 @@ namespace Infrastructure.StateMachine
                 [typeof(LoadProgressState)] = new LoadProgressState(this,
                     globalServices.PersistentProgressService, globalServices.SaveLoadService),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, globalServices.SceneLoader,
-                    globalServices.LoadingCurtainController, globalServices.AssetProviderService,
-                    globalServices.RandomService, globalServices.StaticDataService, globalServices.SoundController,
-                    globalServices.UpdateController, globalServices.PersistentProgressService),
+                    globalServices.LoadingCurtainMonoService, globalServices.AssetProviderService,
+                    globalServices.RandomService, globalServices.StaticDataService, globalServices.SoundMonoService,
+                    globalServices.UpdateMonoService, globalServices.PersistentProgressService),
                 [typeof(GameLoopState)] = new GameLoopState(),
             };
         }

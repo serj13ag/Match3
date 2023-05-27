@@ -7,9 +7,9 @@ namespace Services
 {
     public class LevelStateService
     {
-        private readonly UIController _uiController;
-        private readonly ScoreController _scoreController;
-        private readonly SoundController _soundController;
+        private readonly UiMonoService _uiMonoService;
+        private readonly ScoreMonoService _scoreMonoService;
+        private readonly SoundMonoService _soundMonoService;
 
         private LevelState _levelState;
 
@@ -42,15 +42,15 @@ namespace Services
             }
         }
 
-        public LevelStateService(UIController uiController, BoardService boardService, ScoreController scoreController,
-            SoundController soundController, int scoreGoal, int movesLeft)
+        public LevelStateService(UiMonoService uiMonoService, BoardService boardService, ScoreMonoService scoreMonoService,
+            SoundMonoService soundMonoService, int scoreGoal, int movesLeft)
         {
-            _soundController = soundController;
-            _scoreController = scoreController;
-            _uiController = uiController;
+            _soundMonoService = soundMonoService;
+            _scoreMonoService = scoreMonoService;
+            _uiMonoService = uiMonoService;
 
             boardService.OnGamePiecesSwitched += OnGamePiecesSwitched;
-            _scoreController.OnScoreChanged += OnScoreChanged;
+            _scoreMonoService.OnScoreChanged += OnScoreChanged;
 
             _scoreGoal = scoreGoal;
             _movesLeft = movesLeft;
@@ -71,22 +71,22 @@ namespace Services
             {
                 case LevelState.Playing:
                 {
-                    _uiController.FadeOff();
+                    _uiMonoService.FadeOff();
                     break;
                 }
                 case LevelState.GameOver:
                 {
-                    _uiController.FadeOn();
+                    _uiMonoService.FadeOn();
 
                     if (ScoreGoalReached())
                     {
-                        _soundController.PlaySound(SoundType.Win);
-                        _uiController.ShowGameWinMessageWindow(ReloadLevel);
+                        _soundMonoService.PlaySound(SoundType.Win);
+                        _uiMonoService.ShowGameWinMessageWindow(ReloadLevel);
                     }
                     else
                     {
-                        _soundController.PlaySound(SoundType.Lose);
-                        _uiController.ShowGameOverMessageWindow(ReloadLevel);
+                        _soundMonoService.PlaySound(SoundType.Lose);
+                        _uiMonoService.ShowGameOverMessageWindow(ReloadLevel);
                     }
 
                     break;
@@ -121,7 +121,7 @@ namespace Services
 
         private bool ScoreGoalReached()
         {
-            return _scoreController.Score >= _scoreGoal;
+            return _scoreMonoService.Score >= _scoreGoal;
         }
 
         private void UpdateMovesLeftText()

@@ -17,17 +17,17 @@ namespace Services
 
         private readonly RandomService _randomService;
         private readonly StaticDataService _staticDataService;
-        private readonly ParticleController _particleController;
+        private readonly ParticleMonoService _particleMonoService;
 
         private readonly Transform _tilesContainerTransform;
         private readonly Transform _gamePiecesContainerTransform;
 
         public GameFactory(RandomService randomService, StaticDataService staticDataService,
-            ParticleController particleController)
+            ParticleMonoService particleMonoService)
         {
             _randomService = randomService;
             _staticDataService = staticDataService;
-            _particleController = particleController;
+            _particleMonoService = particleMonoService;
 
             GameObject tilesContainer = new GameObject(TilesContainerName);
             _tilesContainerTransform = tilesContainer.transform;
@@ -40,7 +40,7 @@ namespace Services
         {
             TileModel tileModel = _staticDataService.Tiles[tileType];
             BaseTile tile = Object.Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
-            tile.Init(x, y, _tilesContainerTransform, _particleController, tileModel);
+            tile.Init(x, y, _tilesContainerTransform, _particleMonoService, tileModel);
             return tile;
         }
 

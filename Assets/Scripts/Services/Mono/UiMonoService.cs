@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Services.Mono
 {
-    public class UIController : MonoBehaviour
+    public class UiMonoService : MonoBehaviour
     {
         [SerializeField] private MessageWindow _messageWindow;
 
@@ -12,21 +12,21 @@ namespace Services.Mono
         [SerializeField] private Sprite _loseIcon;
         [SerializeField] private Sprite _goalIcon;
 
-        private LoadingCurtainController _loadingCurtainController;
+        private LoadingCurtainMonoService _loadingCurtainMonoService;
 
-        public void Init(LoadingCurtainController loadingCurtainController)
+        public void Init(LoadingCurtainMonoService loadingCurtainMonoService)
         {
-            _loadingCurtainController = loadingCurtainController;
+            _loadingCurtainMonoService = loadingCurtainMonoService;
         }
 
         public void FadeOn()
         {
-            _loadingCurtainController.FadeOnWithDelay();
+            _loadingCurtainMonoService.FadeOnWithDelay();
         }
 
         public void FadeOff()
         {
-            _loadingCurtainController.FadeOffWithDelay();
+            _loadingCurtainMonoService.FadeOffWithDelay();
         }
 
         public void ShowStartGameMessageWindow(int scoreGoal, Action onButtonClickCallback)

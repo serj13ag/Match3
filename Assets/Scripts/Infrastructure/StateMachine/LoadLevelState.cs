@@ -8,74 +8,74 @@ namespace Infrastructure.StateMachine
 {
     public class LoadLevelState : IPayloadedState<string>
     {
-        private const string ScoreControllerPath = "Prefabs/Infrastructure/Level/ScoreController";
-        private const string UiControllerPath = "Prefabs/Infrastructure/Level/UIController";
-        private const string BackgroundUiPath = "Prefabs/Infrastructure/Level/BackgroundUi";
-        private const string ParticleControllerPath = "Prefabs/Infrastructure/Level/ParticleController";
+        private const string ScoreMonoServicePath = "Prefabs/Services/Level/ScoreMonoService";
+        private const string UiMonoServicePath = "Prefabs/Services/Level/UiMonoService";
+        private const string BackgroundUiPath = "Prefabs/Services/Level/BackgroundUi";
+        private const string ParticleMonoServicePath = "Prefabs/Services/Level/ParticleMonoService";
 
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
-        private readonly LoadingCurtainController _loadingCurtainController;
+        private readonly LoadingCurtainMonoService _loadingCurtainMonoService;
         private readonly AssetProviderService _assetProviderService;
         private readonly RandomService _randomService;
         private readonly StaticDataService _staticDataService;
-        private readonly SoundController _soundController;
-        private readonly UpdateController _updateController;
+        private readonly SoundMonoService _soundMonoService;
+        private readonly UpdateMonoService _updateMonoService;
         private readonly PersistentProgressService _persistentProgressService;
 
         public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
-            LoadingCurtainController loadingCurtainController, AssetProviderService assetProviderService,
-            RandomService randomService, StaticDataService staticDataService, SoundController soundController,
-            UpdateController updateController, PersistentProgressService persistentProgressService)
+            LoadingCurtainMonoService loadingCurtainMonoService, AssetProviderService assetProviderService,
+            RandomService randomService, StaticDataService staticDataService, SoundMonoService soundMonoService,
+            UpdateMonoService updateMonoService, PersistentProgressService persistentProgressService)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
-            _loadingCurtainController = loadingCurtainController;
+            _loadingCurtainMonoService = loadingCurtainMonoService;
             _assetProviderService = assetProviderService;
             _randomService = randomService;
             _staticDataService = staticDataService;
-            _soundController = soundController;
-            _updateController = updateController;
+            _soundMonoService = soundMonoService;
+            _updateMonoService = updateMonoService;
             _persistentProgressService = persistentProgressService;
         }
 
         public void Enter(string sceneName)
         {
-            _loadingCurtainController.FadeOnInstantly();
+            _loadingCurtainMonoService.FadeOnInstantly();
             _sceneLoader.LoadScene(sceneName, OnLevelLoaded);
         }
 
         public void Exit()
         {
-            _loadingCurtainController.FadeOffWithDelay();
+            _loadingCurtainMonoService.FadeOffWithDelay();
         }
 
         private void OnLevelLoaded()
         {
             
-            ParticleController particleController = _assetProviderService.Instantiate<ParticleController>(ParticleControllerPath);
-            GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleController);
-            ScoreController scoreController = _assetProviderService.Instantiate<ScoreController>(ScoreControllerPath);
+            ParticleMonoService particleMonoService = _assetProviderService.Instantiate<ParticleMonoService>(ParticleMonoServicePath);
+            GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleMonoService);
+            ScoreMonoService scoreMonoService = _assetProviderService.Instantiate<ScoreMonoService>(ScoreMonoServicePath);
 
             int width = 7; //TODO to data
             int height = 9; //TODO to data
-            BoardService boardService = new BoardService(particleController, gameFactory, _randomService, scoreController,
-                _staticDataService, _soundController, _updateController, _persistentProgressService, width, height);
+            BoardService boardService = new BoardService(particleMonoService, gameFactory, _randomService, scoreMonoService,
+                _staticDataService, _soundMonoService, _updateMonoService, _persistentProgressService, width, height);
 
-            UIController uiController = _assetProviderService.Instantiate<UIController>(UiControllerPath);
-            uiController.Init(_loadingCurtainController);
+            UiMonoService uiMonoService = _assetProviderService.Instantiate<UiMonoService>(UiMonoServicePath);
+            uiMonoService.Init(_loadingCurtainMonoService);
 
             int scoreGoal = 3000; //TODO to data
             int movesLeft = 10; //TODO to data
-            LevelStateService levelStateService = new LevelStateService(uiController, boardService, scoreController, _soundController, scoreGoal, movesLeft);
+            LevelStateService levelStateService = new LevelStateService(uiMonoService, boardService, scoreMonoService, _soundMonoService, scoreGoal, movesLeft);
 
             CameraService cameraService = new CameraService(boardService.BoardSize);
 
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
             backgroundUi.Init(cameraService);
 
-            _soundController.PlaySound(SoundType.Music);
-            uiController.ShowStartGameMessageWindow(scoreGoal, levelStateService.ChangeStateToPlaying);
+            _soundMonoService.PlaySound(SoundType.Music);
+            uiMonoService.ShowStartGameMessageWindow(scoreGoal, levelStateService.ChangeStateToPlaying);
 
             _gameStateMachine.Enter<GameLoopState>();
         }

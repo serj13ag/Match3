@@ -19,11 +19,11 @@ namespace Services
 {
     public class BoardService : IUpdatable
     {
-        private readonly ParticleController _particleController;
+        private readonly ParticleMonoService _particleMonoService;
         private readonly IGameFactory _gameFactory;
         private readonly RandomService _randomService;
-        private readonly ScoreController _scoreController;
-        private readonly SoundController _soundController;
+        private readonly ScoreMonoService _scoreMonoService;
+        private readonly SoundMonoService _soundMonoService;
         private readonly StaticDataService _staticDataService;
 
         private readonly int _width;
@@ -47,17 +47,17 @@ namespace Services
 
         public event Action OnGamePiecesSwitched;
 
-        public BoardService(ParticleController particleController, IGameFactory gameFactory,
-            RandomService randomService, ScoreController scoreController, StaticDataService staticDataService,
-            SoundController soundController, UpdateController updateController,
+        public BoardService(ParticleMonoService particleMonoService, IGameFactory gameFactory,
+            RandomService randomService, ScoreMonoService scoreMonoService, StaticDataService staticDataService,
+            SoundMonoService soundMonoService, UpdateMonoService updateMonoService,
             PersistentProgressService persistentProgressService, int width, int height)
         {
             _staticDataService = staticDataService;
-            _scoreController = scoreController;
-            _particleController = particleController;
+            _scoreMonoService = scoreMonoService;
+            _particleMonoService = particleMonoService;
             _gameFactory = gameFactory;
             _randomService = randomService;
-            _soundController = soundController;
+            _soundMonoService = soundMonoService;
 
             _movedPieces = new Stack<GamePiece>();
 
@@ -66,7 +66,7 @@ namespace Services
             _width = width;
             _height = height;
 
-            updateController.Register(this);
+            updateMonoService.Register(this);
 
             Setup(persistentProgressService.Progress);
         }
@@ -383,7 +383,7 @@ namespace Services
             {
                 if (TryGetBombedGamePieces(matchedGamePiece, out HashSet<GamePiece> bombedGamePieces))
                 {
-                    _soundController.PlaySound(SoundType.BombGamePieces);
+                    _soundMonoService.PlaySound(SoundType.BombGamePieces);
                     gamePiecesToBreak.UnionWith(bombedGamePieces);
                 }
                 else
@@ -472,17 +472,17 @@ namespace Services
         {
             foreach (GamePiece gamePiece in gamePieces)
             {
-                _scoreController.AddScore(gamePiece.Score, gamePieces.Count,
+                _scoreMonoService.AddScore(gamePiece.Score, gamePieces.Count,
                     _completedBreakIterationsAfterSwitchedGamePieces);
 
                 ClearGamePieceAt(gamePiece.Position, true);
                 ProcessTileMatchAt(gamePiece.Position);
             }
 
-            _soundController.PlaySound(SoundType.BreakGamePieces);
+            _soundMonoService.PlaySound(SoundType.BreakGamePieces);
             if (_completedBreakIterationsAfterSwitchedGamePieces > 1)
             {
-                _soundController.PlaySound(SoundType.Bonus);
+                _soundMonoService.PlaySound(SoundType.Bonus);
             }
 
             _completedBreakIterationsAfterSwitchedGamePieces++;
@@ -499,7 +499,7 @@ namespace Services
 
             if (gamePiece is CollectibleGamePiece)
             {
-                _soundController.PlaySound(SoundType.BreakCollectible);
+                _soundMonoService.PlaySound(SoundType.BreakCollectible);
 
                 _collectibleGamePieces--;
             }
@@ -516,7 +516,7 @@ namespace Services
                 var particleEffectType = gamePiece.Bombed
                     ? ParticleEffectType.Bomb
                     : ParticleEffectType.Clear;
-                _particleController.PlayParticleEffectAt(position, particleEffectType);
+                _particleMonoService.PlayParticleEffectAt(position, particleEffectType);
             }
         }
 

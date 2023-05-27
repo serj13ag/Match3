@@ -8,19 +8,19 @@ namespace Entities.Tiles
 {
     public class BreakableTile : BaseTile
     {
-        private ParticleController _particleController;
+        private ParticleMonoService _particleMonoService;
 
         private int _matchesTillBreak;
         private BreakableSpriteModel[] _breakableSpriteData;
 
         public override bool IsObstacle => false;
 
-        public override void Init(int x, int y, Transform parentTransform, ParticleController particleController,
+        public override void Init(int x, int y, Transform parentTransform, ParticleMonoService particleMonoService,
             TileModel tileModel)
         {
-            base.Init(x, y, parentTransform, particleController, tileModel);
+            base.Init(x, y, parentTransform, particleMonoService, tileModel);
 
-            _particleController = particleController;
+            _particleMonoService = particleMonoService;
 
             Assert.IsTrue(tileModel.MatchesTillBreak > 0);
 
@@ -56,7 +56,7 @@ namespace Entities.Tiles
                 ? ParticleEffectType.DoubleBreak
                 : ParticleEffectType.Break;
 
-            _particleController.PlayParticleEffectAt(Position, effectType);
+            _particleMonoService.PlayParticleEffectAt(Position, effectType);
         }
     }
 }

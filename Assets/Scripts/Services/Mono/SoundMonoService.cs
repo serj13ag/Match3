@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Services.Mono
 {
-    public class SoundController : MonoBehaviour
+    public class SoundMonoService : MonoBehaviour
     {
         [SerializeField] private AudioSource _audioSource; // TODO spawn multiple sources
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Services.Mono
 {
-    public class ParticleController : MonoBehaviour
+    public class ParticleMonoService : MonoBehaviour
     {
         [SerializeField] private ParticleEffect _clearVFX;
         [SerializeField] private ParticleEffect _breakVFX;

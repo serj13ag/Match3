@@ -10,7 +10,7 @@ using Helpers;
 using Interfaces;
 using Services.Mono;
 using Services.PersistentProgress;
-using StaticData.Models;
+using StaticData.StartingData;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -28,6 +28,7 @@ namespace Services
 
         private readonly int _width;
         private readonly int _height;
+        private readonly string _levelName;
 
         private ITile[,] _tiles;
         private GamePiece[,] _gamePieces;
@@ -65,6 +66,7 @@ namespace Services
 
             _width = width;
             _height = height;
+            _levelName = Constants.FirstLevelName; // TODO add to progress
 
             updateMonoService.Register(this);
 
@@ -92,7 +94,7 @@ namespace Services
         {
             _tiles = new ITile[_width, _height];
 
-            foreach (StartingTileModel startingTile in _staticDataService.LevelData.StartingTilesData.StartingTiles)
+            foreach (StartingTileStaticData startingTile in _staticDataService.Levels[_levelName].StartingTilesData.StartingTiles)
             {
                 SpawnTile(startingTile.TileType, startingTile.X, startingTile.Y);
             }
@@ -113,7 +115,7 @@ namespace Services
         {
             _gamePieces = new GamePiece[_width, _height];
 
-            foreach (StartingGamePieceModel startingGamePieceEntry in _staticDataService.LevelData.StartingGamePiecesData
+            foreach (StartingGamePieceStaticData startingGamePieceEntry in _staticDataService.Levels[_levelName].StartingGamePiecesData
                          .StartingGamePieces)
             {
                 SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y,
@@ -180,7 +182,7 @@ namespace Services
 
         private GamePiece SpawnBasicGamePieceWithRandomColor(int x, int y)
         {
-            GamePiece gamePiece = _gameFactory.CreateNormalGamePieceWithRandomColor(x, y);
+            GamePiece gamePiece = _gameFactory.CreateNormalGamePieceWithRandomColor(_levelName, x, y);
             RegisterGamePiece(gamePiece, x, y);
             return gamePiece;
         }

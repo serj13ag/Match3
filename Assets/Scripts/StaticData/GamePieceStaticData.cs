@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace StaticData
 {
-    [CreateAssetMenu(fileName = "GamePieceStaticData", menuName = "StaticData/GamePiece")]
+    [CreateAssetMenu(fileName = "GamePieceData", menuName = "StaticData/GamePiece")]
     public class GamePieceStaticData : ScriptableObject
     {
         public GamePieceType Type;

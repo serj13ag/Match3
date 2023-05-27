@@ -7,7 +7,7 @@ namespace Services
     public interface IGameFactory
     {
         ITile CreateTile(TileType tileType, int x, int y);
-        GamePiece CreateNormalGamePieceWithRandomColor(int x, int y);
+        GamePiece CreateNormalGamePieceWithRandomColor(string levelName, int x, int y);
 
         GamePiece CreateBombGamePiece(int x, int y, BombType bombType, GamePieceColor color);
 

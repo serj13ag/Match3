@@ -1,5 +1,7 @@
 ﻿public static class Constants
 {
+    public const string FirstLevelName = "Level1";
+
     public const float CameraPositionZ = -10f;
 
     public const float TimeToMoveGamePiece = 0.5f;

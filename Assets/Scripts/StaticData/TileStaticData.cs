@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace StaticData
 {
-    [CreateAssetMenu(fileName = "TileStaticData", menuName = "StaticData/Tile")]
+    [CreateAssetMenu(fileName = "TileData", menuName = "StaticData/Tile")]
     public class TileStaticData : ScriptableObject
     {
         public TileType Type;

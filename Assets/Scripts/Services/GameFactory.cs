@@ -44,9 +44,9 @@ namespace Services
             return tile;
         }
 
-        public GamePiece CreateNormalGamePieceWithRandomColor(int x, int y)
+        public GamePiece CreateNormalGamePieceWithRandomColor(string levelName, int x, int y)
         {
-            return CreateGamePiece(GamePieceType.Normal, GetRandomGamePieceColor(), x, y);
+            return CreateGamePiece(GamePieceType.Normal, GetRandomGamePieceColor(levelName), x, y);
         }
 
         public GamePiece CreateBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)
@@ -84,10 +84,10 @@ namespace Services
             };
         }
 
-        private GamePieceColor GetRandomGamePieceColor()
+        private GamePieceColor GetRandomGamePieceColor(string levelName)
         {
-            int randomIndex = _randomService.Next(_staticDataService.LevelData.AvailableColors.Length);
-            return _staticDataService.LevelData.AvailableColors[randomIndex];
+            int randomIndex = _randomService.Next(_staticDataService.Levels[levelName].AvailableColors.Length);
+            return _staticDataService.Levels[levelName].AvailableColors[randomIndex];
         }
 
         private GamePieceType GetRandomCollectibleGamePieceType()

@@ -1,5 +1,6 @@
 using System;
 using Enums;
+using Services;
 using UnityEngine;
 
 namespace Controllers
@@ -21,6 +22,8 @@ namespace Controllers
         public void Init(RandomService randomService)
         {
             _randomService = randomService;
+
+            DontDestroyOnLoad(this);
         }
 
         public void PlaySound(SoundType soundType)

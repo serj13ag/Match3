@@ -3,6 +3,7 @@ using System.Collections;
 using Enums;
 using Helpers;
 using PersistentData.Models;
+using Services;
 using UnityEngine;
 
 namespace Entities
@@ -11,7 +12,7 @@ namespace Entities
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
-        private GameDataRepository _gameDataRepository;
+        private GameDataService _gameDataService;
         private bool _isMoving;
         private Vector2Int _position;
         private int _score;
@@ -39,10 +40,10 @@ namespace Entities
         public event Action<GamePiece> OnPositionChanged;
         public event Action<GamePiece> OnStartMoving;
 
-        public void Init(GamePieceColor color, int x, int y, GameDataRepository gameDataRepository,
+        public void Init(GamePieceColor color, int x, int y, GameDataService gameDataService,
             Transform parentTransform, GamePieceModel gamePieceModel)
         {
-            _gameDataRepository = gameDataRepository;
+            _gameDataService = gameDataService;
 
             _score = gamePieceModel.Score;
 
@@ -71,6 +72,12 @@ namespace Entities
             }
         }
 
+        // TODO move out
+        public void Destroy()
+        {
+            Destroy(gameObject);
+        }
+
         private IEnumerator MoveRoutine(Vector2Int destination, float timeToMove)
         {
             _isMoving = true;
@@ -84,7 +91,7 @@ namespace Entities
             {
                 timeLeft -= Time.deltaTime;
                 float t = (timeToMove - timeLeft) / timeToMove;
-                t = MovementHelper.ApplyInterpolation(t, _gameDataRepository.MoveInterpolationType);
+                t = MovementHelper.ApplyInterpolation(t, _gameDataService.MoveInterpolationType);
 
                 transform.position = Vector3.Lerp(startPosition, destinationPosition, t);
 
@@ -112,7 +119,7 @@ namespace Entities
 
             if (color != GamePieceColor.Undefined)
             {
-                _spriteRenderer.color = _gameDataRepository.Colors[color];
+                _spriteRenderer.color = _gameDataService.Colors[color];
             }
         }
     }

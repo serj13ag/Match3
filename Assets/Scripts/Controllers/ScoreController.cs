@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 namespace Controllers
 {
     public class ScoreController : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _scoreText; // TODO move to ui
-
         private int _score;
         private Coroutine _updateScoreRoutine;
 
@@ -70,7 +67,7 @@ namespace Controllers
 
         private void UpdateScoreText(int score)
         {
-            _scoreText.text = score.ToString();
+            //_scoreText.text = score.ToString(); // TODO
         }
     }
 }

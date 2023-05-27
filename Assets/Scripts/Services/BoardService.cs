@@ -25,7 +25,7 @@ namespace Services
         private readonly RandomService _randomService;
         private readonly ScoreController _scoreController;
         private readonly SoundController _soundController;
-        private readonly GameDataRepository _gameDataRepository;
+        private readonly GameDataService _gameDataService;
 
         private readonly int _width;
         private readonly int _height;
@@ -49,11 +49,11 @@ namespace Services
         public event Action OnGamePiecesSwitched;
 
         public BoardService(ParticleController particleController, IGameFactory gameFactory,
-            RandomService randomService, ScoreController scoreController, GameDataRepository gameDataRepository,
+            RandomService randomService, ScoreController scoreController, GameDataService gameDataService,
             SoundController soundController, UpdateController updateController,
             PersistentProgressService persistentProgressService, int width, int height)
         {
-            _gameDataRepository = gameDataRepository;
+            _gameDataService = gameDataService;
             _scoreController = scoreController;
             _particleController = particleController;
             _gameFactory = gameFactory;
@@ -93,7 +93,7 @@ namespace Services
         {
             _tiles = new ITile[_width, _height];
 
-            foreach (StartingTileModel startingTile in _gameDataRepository.LevelData.StartingTilesData.StartingTiles)
+            foreach (StartingTileModel startingTile in _gameDataService.LevelData.StartingTilesData.StartingTiles)
             {
                 SpawnTile(startingTile.TileType, startingTile.X, startingTile.Y);
             }
@@ -114,7 +114,7 @@ namespace Services
         {
             _gamePieces = new GamePiece[_width, _height];
 
-            foreach (StartingGamePieceModel startingGamePieceEntry in _gameDataRepository.LevelData.StartingGamePiecesData
+            foreach (StartingGamePieceModel startingGamePieceEntry in _gameDataService.LevelData.StartingGamePiecesData
                          .StartingGamePieces)
             {
                 SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y,

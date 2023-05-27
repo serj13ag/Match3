@@ -207,55 +207,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1454728402
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1454728404}
-  - component: {fileID: 1454728403}
-  m_Layer: 0
-  m_Name: GameData
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1454728403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1454728402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d07c5485972d4b29a7157b92f35bb23e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TilesData: {fileID: 11400000, guid: 58d5b5bf443016740987e05305399443, type: 2}
-  GamePiecesData: {fileID: 11400000, guid: 1fdddf5471a10694c8c6e1c7e18ea8a6, type: 2}
-  ColorData: {fileID: 11400000, guid: 5783d67eebb527c46b48ba2e0cef3a70, type: 2}
-  LevelData: {fileID: 11400000, guid: 46c025938f1ca5742bbad5313049e3f5, type: 2}
-  MoveData: {fileID: 11400000, guid: 387edab6fdc57f24eb11178c2004c0dd, type: 2}
---- !u!4 &1454728404
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1454728402}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5320942802706956632
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -269,7 +220,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5320942804270567772, guid: 6cdaf0b18037e7e4da9b4114f8001f78, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5320942804270567772, guid: 6cdaf0b18037e7e4da9b4114f8001f78, type: 3}
       propertyPath: m_LocalPosition.x
@@ -322,7 +273,7 @@ PrefabInstance:
     - target: {fileID: 5320942804270567773, guid: 6cdaf0b18037e7e4da9b4114f8001f78, type: 3}
       propertyPath: _gameData
       value: 
-      objectReference: {fileID: 1454728403}
+      objectReference: {fileID: 0}
     - target: {fileID: 5320942804270567773, guid: 6cdaf0b18037e7e4da9b4114f8001f78, type: 3}
       propertyPath: _uiController
       value: 

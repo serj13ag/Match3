@@ -14,7 +14,7 @@ namespace Infrastructure
 
         public RandomService RandomService { get; private set; }
         public AssetProviderService AssetProviderService { get; private set; }
-        public GameDataRepository GameDataRepository { get; private set; }
+        public GameDataService GameDataService { get; private set; }
         public PersistentProgressService PersistentProgressService { get; private set; }
 
         public SoundController SoundController { get; private set; }
@@ -27,11 +27,11 @@ namespace Infrastructure
             SceneLoader = sceneLoader;
         }
 
-        public void InitGlobalServices(GameData gameData)
+        public void InitGlobalServices()
         {
             RandomService = new RandomService();
             AssetProviderService = new AssetProviderService();
-            GameDataRepository = new GameDataRepository(gameData);
+            GameDataService = new GameDataService();
             PersistentProgressService = new PersistentProgressService();
             SaveLoadService = new SaveLoadService(PersistentProgressService);
 

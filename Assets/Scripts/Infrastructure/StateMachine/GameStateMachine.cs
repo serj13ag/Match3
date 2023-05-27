@@ -9,16 +9,16 @@ namespace Infrastructure.StateMachine
 
         private IExitableState _currentState;
 
-        public GameStateMachine(GameData gameData, GlobalServices globalServices)
+        public GameStateMachine(GlobalServices globalServices)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, gameData, globalServices),
+                [typeof(BootstrapState)] = new BootstrapState(this, globalServices),
                 [typeof(LoadProgressState)] = new LoadProgressState(this,
                     globalServices.PersistentProgressService, globalServices.SaveLoadService),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, globalServices.SceneLoader,
                     globalServices.LoadingCurtainController, globalServices.AssetProviderService,
-                    globalServices.RandomService, globalServices.GameDataRepository, globalServices.SoundController,
+                    globalServices.RandomService, globalServices.GameDataService, globalServices.SoundController,
                     globalServices.UpdateController, globalServices.PersistentProgressService),
                 [typeof(GameLoopState)] = new GameLoopState(),
             };

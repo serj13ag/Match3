@@ -7,12 +7,12 @@
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
 
-        public BootstrapState(GameStateMachine gameStateMachine, GameData gameData, GlobalServices services)
+        public BootstrapState(GameStateMachine gameStateMachine, GlobalServices services)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = services.SceneLoader;
 
-            services.InitGlobalServices(gameData);
+            services.InitGlobalServices();
         }
 
         public void Enter()

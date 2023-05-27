@@ -16,17 +16,17 @@ namespace Services
         private const string GamePiecesContainerName = "GamePieces";
 
         private readonly RandomService _randomService;
-        private readonly GameDataRepository _gameDataRepository;
+        private readonly GameDataService _gameDataService;
         private readonly ParticleController _particleController;
 
         private readonly Transform _tilesContainerTransform;
         private readonly Transform _gamePiecesContainerTransform;
 
-        public GameFactory(RandomService randomService, GameDataRepository gameDataRepository,
+        public GameFactory(RandomService randomService, GameDataService gameDataService,
             ParticleController particleController)
         {
             _randomService = randomService;
-            _gameDataRepository = gameDataRepository;
+            _gameDataService = gameDataService;
             _particleController = particleController;
 
             GameObject tilesContainer = new GameObject(TilesContainerName);
@@ -38,7 +38,7 @@ namespace Services
 
         public ITile CreateTile(TileType tileType, int x, int y)
         {
-            TileModel tileModel = _gameDataRepository.Tiles[tileType];
+            TileModel tileModel = _gameDataService.Tiles[tileType];
             BaseTile tile = Object.Instantiate(tileModel.TilePrefab, new Vector3(x, y, 0), Quaternion.identity);
             tile.Init(x, y, _tilesContainerTransform, _particleController, tileModel);
             return tile;
@@ -66,9 +66,9 @@ namespace Services
 
         public GamePiece CreateGamePiece(GamePieceType gamePieceType, GamePieceColor color, int x, int y)
         {
-            GamePieceModel gamePieceModel = _gameDataRepository.GamePieces[gamePieceType];
+            GamePieceModel gamePieceModel = _gameDataService.GamePieces[gamePieceType];
             GamePiece gamePiece = Object.Instantiate(gamePieceModel.GamePiecePrefab, Vector3.zero, Quaternion.identity);
-            gamePiece.Init(color, x, y, _gameDataRepository, _gamePiecesContainerTransform, gamePieceModel);
+            gamePiece.Init(color, x, y, _gameDataService, _gamePiecesContainerTransform, gamePieceModel);
             return gamePiece;
         }
 
@@ -86,8 +86,8 @@ namespace Services
 
         private GamePieceColor GetRandomGamePieceColor()
         {
-            int randomIndex = _randomService.Next(_gameDataRepository.LevelData.AvailableColors.Length);
-            return _gameDataRepository.LevelData.AvailableColors[randomIndex];
+            int randomIndex = _randomService.Next(_gameDataService.LevelData.AvailableColors.Length);
+            return _gameDataService.LevelData.AvailableColors[randomIndex];
         }
 
         private GamePieceType GetRandomCollectibleGamePieceType()

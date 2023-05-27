@@ -6,12 +6,12 @@ namespace Infrastructure
     {
         public GameStateMachine GameStateMachine { get; }
 
-        public Game(GameData gameData, ICoroutineRunner coroutineRunner)
+        public Game(ICoroutineRunner coroutineRunner)
         {
             SceneLoader sceneLoader = new SceneLoader(coroutineRunner);
             GlobalServices globalServices = new GlobalServices(sceneLoader);
 
-            GameStateMachine = new GameStateMachine(gameData, globalServices);
+            GameStateMachine = new GameStateMachine(globalServices);
         }
     }
 }

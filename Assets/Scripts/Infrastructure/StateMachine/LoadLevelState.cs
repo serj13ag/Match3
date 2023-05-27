@@ -2,6 +2,7 @@
 using Services;
 using Services.Mono;
 using Services.PersistentProgress;
+using StaticData;
 using UI;
 
 namespace Infrastructure.StateMachine
@@ -52,21 +53,20 @@ namespace Infrastructure.StateMachine
 
         private void OnLevelLoaded()
         {
-            
             ParticleMonoService particleMonoService = _assetProviderService.Instantiate<ParticleMonoService>(ParticleMonoServicePath);
             GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleMonoService);
             ScoreMonoService scoreMonoService = _assetProviderService.Instantiate<ScoreMonoService>(ScoreMonoServicePath);
 
-            int width = 7; //TODO to data
-            int height = 9; //TODO to data
             BoardService boardService = new BoardService(particleMonoService, gameFactory, _randomService, scoreMonoService,
-                _staticDataService, _soundMonoService, _updateMonoService, _persistentProgressService, width, height);
+                _staticDataService, _soundMonoService, _updateMonoService, _persistentProgressService);
 
             UiMonoService uiMonoService = _assetProviderService.Instantiate<UiMonoService>(UiMonoServicePath);
             uiMonoService.Init(_loadingCurtainMonoService);
 
-            int scoreGoal = 3000; //TODO to data
-            int movesLeft = 10; //TODO to data
+            LevelStaticData levelStaticData = _staticDataService.Levels[Constants.FirstLevelName];
+            int scoreGoal = levelStaticData.ScoreGoal;
+            int movesLeft = levelStaticData.MovesLeft;
+
             LevelStateService levelStateService = new LevelStateService(uiMonoService, boardService, scoreMonoService, _soundMonoService, scoreGoal, movesLeft);
 
             CameraService cameraService = new CameraService(boardService.BoardSize);

@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab7f489f39cf446186128939f795b098, type: 3}
   m_Name: SettingsData
   m_EditorClassIdentifier: 
+  BoardWidth: 7
+  BoardHeight: 9
   MoveInterpolationType: 2

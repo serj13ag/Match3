@@ -51,7 +51,7 @@ namespace Services
         public BoardService(ParticleMonoService particleMonoService, IGameFactory gameFactory,
             RandomService randomService, ScoreMonoService scoreMonoService, StaticDataService staticDataService,
             SoundMonoService soundMonoService, UpdateMonoService updateMonoService,
-            PersistentProgressService persistentProgressService, int width, int height)
+            PersistentProgressService persistentProgressService)
         {
             _staticDataService = staticDataService;
             _scoreMonoService = scoreMonoService;
@@ -64,8 +64,8 @@ namespace Services
 
             _commandBlock = new CommandBlock();
 
-            _width = width;
-            _height = height;
+            _width = staticDataService.Settings.BoardWidth;
+            _height = staticDataService.Settings.BoardHeight;
             _levelName = Constants.FirstLevelName; // TODO add to progress
 
             updateMonoService.Register(this);

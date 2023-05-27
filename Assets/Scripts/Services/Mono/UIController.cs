@@ -2,7 +2,7 @@
 using UI;
 using UnityEngine;
 
-namespace Controllers
+namespace Services.Mono
 {
     public class UIController : MonoBehaviour
     {

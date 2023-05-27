@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Controllers
+namespace Services.Mono
 {
     public class LoadingCurtainController : MonoBehaviour
     {

@@ -1,9 +1,8 @@
 using System;
 using Enums;
-using Services;
 using UnityEngine;
 
-namespace Controllers
+namespace Services.Mono
 {
     public class SoundController : MonoBehaviour
     {

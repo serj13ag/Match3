@@ -3,7 +3,7 @@ using Entities;
 using Enums;
 using UnityEngine;
 
-namespace Controllers
+namespace Services.Mono
 {
     public class ParticleController : MonoBehaviour
     {

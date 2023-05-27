@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Controllers
+namespace Services.Mono
 {
     public class ScoreController : MonoBehaviour
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using Enums;
-using Services;
+using Services.Mono;
 using UnityEngine;
 
-namespace Controllers
+namespace Services
 {
     public class LevelStateService
     {

@@ -2,7 +2,7 @@
 using Interfaces;
 using UnityEngine;
 
-namespace Infrastructure
+namespace Services.Mono
 {
     public class UpdateController : MonoBehaviour
     {

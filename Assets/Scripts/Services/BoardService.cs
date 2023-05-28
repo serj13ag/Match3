@@ -48,7 +48,7 @@ namespace Services
 
         public event Action OnGamePiecesSwitched;
 
-        public BoardService(ParticleService particleService, IGameFactory gameFactory,
+        public BoardService(string levelName, ParticleService particleService, IGameFactory gameFactory,
             RandomService randomService, ScoreMonoService scoreMonoService, StaticDataService staticDataService,
             SoundMonoService soundMonoService, UpdateMonoService updateMonoService,
             PersistentProgressService persistentProgressService)
@@ -64,9 +64,9 @@ namespace Services
 
             _commandBlock = new CommandBlock();
 
+            _levelName = levelName;
             _width = staticDataService.Settings.BoardWidth;
             _height = staticDataService.Settings.BoardHeight;
-            _levelName = Constants.FirstLevelName; // TODO add to progress
 
             updateMonoService.Register(this);
 

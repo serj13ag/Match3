@@ -56,17 +56,19 @@ namespace Infrastructure.StateMachine
             GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
             ScoreMonoService scoreMonoService = _assetProviderService.Instantiate<ScoreMonoService>(ScoreMonoServicePath);
 
-            BoardService boardService = new BoardService(particleService, gameFactory, _randomService, scoreMonoService,
+            string levelName = Constants.FirstLevelName; // TODO add to progress
+            LevelStaticData levelStaticData = _staticDataService.Levels[levelName];
+            int scoreGoal = levelStaticData.ScoreGoal;
+            int movesLeft = levelStaticData.MovesLeft;
+
+            BoardService boardService = new BoardService(levelName, particleService, gameFactory, _randomService, scoreMonoService,
                 _staticDataService, _soundMonoService, _updateMonoService, _persistentProgressService);
 
             UiMonoService uiMonoService = _assetProviderService.Instantiate<UiMonoService>(UiMonoServicePath);
             uiMonoService.Init(_loadingCurtainMonoService);
 
-            LevelStaticData levelStaticData = _staticDataService.Levels[Constants.FirstLevelName];
-            int scoreGoal = levelStaticData.ScoreGoal;
-            int movesLeft = levelStaticData.MovesLeft;
-
-            LevelStateService levelStateService = new LevelStateService(uiMonoService, boardService, scoreMonoService, _soundMonoService, scoreGoal, movesLeft);
+            LevelStateService levelStateService = new LevelStateService(uiMonoService, boardService, scoreMonoService,
+                _soundMonoService, scoreGoal, movesLeft);
             CameraService cameraService = new CameraService(boardService.BoardSize);
 
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);

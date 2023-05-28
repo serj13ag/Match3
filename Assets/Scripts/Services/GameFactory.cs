@@ -3,7 +3,6 @@ using Entities;
 using Entities.Tiles;
 using Enums;
 using Interfaces;
-using Services.Mono;
 using StaticData;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -17,17 +16,17 @@ namespace Services
 
         private readonly RandomService _randomService;
         private readonly StaticDataService _staticDataService;
-        private readonly ParticleMonoService _particleMonoService;
+        private readonly ParticleService _particleService;
 
         private readonly Transform _tilesContainerTransform;
         private readonly Transform _gamePiecesContainerTransform;
 
         public GameFactory(RandomService randomService, StaticDataService staticDataService,
-            ParticleMonoService particleMonoService)
+            ParticleService particleService)
         {
             _randomService = randomService;
             _staticDataService = staticDataService;
-            _particleMonoService = particleMonoService;
+            _particleService = particleService;
 
             GameObject tilesContainer = new GameObject(TilesContainerName);
             _tilesContainerTransform = tilesContainer.transform;
@@ -39,8 +38,8 @@ namespace Services
         public ITile CreateTile(TileType tileType, int x, int y)
         {
             TileStaticData tileData = _staticDataService.Tiles[tileType];
-            BaseTile tile = Object.Instantiate(tileData.Prefab, new Vector3(x, y, 0), Quaternion.identity);
-            tile.Init(tileData, x, y, _tilesContainerTransform, _particleMonoService);
+            BaseTile tile = Instantiate(tileData.Prefab, new Vector3(x, y, 0));
+            tile.Init(tileData, x, y, _tilesContainerTransform, _particleService);
             return tile;
         }
 
@@ -67,7 +66,7 @@ namespace Services
         public GamePiece CreateGamePiece(GamePieceType gamePieceType, GamePieceColor color, int x, int y)
         {
             GamePieceStaticData gamePieceData = _staticDataService.GamePieces[gamePieceType];
-            GamePiece gamePiece = Object.Instantiate(gamePieceData.Prefab, Vector3.zero, Quaternion.identity);
+            GamePiece gamePiece = Instantiate(gamePieceData.Prefab, Vector3.zero);
             gamePiece.Init(gamePieceData, color, x, y, _gamePiecesContainerTransform, _staticDataService);
             return gamePiece;
         }
@@ -99,6 +98,11 @@ namespace Services
             };
 
             return collectibleGamePieceTypes[_randomService.Next(collectibleGamePieceTypes.Length)];
+        }
+
+        private static T Instantiate<T>(T prefab, Vector3 position) where T : Object
+        {
+            return Object.Instantiate(prefab, position, Quaternion.identity);
         }
     }
 }

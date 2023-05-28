@@ -1,4 +1,5 @@
 ﻿using Enums;
+using Services;
 using Services.Mono;
 using StaticData;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace Entities.Tiles
 {
     public class BreakableTile : BaseTile
     {
-        private ParticleMonoService _particleMonoService;
+        private ParticleService _particleService;
 
         private int _matchesTillBreak;
         private BreakableSpriteStaticData[] _breakableSpriteData;
@@ -16,11 +17,11 @@ namespace Entities.Tiles
         public override bool IsObstacle => false;
 
         public override void Init(TileStaticData tileData, int x, int y, Transform parentTransform,
-            ParticleMonoService particleMonoService)
+            ParticleService particleService)
         {
-            base.Init(tileData, x, y, parentTransform, particleMonoService);
+            base.Init(tileData, x, y, parentTransform, particleService);
 
-            _particleMonoService = particleMonoService;
+            _particleService = particleService;
 
             Assert.IsTrue(tileData.MatchesTillBreak > 0);
 
@@ -56,7 +57,7 @@ namespace Entities.Tiles
                 ? ParticleEffectType.DoubleBreak
                 : ParticleEffectType.Break;
 
-            _particleMonoService.PlayParticleEffectAt(Position, effectType);
+            _particleService.PlayParticleEffectAt(Position, effectType);
         }
     }
 }

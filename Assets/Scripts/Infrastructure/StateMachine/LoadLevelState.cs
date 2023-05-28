@@ -12,7 +12,6 @@ namespace Infrastructure.StateMachine
         private const string ScoreMonoServicePath = "Prefabs/Services/Level/ScoreMonoService";
         private const string UiMonoServicePath = "Prefabs/Services/Level/UiMonoService";
         private const string BackgroundUiPath = "Prefabs/Services/Level/BackgroundUi";
-        private const string ParticleMonoServicePath = "Prefabs/Services/Level/ParticleMonoService";
 
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -53,11 +52,11 @@ namespace Infrastructure.StateMachine
 
         private void OnLevelLoaded()
         {
-            ParticleMonoService particleMonoService = _assetProviderService.Instantiate<ParticleMonoService>(ParticleMonoServicePath);
-            GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleMonoService);
+            ParticleService particleService = new ParticleService(_staticDataService);
+            GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
             ScoreMonoService scoreMonoService = _assetProviderService.Instantiate<ScoreMonoService>(ScoreMonoServicePath);
 
-            BoardService boardService = new BoardService(particleMonoService, gameFactory, _randomService, scoreMonoService,
+            BoardService boardService = new BoardService(particleService, gameFactory, _randomService, scoreMonoService,
                 _staticDataService, _soundMonoService, _updateMonoService, _persistentProgressService);
 
             UiMonoService uiMonoService = _assetProviderService.Instantiate<UiMonoService>(UiMonoServicePath);

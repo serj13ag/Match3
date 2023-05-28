@@ -19,7 +19,7 @@ namespace Services
 {
     public class BoardService : IUpdatable
     {
-        private readonly ParticleMonoService _particleMonoService;
+        private readonly ParticleService _particleService;
         private readonly IGameFactory _gameFactory;
         private readonly RandomService _randomService;
         private readonly ScoreMonoService _scoreMonoService;
@@ -48,14 +48,14 @@ namespace Services
 
         public event Action OnGamePiecesSwitched;
 
-        public BoardService(ParticleMonoService particleMonoService, IGameFactory gameFactory,
+        public BoardService(ParticleService particleService, IGameFactory gameFactory,
             RandomService randomService, ScoreMonoService scoreMonoService, StaticDataService staticDataService,
             SoundMonoService soundMonoService, UpdateMonoService updateMonoService,
             PersistentProgressService persistentProgressService)
         {
             _staticDataService = staticDataService;
             _scoreMonoService = scoreMonoService;
-            _particleMonoService = particleMonoService;
+            _particleService = particleService;
             _gameFactory = gameFactory;
             _randomService = randomService;
             _soundMonoService = soundMonoService;
@@ -518,7 +518,7 @@ namespace Services
                 var particleEffectType = gamePiece.Bombed
                     ? ParticleEffectType.Bomb
                     : ParticleEffectType.Clear;
-                _particleMonoService.PlayParticleEffectAt(position, particleEffectType);
+                _particleService.PlayParticleEffectAt(position, particleEffectType);
             }
         }
 

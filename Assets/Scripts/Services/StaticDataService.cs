@@ -11,6 +11,7 @@ namespace Services
         private const string TilesDataPath = "GameData/Tiles/";
         private const string GamePiecesDataPath = "GameData/GamePieces/";
         private const string LevelsDataPath = "GameData/Levels/";
+        private const string ParticleEffectsDataPath = "GameData/ParticleEffects/";
 
         private const string ColorsDataPath = "GameData/ColorsData";
         private const string SettingsDataPath = "GameData/SettingsData";
@@ -22,6 +23,8 @@ namespace Services
         public Dictionary<string, LevelStaticData> Levels { get; }
 
         public SettingsStaticData Settings { get; }
+
+        public Dictionary<ParticleEffectType, ParticleEffectStaticData> ParticleEffects { get; }
 
         public StaticDataService()
         {
@@ -39,6 +42,9 @@ namespace Services
                 .ToDictionary(x => x.LevelName, x => x);
 
             Settings = LoadFileFromResources<SettingsStaticData>(SettingsDataPath);
+
+            ParticleEffects = LoadFilesFromResources<ParticleEffectStaticData>(ParticleEffectsDataPath)
+                .ToDictionary(x => x.Type, x => x);
         }
 
         private static T LoadFileFromResources<T>(string path) where T : Object

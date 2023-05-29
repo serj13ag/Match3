@@ -271,6 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvas: {fileID: 6496748320264840132}
   _levelNameText: {fileID: 6496748321292658674}
+  _scoreText: {fileID: 6496748321336580124}
 --- !u!1 &6496748320291510614
 GameObject:
   m_ObjectHideFlags: 0

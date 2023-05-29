@@ -22,7 +22,7 @@ namespace Services
         private readonly ParticleService _particleService;
         private readonly IGameFactory _gameFactory;
         private readonly RandomService _randomService;
-        private readonly ScoreMonoService _scoreMonoService;
+        private readonly ScoreService _scoreService;
         private readonly SoundMonoService _soundMonoService;
         private readonly StaticDataService _staticDataService;
 
@@ -49,12 +49,12 @@ namespace Services
         public event Action OnGamePiecesSwitched;
 
         public BoardService(string levelName, ParticleService particleService, IGameFactory gameFactory,
-            RandomService randomService, ScoreMonoService scoreMonoService, StaticDataService staticDataService,
+            RandomService randomService, ScoreService scoreService, StaticDataService staticDataService,
             SoundMonoService soundMonoService, UpdateMonoService updateMonoService,
             PersistentProgressService persistentProgressService)
         {
             _staticDataService = staticDataService;
-            _scoreMonoService = scoreMonoService;
+            _scoreService = scoreService;
             _particleService = particleService;
             _gameFactory = gameFactory;
             _randomService = randomService;
@@ -474,7 +474,7 @@ namespace Services
         {
             foreach (GamePiece gamePiece in gamePieces)
             {
-                _scoreMonoService.AddScore(gamePiece.Score, gamePieces.Count,
+                _scoreService.AddScore(gamePiece.Score, gamePieces.Count,
                     _completedBreakIterationsAfterSwitchedGamePieces);
 
                 ClearGamePieceAt(gamePiece.Position, true);

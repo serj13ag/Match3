@@ -9,7 +9,6 @@ namespace Infrastructure.StateMachine
 {
     public class LoadLevelState : IPayloadedState<string>
     {
-        private const string ScoreMonoServicePath = "Prefabs/Services/Level/ScoreMonoService";
         private const string UiMonoServicePath = "Prefabs/Services/Level/UiMonoService";
         private const string BackgroundUiPath = "Prefabs/Services/Level/BackgroundUi";
 
@@ -54,25 +53,25 @@ namespace Infrastructure.StateMachine
         {
             ParticleService particleService = new ParticleService(_staticDataService);
             GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
-            ScoreMonoService scoreMonoService = _assetProviderService.Instantiate<ScoreMonoService>(ScoreMonoServicePath);
+            ScoreService scoreService = new ScoreService();
 
             string levelName = Constants.FirstLevelName; // TODO add to progress
             LevelStaticData levelStaticData = _staticDataService.Levels[levelName];
             int scoreGoal = levelStaticData.ScoreGoal;
             int movesLeft = levelStaticData.MovesLeft;
 
-            BoardService boardService = new BoardService(levelName, particleService, gameFactory, _randomService, scoreMonoService,
-                _staticDataService, _soundMonoService, _updateMonoService, _persistentProgressService);
+            BoardService boardService = new BoardService(levelName, particleService, gameFactory, _randomService,
+                scoreService, _staticDataService, _soundMonoService, _updateMonoService, _persistentProgressService);
 
             UiMonoService uiMonoService = _assetProviderService.Instantiate<UiMonoService>(UiMonoServicePath);
             uiMonoService.Init(_loadingCurtainMonoService);
 
-            LevelStateService levelStateService = new LevelStateService(uiMonoService, boardService, scoreMonoService,
+            LevelStateService levelStateService = new LevelStateService(uiMonoService, boardService, scoreService,
                 _soundMonoService, scoreGoal, movesLeft);
             CameraService cameraService = new CameraService(boardService.BoardSize);
 
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
-            backgroundUi.Init(cameraService);
+            backgroundUi.Init(scoreService, cameraService);
 
             _soundMonoService.PlaySound(SoundType.Music);
             uiMonoService.ShowStartGameMessageWindow(scoreGoal, levelStateService.ChangeStateToPlaying);

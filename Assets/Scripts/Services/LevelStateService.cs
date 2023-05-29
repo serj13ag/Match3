@@ -1,5 +1,6 @@
 ﻿using System;
 using Enums;
+using EventArgs;
 using Services.Mono;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Services
     public class LevelStateService
     {
         private readonly UiMonoService _uiMonoService;
-        private readonly ScoreMonoService _scoreMonoService;
+        private readonly ScoreService _scoreService;
         private readonly SoundMonoService _soundMonoService;
 
         private LevelState _levelState;
@@ -42,15 +43,15 @@ namespace Services
             }
         }
 
-        public LevelStateService(UiMonoService uiMonoService, BoardService boardService, ScoreMonoService scoreMonoService,
+        public LevelStateService(UiMonoService uiMonoService, BoardService boardService, ScoreService scoreService,
             SoundMonoService soundMonoService, int scoreGoal, int movesLeft)
         {
             _soundMonoService = soundMonoService;
-            _scoreMonoService = scoreMonoService;
+            _scoreService = scoreService;
             _uiMonoService = uiMonoService;
 
             boardService.OnGamePiecesSwitched += OnGamePiecesSwitched;
-            _scoreMonoService.OnScoreChanged += OnScoreChanged;
+            _scoreService.OnScoreChanged += OnScoreChanged;
 
             _scoreGoal = scoreGoal;
             _movesLeft = movesLeft;
@@ -106,7 +107,7 @@ namespace Services
             MovesLeft--;
         }
 
-        private void OnScoreChanged()
+        private void OnScoreChanged(object sender, ScoreChangedEventArgs eventArgs)
         {
             if (_levelState == LevelState.GameOver)
             {
@@ -121,7 +122,7 @@ namespace Services
 
         private bool ScoreGoalReached()
         {
-            return _scoreMonoService.Score >= _scoreGoal;
+            return _scoreService.Score >= _scoreGoal;
         }
 
         private void UpdateMovesLeftText()

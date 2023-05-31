@@ -16,11 +16,10 @@ namespace Infrastructure.StateMachine
                 [typeof(BootstrapState)] = new BootstrapState(this, globalServices),
                 [typeof(LoadProgressState)] = new LoadProgressState(this,
                     globalServices.PersistentProgressService, globalServices.SaveLoadService),
-                [typeof(LoadLevelState)] = new LoadLevelState(this, globalServices.SceneLoader,
+                [typeof(GameLoopState)] = new GameLoopState(this, globalServices.SceneLoader,
                     globalServices.LoadingCurtainMonoService, globalServices.AssetProviderService,
                     globalServices.RandomService, globalServices.StaticDataService, globalServices.SoundMonoService,
                     globalServices.UpdateMonoService, globalServices.PersistentProgressService),
-                [typeof(GameLoopState)] = new GameLoopState(),
             };
         }
 

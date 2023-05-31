@@ -1,19 +1,26 @@
 using Enums;
+using Infrastructure.StateMachine;
 using Services.Mono;
 
 namespace Services
 {
     public class GameRoundService
     {
+        private readonly GameStateMachine _gameStateMachine;
         private readonly SoundMonoService _soundMonoService;
         private readonly UiMonoService _uiMonoService;
+
+        private readonly string _levelName;
 
         private bool _roundIsActive;
 
         public bool RoundIsActive => _roundIsActive;
 
-        public GameRoundService(SoundMonoService soundMonoService, UiMonoService uiMonoService)
+        public GameRoundService(string levelName, GameStateMachine gameStateMachine, SoundMonoService soundMonoService,
+            UiMonoService uiMonoService)
         {
+            _levelName = levelName;
+            _gameStateMachine = gameStateMachine;
             _soundMonoService = soundMonoService;
             _uiMonoService = uiMonoService;
         }
@@ -47,7 +54,7 @@ namespace Services
 
         private void ReloadLevel()
         {
-            //AllServices.Instance.GameStateMachine.ReloadLevel(); // TODO: implement
+            _gameStateMachine.Enter<GameLoopState, string>(_levelName);
         }
     }
 }

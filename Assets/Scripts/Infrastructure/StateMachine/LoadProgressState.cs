@@ -6,8 +6,6 @@ namespace Infrastructure.StateMachine
 {
     public class LoadProgressState : IState
     {
-        private const string Level1SceneName = "Level_1";
-
         private readonly GameStateMachine _gameStateMachine;
         private readonly PersistentProgressService _persistentProgressService;
         private readonly SaveLoadService _saveLoadService;
@@ -24,7 +22,7 @@ namespace Infrastructure.StateMachine
         {
             LoadProgressOrInitNew();
 
-            _gameStateMachine.Enter<LoadLevelState, string>(_persistentProgressService.Progress.BoardData.LevelBoardData.LevelName);
+            _gameStateMachine.Enter<GameLoopState, string>(Constants.FirstLevelName); // TODO
         }
 
         public void Exit()
@@ -38,7 +36,7 @@ namespace Infrastructure.StateMachine
 
         private static PlayerProgress CreatePlayerProgress()
         {
-            return new PlayerProgress(Level1SceneName);
+            return new PlayerProgress(Constants.FirstLevelName); // TODO
         }
     }
 }

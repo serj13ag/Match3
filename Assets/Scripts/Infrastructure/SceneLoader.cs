@@ -14,9 +14,9 @@ namespace Infrastructure
             _coroutineRunner = coroutineRunner;
         }
 
-        public void LoadScene(string name, Action onLoaded = null)
+        public void LoadScene(string name, Action onLoaded = null, bool forceReload = false)
         {
-            if (SceneManager.GetActiveScene().name == name)
+            if (!forceReload && SceneManager.GetActiveScene().name == name)
             {
                 onLoaded?.Invoke();
                 return;

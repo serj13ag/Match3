@@ -19,16 +19,16 @@ namespace UI
         private Coroutine _updateScoreRoutine;
         private int _currentScore;
 
-        public void Init(ScoreService scoreService, CameraService cameraService, LevelStateService levelStateService)
+        public void Init(ScoreService scoreService, CameraService cameraService, MovesLeftService movesLeftService)
         {
             _canvas.worldCamera = cameraService.MainCamera;
 
             UpdateSceneNameText();
             UpdateScoreText(scoreService.Score);
-            UpdateMovesLeftText(levelStateService.MovesLeft);
+            UpdateMovesLeftText(movesLeftService.MovesLeft);
 
             scoreService.OnScoreChanged += OnScoreChanged;
-            levelStateService.OnMovesLeftChanged += OnMovesLeftChanged;
+            movesLeftService.OnMovesLeftChanged += OnMovesLeftChanged;
         }
 
         private void OnScoreChanged(object sender, ScoreChangedEventArgs e)

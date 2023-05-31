@@ -12,23 +12,6 @@ namespace Services.Mono
         [SerializeField] private Sprite _loseIcon;
         [SerializeField] private Sprite _goalIcon;
 
-        private LoadingCurtainMonoService _loadingCurtainMonoService;
-
-        public void Init(LoadingCurtainMonoService loadingCurtainMonoService)
-        {
-            _loadingCurtainMonoService = loadingCurtainMonoService;
-        }
-
-        public void FadeOn()
-        {
-            _loadingCurtainMonoService.FadeOnWithDelay();
-        }
-
-        public void FadeOff()
-        {
-            _loadingCurtainMonoService.FadeOffWithDelay();
-        }
-
         public void ShowStartGameMessageWindow(int scoreGoal, Action onButtonClickCallback)
         {
             _messageWindow.ShowMessage(_goalIcon, $"score goal\n{scoreGoal}", "start", onButtonClickCallback);

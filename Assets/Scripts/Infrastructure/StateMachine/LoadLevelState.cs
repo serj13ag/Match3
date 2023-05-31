@@ -51,30 +51,30 @@ namespace Infrastructure.StateMachine
 
         private void OnLevelLoaded()
         {
-            ParticleService particleService = new ParticleService(_staticDataService);
-            GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
-            ScoreService scoreService = new ScoreService();
-
             string levelName = Constants.FirstLevelName; // TODO add to progress
             LevelStaticData levelStaticData = _staticDataService.Levels[levelName];
             int scoreGoal = levelStaticData.ScoreGoal;
             int movesLeft = levelStaticData.MovesLeft;
 
+            UiMonoService uiMonoService = _assetProviderService.Instantiate<UiMonoService>(UiMonoServicePath);
+
+            ParticleService particleService = new ParticleService(_staticDataService);
+            GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
+            GameRoundService gameRoundService = new GameRoundService(_soundMonoService, uiMonoService);
+
+            ScoreService scoreService = new ScoreService(gameRoundService, scoreGoal);
+
             BoardService boardService = new BoardService(levelName, particleService, gameFactory, _randomService,
                 scoreService, _staticDataService, _soundMonoService, _updateMonoService, _persistentProgressService);
 
-            UiMonoService uiMonoService = _assetProviderService.Instantiate<UiMonoService>(UiMonoServicePath);
-            uiMonoService.Init(_loadingCurtainMonoService);
-
-            LevelStateService levelStateService = new LevelStateService(uiMonoService, boardService, scoreService,
-                _soundMonoService, scoreGoal, movesLeft);
+            MovesLeftService movesLeftService = new MovesLeftService(boardService, scoreService, gameRoundService, movesLeft);
             CameraService cameraService = new CameraService(boardService.BoardSize);
 
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
-            backgroundUi.Init(scoreService, cameraService, levelStateService);
+            backgroundUi.Init(scoreService, cameraService, movesLeftService);
 
             _soundMonoService.PlaySound(SoundType.Music);
-            uiMonoService.ShowStartGameMessageWindow(scoreGoal, levelStateService.ChangeStateToPlaying);
+            uiMonoService.ShowStartGameMessageWindow(scoreGoal, null);
 
             _gameStateMachine.Enter<GameLoopState>();
         }

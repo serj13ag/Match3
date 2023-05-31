@@ -1,5 +1,4 @@
-﻿using Enums;
-using Services;
+﻿using Services;
 using Services.Mono;
 using Services.PersistentProgress;
 using StaticData;
@@ -63,8 +62,8 @@ namespace Infrastructure.StateMachine
             GameRoundService gameRoundService = new GameRoundService(_soundMonoService, uiMonoService);
             ScoreService scoreService = new ScoreService(gameRoundService, scoreGoal);
 
-            BoardService boardService = new BoardService(levelName, particleService, gameFactory, _randomService,
-                scoreService, _staticDataService, _soundMonoService, _updateMonoService, _persistentProgressService);
+            BoardService boardService = new BoardService(levelName, _randomService, _staticDataService, _soundMonoService,
+                _updateMonoService, _persistentProgressService, gameFactory, scoreService, gameRoundService, particleService);
 
             MovesLeftService movesLeftService = new MovesLeftService(boardService, scoreService, gameRoundService, movesLeft);
             CameraService cameraService = new CameraService(boardService.BoardSize);

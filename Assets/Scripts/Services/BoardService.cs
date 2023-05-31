@@ -25,6 +25,7 @@ namespace Services
         private readonly ScoreService _scoreService;
         private readonly SoundMonoService _soundMonoService;
         private readonly StaticDataService _staticDataService;
+        private GameRoundService _gameRoundService;
 
         private readonly int _width;
         private readonly int _height;
@@ -48,10 +49,10 @@ namespace Services
 
         public event Action OnGamePiecesSwitched;
 
-        public BoardService(string levelName, ParticleService particleService, IGameFactory gameFactory,
-            RandomService randomService, ScoreService scoreService, StaticDataService staticDataService,
+        public BoardService(string levelName, RandomService randomService, StaticDataService staticDataService,
             SoundMonoService soundMonoService, UpdateMonoService updateMonoService,
-            PersistentProgressService persistentProgressService)
+            PersistentProgressService persistentProgressService, IGameFactory gameFactory, ScoreService scoreService,
+            GameRoundService gameRoundService, ParticleService particleService)
         {
             _staticDataService = staticDataService;
             _scoreService = scoreService;
@@ -59,6 +60,7 @@ namespace Services
             _gameFactory = gameFactory;
             _randomService = randomService;
             _soundMonoService = soundMonoService;
+            _gameRoundService = gameRoundService;
 
             _movedPieces = new Stack<GamePiece>();
 
@@ -75,6 +77,11 @@ namespace Services
 
         public void OnUpdate(float deltaTime)
         {
+            if (!_gameRoundService.RoundIsActive)
+            {
+                return;
+            }
+            
             _commandBlock.Update(deltaTime);
         }
 

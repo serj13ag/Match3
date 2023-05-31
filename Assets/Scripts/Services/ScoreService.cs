@@ -54,7 +54,7 @@ namespace Services
 
             if (ScoreGoalReached)
             {
-                _gameRoundService.EndGame(true);
+                _gameRoundService.EndRound(true);
             }
         }
     }

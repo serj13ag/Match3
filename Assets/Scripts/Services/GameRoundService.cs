@@ -8,6 +8,10 @@ namespace Services
         private readonly SoundMonoService _soundMonoService;
         private readonly UiMonoService _uiMonoService;
 
+        private bool _roundIsActive;
+
+        public bool RoundIsActive => _roundIsActive;
+
         public GameRoundService(SoundMonoService soundMonoService, UiMonoService uiMonoService)
         {
             _soundMonoService = soundMonoService;
@@ -17,10 +21,10 @@ namespace Services
         public void StartGame(int scoreGoal)
         {
             _soundMonoService.PlaySound(SoundType.Music);
-            _uiMonoService.ShowStartGameMessageWindow(scoreGoal, null);
+            _uiMonoService.ShowStartGameMessageWindow(scoreGoal, StartRound);
         }
 
-        public void EndGame(bool scoreGoalReached)
+        public void EndRound(bool scoreGoalReached)
         {
             if (scoreGoalReached)
             {
@@ -32,6 +36,13 @@ namespace Services
                 _soundMonoService.PlaySound(SoundType.Lose);
                 _uiMonoService.ShowGameOverMessageWindow(ReloadLevel);
             }
+
+            _roundIsActive = false;
+        }
+
+        private void StartRound()
+        {
+            _roundIsActive = true;
         }
 
         private void ReloadLevel()

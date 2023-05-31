@@ -34,7 +34,7 @@ namespace Services
                 }
 
                 _movesLeft = value;
-                UpdateMovesLeftText();
+                OnMovesLeftChanged?.Invoke(this, new MovesLeftChangedEventArgs(_movesLeft));
 
                 if (_movesLeft == 0)
                 {
@@ -42,6 +42,8 @@ namespace Services
                 }
             }
         }
+        
+        public event EventHandler<MovesLeftChangedEventArgs> OnMovesLeftChanged;
 
         public LevelStateService(UiMonoService uiMonoService, BoardService boardService, ScoreService scoreService,
             SoundMonoService soundMonoService, int scoreGoal, int movesLeft)
@@ -55,8 +57,6 @@ namespace Services
 
             _scoreGoal = scoreGoal;
             _movesLeft = movesLeft;
-            
-            UpdateMovesLeftText();
         }
 
         public void ChangeStateToPlaying()
@@ -123,11 +123,6 @@ namespace Services
         private bool ScoreGoalReached()
         {
             return _scoreService.Score >= _scoreGoal;
-        }
-
-        private void UpdateMovesLeftText()
-        {
-            //_movesLeftText.text = _movesLeft.ToString(); //TODO
         }
     }
 }

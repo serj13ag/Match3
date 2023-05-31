@@ -71,7 +71,7 @@ namespace Infrastructure.StateMachine
             CameraService cameraService = new CameraService(boardService.BoardSize);
 
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
-            backgroundUi.Init(scoreService, cameraService);
+            backgroundUi.Init(scoreService, cameraService, levelStateService);
 
             _soundMonoService.PlaySound(SoundType.Music);
             uiMonoService.ShowStartGameMessageWindow(scoreGoal, levelStateService.ChangeStateToPlaying);

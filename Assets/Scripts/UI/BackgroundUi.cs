@@ -11,20 +11,24 @@ namespace UI
     {
         [SerializeField] private Canvas _canvas;
 
+        // TODO: separate classes
         [SerializeField] private TMP_Text _levelNameText;
         [SerializeField] private TMP_Text _scoreText;
+        [SerializeField] private TMP_Text _movesLeftText;
 
         private Coroutine _updateScoreRoutine;
         private int _currentScore;
 
-        public void Init(ScoreService scoreService, CameraService cameraService)
+        public void Init(ScoreService scoreService, CameraService cameraService, LevelStateService levelStateService)
         {
             _canvas.worldCamera = cameraService.MainCamera;
 
             UpdateSceneNameText();
             UpdateScoreText(scoreService.Score);
+            UpdateMovesLeftText(levelStateService.MovesLeft);
 
             scoreService.OnScoreChanged += OnScoreChanged;
+            levelStateService.OnMovesLeftChanged += OnMovesLeftChanged;
         }
 
         private void OnScoreChanged(object sender, ScoreChangedEventArgs e)
@@ -34,6 +38,11 @@ namespace UI
             _currentScore = e.Score;
 
             _updateScoreRoutine ??= StartCoroutine(UpdateScoreTextRoutine(oldScore));
+        }
+
+        private void OnMovesLeftChanged(object sender, MovesLeftChangedEventArgs e)
+        {
+            UpdateMovesLeftText(e.MovesLeft);
         }
 
         private IEnumerator UpdateScoreTextRoutine(int oldScore)
@@ -65,6 +74,11 @@ namespace UI
             Scene scene = SceneManager.GetActiveScene();
 
             _levelNameText.text = scene.name;
+        }
+
+        private void UpdateMovesLeftText(int movesLeft)
+        {
+            _movesLeftText.text = movesLeft.ToString();
         }
     }
 }

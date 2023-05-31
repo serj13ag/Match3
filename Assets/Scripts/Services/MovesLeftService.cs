@@ -38,7 +38,7 @@ namespace Services
 
             if (_movesLeft == 0)
             {
-                _gameRoundService.GameOver(_scoreService.ScoreGoalReached);
+                _gameRoundService.EndGame(_scoreService.ScoreGoalReached);
             }
         }
     }

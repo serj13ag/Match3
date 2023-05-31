@@ -14,7 +14,13 @@ namespace Services
             _uiMonoService = uiMonoService;
         }
 
-        public void GameOver(bool scoreGoalReached)
+        public void StartGame(int scoreGoal)
+        {
+            _soundMonoService.PlaySound(SoundType.Music);
+            _uiMonoService.ShowStartGameMessageWindow(scoreGoal, null);
+        }
+
+        public void EndGame(bool scoreGoalReached)
         {
             if (scoreGoalReached)
             {
@@ -30,7 +36,7 @@ namespace Services
 
         private void ReloadLevel()
         {
-            //AllServices.Instance.GameStateMachine.ReloadLevel(); //TODO
+            //AllServices.Instance.GameStateMachine.ReloadLevel(); // TODO: implement
         }
     }
 }

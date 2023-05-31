@@ -61,7 +61,6 @@ namespace Infrastructure.StateMachine
             ParticleService particleService = new ParticleService(_staticDataService);
             GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
             GameRoundService gameRoundService = new GameRoundService(_soundMonoService, uiMonoService);
-
             ScoreService scoreService = new ScoreService(gameRoundService, scoreGoal);
 
             BoardService boardService = new BoardService(levelName, particleService, gameFactory, _randomService,
@@ -73,8 +72,7 @@ namespace Infrastructure.StateMachine
             BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
             backgroundUi.Init(scoreService, cameraService, movesLeftService);
 
-            _soundMonoService.PlaySound(SoundType.Music);
-            uiMonoService.ShowStartGameMessageWindow(scoreGoal, null);
+            gameRoundService.StartGame(scoreGoal);
 
             _gameStateMachine.Enter<GameLoopState>();
         }

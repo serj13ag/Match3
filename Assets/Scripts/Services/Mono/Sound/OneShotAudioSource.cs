@@ -4,17 +4,11 @@ using UnityEngine;
 
 namespace Services.Mono.Sound
 {
-    public class OneShotAudioSource : MonoBehaviour
+    public class OneShotAudioSource : BaseAudioSource
     {
-        [SerializeField] private AudioSource _audioSource;
-
-        public void Init(AudioClip audioClip, float volume, float pitch)
+        public override void Init(AudioClip audioClip, float volume, float pitch = 1)
         {
-            _audioSource.clip = audioClip;
-            _audioSource.volume = volume;
-            _audioSource.pitch = pitch;
-
-            _audioSource.Play();
+            base.Init(audioClip, volume, pitch);
 
             StartCoroutine(DestroyAfterDelay(audioClip.length));
         }

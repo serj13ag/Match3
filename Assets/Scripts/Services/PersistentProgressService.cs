@@ -1,6 +1,6 @@
 ﻿using Data;
 
-namespace Services.PersistentProgress
+namespace Services
 {
     public class PersistentProgressService
     {

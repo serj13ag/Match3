@@ -9,7 +9,6 @@ using Enums;
 using Helpers;
 using Interfaces;
 using Services.Mono;
-using Services.PersistentProgress;
 using StaticData.StartingData;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -25,7 +24,7 @@ namespace Services
         private readonly ScoreService _scoreService;
         private readonly SoundMonoService _soundMonoService;
         private readonly StaticDataService _staticDataService;
-        private GameRoundService _gameRoundService;
+        private readonly GameRoundService _gameRoundService;
 
         private readonly int _width;
         private readonly int _height;

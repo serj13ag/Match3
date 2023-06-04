@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace UI.Background
 {
-    public class BackgroundUi : MonoBehaviour
+    public class BackgroundScreen : MonoBehaviour
     {
         [SerializeField] private Canvas _canvas;
 

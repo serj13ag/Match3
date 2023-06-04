@@ -3,7 +3,7 @@
     public static class AssetPaths
     {
         // Prefabs
-        public const string BackgroundUiPath = "Prefabs/UI/BackgroundUi";
+        public const string BackgroundScreenPath = "Prefabs/UI/BackgroundScreen";
 
         // GameData
         public const string TilesDataPath = "GameData/Tiles/";

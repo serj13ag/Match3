@@ -70,8 +70,8 @@ namespace Infrastructure.StateMachine
             MovesLeftService movesLeftService = new MovesLeftService(boardService, scoreService, gameRoundService, movesLeft);
             CameraService cameraService = new CameraService(boardService.BoardSize);
 
-            BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(AssetPaths.BackgroundUiPath);
-            backgroundUi.Init(scoreService, cameraService, movesLeftService);
+            BackgroundScreen backgroundScreen = _assetProviderService.Instantiate<BackgroundScreen>(AssetPaths.BackgroundScreenPath);
+            backgroundScreen.Init(scoreService, cameraService, movesLeftService);
 
             gameRoundService.StartGame(scoreGoal);
             _loadingCurtainMonoService.FadeOffWithDelay();

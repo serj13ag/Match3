@@ -1,13 +1,11 @@
-﻿using UI;
+﻿using Constants;
+using UI;
 using UnityEngine;
 
 namespace Services.UI
 {
     public class UiFactory
     {
-        private const string UiRootCanvasPath = "Prefabs/UI/UIRootCanvas";
-        private const string MessageWindowPath = "Prefabs/UI/MessageWindow";
-
         private readonly AssetProviderService _assetProviderService;
 
         private Transform _uiRootTransform;
@@ -21,7 +19,7 @@ namespace Services.UI
 
         public void CreateUiRootCanvas()
         {
-            GameObject uiRoot = _assetProviderService.Instantiate<GameObject>(UiRootCanvasPath);
+            GameObject uiRoot = _assetProviderService.Instantiate<GameObject>(AssetPaths.UiRootCanvasPath);
             _uiRootTransform = uiRoot.transform;
         }
 
@@ -32,7 +30,7 @@ namespace Services.UI
                 return _messageWindow;
             }
 
-            _messageWindow = _assetProviderService.Instantiate<MessageWindow>(MessageWindowPath, _uiRootTransform);
+            _messageWindow = _assetProviderService.Instantiate<MessageWindow>(AssetPaths.MessageWindowPath, _uiRootTransform);
             return _messageWindow;
         }
     }

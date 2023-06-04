@@ -1,4 +1,5 @@
-﻿using Services;
+﻿using Constants;
+using Services;
 using Services.Mono;
 using Services.UI;
 
@@ -6,10 +7,6 @@ namespace Infrastructure
 {
     public class GlobalServices
     {
-        private const string SoundMonoServicePath = "Prefabs/Services/Global/SoundMonoService";
-        private const string LoadingCurtainMonoServicePath = "Prefabs/Services/Global/LoadingCurtainMonoService";
-        private const string UpdateMonoServicePath = "Prefabs/Services/Global/UpdateMonoService";
-
         public SceneLoader SceneLoader { get; }
 
         public RandomService RandomService { get; private set; }
@@ -41,12 +38,12 @@ namespace Infrastructure
             UiFactory = new UiFactory(AssetProviderService);
             WindowService = new WindowService(UiFactory, AssetProviderService);
 
-            LoadingCurtainMonoService = AssetProviderService.Instantiate<LoadingCurtainMonoService>(LoadingCurtainMonoServicePath);
+            LoadingCurtainMonoService = AssetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
 
-            SoundMonoService = AssetProviderService.Instantiate<SoundMonoService>(SoundMonoServicePath);
+            SoundMonoService = AssetProviderService.Instantiate<SoundMonoService>(AssetPaths.SoundMonoServicePath);
             SoundMonoService.Init(RandomService);
 
-            UpdateMonoService = AssetProviderService.Instantiate<UpdateMonoService>(UpdateMonoServicePath);
+            UpdateMonoService = AssetProviderService.Instantiate<UpdateMonoService>(AssetPaths.UpdateMonoServicePath);
             UpdateMonoService.Init();
         }
     }

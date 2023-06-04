@@ -3,11 +3,11 @@ using Constants;
 using Enums;
 using UnityEngine;
 
-namespace Services.Mono
+namespace Services.Mono.Sound
 {
     public class SoundMonoService : MonoBehaviour
     {
-        [SerializeField] private AudioSource _audioSource; // TODO spawn multiple sources
+        [SerializeField] private OneShotAudioSource _oneShotAudioSourcePrefab;
 
         [SerializeField] private AudioClip[] _musicClips;
         [SerializeField] private AudioClip _winClip;
@@ -68,13 +68,10 @@ namespace Services.Mono
 
         private void PlayClip(AudioClip audioClip, float volume)
         {
-            _audioSource.clip = audioClip;
-
+            OneShotAudioSource oneShotAudioSource = Instantiate(_oneShotAudioSourcePrefab, transform);
+            
             float randomPitch = _randomService.Next(Settings.Sound.LowPitch, Settings.Sound.HighPitch);
-            _audioSource.pitch = randomPitch;
-
-            _audioSource.volume = volume;
-            _audioSource.Play();
+            oneShotAudioSource.Init(audioClip, volume, randomPitch);
         }
     }
 }

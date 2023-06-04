@@ -40,6 +40,7 @@
             public const float HighPitch = 1.05f;
             public const float MusicVolume = 0.5f;
             public const float FxVolume = 0.5f;
+            public const int AdditionalTimeBeforeDestroyAudioSource = 1;
         }
 
         public static class Score

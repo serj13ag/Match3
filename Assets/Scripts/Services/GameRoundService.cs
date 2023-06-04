@@ -1,6 +1,7 @@
 using Enums;
 using Infrastructure.StateMachine;
 using Services.Mono;
+using Services.UI;
 
 namespace Services
 {
@@ -8,7 +9,7 @@ namespace Services
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly SoundMonoService _soundMonoService;
-        private readonly UiMonoService _uiMonoService;
+        private readonly WindowService _windowService;
 
         private readonly string _levelName;
 
@@ -17,18 +18,18 @@ namespace Services
         public bool RoundIsActive => _roundIsActive;
 
         public GameRoundService(string levelName, GameStateMachine gameStateMachine, SoundMonoService soundMonoService,
-            UiMonoService uiMonoService)
+            WindowService windowService)
         {
             _levelName = levelName;
             _gameStateMachine = gameStateMachine;
             _soundMonoService = soundMonoService;
-            _uiMonoService = uiMonoService;
+            _windowService = windowService;
         }
 
         public void StartGame(int scoreGoal)
         {
             _soundMonoService.PlaySound(SoundType.Music);
-            _uiMonoService.ShowStartGameMessageWindow(scoreGoal, StartRound);
+            _windowService.ShowStartGameMessageWindow(scoreGoal, StartRound);
         }
 
         public void EndRound(bool scoreGoalReached)
@@ -36,12 +37,12 @@ namespace Services
             if (scoreGoalReached)
             {
                 _soundMonoService.PlaySound(SoundType.Win);
-                _uiMonoService.ShowGameWinMessageWindow(ReloadLevel);
+                _windowService.ShowGameWinMessageWindow(ReloadLevel);
             }
             else
             {
                 _soundMonoService.PlaySound(SoundType.Lose);
-                _uiMonoService.ShowGameOverMessageWindow(ReloadLevel);
+                _windowService.ShowGameOverMessageWindow(ReloadLevel);
             }
 
             _roundIsActive = false;

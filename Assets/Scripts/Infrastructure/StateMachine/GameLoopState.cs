@@ -1,6 +1,7 @@
 ﻿using Services;
 using Services.Mono;
 using Services.PersistentProgress;
+using Services.UI;
 using StaticData;
 using UI;
 
@@ -10,8 +11,7 @@ namespace Infrastructure.StateMachine
     {
         private const string GameLevelScene = "GameLevelScene";
 
-        private const string UiMonoServicePath = "Prefabs/Services/Level/UiMonoService";
-        private const string BackgroundUiPath = "Prefabs/Services/Level/BackgroundUi";
+        private const string BackgroundUiPath = "Prefabs/UI/BackgroundUi";
 
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -22,11 +22,14 @@ namespace Infrastructure.StateMachine
         private readonly SoundMonoService _soundMonoService;
         private readonly UpdateMonoService _updateMonoService;
         private readonly PersistentProgressService _persistentProgressService;
+        private readonly UiFactory _uiFactory;
+        private readonly WindowService _windowService;
 
         public GameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             LoadingCurtainMonoService loadingCurtainMonoService, AssetProviderService assetProviderService,
             RandomService randomService, StaticDataService staticDataService, SoundMonoService soundMonoService,
-            UpdateMonoService updateMonoService, PersistentProgressService persistentProgressService)
+            UpdateMonoService updateMonoService, PersistentProgressService persistentProgressService,
+            UiFactory uiFactory, WindowService windowService)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
@@ -37,6 +40,8 @@ namespace Infrastructure.StateMachine
             _soundMonoService = soundMonoService;
             _updateMonoService = updateMonoService;
             _persistentProgressService = persistentProgressService;
+            _uiFactory = uiFactory;
+            _windowService = windowService;
         }
 
         public void Enter(string levelName)
@@ -51,15 +56,15 @@ namespace Infrastructure.StateMachine
 
         private void OnLevelLoaded(string levelName)
         {
+            _uiFactory.CreateUiRootCanvas();
+
             LevelStaticData levelStaticData = _staticDataService.Levels[levelName];
             int scoreGoal = levelStaticData.ScoreGoal;
             int movesLeft = levelStaticData.MovesLeft;
 
-            UiMonoService uiMonoService = _assetProviderService.Instantiate<UiMonoService>(UiMonoServicePath);
-
             ParticleService particleService = new ParticleService(_staticDataService);
             GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
-            GameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, uiMonoService);
+            GameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService);
             ScoreService scoreService = new ScoreService(gameRoundService, scoreGoal);
 
             BoardService boardService = new BoardService(levelName, _randomService, _staticDataService,

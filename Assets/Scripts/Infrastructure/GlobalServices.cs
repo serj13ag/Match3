@@ -1,6 +1,7 @@
 ﻿using Services;
 using Services.Mono;
 using Services.PersistentProgress;
+using Services.UI;
 
 namespace Infrastructure
 {
@@ -18,6 +19,9 @@ namespace Infrastructure
         public PersistentProgressService PersistentProgressService { get; private set; }
         public SaveLoadService SaveLoadService { get; private set; }
 
+        public UiFactory UiFactory { get; private set; }
+        public WindowService WindowService { get; private set; }
+
         public SoundMonoService SoundMonoService { get; private set; }
         public LoadingCurtainMonoService LoadingCurtainMonoService { get; private set; }
         public UpdateMonoService UpdateMonoService { get; private set; }
@@ -34,6 +38,9 @@ namespace Infrastructure
             StaticDataService = new StaticDataService();
             PersistentProgressService = new PersistentProgressService();
             SaveLoadService = new SaveLoadService(PersistentProgressService);
+
+            UiFactory = new UiFactory(AssetProviderService);
+            WindowService = new WindowService(UiFactory, AssetProviderService);
 
             LoadingCurtainMonoService = AssetProviderService.Instantiate<LoadingCurtainMonoService>(LoadingCurtainMonoServicePath);
 

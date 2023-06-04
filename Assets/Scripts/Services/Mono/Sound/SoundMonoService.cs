@@ -8,6 +8,7 @@ namespace Services.Mono.Sound
     public class SoundMonoService : MonoBehaviour
     {
         [SerializeField] private OneShotAudioSource _oneShotAudioSourcePrefab;
+        [SerializeField] private LoopAudioSource _loopAudioSource;
 
         [SerializeField] private AudioClip[] _musicClips;
         [SerializeField] private AudioClip _winClip;
@@ -19,6 +20,8 @@ namespace Services.Mono.Sound
 
         private RandomService _randomService;
 
+        private LoopAudioSource _backgroundMusicAudioSource;
+
         public void Init(RandomService randomService)
         {
             _randomService = randomService;
@@ -26,9 +29,17 @@ namespace Services.Mono.Sound
             DontDestroyOnLoad(this);
         }
 
+        public void PlayBackgroundMusic()
+        {
+            if (_backgroundMusicAudioSource == null)
+            {
+                _backgroundMusicAudioSource = CreateBackgroundMusicAudioSource();
+            }
+        }
+
         public void PlaySound(SoundType soundType)
         {
-            PlayClip(GetClip(soundType), GetVolume(soundType));
+            PlayOneShotClip(GetClip(soundType), GetVolume(soundType));
         }
 
         private static float GetVolume(SoundType soundType)
@@ -57,7 +68,7 @@ namespace Services.Mono.Sound
                 SoundType.Bonus => _bonusClip,
                 SoundType.BombGamePieces => _bombGamePieceClip,
                 SoundType.BreakCollectible => _breakCollectibleClip,
-                _ => throw new ArgumentOutOfRangeException(nameof(soundType), soundType, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(soundType), soundType, null),
             };
         }
 
@@ -66,12 +77,19 @@ namespace Services.Mono.Sound
             return musicClips[_randomService.Next(musicClips.Length)];
         }
 
-        private void PlayClip(AudioClip audioClip, float volume)
+        private void PlayOneShotClip(AudioClip audioClip, float volume)
         {
             OneShotAudioSource oneShotAudioSource = Instantiate(_oneShotAudioSourcePrefab, transform);
-            
+
             float randomPitch = _randomService.Next(Settings.Sound.LowPitch, Settings.Sound.HighPitch);
             oneShotAudioSource.Init(audioClip, volume, randomPitch);
+        }
+
+        private LoopAudioSource CreateBackgroundMusicAudioSource()
+        {
+            LoopAudioSource backgroundMusicAudioSource = Instantiate(_loopAudioSource, transform);
+            backgroundMusicAudioSource.Init(GetClip(SoundType.Music), GetVolume(SoundType.Music));
+            return backgroundMusicAudioSource;
         }
     }
 }

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _oneShotAudioSourcePrefab: {fileID: 3684730967644596617, guid: 5c97e2f4a2f8f9e479be1ba3c4713b99, type: 3}
+  _loopAudioSource: {fileID: 1157548054346473849, guid: c0f73f05880ac8b4aa34e26a10a71431, type: 3}
   _musicClips:
   - {fileID: 8300000, guid: e75e89afb6e1648e7a4a2ac64328a7c0, type: 3}
   - {fileID: 8300000, guid: e5e029a21fda14206a9ff1423a1302a9, type: 3}

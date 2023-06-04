@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Constants;
+using UnityEngine;
 
 namespace Services
 {
@@ -21,7 +22,7 @@ namespace Services
             float boardCenterX = (boardSize.x - 1) / 2f;
             float boardCenterY = (boardSize.y - 1) / 2f;
 
-            MainCamera.transform.position = new Vector3(boardCenterX, boardCenterY, Constants.CameraPositionZ);
+            MainCamera.transform.position = new Vector3(boardCenterX, boardCenterY, Settings.CameraPositionZ);
         }
 
         private void SetCameraAspectRatio(Vector2Int boardSize)

@@ -1,4 +1,5 @@
-﻿using Services;
+﻿using Constants;
+using Services;
 using Services.Mono;
 using Services.UI;
 using StaticData;
@@ -8,10 +9,6 @@ namespace Infrastructure.StateMachine
 {
     public class GameLoopState : IPayloadedState<string>
     {
-        private const string GameLevelScene = "GameLevelScene";
-
-        private const string BackgroundUiPath = "Prefabs/UI/BackgroundUi";
-
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly LoadingCurtainMonoService _loadingCurtainMonoService;
@@ -46,7 +43,7 @@ namespace Infrastructure.StateMachine
         public void Enter(string levelName)
         {
             _loadingCurtainMonoService.FadeOnInstantly();
-            _sceneLoader.LoadScene(GameLevelScene, () => OnLevelLoaded(levelName), true);
+            _sceneLoader.LoadScene(Settings.GameLevelScene, () => OnLevelLoaded(levelName), true);
         }
 
         public void Exit()
@@ -73,7 +70,7 @@ namespace Infrastructure.StateMachine
             MovesLeftService movesLeftService = new MovesLeftService(boardService, scoreService, gameRoundService, movesLeft);
             CameraService cameraService = new CameraService(boardService.BoardSize);
 
-            BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(BackgroundUiPath);
+            BackgroundUi backgroundUi = _assetProviderService.Instantiate<BackgroundUi>(AssetPaths.BackgroundUiPath);
             backgroundUi.Init(scoreService, cameraService, movesLeftService);
 
             gameRoundService.StartGame(scoreGoal);

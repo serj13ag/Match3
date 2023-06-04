@@ -1,4 +1,5 @@
 ﻿using System;
+using Constants;
 using UI;
 using UnityEngine;
 
@@ -6,10 +7,6 @@ namespace Services.UI
 {
     public class WindowService
     {
-        private const string GoalIconSpritePath = "Images/GoalIcon";
-        private const string WinIconSpritePath = "Images/WinIcon";
-        private const string LoseIconSpritePath = "Images/LoseIcon";
-
         private readonly UiFactory _uiFactory;
         private readonly AssetProviderService _assetProviderService;
 
@@ -21,23 +18,24 @@ namespace Services.UI
 
         public void ShowStartGameMessageWindow(int scoreGoal, Action onButtonClickCallback)
         {
-            MessageWindow messageWindow = _uiFactory.GetMessageWindow();
-            Sprite goalIcon = _assetProviderService.LoadSprite(GoalIconSpritePath);
-            messageWindow.ShowMessage(goalIcon, $"score goal\n{scoreGoal}", "start", onButtonClickCallback);
+            ShowMessage(onButtonClickCallback, AssetPaths.GoalIconSpritePath, $"score goal\n{scoreGoal}", "start");
         }
 
         public void ShowGameWinMessageWindow(Action onButtonClickCallback)
         {
-            MessageWindow messageWindow = _uiFactory.GetMessageWindow();
-            Sprite winIcon = _assetProviderService.LoadSprite(WinIconSpritePath);
-            messageWindow.ShowMessage(winIcon, "you win!", "ok", onButtonClickCallback);
+            ShowMessage(onButtonClickCallback, AssetPaths.WinIconSpritePath, "you win!", "ok");
         }
 
         public void ShowGameOverMessageWindow(Action onButtonClickCallback)
         {
+            ShowMessage(onButtonClickCallback, AssetPaths.LoseIconSpritePath, "you lose!", "ok");
+        }
+
+        private void ShowMessage(Action onButtonClickCallback, string iconSpritePath, string message, string buttonText)
+        {
             MessageWindow messageWindow = _uiFactory.GetMessageWindow();
-            Sprite loseIcon = _assetProviderService.LoadSprite(LoseIconSpritePath);
-            messageWindow.ShowMessage(loseIcon, "you lose!", "ok", onButtonClickCallback);
+            Sprite goalIcon = _assetProviderService.LoadSprite(iconSpritePath);
+            messageWindow.ShowMessage(goalIcon, message, buttonText, onButtonClickCallback);
         }
     }
 }

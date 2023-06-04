@@ -1,4 +1,5 @@
 using System.Collections;
+using Constants;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,24 +16,24 @@ namespace Services.Mono
 
         public void FadeOnInstantly()
         {
-            _fadeMaskableGraphic.CrossFadeAlpha(Constants.ScreenFader.SolidAlpha, 0f, true);
+            _fadeMaskableGraphic.CrossFadeAlpha(Settings.ScreenFader.SolidAlpha, 0f, true);
         }
 
         public void FadeOnWithDelay()
         {
-            StartCoroutine(FadeRoutine(Constants.ScreenFader.SolidAlpha));
+            StartCoroutine(FadeRoutine(Settings.ScreenFader.SolidAlpha));
         }
 
         public void FadeOffWithDelay()
         {
-            StartCoroutine(FadeRoutine(Constants.ScreenFader.ClearAlpha));
+            StartCoroutine(FadeRoutine(Settings.ScreenFader.ClearAlpha));
         }
 
         private IEnumerator FadeRoutine(float alpha)
         {
-            yield return new WaitForSeconds(Constants.ScreenFader.Delay);
+            yield return new WaitForSeconds(Settings.ScreenFader.Delay);
 
-            _fadeMaskableGraphic.CrossFadeAlpha(alpha, Constants.ScreenFader.TimeToFade, true);
+            _fadeMaskableGraphic.CrossFadeAlpha(alpha, Settings.ScreenFader.TimeToFade, true);
         }
     }
 }

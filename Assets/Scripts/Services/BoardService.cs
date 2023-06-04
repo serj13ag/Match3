@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Commands;
+using Constants;
 using Data;
 using DTO;
 using Entities;
@@ -176,8 +177,8 @@ namespace Services
         private bool TrySpawnCollectibleGamePiece(int x, int y)
         {
             if (y == _height - 1
-                && _collectibleGamePieces < Constants.MaxCollectibles
-                && _randomService.Next(100) <= Constants.PercentChanceToSpawnCollectible)
+                && _collectibleGamePieces < Settings.MaxCollectibles
+                && _randomService.Next(100) <= Settings.PercentChanceToSpawnCollectible)
             {
                 SpawnRandomCollectibleGamePiece(x, y);
                 return true;
@@ -216,7 +217,7 @@ namespace Services
             if (gamePiece is CollectibleGamePiece)
             {
                 _collectibleGamePieces++;
-                Assert.IsTrue(_collectibleGamePieces <= Constants.MaxCollectibles);
+                Assert.IsTrue(_collectibleGamePieces <= Settings.MaxCollectibles);
             }
 
             gamePiece.OnStartMoving += OnGamePieceStartMoving;
@@ -361,7 +362,7 @@ namespace Services
             HashSet<GamePiece> gamePiecesToBreak = GetGamePiecesToBreak(allMatches);
 
             var clickedGamePiece = movedGamePieces[1];
-            if (allMatches.Count >= Constants.MatchesToSpawnBomb && allMatches.Contains(clickedGamePiece))
+            if (allMatches.Count >= Settings.MatchesToSpawnBomb && allMatches.Contains(clickedGamePiece))
             {
                 var bombType = GamePieceMatchHelper.GetBombTypeOnMatch(allMatches, _playerSwitchGamePiecesDirection);
                 ClearGamePieceAt(clickedGamePiece.Position);
@@ -449,7 +450,7 @@ namespace Services
                 BombType.Column => GetBombedColumnGamePieces(matchedGamePiece.Position.x),
                 BombType.Row => GetBombedRowGamePieces(matchedGamePiece.Position.y),
                 BombType.Adjacent => GetBombedAdjacentGamePieces(matchedGamePiece.Position,
-                    Constants.BombAdjacentGamePiecesRange),
+                    Settings.BombAdjacentGamePiecesRange),
                 BombType.Color => null,
                 _ => throw new ArgumentOutOfRangeException(),
             };
@@ -458,7 +459,7 @@ namespace Services
         private void AddBreakGamePiecesCommand(HashSet<GamePiece> gamePiecesToBreak)
         {
             Command breakCommand =
-                new Command(() => BreakGamePieces(gamePiecesToBreak), Constants.Commands.ClearGamePiecesTimeout);
+                new Command(() => BreakGamePieces(gamePiecesToBreak), Settings.Commands.ClearGamePiecesTimeout);
             _commandBlock.AddCommand(breakCommand);
         }
 
@@ -466,13 +467,13 @@ namespace Services
         {
             HashSet<int> columnIndexes = BoardHelper.GetColumnIndexes(gamePiecesToBreak);
             Command collapseCommand =
-                new Command(() => CollapseColumns(columnIndexes), Constants.Commands.CollapseColumnsTimeout);
+                new Command(() => CollapseColumns(columnIndexes), Settings.Commands.CollapseColumnsTimeout);
             _commandBlock.AddCommand(collapseCommand);
         }
 
         private void AddFillBoardCommand()
         {
-            Command fillBoardCommand = new Command(FillBoardWithRandomGamePieces, Constants.Commands.FillBoardTimeout);
+            Command fillBoardCommand = new Command(FillBoardWithRandomGamePieces, Settings.Commands.FillBoardTimeout);
             _commandBlock.AddCommand(fillBoardCommand);
         }
 

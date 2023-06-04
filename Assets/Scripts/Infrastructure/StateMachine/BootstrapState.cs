@@ -1,9 +1,9 @@
-﻿namespace Infrastructure.StateMachine
+﻿using Constants;
+
+namespace Infrastructure.StateMachine
 {
     public class BootstrapState : IState
     {
-        private const string BootstrapSceneName = "BootstrapScene";
-
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
 
@@ -17,7 +17,7 @@
 
         public void Enter()
         {
-            _sceneLoader.LoadScene(BootstrapSceneName, OnBootstrapSceneLoaded);
+            _sceneLoader.LoadScene(Settings.BootstrapSceneName, OnBootstrapSceneLoaded);
         }
 
         public void Exit()

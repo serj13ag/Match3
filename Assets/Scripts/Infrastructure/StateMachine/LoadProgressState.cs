@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using Constants;
+using Data;
 using Services;
 
 namespace Infrastructure.StateMachine
@@ -21,7 +22,7 @@ namespace Infrastructure.StateMachine
         {
             LoadProgressOrInitNew();
 
-            _gameStateMachine.Enter<GameLoopState, string>(Constants.FirstLevelName); // TODO
+            _gameStateMachine.Enter<GameLoopState, string>(Settings.FirstLevelName); // TODO
         }
 
         public void Exit()
@@ -35,7 +36,7 @@ namespace Infrastructure.StateMachine
 
         private static PlayerProgress CreatePlayerProgress()
         {
-            return new PlayerProgress(Constants.FirstLevelName); // TODO
+            return new PlayerProgress(Settings.FirstLevelName); // TODO
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using Constants;
 using EventArgs;
 using Services;
 using TMPro;
@@ -51,12 +52,12 @@ namespace UI
 
             while (counterValue < _currentScore)
             {
-                counterValue += Constants.Score.UpdateScoreTextIncrement;
+                counterValue += Settings.Score.UpdateScoreTextIncrement;
                 counterValue = Mathf.Min(counterValue, _currentScore);
 
                 UpdateScoreText(counterValue);
 
-                yield return new WaitForSeconds(Constants.Score.ScoreTextUpdateIntervalInSeconds);
+                yield return new WaitForSeconds(Settings.Score.ScoreTextUpdateIntervalInSeconds);
             }
 
             UpdateScoreText(_currentScore);

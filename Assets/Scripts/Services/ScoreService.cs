@@ -1,4 +1,5 @@
 ﻿using System;
+using Constants;
 using EventArgs;
 using UnityEngine;
 
@@ -26,8 +27,8 @@ namespace Services
         public void AddScore(int gamePieceScore, int numberOfBreakGamePieces,
             int completedBreakIterationsAfterSwitchedGamePieces)
         {
-            int bonusScore = numberOfBreakGamePieces >= Constants.Score.MinNumberOfBreakGamePiecesToGrantBonus
-                ? Constants.Score.BonusScore
+            int bonusScore = numberOfBreakGamePieces >= Settings.Score.MinNumberOfBreakGamePiecesToGrantBonus
+                ? Settings.Score.BonusScore
                 : 0;
             int scoreMultiplier = completedBreakIterationsAfterSwitchedGamePieces + 1;
             int totalScore = gamePieceScore * scoreMultiplier + bonusScore;

@@ -1,4 +1,5 @@
 using System;
+using Constants;
 using Enums;
 using UnityEngine;
 
@@ -34,13 +35,13 @@ namespace Services.Mono
         {
             return soundType switch
             {
-                SoundType.Music => Constants.Sound.MusicVolume,
-                SoundType.Win => Constants.Sound.FxVolume,
-                SoundType.Lose => Constants.Sound.FxVolume,
-                SoundType.Bonus => Constants.Sound.FxVolume,
-                SoundType.BreakGamePieces => Constants.Sound.FxVolume,
-                SoundType.BombGamePieces => Constants.Sound.FxVolume,
-                SoundType.BreakCollectible => Constants.Sound.FxVolume,
+                SoundType.Music => Settings.Sound.MusicVolume,
+                SoundType.Win => Settings.Sound.FxVolume,
+                SoundType.Lose => Settings.Sound.FxVolume,
+                SoundType.Bonus => Settings.Sound.FxVolume,
+                SoundType.BreakGamePieces => Settings.Sound.FxVolume,
+                SoundType.BombGamePieces => Settings.Sound.FxVolume,
+                SoundType.BreakCollectible => Settings.Sound.FxVolume,
                 _ => throw new ArgumentOutOfRangeException(nameof(soundType), soundType, null)
             };
         }
@@ -69,7 +70,7 @@ namespace Services.Mono
         {
             _audioSource.clip = audioClip;
 
-            float randomPitch = _randomService.Next(Constants.Sound.LowPitch, Constants.Sound.HighPitch);
+            float randomPitch = _randomService.Next(Settings.Sound.LowPitch, Settings.Sound.HighPitch);
             _audioSource.pitch = randomPitch;
 
             _audioSource.volume = volume;

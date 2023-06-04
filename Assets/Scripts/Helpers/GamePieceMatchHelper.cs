@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Constants;
 using Entities;
 using Enums;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace Helpers
         public static BombType GetBombTypeOnMatch(HashSet<GamePiece> allMatches, Direction playerSwitchGamePiecesDirection)
         {
             BombType bombType;
-            if (allMatches.Count >= Constants.MatchesToSpawnColorBomb)
+            if (allMatches.Count >= Settings.MatchesToSpawnColorBomb)
             {
                 bombType = BombType.Color;
             }
@@ -30,13 +31,13 @@ namespace Helpers
 
         public static bool HasMatchAtFillBoard(Vector2Int position, GamePiece[,] gamePieces, Vector2Int boardSize)
         {
-            if (TryFindMatchesByDirection(position, Vector2Int.left, Constants.MinMatchesCount, gamePieces,
+            if (TryFindMatchesByDirection(position, Vector2Int.left, Settings.MinMatchesCount, gamePieces,
                     boardSize, out _))
             {
                 return true;
             }
 
-            if (TryFindMatchesByDirection(position, Vector2Int.down, Constants.MinMatchesCount, gamePieces,
+            if (TryFindMatchesByDirection(position, Vector2Int.down, Settings.MinMatchesCount, gamePieces,
                     boardSize, out _))
             {
                 return true;

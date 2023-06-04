@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Constants;
 using Enums;
 using Helpers;
 using Services;
@@ -68,7 +69,7 @@ namespace Entities
             {
                 IsLastMoveMadeByPlayer = movedByPlayerInput;
                 OnStartMoving?.Invoke(this);
-                StartCoroutine(MoveRoutine(destination, Constants.TimeToMoveGamePiece));
+                StartCoroutine(MoveRoutine(destination, Settings.TimeToMoveGamePiece));
             }
         }
 

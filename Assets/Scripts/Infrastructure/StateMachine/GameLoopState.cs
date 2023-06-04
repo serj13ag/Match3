@@ -3,7 +3,7 @@ using Services;
 using Services.Mono;
 using Services.UI;
 using StaticData;
-using UI;
+using UI.Background;
 
 namespace Infrastructure.StateMachine
 {

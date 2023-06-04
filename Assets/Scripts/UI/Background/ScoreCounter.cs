@@ -1,35 +1,24 @@
-using System.Collections;
+﻿using System.Collections;
 using Constants;
 using EventArgs;
 using Services;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace UI
+namespace UI.Background
 {
-    public class BackgroundUi : MonoBehaviour
+    public class ScoreCounter : MonoBehaviour
     {
-        [SerializeField] private Canvas _canvas;
-
-        // TODO: separate classes
-        [SerializeField] private TMP_Text _levelNameText;
         [SerializeField] private TMP_Text _scoreText;
-        [SerializeField] private TMP_Text _movesLeftText;
 
-        private Coroutine _updateScoreRoutine;
         private int _currentScore;
+        private Coroutine _updateScoreRoutine;
 
-        public void Init(ScoreService scoreService, CameraService cameraService, MovesLeftService movesLeftService)
+        public void Init(ScoreService scoreService)
         {
-            _canvas.worldCamera = cameraService.MainCamera;
-
-            UpdateSceneNameText();
             UpdateScoreText(scoreService.Score);
-            UpdateMovesLeftText(movesLeftService.MovesLeft);
 
             scoreService.OnScoreChanged += OnScoreChanged;
-            movesLeftService.OnMovesLeftChanged += OnMovesLeftChanged;
         }
 
         private void OnScoreChanged(object sender, ScoreChangedEventArgs e)
@@ -39,11 +28,6 @@ namespace UI
             _currentScore = e.Score;
 
             _updateScoreRoutine ??= StartCoroutine(UpdateScoreTextRoutine(oldScore));
-        }
-
-        private void OnMovesLeftChanged(object sender, MovesLeftChangedEventArgs e)
-        {
-            UpdateMovesLeftText(e.MovesLeft);
         }
 
         private IEnumerator UpdateScoreTextRoutine(int oldScore)
@@ -68,18 +52,6 @@ namespace UI
         private void UpdateScoreText(int score)
         {
             _scoreText.text = score.ToString();
-        }
-
-        private void UpdateSceneNameText()
-        {
-            Scene scene = SceneManager.GetActiveScene();
-
-            _levelNameText.text = scene.name;
-        }
-
-        private void UpdateMovesLeftText(int movesLeft)
-        {
-            _movesLeftText.text = movesLeft.ToString();
         }
     }
 }

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6496748320048320379}
+  - component: {fileID: 2067153902873328594}
   m_Layer: 5
   m_Name: ScoreContainer
   m_TagString: Untagged
@@ -38,6 +39,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2067153902873328594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6496748320048320378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377ce9d9efef41d9b04bb7e08931c4e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scoreText: {fileID: 6496748321336580124}
 --- !u!1 &6496748320201628852
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,9 +284,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 6496748320264840132}
+  _scoreCounter: {fileID: 2067153902873328594}
+  _movesLeftCounter: {fileID: 22886751173370272}
   _levelNameText: {fileID: 6496748321292658674}
-  _scoreText: {fileID: 6496748321336580124}
-  _movesLeftText: {fileID: 6496748321127328022}
 --- !u!1 &6496748320291510614
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,6 +296,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6496748320291510615}
+  - component: {fileID: 22886751173370272}
   m_Layer: 5
   m_Name: MovesLeftContainer
   m_TagString: Untagged
@@ -311,6 +326,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &22886751173370272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6496748320291510614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a605eeeab41b42fb80372cbef1c6f5f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movesLeftText: {fileID: 6496748321127328022}
 --- !u!1 &6496748320397140814
 GameObject:
   m_ObjectHideFlags: 0

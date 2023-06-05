@@ -40,7 +40,7 @@ namespace Services
         {
             if (scoreToAdd < 0)
             {
-                Debug.LogError($"{nameof(ScoreService)} : Attempt to add negative score: {scoreToAdd}!"); // TODO: add logger
+                Debug.LogError($"{nameof(ScoreService)} : Attempt to add negative score: {scoreToAdd}!");
                 return;
             }
 

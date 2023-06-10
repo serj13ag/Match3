@@ -18,11 +18,11 @@ namespace Services.Mono.Sound
         [SerializeField] private AudioClip _bombGamePieceClip;
         [SerializeField] private AudioClip _breakCollectibleClip;
 
-        private RandomService _randomService;
+        private IRandomService _randomService;
 
         private LoopAudioSource _backgroundMusicAudioSource;
 
-        public void Init(RandomService randomService)
+        public void Init(IRandomService randomService)
         {
             _randomService = randomService;
 

@@ -14,14 +14,14 @@ namespace Services
         private const string TilesContainerName = "Tiles";
         private const string GamePiecesContainerName = "GamePieces";
 
-        private readonly RandomService _randomService;
+        private readonly IRandomService _randomService;
         private readonly StaticDataService _staticDataService;
         private readonly ParticleService _particleService;
 
         private readonly Transform _tilesContainerTransform;
         private readonly Transform _gamePiecesContainerTransform;
 
-        public GameFactory(RandomService randomService, StaticDataService staticDataService,
+        public GameFactory(IRandomService randomService, StaticDataService staticDataService,
             ParticleService particleService)
         {
             _randomService = randomService;

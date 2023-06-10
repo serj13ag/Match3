@@ -2,7 +2,7 @@
 
 namespace Services
 {
-    public class RandomService
+    public class RandomService : IRandomService
     {
         private readonly Random _random;
 

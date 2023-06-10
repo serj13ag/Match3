@@ -14,7 +14,7 @@ namespace Infrastructure.StateMachine
         private readonly SceneLoader _sceneLoader;
         private readonly LoadingCurtainMonoService _loadingCurtainMonoService;
         private readonly AssetProviderService _assetProviderService;
-        private readonly RandomService _randomService;
+        private readonly IRandomService _randomService;
         private readonly StaticDataService _staticDataService;
         private readonly SoundMonoService _soundMonoService;
         private readonly UpdateMonoService _updateMonoService;
@@ -25,7 +25,7 @@ namespace Infrastructure.StateMachine
 
         public GameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             LoadingCurtainMonoService loadingCurtainMonoService, AssetProviderService assetProviderService,
-            RandomService randomService, StaticDataService staticDataService, SoundMonoService soundMonoService,
+            IRandomService randomService, StaticDataService staticDataService, SoundMonoService soundMonoService,
             UpdateMonoService updateMonoService, PersistentProgressService persistentProgressService,
             UiFactory uiFactory, WindowService windowService, SaveLoadService saveLoadService)
         {

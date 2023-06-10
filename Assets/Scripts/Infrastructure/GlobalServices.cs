@@ -10,7 +10,7 @@ namespace Infrastructure
     {
         public SceneLoader SceneLoader { get; }
 
-        public RandomService RandomService { get; private set; }
+        public IRandomService RandomService { get; private set; }
         public AssetProviderService AssetProviderService { get; private set; }
         public StaticDataService StaticDataService { get; private set; }
         public PersistentProgressService PersistentProgressService { get; private set; }

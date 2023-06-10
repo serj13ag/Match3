@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Services
 {
-    public class SaveLoadService
+    public class SaveLoadService : ISaveLoadService
     {
         private const string ProgressKey = "ProgressKey";
 
@@ -22,7 +22,6 @@ namespace Services
                 : DeserializeJson<PlayerProgress>(savedProgressString);
         }
 
-        // TODO: implement
         public void SaveProgress()
         {
             PlayerPrefs.SetString(ProgressKey, ToJson(_persistentProgressService.Progress));

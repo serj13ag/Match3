@@ -21,13 +21,13 @@ namespace Infrastructure.StateMachine
         private readonly PersistentProgressService _persistentProgressService;
         private readonly UiFactory _uiFactory;
         private readonly WindowService _windowService;
-        private readonly SaveLoadService _saveLoadService;
+        private readonly ISaveLoadService _saveLoadService;
 
         public GameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             LoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
             IRandomService randomService, IStaticDataService staticDataService, SoundMonoService soundMonoService,
             UpdateMonoService updateMonoService, PersistentProgressService persistentProgressService,
-            UiFactory uiFactory, WindowService windowService, SaveLoadService saveLoadService)
+            UiFactory uiFactory, WindowService windowService, ISaveLoadService saveLoadService)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;

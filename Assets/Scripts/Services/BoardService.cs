@@ -26,7 +26,7 @@ namespace Services
         private readonly ScoreService _scoreService;
         private readonly SoundMonoService _soundMonoService;
         private readonly PersistentProgressService _persistentProgressService;
-        private readonly SaveLoadService _saveLoadService;
+        private readonly ISaveLoadService _saveLoadService;
         private readonly IStaticDataService _staticDataService;
         private readonly GameRoundService _gameRoundService;
 
@@ -54,7 +54,7 @@ namespace Services
 
         public BoardService(string levelName, IRandomService randomService, IStaticDataService staticDataService,
             SoundMonoService soundMonoService, UpdateMonoService updateMonoService,
-            PersistentProgressService persistentProgressService, SaveLoadService saveLoadService,
+            PersistentProgressService persistentProgressService, ISaveLoadService saveLoadService,
             IGameFactory gameFactory, ScoreService scoreService, GameRoundService gameRoundService,
             ParticleService particleService)
         {

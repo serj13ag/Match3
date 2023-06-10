@@ -14,7 +14,7 @@ namespace Infrastructure
         public IAssetProviderService AssetProviderService { get; private set; }
         public IStaticDataService StaticDataService { get; private set; }
         public PersistentProgressService PersistentProgressService { get; private set; }
-        public SaveLoadService SaveLoadService { get; private set; }
+        public ISaveLoadService SaveLoadService { get; private set; }
 
         public UiFactory UiFactory { get; private set; }
         public WindowService WindowService { get; private set; }

@@ -17,7 +17,7 @@ namespace UI.Background
         private Coroutine _updateScoreRoutine;
         private int _currentScore;
 
-        public void Init(IScoreService scoreService, CameraService cameraService, IMovesLeftService movesLeftService)
+        public void Init(IScoreService scoreService, ICameraService cameraService, IMovesLeftService movesLeftService)
         {
             _canvas.worldCamera = cameraService.MainCamera;
 

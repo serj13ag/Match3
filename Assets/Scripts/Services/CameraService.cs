@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Services
 {
-    public class CameraService
+    public class CameraService : ICameraService
     {
         private const int BorderSize = 2;
 

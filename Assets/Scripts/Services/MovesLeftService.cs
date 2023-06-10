@@ -14,7 +14,7 @@ namespace Services
 
         public event EventHandler<MovesLeftChangedEventArgs> OnMovesLeftChanged;
 
-        public MovesLeftService(BoardService boardService, IScoreService scoreService, IGameRoundService gameRoundService,
+        public MovesLeftService(IBoardService boardService, IScoreService scoreService, IGameRoundService gameRoundService,
             int movesLeft)
         {
             _scoreService = scoreService;

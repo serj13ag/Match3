@@ -18,7 +18,7 @@ using UnityEngine.Assertions;
 
 namespace Services
 {
-    public class BoardService : IUpdatable
+    public class BoardService : IUpdatable, IBoardService
     {
         private readonly IParticleService _particleService;
         private readonly IGameFactory _gameFactory;

@@ -21,7 +21,7 @@ namespace Infrastructure
 
         public ISoundMonoService SoundMonoService { get; private set; }
         public ILoadingCurtainMonoService LoadingCurtainMonoService { get; private set; }
-        public UpdateMonoService UpdateMonoService { get; private set; }
+        public IUpdateMonoService UpdateMonoService { get; private set; }
 
         public GlobalServices(SceneLoader sceneLoader)
         {

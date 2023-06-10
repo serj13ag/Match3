@@ -53,7 +53,7 @@ namespace Services
         public event Action OnGamePiecesSwitched;
 
         public BoardService(string levelName, IRandomService randomService, IStaticDataService staticDataService,
-            ISoundMonoService soundMonoService, UpdateMonoService updateMonoService,
+            ISoundMonoService soundMonoService, IUpdateMonoService updateMonoService,
             PersistentProgressService persistentProgressService, ISaveLoadService saveLoadService,
             IGameFactory gameFactory, ScoreService scoreService, GameRoundService gameRoundService,
             ParticleService particleService)

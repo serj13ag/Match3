@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Services.Mono
 {
-    public class UpdateMonoService : MonoBehaviour
+    public class UpdateMonoService : MonoBehaviour, IUpdateMonoService
     {
         private List<IUpdatable> _updatableEntities;
 

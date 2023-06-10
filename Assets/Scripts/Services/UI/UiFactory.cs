@@ -6,13 +6,13 @@ namespace Services.UI
 {
     public class UiFactory
     {
-        private readonly AssetProviderService _assetProviderService;
+        private readonly IAssetProviderService _assetProviderService;
 
         private Transform _uiRootTransform;
 
         private MessageWindow _messageWindow;
 
-        public UiFactory(AssetProviderService assetProviderService)
+        public UiFactory(IAssetProviderService assetProviderService)
         {
             _assetProviderService = assetProviderService;
         }

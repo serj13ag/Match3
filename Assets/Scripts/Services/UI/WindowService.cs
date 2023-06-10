@@ -8,9 +8,9 @@ namespace Services.UI
     public class WindowService
     {
         private readonly UiFactory _uiFactory;
-        private readonly AssetProviderService _assetProviderService;
+        private readonly IAssetProviderService _assetProviderService;
 
-        public WindowService(UiFactory uiFactory, AssetProviderService assetProviderService)
+        public WindowService(UiFactory uiFactory, IAssetProviderService assetProviderService)
         {
             _uiFactory = uiFactory;
             _assetProviderService = assetProviderService;

@@ -2,7 +2,7 @@
 
 namespace Services
 {
-    public class AssetProviderService
+    public class AssetProviderService : IAssetProviderService
     {
         public T Instantiate<T>(string path) where T : Object
         {

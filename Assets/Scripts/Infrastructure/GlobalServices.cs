@@ -11,7 +11,7 @@ namespace Infrastructure
         public SceneLoader SceneLoader { get; }
 
         public IRandomService RandomService { get; private set; }
-        public AssetProviderService AssetProviderService { get; private set; }
+        public IAssetProviderService AssetProviderService { get; private set; }
         public StaticDataService StaticDataService { get; private set; }
         public PersistentProgressService PersistentProgressService { get; private set; }
         public SaveLoadService SaveLoadService { get; private set; }

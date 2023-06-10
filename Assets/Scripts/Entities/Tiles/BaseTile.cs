@@ -26,7 +26,7 @@ namespace Entities.Tiles
         public event Action OnMouseReleased;
 
         public virtual void Init(TileStaticData tileData, int x, int y, Transform parentTransform,
-            ParticleService particleService)
+            IParticleService particleService)
         {
             _type = tileData.Type;
             _position = new Vector2Int(x, y);

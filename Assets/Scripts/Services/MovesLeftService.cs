@@ -6,7 +6,7 @@ namespace Services
     public class MovesLeftService
     {
         private readonly ScoreService _scoreService;
-        private readonly GameRoundService _gameRoundService;
+        private readonly IGameRoundService _gameRoundService;
 
         private int _movesLeft;
 
@@ -14,7 +14,7 @@ namespace Services
 
         public event EventHandler<MovesLeftChangedEventArgs> OnMovesLeftChanged;
 
-        public MovesLeftService(BoardService boardService, ScoreService scoreService, GameRoundService gameRoundService,
+        public MovesLeftService(BoardService boardService, ScoreService scoreService, IGameRoundService gameRoundService,
             int movesLeft)
         {
             _scoreService = scoreService;

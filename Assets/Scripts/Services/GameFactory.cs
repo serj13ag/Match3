@@ -16,13 +16,13 @@ namespace Services
 
         private readonly IRandomService _randomService;
         private readonly IStaticDataService _staticDataService;
-        private readonly ParticleService _particleService;
+        private readonly IParticleService _particleService;
 
         private readonly Transform _tilesContainerTransform;
         private readonly Transform _gamePiecesContainerTransform;
 
         public GameFactory(IRandomService randomService, IStaticDataService staticDataService,
-            ParticleService particleService)
+            IParticleService particleService)
         {
             _randomService = randomService;
             _staticDataService = staticDataService;

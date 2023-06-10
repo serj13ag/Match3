@@ -7,7 +7,7 @@ namespace Services
 {
     public class ScoreService
     {
-        private readonly GameRoundService _gameRoundService;
+        private readonly IGameRoundService _gameRoundService;
 
         private readonly int _scoreGoal;
         private int _score;
@@ -18,7 +18,7 @@ namespace Services
 
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
 
-        public ScoreService(GameRoundService gameRoundService, int scoreGoal)
+        public ScoreService(IGameRoundService gameRoundService, int scoreGoal)
         {
             _scoreGoal = scoreGoal;
             _gameRoundService = gameRoundService;

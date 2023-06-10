@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Services
 {
-    public class ParticleService
+    public class ParticleService : IParticleService
     {
         private readonly IStaticDataService _staticDataService;
 

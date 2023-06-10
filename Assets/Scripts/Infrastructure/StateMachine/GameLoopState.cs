@@ -61,9 +61,9 @@ namespace Infrastructure.StateMachine
             int scoreGoal = levelStaticData.ScoreGoal;
             int movesLeft = levelStaticData.MovesLeft;
 
-            ParticleService particleService = new ParticleService(_staticDataService);
-            GameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
-            GameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService);
+            IParticleService particleService = new ParticleService(_staticDataService);
+            IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
+            IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService);
             ScoreService scoreService = new ScoreService(gameRoundService, scoreGoal);
 
             BoardService boardService = new BoardService(levelName, _randomService, _staticDataService,

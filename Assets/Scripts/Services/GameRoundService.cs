@@ -5,7 +5,7 @@ using Services.UI;
 
 namespace Services
 {
-    public class GameRoundService
+    public class GameRoundService : IGameRoundService
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly ISoundMonoService _soundMonoService;

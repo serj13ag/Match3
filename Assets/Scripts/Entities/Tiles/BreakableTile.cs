@@ -9,7 +9,7 @@ namespace Entities.Tiles
 {
     public class BreakableTile : BaseTile
     {
-        private ParticleService _particleService;
+        private IParticleService _particleService;
 
         private int _matchesTillBreak;
         private BreakableSpriteStaticData[] _breakableSpriteData;
@@ -17,7 +17,7 @@ namespace Entities.Tiles
         public override bool IsObstacle => false;
 
         public override void Init(TileStaticData tileData, int x, int y, Transform parentTransform,
-            ParticleService particleService)
+            IParticleService particleService)
         {
             base.Init(tileData, x, y, parentTransform, particleService);
 

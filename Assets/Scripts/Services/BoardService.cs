@@ -20,7 +20,7 @@ namespace Services
 {
     public class BoardService : IUpdatable
     {
-        private readonly ParticleService _particleService;
+        private readonly IParticleService _particleService;
         private readonly IGameFactory _gameFactory;
         private readonly IRandomService _randomService;
         private readonly ScoreService _scoreService;
@@ -28,7 +28,7 @@ namespace Services
         private readonly IPersistentProgressService _persistentProgressService;
         private readonly ISaveLoadService _saveLoadService;
         private readonly IStaticDataService _staticDataService;
-        private readonly GameRoundService _gameRoundService;
+        private readonly IGameRoundService _gameRoundService;
 
         private readonly int _width;
         private readonly int _height;
@@ -55,8 +55,8 @@ namespace Services
         public BoardService(string levelName, IRandomService randomService, IStaticDataService staticDataService,
             ISoundMonoService soundMonoService, IUpdateMonoService updateMonoService,
             IPersistentProgressService persistentProgressService, ISaveLoadService saveLoadService,
-            IGameFactory gameFactory, ScoreService scoreService, GameRoundService gameRoundService,
-            ParticleService particleService)
+            IGameFactory gameFactory, ScoreService scoreService, IGameRoundService gameRoundService,
+            IParticleService particleService)
         {
             _staticDataService = staticDataService;
             _scoreService = scoreService;

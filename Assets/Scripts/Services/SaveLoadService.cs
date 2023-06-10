@@ -7,9 +7,9 @@ namespace Services
     {
         private const string ProgressKey = "ProgressKey";
 
-        private readonly PersistentProgressService _persistentProgressService;
+        private readonly IPersistentProgressService _persistentProgressService;
 
-        public SaveLoadService(PersistentProgressService persistentProgressService)
+        public SaveLoadService(IPersistentProgressService persistentProgressService)
         {
             _persistentProgressService = persistentProgressService;
         }

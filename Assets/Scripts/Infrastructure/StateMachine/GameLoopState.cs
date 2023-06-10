@@ -18,7 +18,7 @@ namespace Infrastructure.StateMachine
         private readonly IStaticDataService _staticDataService;
         private readonly ISoundMonoService _soundMonoService;
         private readonly IUpdateMonoService _updateMonoService;
-        private readonly PersistentProgressService _persistentProgressService;
+        private readonly IPersistentProgressService _persistentProgressService;
         private readonly IUiFactory _uiFactory;
         private readonly IWindowService _windowService;
         private readonly ISaveLoadService _saveLoadService;
@@ -26,7 +26,7 @@ namespace Infrastructure.StateMachine
         public GameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             ILoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
             IRandomService randomService, IStaticDataService staticDataService, ISoundMonoService soundMonoService,
-            IUpdateMonoService updateMonoService, PersistentProgressService persistentProgressService,
+            IUpdateMonoService updateMonoService, IPersistentProgressService persistentProgressService,
             IUiFactory uiFactory, IWindowService windowService, ISaveLoadService saveLoadService)
         {
             _gameStateMachine = gameStateMachine;

@@ -13,7 +13,7 @@ namespace Infrastructure
         public IRandomService RandomService { get; private set; }
         public IAssetProviderService AssetProviderService { get; private set; }
         public IStaticDataService StaticDataService { get; private set; }
-        public PersistentProgressService PersistentProgressService { get; private set; }
+        public IPersistentProgressService PersistentProgressService { get; private set; }
         public ISaveLoadService SaveLoadService { get; private set; }
 
         public IUiFactory UiFactory { get; private set; }

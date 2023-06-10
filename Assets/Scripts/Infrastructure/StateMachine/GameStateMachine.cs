@@ -19,7 +19,8 @@ namespace Infrastructure.StateMachine
                 [typeof(GameLoopState)] = new GameLoopState(this, globalServices.SceneLoader,
                     globalServices.LoadingCurtainMonoService, globalServices.AssetProviderService,
                     globalServices.RandomService, globalServices.StaticDataService, globalServices.SoundMonoService,
-                    globalServices.UpdateMonoService, globalServices.PersistentProgressService, globalServices.UiFactory, globalServices.WindowService),
+                    globalServices.UpdateMonoService, globalServices.PersistentProgressService,
+                    globalServices.UiFactory, globalServices.WindowService, globalServices.SaveLoadService),
             };
         }
 

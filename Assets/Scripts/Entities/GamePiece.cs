@@ -15,11 +15,13 @@ namespace Entities
 
         private StaticDataService _staticDataService;
         private bool _isMoving;
+        private GamePieceType _type;
         private Vector2Int _position;
         private int _score;
 
         public bool IsLastMoveMadeByPlayer { get; private set; }
 
+        public GamePieceType Type => _type;
         public GamePieceColor Color { get; private set; }
 
         public Vector2Int Position
@@ -46,6 +48,7 @@ namespace Entities
         {
             _staticDataService = staticDataService;
 
+            _type = gamePieceData.Type;
             _score = gamePieceData.Score;
 
             SetColor(color);

@@ -21,12 +21,13 @@ namespace Infrastructure.StateMachine
         private readonly PersistentProgressService _persistentProgressService;
         private readonly UiFactory _uiFactory;
         private readonly WindowService _windowService;
+        private readonly SaveLoadService _saveLoadService;
 
         public GameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             LoadingCurtainMonoService loadingCurtainMonoService, AssetProviderService assetProviderService,
             RandomService randomService, StaticDataService staticDataService, SoundMonoService soundMonoService,
             UpdateMonoService updateMonoService, PersistentProgressService persistentProgressService,
-            UiFactory uiFactory, WindowService windowService)
+            UiFactory uiFactory, WindowService windowService, SaveLoadService saveLoadService)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
@@ -39,6 +40,7 @@ namespace Infrastructure.StateMachine
             _persistentProgressService = persistentProgressService;
             _uiFactory = uiFactory;
             _windowService = windowService;
+            _saveLoadService = saveLoadService;
         }
 
         public void Enter(string levelName)
@@ -65,8 +67,8 @@ namespace Infrastructure.StateMachine
             ScoreService scoreService = new ScoreService(gameRoundService, scoreGoal);
 
             BoardService boardService = new BoardService(levelName, _randomService, _staticDataService,
-                _soundMonoService, _updateMonoService, _persistentProgressService, gameFactory, scoreService,
-                gameRoundService, particleService);
+                _soundMonoService, _updateMonoService, _persistentProgressService, _saveLoadService, gameFactory,
+                scoreService, gameRoundService, particleService);
 
             MovesLeftService movesLeftService = new MovesLeftService(boardService, scoreService, gameRoundService, movesLeft);
             CameraService cameraService = new CameraService(boardService.BoardSize);

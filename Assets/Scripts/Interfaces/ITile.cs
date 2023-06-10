@@ -1,10 +1,12 @@
 ﻿using System;
+using Enums;
 using UnityEngine;
 
 namespace Interfaces
 {
     public interface ITile
     {
+        TileType Type { get; }
         Vector2Int Position { get; }
         bool IsObstacle { get; }
 

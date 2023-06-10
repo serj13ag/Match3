@@ -1,4 +1,5 @@
 ﻿using System;
+using Enums;
 using Interfaces;
 using Services;
 using Services.Mono;
@@ -11,8 +12,10 @@ namespace Entities.Tiles
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
+        private TileType _type;
         private Vector2Int _position;
 
+        public TileType Type => _type;
         public Vector2Int Position => _position;
         public abstract bool IsObstacle { get; }
 
@@ -25,6 +28,7 @@ namespace Entities.Tiles
         public virtual void Init(TileStaticData tileData, int x, int y, Transform parentTransform,
             ParticleService particleService)
         {
+            _type = tileData.Type;
             _position = new Vector2Int(x, y);
 
             name = $"Tile {_position}";

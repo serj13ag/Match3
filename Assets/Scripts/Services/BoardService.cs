@@ -11,10 +11,10 @@ using Helpers;
 using Interfaces;
 using Services.Mono;
 using Services.Mono.Sound;
+using StaticData;
 using StaticData.StartingData;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
 
 namespace Services
 {
@@ -25,6 +25,8 @@ namespace Services
         private readonly RandomService _randomService;
         private readonly ScoreService _scoreService;
         private readonly SoundMonoService _soundMonoService;
+        private readonly PersistentProgressService _persistentProgressService;
+        private readonly SaveLoadService _saveLoadService;
         private readonly StaticDataService _staticDataService;
         private readonly GameRoundService _gameRoundService;
 
@@ -52,8 +54,9 @@ namespace Services
 
         public BoardService(string levelName, RandomService randomService, StaticDataService staticDataService,
             SoundMonoService soundMonoService, UpdateMonoService updateMonoService,
-            PersistentProgressService persistentProgressService, IGameFactory gameFactory, ScoreService scoreService,
-            GameRoundService gameRoundService, ParticleService particleService)
+            PersistentProgressService persistentProgressService, SaveLoadService saveLoadService,
+            IGameFactory gameFactory, ScoreService scoreService, GameRoundService gameRoundService,
+            ParticleService particleService)
         {
             _staticDataService = staticDataService;
             _scoreService = scoreService;
@@ -61,6 +64,8 @@ namespace Services
             _gameFactory = gameFactory;
             _randomService = randomService;
             _soundMonoService = soundMonoService;
+            _persistentProgressService = persistentProgressService;
+            _saveLoadService = saveLoadService;
             _gameRoundService = gameRoundService;
 
             _movedPieces = new Stack<GamePiece>();
@@ -88,28 +93,43 @@ namespace Services
 
         private void Setup(PlayerProgress progress)
         {
-            LevelBoardData levelBoardData = progress.BoardData.LevelBoardData;
-            if (SceneManager.GetActiveScene().name == levelBoardData.LevelName)
-            {
-                //_savedTiles = levelBoardData.Tiles; TODO add load
-            }
+            _tiles = new ITile[_width, _height];
+            _gamePieces = new GamePiece[_width, _height];
 
-            SetupTiles();
-            SetupGamePieces();
+            LevelBoardData levelBoardData = progress.BoardData.LevelBoardData;
+            if (_levelName == levelBoardData.LevelName && levelBoardData.Tiles != null && levelBoardData.GamePieces != null)
+            {
+                SetupFromLoadData(levelBoardData);
+            }
+            else
+            {
+                SetupNewBoard(_staticDataService.Levels[_levelName]);
+            }
         }
 
-        private void SetupTiles()
+        private void SetupFromLoadData(LevelBoardData levelBoardData)
         {
-            _tiles = new ITile[_width, _height];
+            foreach (TileSaveData tile in levelBoardData.Tiles)
+            {
+                SpawnTile(tile.Type, tile.Position.x, tile.Position.y);
+            }
 
-            foreach (StartingTileStaticData startingTile in _staticDataService.Levels[_levelName].StartingTiles.StartingTiles)
+            foreach (GamePieceSaveData gamePiece in levelBoardData.GamePieces)
+            {
+                SpawnCustomGamePiece(gamePiece.Position.x, gamePiece.Position.y, gamePiece.Type, gamePiece.Color);
+            }
+        }
+
+        private void SetupNewBoard(LevelStaticData levelStaticData)
+        {
+            foreach (StartingTileStaticData startingTile in levelStaticData.StartingTiles.StartingTiles)
             {
                 SpawnTile(startingTile.Type, startingTile.X, startingTile.Y);
             }
 
-            for (var i = 0; i < _width; i++)
+            for (int i = 0; i < _width; i++)
             {
-                for (var j = 0; j < _height; j++)
+                for (int j = 0; j < _height; j++)
                 {
                     if (!TryGetTileAt(i, j, out _))
                     {
@@ -117,17 +137,11 @@ namespace Services
                     }
                 }
             }
-        }
 
-        private void SetupGamePieces()
-        {
-            _gamePieces = new GamePiece[_width, _height];
-
-            foreach (StartingGamePieceStaticData startingGamePieceEntry in _staticDataService.Levels[_levelName].StartingGamePieces
-                         .StartingGamePieces)
+            foreach (StartingGamePieceStaticData startingGamePieceEntry in levelStaticData.StartingGamePieces.StartingGamePieces)
             {
-                SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y,
-                    startingGamePieceEntry.Type, startingGamePieceEntry.Color);
+                SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y, startingGamePieceEntry.Type,
+                    startingGamePieceEntry.Color);
             }
 
             FillBoardWithRandomGamePieces();
@@ -173,6 +187,8 @@ namespace Services
                     }
                 }
             }
+
+            SaveBoardToProgress();
         }
 
         private bool TrySpawnCollectibleGamePiece(int x, int y)
@@ -763,6 +779,12 @@ namespace Services
             }
 
             return result;
+        }
+
+        private void SaveBoardToProgress()
+        {
+            _persistentProgressService.Progress.BoardData.LevelBoardData = new LevelBoardData(_levelName, _tiles, _gamePieces);
+            _saveLoadService.SaveProgress();
         }
     }
 }

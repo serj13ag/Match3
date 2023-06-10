@@ -19,8 +19,8 @@ namespace Infrastructure
         public IUiFactory UiFactory { get; private set; }
         public IWindowService WindowService { get; private set; }
 
-        public SoundMonoService SoundMonoService { get; private set; }
-        public LoadingCurtainMonoService LoadingCurtainMonoService { get; private set; }
+        public ISoundMonoService SoundMonoService { get; private set; }
+        public ILoadingCurtainMonoService LoadingCurtainMonoService { get; private set; }
         public UpdateMonoService UpdateMonoService { get; private set; }
 
         public GlobalServices(SceneLoader sceneLoader)

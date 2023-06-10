@@ -8,7 +8,7 @@ namespace Services
     public class GameRoundService
     {
         private readonly GameStateMachine _gameStateMachine;
-        private readonly SoundMonoService _soundMonoService;
+        private readonly ISoundMonoService _soundMonoService;
         private readonly IWindowService _windowService;
 
         private readonly string _levelName;
@@ -17,7 +17,7 @@ namespace Services
 
         public bool RoundIsActive => _roundIsActive;
 
-        public GameRoundService(string levelName, GameStateMachine gameStateMachine, SoundMonoService soundMonoService,
+        public GameRoundService(string levelName, GameStateMachine gameStateMachine, ISoundMonoService soundMonoService,
             IWindowService windowService)
         {
             _levelName = levelName;

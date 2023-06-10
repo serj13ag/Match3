@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Services.Mono.Sound
 {
-    public class SoundMonoService : MonoBehaviour
+    public class SoundMonoService : MonoBehaviour, ISoundMonoService
     {
         [SerializeField] private OneShotAudioSource _oneShotAudioSourcePrefab;
         [SerializeField] private LoopAudioSource _loopAudioSource;

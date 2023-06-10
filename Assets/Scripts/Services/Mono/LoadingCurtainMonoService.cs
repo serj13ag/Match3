@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Services.Mono
 {
-    public class LoadingCurtainMonoService : MonoBehaviour
+    public class LoadingCurtainMonoService : MonoBehaviour, ILoadingCurtainMonoService
     {
         [SerializeField] private MaskableGraphic _fadeMaskableGraphic;
 

@@ -24,7 +24,7 @@ namespace Services
         private readonly IGameFactory _gameFactory;
         private readonly IRandomService _randomService;
         private readonly ScoreService _scoreService;
-        private readonly SoundMonoService _soundMonoService;
+        private readonly ISoundMonoService _soundMonoService;
         private readonly PersistentProgressService _persistentProgressService;
         private readonly ISaveLoadService _saveLoadService;
         private readonly IStaticDataService _staticDataService;
@@ -53,7 +53,7 @@ namespace Services
         public event Action OnGamePiecesSwitched;
 
         public BoardService(string levelName, IRandomService randomService, IStaticDataService staticDataService,
-            SoundMonoService soundMonoService, UpdateMonoService updateMonoService,
+            ISoundMonoService soundMonoService, UpdateMonoService updateMonoService,
             PersistentProgressService persistentProgressService, ISaveLoadService saveLoadService,
             IGameFactory gameFactory, ScoreService scoreService, GameRoundService gameRoundService,
             ParticleService particleService)

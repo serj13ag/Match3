@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Services
 {
-    public class ScoreService
+    public class ScoreService : IScoreService
     {
         private readonly IGameRoundService _gameRoundService;
 

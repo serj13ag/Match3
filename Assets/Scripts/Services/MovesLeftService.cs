@@ -3,9 +3,9 @@ using EventArgs;
 
 namespace Services
 {
-    public class MovesLeftService
+    public class MovesLeftService : IMovesLeftService
     {
-        private readonly ScoreService _scoreService;
+        private readonly IScoreService _scoreService;
         private readonly IGameRoundService _gameRoundService;
 
         private int _movesLeft;
@@ -14,7 +14,7 @@ namespace Services
 
         public event EventHandler<MovesLeftChangedEventArgs> OnMovesLeftChanged;
 
-        public MovesLeftService(BoardService boardService, ScoreService scoreService, IGameRoundService gameRoundService,
+        public MovesLeftService(BoardService boardService, IScoreService scoreService, IGameRoundService gameRoundService,
             int movesLeft)
         {
             _scoreService = scoreService;

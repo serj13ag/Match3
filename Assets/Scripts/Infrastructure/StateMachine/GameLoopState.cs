@@ -64,13 +64,13 @@ namespace Infrastructure.StateMachine
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
             IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService);
-            ScoreService scoreService = new ScoreService(gameRoundService, scoreGoal);
+            IScoreService scoreService = new ScoreService(gameRoundService, scoreGoal);
 
             BoardService boardService = new BoardService(levelName, _randomService, _staticDataService,
                 _soundMonoService, _updateMonoService, _persistentProgressService, _saveLoadService, gameFactory,
                 scoreService, gameRoundService, particleService);
 
-            MovesLeftService movesLeftService = new MovesLeftService(boardService, scoreService, gameRoundService, movesLeft);
+            IMovesLeftService movesLeftService = new MovesLeftService(boardService, scoreService, gameRoundService, movesLeft);
             CameraService cameraService = new CameraService(boardService.BoardSize);
 
             BackgroundScreen backgroundScreen = _assetProviderService.Instantiate<BackgroundScreen>(AssetPaths.BackgroundScreenPath);

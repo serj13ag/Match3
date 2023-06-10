@@ -9,7 +9,7 @@ namespace UI.Background
     {
         [SerializeField] private TMP_Text _movesLeftText;
 
-        public void Init(MovesLeftService movesLeftService)
+        public void Init(IMovesLeftService movesLeftService)
         {
             UpdateMovesLeftText(movesLeftService.MovesLeft);
 

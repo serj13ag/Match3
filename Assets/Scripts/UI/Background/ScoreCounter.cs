@@ -14,7 +14,7 @@ namespace UI.Background
         private int _currentScore;
         private Coroutine _updateScoreRoutine;
 
-        public void Init(ScoreService scoreService)
+        public void Init(IScoreService scoreService)
         {
             UpdateScoreText(scoreService.Score);
 

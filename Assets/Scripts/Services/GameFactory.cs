@@ -15,13 +15,13 @@ namespace Services
         private const string GamePiecesContainerName = "GamePieces";
 
         private readonly IRandomService _randomService;
-        private readonly StaticDataService _staticDataService;
+        private readonly IStaticDataService _staticDataService;
         private readonly ParticleService _particleService;
 
         private readonly Transform _tilesContainerTransform;
         private readonly Transform _gamePiecesContainerTransform;
 
-        public GameFactory(IRandomService randomService, StaticDataService staticDataService,
+        public GameFactory(IRandomService randomService, IStaticDataService staticDataService,
             ParticleService particleService)
         {
             _randomService = randomService;
@@ -37,7 +37,7 @@ namespace Services
 
         public ITile CreateTile(TileType tileType, int x, int y)
         {
-            TileStaticData tileData = _staticDataService.Tiles[tileType];
+            TileStaticData tileData = _staticDataService.GetDataForTile(tileType);
             BaseTile tile = Instantiate(tileData.Prefab, new Vector3(x, y, 0));
             tile.Init(tileData, x, y, _tilesContainerTransform, _particleService);
             return tile;
@@ -65,7 +65,7 @@ namespace Services
 
         public GamePiece CreateGamePiece(GamePieceType gamePieceType, GamePieceColor color, int x, int y)
         {
-            GamePieceStaticData gamePieceData = _staticDataService.GamePieces[gamePieceType];
+            GamePieceStaticData gamePieceData = _staticDataService.GetDataForGamePiece(gamePieceType);
             GamePiece gamePiece = Instantiate(gamePieceData.Prefab, Vector3.zero);
             gamePiece.Init(gamePieceData, color, x, y, _gamePiecesContainerTransform, _staticDataService);
             return gamePiece;
@@ -85,8 +85,8 @@ namespace Services
 
         private GamePieceColor GetRandomGamePieceColor(string levelName)
         {
-            int randomIndex = _randomService.Next(_staticDataService.Levels[levelName].AvailableColors.Length);
-            return _staticDataService.Levels[levelName].AvailableColors[randomIndex];
+            int randomIndex = _randomService.Next(_staticDataService.GetDataForLevel(levelName).AvailableColors.Length);
+            return _staticDataService.GetDataForLevel(levelName).AvailableColors[randomIndex];
         }
 
         private GamePieceType GetRandomCollectibleGamePieceType()

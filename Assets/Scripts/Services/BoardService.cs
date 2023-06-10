@@ -27,7 +27,7 @@ namespace Services
         private readonly SoundMonoService _soundMonoService;
         private readonly PersistentProgressService _persistentProgressService;
         private readonly SaveLoadService _saveLoadService;
-        private readonly StaticDataService _staticDataService;
+        private readonly IStaticDataService _staticDataService;
         private readonly GameRoundService _gameRoundService;
 
         private readonly int _width;
@@ -52,7 +52,7 @@ namespace Services
 
         public event Action OnGamePiecesSwitched;
 
-        public BoardService(string levelName, IRandomService randomService, StaticDataService staticDataService,
+        public BoardService(string levelName, IRandomService randomService, IStaticDataService staticDataService,
             SoundMonoService soundMonoService, UpdateMonoService updateMonoService,
             PersistentProgressService persistentProgressService, SaveLoadService saveLoadService,
             IGameFactory gameFactory, ScoreService scoreService, GameRoundService gameRoundService,
@@ -103,7 +103,7 @@ namespace Services
             }
             else
             {
-                SetupNewBoard(_staticDataService.Levels[_levelName]);
+                SetupNewBoard(_staticDataService.GetDataForLevel(_levelName));
             }
         }
 

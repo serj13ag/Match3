@@ -6,9 +6,9 @@ namespace Services
 {
     public class ParticleService
     {
-        private readonly StaticDataService _staticDataService;
+        private readonly IStaticDataService _staticDataService;
 
-        public ParticleService(StaticDataService staticDataService)
+        public ParticleService(IStaticDataService staticDataService)
         {
             _staticDataService = staticDataService;
         }
@@ -24,7 +24,7 @@ namespace Services
 
         private ParticleEffect GetEffectPrefab(ParticleEffectType particleEffectType)
         {
-            return _staticDataService.ParticleEffects[particleEffectType].Prefab;
+            return _staticDataService.GetDataForParticleEffect(particleEffectType).Prefab;
         }
     }
 }

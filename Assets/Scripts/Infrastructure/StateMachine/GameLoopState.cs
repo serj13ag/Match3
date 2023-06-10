@@ -15,7 +15,7 @@ namespace Infrastructure.StateMachine
         private readonly LoadingCurtainMonoService _loadingCurtainMonoService;
         private readonly IAssetProviderService _assetProviderService;
         private readonly IRandomService _randomService;
-        private readonly StaticDataService _staticDataService;
+        private readonly IStaticDataService _staticDataService;
         private readonly SoundMonoService _soundMonoService;
         private readonly UpdateMonoService _updateMonoService;
         private readonly PersistentProgressService _persistentProgressService;
@@ -25,7 +25,7 @@ namespace Infrastructure.StateMachine
 
         public GameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             LoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
-            IRandomService randomService, StaticDataService staticDataService, SoundMonoService soundMonoService,
+            IRandomService randomService, IStaticDataService staticDataService, SoundMonoService soundMonoService,
             UpdateMonoService updateMonoService, PersistentProgressService persistentProgressService,
             UiFactory uiFactory, WindowService windowService, SaveLoadService saveLoadService)
         {
@@ -57,7 +57,7 @@ namespace Infrastructure.StateMachine
         {
             _uiFactory.CreateUiRootCanvas();
 
-            LevelStaticData levelStaticData = _staticDataService.Levels[levelName];
+            LevelStaticData levelStaticData = _staticDataService.GetDataForLevel(levelName);
             int scoreGoal = levelStaticData.ScoreGoal;
             int movesLeft = levelStaticData.MovesLeft;
 

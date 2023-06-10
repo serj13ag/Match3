@@ -13,7 +13,8 @@ namespace Entities
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
-        private StaticDataService _staticDataService;
+        private IStaticDataService _staticDataService;
+
         private bool _isMoving;
         private GamePieceType _type;
         private Vector2Int _position;
@@ -44,7 +45,7 @@ namespace Entities
         public event Action<GamePiece> OnStartMoving;
 
         public void Init(GamePieceStaticData gamePieceData, GamePieceColor color, int x, int y,
-            Transform parentTransform, StaticDataService staticDataService)
+            Transform parentTransform, IStaticDataService staticDataService)
         {
             _staticDataService = staticDataService;
 
@@ -123,7 +124,7 @@ namespace Entities
 
             if (color != GamePieceColor.Undefined)
             {
-                _spriteRenderer.color = _staticDataService.Colors[color];
+                _spriteRenderer.color = _staticDataService.GetColorForGamePiece(color);
             }
         }
     }

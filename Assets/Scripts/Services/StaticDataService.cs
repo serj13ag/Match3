@@ -7,37 +7,87 @@ using UnityEngine;
 
 namespace Services
 {
-    public class StaticDataService
+    public class StaticDataService : IStaticDataService
     {
-        public Dictionary<TileType, TileStaticData> Tiles { get; }
-        public Dictionary<GamePieceType, GamePieceStaticData> GamePieces { get; }
-        public Dictionary<GamePieceColor, Color> Colors { get; }
+        private readonly Dictionary<TileType, TileStaticData> _tiles;
+        private readonly Dictionary<GamePieceType, GamePieceStaticData> _gamePieces;
+        private readonly Dictionary<GamePieceColor, Color> _colors;
+        private readonly Dictionary<string, LevelStaticData> _levels;
+        private readonly Dictionary<ParticleEffectType, ParticleEffectStaticData> _particleEffects;
 
-        public Dictionary<string, LevelStaticData> Levels { get; }
+        private readonly SettingsStaticData _settings;
 
-        public SettingsStaticData Settings { get; }
-
-        public Dictionary<ParticleEffectType, ParticleEffectStaticData> ParticleEffects { get; }
+        public SettingsStaticData Settings => _settings;
 
         public StaticDataService()
         {
-            Tiles = LoadFilesFromResources<TileStaticData>(AssetPaths.TilesDataPath)
+            _tiles = LoadFilesFromResources<TileStaticData>(AssetPaths.TilesDataPath)
                 .ToDictionary(x => x.Type, x => x);
 
-            GamePieces = LoadFilesFromResources<GamePieceStaticData>(AssetPaths.GamePiecesDataPath)
+            _gamePieces = LoadFilesFromResources<GamePieceStaticData>(AssetPaths.GamePiecesDataPath)
                 .ToDictionary(x => x.Type, x => x);
 
-            Colors = LoadFileFromResources<ColorsStaticData>(AssetPaths.ColorsDataPath)
+            _colors = LoadFileFromResources<ColorsStaticData>(AssetPaths.ColorsDataPath)
                 .GamePieceColors
                 .ToDictionary(x => x.Type, x => x.Color);
 
-            Levels = LoadFilesFromResources<LevelStaticData>(AssetPaths.LevelsDataPath)
+            _levels = LoadFilesFromResources<LevelStaticData>(AssetPaths.LevelsDataPath)
                 .ToDictionary(x => x.LevelName, x => x);
 
-            Settings = LoadFileFromResources<SettingsStaticData>(AssetPaths.SettingsDataPath);
+            _settings = LoadFileFromResources<SettingsStaticData>(AssetPaths.SettingsDataPath);
 
-            ParticleEffects = LoadFilesFromResources<ParticleEffectStaticData>(AssetPaths.ParticleEffectsDataPath)
+            _particleEffects = LoadFilesFromResources<ParticleEffectStaticData>(AssetPaths.ParticleEffectsDataPath)
                 .ToDictionary(x => x.Type, x => x);
+        }
+
+        public TileStaticData GetDataForTile(TileType tileType)
+        {
+            if (_tiles.TryGetValue(tileType, out TileStaticData tileStaticData))
+            {
+                return tileStaticData;
+            }
+
+            return null;
+        }
+
+        public GamePieceStaticData GetDataForGamePiece(GamePieceType gamePieceType)
+        {
+            if (_gamePieces.TryGetValue(gamePieceType, out GamePieceStaticData gamePieceStaticData))
+            {
+                return gamePieceStaticData;
+            }
+
+            return null;
+        }
+
+        public Color GetColorForGamePiece(GamePieceColor gamePieceColor)
+        {
+            if (_colors.TryGetValue(gamePieceColor, out Color color))
+            {
+                return color;
+            }
+
+            return Color.white;
+        }
+
+        public LevelStaticData GetDataForLevel(string levelName)
+        {
+            if (_levels.TryGetValue(levelName, out LevelStaticData levelStaticData))
+            {
+                return levelStaticData;
+            }
+
+            return null;
+        }
+
+        public ParticleEffectStaticData GetDataForParticleEffect(ParticleEffectType particleEffectType)
+        {
+            if (_particleEffects.TryGetValue(particleEffectType, out ParticleEffectStaticData particleEffectStaticData))
+            {
+                return particleEffectStaticData;
+            }
+
+            return null;
         }
 
         private static T LoadFileFromResources<T>(string path) where T : Object

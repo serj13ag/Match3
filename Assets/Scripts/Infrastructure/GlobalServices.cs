@@ -16,8 +16,8 @@ namespace Infrastructure
         public PersistentProgressService PersistentProgressService { get; private set; }
         public ISaveLoadService SaveLoadService { get; private set; }
 
-        public UiFactory UiFactory { get; private set; }
-        public WindowService WindowService { get; private set; }
+        public IUiFactory UiFactory { get; private set; }
+        public IWindowService WindowService { get; private set; }
 
         public SoundMonoService SoundMonoService { get; private set; }
         public LoadingCurtainMonoService LoadingCurtainMonoService { get; private set; }

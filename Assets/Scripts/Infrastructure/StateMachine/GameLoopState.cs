@@ -19,15 +19,15 @@ namespace Infrastructure.StateMachine
         private readonly SoundMonoService _soundMonoService;
         private readonly UpdateMonoService _updateMonoService;
         private readonly PersistentProgressService _persistentProgressService;
-        private readonly UiFactory _uiFactory;
-        private readonly WindowService _windowService;
+        private readonly IUiFactory _uiFactory;
+        private readonly IWindowService _windowService;
         private readonly ISaveLoadService _saveLoadService;
 
         public GameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             LoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
             IRandomService randomService, IStaticDataService staticDataService, SoundMonoService soundMonoService,
             UpdateMonoService updateMonoService, PersistentProgressService persistentProgressService,
-            UiFactory uiFactory, WindowService windowService, ISaveLoadService saveLoadService)
+            IUiFactory uiFactory, IWindowService windowService, ISaveLoadService saveLoadService)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;

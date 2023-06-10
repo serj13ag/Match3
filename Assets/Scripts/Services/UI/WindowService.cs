@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Services.UI
 {
-    public class WindowService
+    public class WindowService : IWindowService
     {
-        private readonly UiFactory _uiFactory;
+        private readonly IUiFactory _uiFactory;
         private readonly IAssetProviderService _assetProviderService;
 
-        public WindowService(UiFactory uiFactory, IAssetProviderService assetProviderService)
+        public WindowService(IUiFactory uiFactory, IAssetProviderService assetProviderService)
         {
             _uiFactory = uiFactory;
             _assetProviderService = assetProviderService;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Services.UI
 {
-    public class UiFactory
+    public class UiFactory : IUiFactory
     {
         private readonly IAssetProviderService _assetProviderService;
 

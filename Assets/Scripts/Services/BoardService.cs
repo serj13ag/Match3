@@ -29,14 +29,13 @@ namespace Services
         private readonly ISoundMonoService _soundMonoService;
         private readonly IPersistentProgressService _persistentProgressService;
         private readonly ISaveLoadService _saveLoadService;
-        private readonly IStaticDataService _staticDataService;
         private readonly IGameRoundService _gameRoundService;
 
         private readonly int _width;
         private readonly int _height;
         private readonly string _levelName;
 
-        private GamePiece[,] _gamePieces;
+        private readonly GamePiece[,] _gamePieces;
 
         private readonly Stack<GamePiece> _movedPieces;
         private int _collapsedGamePieces;
@@ -57,7 +56,6 @@ namespace Services
             IGameFactory gameFactory, IScoreService scoreService, IGameRoundService gameRoundService,
             IParticleService particleService, ITileService tileService)
         {
-            _staticDataService = staticDataService;
             _scoreService = scoreService;
             _particleService = particleService;
             _tileService = tileService;
@@ -76,9 +74,19 @@ namespace Services
             _width = staticDataService.Settings.BoardWidth;
             _height = staticDataService.Settings.BoardHeight;
 
-            updateMonoService.Register(this);
+            _gamePieces = new GamePiece[_width, _height];
 
-            Setup(persistentProgressService.Progress);
+            LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
+            if (_levelName == levelBoardData.LevelName && levelBoardData.GamePieces != null)
+            {
+                SetupFromLoadData(levelBoardData);
+            }
+            else
+            {
+                SetupNewBoard(staticDataService.GetDataForLevel(_levelName));
+            }
+
+            updateMonoService.Register(this);
 
             tileService.OnMoveRequested += OnMoveRequested;
         }
@@ -91,21 +99,6 @@ namespace Services
             }
             
             _commandBlock.Update(deltaTime);
-        }
-
-        private void Setup(PlayerProgress progress)
-        {
-            _gamePieces = new GamePiece[_width, _height];
-
-            LevelBoardData levelBoardData = progress.BoardData.LevelBoardData;
-            if (_levelName == levelBoardData.LevelName && levelBoardData.GamePieces != null)
-            {
-                SetupFromLoadData(levelBoardData);
-            }
-            else
-            {
-                SetupNewBoard(_staticDataService.GetDataForLevel(_levelName));
-            }
         }
 
         private void SetupFromLoadData(LevelBoardData levelBoardData)

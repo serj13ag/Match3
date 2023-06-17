@@ -7,6 +7,7 @@ using Data;
 using DTO;
 using Entities;
 using Enums;
+using EventArguments;
 using Helpers;
 using Interfaces;
 using Services.Mono;
@@ -21,6 +22,7 @@ namespace Services
     public class BoardService : IUpdatable, IBoardService
     {
         private readonly IParticleService _particleService;
+        private readonly ITileService _tileService;
         private readonly IGameFactory _gameFactory;
         private readonly IRandomService _randomService;
         private readonly IScoreService _scoreService;
@@ -34,11 +36,8 @@ namespace Services
         private readonly int _height;
         private readonly string _levelName;
 
-        private ITile[,] _tiles;
         private GamePiece[,] _gamePieces;
 
-        private ITile _clickedTile;
-        private ITile _targetTile;
         private readonly Stack<GamePiece> _movedPieces;
         private int _collapsedGamePieces;
 
@@ -56,11 +55,12 @@ namespace Services
             ISoundMonoService soundMonoService, IUpdateMonoService updateMonoService,
             IPersistentProgressService persistentProgressService, ISaveLoadService saveLoadService,
             IGameFactory gameFactory, IScoreService scoreService, IGameRoundService gameRoundService,
-            IParticleService particleService)
+            IParticleService particleService, ITileService tileService)
         {
             _staticDataService = staticDataService;
             _scoreService = scoreService;
             _particleService = particleService;
+            _tileService = tileService;
             _gameFactory = gameFactory;
             _randomService = randomService;
             _soundMonoService = soundMonoService;
@@ -79,6 +79,8 @@ namespace Services
             updateMonoService.Register(this);
 
             Setup(persistentProgressService.Progress);
+
+            tileService.OnMoveRequested += OnTileMovement;
         }
 
         public void OnUpdate(float deltaTime)
@@ -93,11 +95,10 @@ namespace Services
 
         private void Setup(PlayerProgress progress)
         {
-            _tiles = new ITile[_width, _height];
             _gamePieces = new GamePiece[_width, _height];
 
             LevelBoardData levelBoardData = progress.BoardData.LevelBoardData;
-            if (_levelName == levelBoardData.LevelName && levelBoardData.Tiles != null && levelBoardData.GamePieces != null)
+            if (_levelName == levelBoardData.LevelName && levelBoardData.GamePieces != null)
             {
                 SetupFromLoadData(levelBoardData);
             }
@@ -109,11 +110,6 @@ namespace Services
 
         private void SetupFromLoadData(LevelBoardData levelBoardData)
         {
-            foreach (TileSaveData tile in levelBoardData.Tiles)
-            {
-                SpawnTile(tile.Type, tile.Position.x, tile.Position.y);
-            }
-
             foreach (GamePieceSaveData gamePiece in levelBoardData.GamePieces)
             {
                 SpawnCustomGamePiece(gamePiece.Position.x, gamePiece.Position.y, gamePiece.Type, gamePiece.Color);
@@ -122,22 +118,6 @@ namespace Services
 
         private void SetupNewBoard(LevelStaticData levelStaticData)
         {
-            foreach (StartingTileStaticData startingTile in levelStaticData.StartingTiles.StartingTiles)
-            {
-                SpawnTile(startingTile.Type, startingTile.X, startingTile.Y);
-            }
-
-            for (int i = 0; i < _width; i++)
-            {
-                for (int j = 0; j < _height; j++)
-                {
-                    if (!TryGetTileAt(i, j, out _))
-                    {
-                        SpawnTile(TileType.Normal, i, j);
-                    }
-                }
-            }
-
             foreach (StartingGamePieceStaticData startingGamePieceEntry in levelStaticData.StartingGamePieces.StartingGamePieces)
             {
                 SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y, startingGamePieceEntry.Type,
@@ -147,28 +127,13 @@ namespace Services
             FillBoardWithRandomGamePieces();
         }
 
-        private void SpawnTile(TileType tileType, int x, int y)
-        {
-            ITile tile = _gameFactory.CreateTile(tileType, x, y);
-            RegisterTile(x, y, tile);
-        }
-
-        private void RegisterTile(int x, int y, ITile tile)
-        {
-            tile.OnClicked += OnTileClicked;
-            tile.OnMouseEntered += OnTileMouseEntered;
-            tile.OnMouseReleased += OnTileMouseReleased;
-
-            _tiles[x, y] = tile;
-        }
-
         private void FillBoardWithRandomGamePieces()
         {
             for (var i = 0; i < _width; i++)
             {
                 for (var j = 0; j < _height; j++)
                 {
-                    if (_gamePieces[i, j] != null || _tiles[i, j].IsObstacle)
+                    if (_gamePieces[i, j] != null || _tileService.Tiles[i, j].IsObstacle)
                     {
                         continue;
                     }
@@ -265,38 +230,21 @@ namespace Services
             }
         }
 
-        private void OnTileClicked(ITile tile)
+        private void OnTileMovement(object sender, MoveRequestedEventArgs e)
         {
-            _clickedTile ??= tile;
-        }
+            Vector2Int fromPosition = e.FromPosition;
+            Vector2Int toPosition = e.ToPosition;
 
-        private void OnTileMouseEntered(ITile tile)
-        {
-            if (_clickedTile != null && TileHelper.IsNeighbours(_clickedTile, tile))
+            if (TryGetGamePieceAt(fromPosition, out _) && TryGetGamePieceAt(toPosition, out _))
             {
-                _targetTile = tile;
+                SwitchGamePieces(fromPosition, toPosition);
             }
         }
 
-        private void OnTileMouseReleased()
+        private void SwitchGamePieces(Vector2Int fromPosition, Vector2Int toPosition)
         {
-            if (!_commandBlock.IsActive
-                && _clickedTile != null
-                && _targetTile != null
-                && TryGetGamePieceAt(_clickedTile.Position, out _)
-                && TryGetGamePieceAt(_targetTile.Position, out _))
-            {
-                SwitchGamePieces(_clickedTile, _targetTile);
-            }
-
-            _clickedTile = null;
-            _targetTile = null;
-        }
-
-        private void SwitchGamePieces(ITile clickedTile, ITile targetTile)
-        {
-            GamePiece clickedGamePiece = _gamePieces[clickedTile.Position.x, clickedTile.Position.y];
-            GamePiece targetGamePiece = _gamePieces[targetTile.Position.x, targetTile.Position.y];
+            GamePiece clickedGamePiece = _gamePieces[fromPosition.x, fromPosition.y];
+            GamePiece targetGamePiece = _gamePieces[toPosition.x, toPosition.y];
 
             _playerSwitchGamePiecesDirection = clickedGamePiece.Position.x != targetGamePiece.Position.x
                 ? Direction.Horizontal
@@ -304,8 +252,8 @@ namespace Services
 
             _completedBreakIterationsAfterSwitchedGamePieces = 0;
 
-            clickedGamePiece.Move(targetTile.Position, true);
-            targetGamePiece.Move(clickedTile.Position, true);
+            clickedGamePiece.Move(toPosition, true);
+            targetGamePiece.Move(fromPosition, true);
         }
 
         private void HandlePieceMovedByPlayer(GamePiece gamePiece)
@@ -502,7 +450,7 @@ namespace Services
                     _completedBreakIterationsAfterSwitchedGamePieces);
 
                 ClearGamePieceAt(gamePiece.Position, true);
-                ProcessTileMatchAt(gamePiece.Position);
+                _tileService.ProcessTileMatchAt(gamePiece.Position);
             }
 
             _soundMonoService.PlaySound(SoundType.BreakGamePieces);
@@ -539,18 +487,10 @@ namespace Services
 
             if (breakOnMatch)
             {
-                var particleEffectType = gamePiece.Bombed
+                ParticleEffectType particleEffectType = gamePiece.Bombed
                     ? ParticleEffectType.Bomb
                     : ParticleEffectType.Clear;
                 _particleService.PlayParticleEffectAt(position, particleEffectType);
-            }
-        }
-
-        private void ProcessTileMatchAt(Vector2Int position)
-        {
-            if (TryGetTileAt(position.x, position.y, out ITile tile))
-            {
-                tile.ProcessMatch();
             }
         }
 
@@ -597,7 +537,7 @@ namespace Services
                         availableRows.Enqueue(row);
                     }
                 }
-                else if (!_tiles[column, row].IsObstacle)
+                else if (!_tileService.Tiles[column, row].IsObstacle)
                 {
                     availableRows.Enqueue(row);
                 }
@@ -618,13 +558,6 @@ namespace Services
             gamePiece = _gamePieces[position.x, position.y];
 
             return gamePiece != null;
-        }
-
-        private bool TryGetTileAt(int x, int y, out ITile tile)
-        {
-            tile = _tiles[x, y];
-
-            return tile != null;
         }
 
         private bool HasMatches(IEnumerable<GamePiece> gamePieces, out HashSet<GamePiece> allMatches)
@@ -783,7 +716,7 @@ namespace Services
 
         private void SaveBoardToProgress()
         {
-            _persistentProgressService.Progress.BoardData.LevelBoardData = new LevelBoardData(_levelName, _tiles, _gamePieces);
+            _persistentProgressService.Progress.BoardData.LevelBoardData = new LevelBoardData(_levelName, _tileService.Tiles, _gamePieces);
             _saveLoadService.SaveProgress();
         }
     }

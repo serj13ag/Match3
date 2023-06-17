@@ -1,5 +1,5 @@
 ﻿using System;
-using EventArgs;
+using EventArguments;
 
 namespace Services
 {

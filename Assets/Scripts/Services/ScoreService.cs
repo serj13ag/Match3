@@ -1,6 +1,6 @@
 ﻿using System;
 using Constants;
-using EventArgs;
+using EventArguments;
 using UnityEngine;
 
 namespace Services

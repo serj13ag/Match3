@@ -1,6 +1,8 @@
-﻿namespace EventArgs
+﻿using System;
+
+namespace EventArguments
 {
-    public class ScoreChangedEventArgs : System.EventArgs
+    public class ScoreChangedEventArgs : EventArgs
     {
         public int Score { get; }
 

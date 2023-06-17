@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using Constants;
-using EventArgs;
+using EventArguments;
 using Services;
 using TMPro;
 using UnityEngine;

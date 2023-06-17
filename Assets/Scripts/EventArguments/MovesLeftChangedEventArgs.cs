@@ -1,6 +1,8 @@
-namespace EventArgs
+using System;
+
+namespace EventArguments
 {
-    public class MovesLeftChangedEventArgs : System.EventArgs
+    public class MovesLeftChangedEventArgs : EventArgs
     {
         public int MovesLeft { get; }
 

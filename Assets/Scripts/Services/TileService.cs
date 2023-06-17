@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Data;
 using Enums;
 using EventArguments;
@@ -12,6 +13,7 @@ namespace Services
 {
     public class TileService : ITileService
     {
+        private readonly IPersistentProgressService _persistentProgressService;
         private readonly IGameFactory _gameFactory;
 
         private readonly ITile[,] _tiles;
@@ -19,13 +21,12 @@ namespace Services
         private ITile _clickedTile;
         private ITile _targetTile;
 
-        public ITile[,] Tiles => _tiles;
-
         public event EventHandler<MoveRequestedEventArgs> OnMoveRequested;
 
         public TileService(string levelName, IStaticDataService staticDataService,
             IPersistentProgressService persistentProgressService, IGameFactory gameFactory)
         {
+            _persistentProgressService = persistentProgressService;
             _gameFactory = gameFactory;
 
             int width = staticDataService.Settings.BoardWidth;
@@ -50,6 +51,23 @@ namespace Services
             {
                 tile.ProcessMatch();
             }
+        }
+
+        public bool IsObstacleAt(int column, int row)
+        {
+            return _tiles[column, row].IsObstacle;
+        }
+
+        public void UpdateProgress()
+        {
+            List<TileSaveData> tilesSaveData = new List<TileSaveData>();
+
+            foreach (ITile tile in _tiles)
+            {
+                tilesSaveData.Add(new TileSaveData(tile.Type, tile.Position));
+            }
+
+            _persistentProgressService.Progress.BoardData.LevelBoardData.Tiles = tilesSaveData;
         }
 
         private void SetupFromLoadData(LevelBoardData levelBoardData)

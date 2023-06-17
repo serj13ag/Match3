@@ -80,7 +80,7 @@ namespace Services
 
             Setup(persistentProgressService.Progress);
 
-            tileService.OnMoveRequested += OnTileMovement;
+            tileService.OnMoveRequested += OnMoveRequested;
         }
 
         public void OnUpdate(float deltaTime)
@@ -133,7 +133,7 @@ namespace Services
             {
                 for (var j = 0; j < _height; j++)
                 {
-                    if (_gamePieces[i, j] != null || _tileService.Tiles[i, j].IsObstacle)
+                    if (_gamePieces[i, j] != null || _tileService.IsObstacleAt(i, j))
                     {
                         continue;
                     }
@@ -153,7 +153,7 @@ namespace Services
                 }
             }
 
-            SaveBoardToProgress();
+            UpdateProgressAndSave();
         }
 
         private bool TrySpawnCollectibleGamePiece(int x, int y)
@@ -230,30 +230,29 @@ namespace Services
             }
         }
 
-        private void OnTileMovement(object sender, MoveRequestedEventArgs e)
+        private void OnMoveRequested(object sender, MoveRequestedEventArgs e)
         {
-            Vector2Int fromPosition = e.FromPosition;
-            Vector2Int toPosition = e.ToPosition;
-
-            if (TryGetGamePieceAt(fromPosition, out _) && TryGetGamePieceAt(toPosition, out _))
+            if (!_commandBlock.IsActive
+                && TryGetGamePieceAt(e.FromPosition, out GamePiece firstGamePiece)
+                && TryGetGamePieceAt(e.ToPosition, out GamePiece secondGamePiece))
             {
-                SwitchGamePieces(fromPosition, toPosition);
+                SwitchGamePieces(firstGamePiece, secondGamePiece);
             }
         }
 
-        private void SwitchGamePieces(Vector2Int fromPosition, Vector2Int toPosition)
+        private void SwitchGamePieces(GamePiece firstGamePiece, GamePiece secondGamePiece)
         {
-            GamePiece clickedGamePiece = _gamePieces[fromPosition.x, fromPosition.y];
-            GamePiece targetGamePiece = _gamePieces[toPosition.x, toPosition.y];
+            Vector2Int firstGamePiecePosition = firstGamePiece.Position;
+            Vector2Int secondGamePiecePosition = secondGamePiece.Position;
 
-            _playerSwitchGamePiecesDirection = clickedGamePiece.Position.x != targetGamePiece.Position.x
+            _playerSwitchGamePiecesDirection = firstGamePiecePosition.x != secondGamePiecePosition.x
                 ? Direction.Horizontal
                 : Direction.Vertical;
 
             _completedBreakIterationsAfterSwitchedGamePieces = 0;
 
-            clickedGamePiece.Move(toPosition, true);
-            targetGamePiece.Move(fromPosition, true);
+            firstGamePiece.Move(secondGamePiecePosition, true);
+            secondGamePiece.Move(firstGamePiecePosition, true);
         }
 
         private void HandlePieceMovedByPlayer(GamePiece gamePiece)
@@ -537,7 +536,7 @@ namespace Services
                         availableRows.Enqueue(row);
                     }
                 }
-                else if (!_tileService.Tiles[column, row].IsObstacle)
+                else if (!_tileService.IsObstacleAt(column, row))
                 {
                     availableRows.Enqueue(row);
                 }
@@ -714,9 +713,22 @@ namespace Services
             return result;
         }
 
-        private void SaveBoardToProgress()
+        private void UpdateProgressAndSave()
         {
-            _persistentProgressService.Progress.BoardData.LevelBoardData = new LevelBoardData(_levelName, _tileService.Tiles, _gamePieces);
+            List<GamePieceSaveData> gamePieceSaveData = new List<GamePieceSaveData>();
+
+            foreach (GamePiece gamePiece in _gamePieces)
+            {
+                if (gamePiece != null)
+                {
+                    gamePieceSaveData.Add(new GamePieceSaveData(gamePiece.Type, gamePiece.Position, gamePiece.Color));
+                }
+            }
+
+            _persistentProgressService.Progress.BoardData.LevelBoardData.GamePieces = gamePieceSaveData;
+            _persistentProgressService.Progress.BoardData.LevelBoardData.LevelName = _levelName;
+
+            _tileService.UpdateProgress();
             _saveLoadService.SaveProgress();
         }
     }

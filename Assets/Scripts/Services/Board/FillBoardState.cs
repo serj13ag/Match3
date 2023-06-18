@@ -12,7 +12,7 @@ namespace Services.Board
         public FillBoardState(IBoardService boardService)
         {
             _boardService = boardService;
-            _timeTillExecute = Settings.Commands.FillBoardTimeout;
+            _timeTillExecute = Settings.Timeouts.FillBoardTimeout;
         }
 
         public void Update(float deltaTime)

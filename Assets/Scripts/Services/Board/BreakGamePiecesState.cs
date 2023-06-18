@@ -27,7 +27,7 @@ namespace Services.Board
             _soundMonoService = soundMonoService;
 
             _gamePiecesToBreak = gamePiecesToBreak;
-            _timeTillExecute = Settings.Commands.ClearGamePiecesTimeout;
+            _timeTillExecute = Settings.Timeouts.ClearGamePiecesTimeout;
         }
 
         public void Update(float deltaTime)

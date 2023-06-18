@@ -20,7 +20,7 @@ namespace Services.Board
             _boardService = boardService;
 
             _gamePiecesToCollapse = gamePiecesToCollapse;
-            _timeTillExecute = Settings.Commands.CollapseColumnsTimeout;
+            _timeTillExecute = Settings.Timeouts.CollapseColumnsTimeout;
 
             _movedPieces = new Stack<GamePiece>();
         }

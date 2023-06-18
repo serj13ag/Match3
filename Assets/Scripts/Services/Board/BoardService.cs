@@ -258,8 +258,8 @@ namespace Services.Board
 
             //_completedBreakIterationsAfterSwitchedGamePieces = 0;
 
-            firstGamePiece.Move(secondGamePiecePosition, true);
-            secondGamePiece.Move(firstGamePiecePosition, true);
+            firstGamePiece.Move(secondGamePiecePosition);
+            secondGamePiece.Move(firstGamePiecePosition);
 
             return firstGamePiecePosition.x != secondGamePiecePosition.x
                 ? Direction.Horizontal

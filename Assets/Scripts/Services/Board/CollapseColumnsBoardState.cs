@@ -6,35 +6,22 @@ using Helpers;
 
 namespace Services.Board
 {
-    public class CollapseColumnsBoardState : IBoardState
+    public class CollapseColumnsBoardState : BaseBoardStateWithTimeout, IBoardState
     {
         private readonly IBoardService _boardService;
 
         private readonly HashSet<GamePiece> _gamePiecesToCollapse;
-        private float _timeTillExecute;
         private int _collapsedGamePieces;
         private readonly Stack<GamePiece> _movedPieces;
 
         public CollapseColumnsBoardState(IBoardService boardService, HashSet<GamePiece> gamePiecesToCollapse)
+            : base(Settings.Timeouts.CollapseColumnsTimeout)
         {
             _boardService = boardService;
 
             _gamePiecesToCollapse = gamePiecesToCollapse;
-            _timeTillExecute = Settings.Timeouts.CollapseColumnsTimeout;
 
             _movedPieces = new Stack<GamePiece>();
-        }
-
-        public void Update(float deltaTime)
-        {
-            if (_timeTillExecute < 0f)
-            {
-                CollapseColumns(BoardHelper.GetColumnIndexes(_gamePiecesToCollapse));
-            }
-            else
-            {
-                _timeTillExecute -= deltaTime;
-            }
         }
 
         public void OnGamePiecePositionChanged(GamePiece gamePiece)
@@ -64,6 +51,11 @@ namespace Services.Board
                     _boardService.ChangeStateToFill();
                 }
             }
+        }
+
+        protected override void OnTimeoutEnded()
+        {
+            CollapseColumns(BoardHelper.GetColumnIndexes(_gamePiecesToCollapse));
         }
 
         private void CollapseColumns(HashSet<int> columnIndexes)

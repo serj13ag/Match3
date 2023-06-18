@@ -3,33 +3,25 @@ using Entities;
 
 namespace Services.Board
 {
-    public class FillBoardState : IBoardState
+    public class FillBoardState : BaseBoardStateWithTimeout, IBoardState
     {
         private readonly IBoardService _boardService;
 
-        private float _timeTillExecute;
-
+        // TODO : fix timeout bug because must start timeout when collapsed pieces moved to end positions
         public FillBoardState(IBoardService boardService)
+            : base(Settings.Timeouts.FillBoardTimeout)
         {
             _boardService = boardService;
-            _timeTillExecute = Settings.Timeouts.FillBoardTimeout;
-        }
-
-        public void Update(float deltaTime)
-        {
-            if (_timeTillExecute < 0f)
-            {
-                _boardService.FillBoardWithRandomGamePieces();
-                _boardService.ChangeStateToWaiting();
-            }
-            else
-            {
-                _timeTillExecute -= deltaTime;
-            }
         }
 
         public void OnGamePiecePositionChanged(GamePiece gamePiece)
         {
+        }
+
+        protected override void OnTimeoutEnded()
+        {
+            _boardService.FillBoardWithRandomGamePieces();
+            _boardService.ChangeStateToWaiting();
         }
     }
 }

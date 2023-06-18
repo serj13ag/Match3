@@ -6,7 +6,7 @@ using Services.Mono.Sound;
 
 namespace Services.Board
 {
-    internal class BreakGamePiecesState : IBoardState
+    internal class BreakGamePiecesState : BaseBoardStateWithTimeout, IBoardState
     {
         private const int CompletedBreakIterationsAfterSwitchedGamePieces = 1; // TODO: implement mechanic
 
@@ -16,10 +16,10 @@ namespace Services.Board
         private readonly ISoundMonoService _soundMonoService;
 
         private readonly HashSet<GamePiece> _gamePiecesToBreak;
-        private float _timeTillExecute;
 
         public BreakGamePiecesState(IBoardService boardService, IScoreService scoreService, ITileService tileService,
             ISoundMonoService soundMonoService, HashSet<GamePiece> gamePiecesToBreak)
+            : base(Settings.Timeouts.ClearGamePiecesTimeout)
         {
             _boardService = boardService;
             _scoreService = scoreService;
@@ -27,24 +27,16 @@ namespace Services.Board
             _soundMonoService = soundMonoService;
 
             _gamePiecesToBreak = gamePiecesToBreak;
-            _timeTillExecute = Settings.Timeouts.ClearGamePiecesTimeout;
-        }
-
-        public void Update(float deltaTime)
-        {
-            if (_timeTillExecute < 0f)
-            {
-                BreakGamePieces(_gamePiecesToBreak);
-                _boardService.ChangeStateToCollapse(_gamePiecesToBreak);
-            }
-            else
-            {
-                _timeTillExecute -= deltaTime;
-            }
         }
 
         public void OnGamePiecePositionChanged(GamePiece gamePiece)
         {
+        }
+
+        protected override void OnTimeoutEnded()
+        {
+            BreakGamePieces(_gamePiecesToBreak);
+            _boardService.ChangeStateToCollapse(_gamePiecesToBreak);
         }
 
         private void BreakGamePieces(HashSet<GamePiece> gamePieces)

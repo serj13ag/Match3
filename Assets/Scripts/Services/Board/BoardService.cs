@@ -212,6 +212,7 @@ namespace Services.Board
         {
             if (_boardState is WaitingBoardState
                 && TryGetGamePieceAt(e.FromPosition, out GamePiece firstGamePiece)
+                && !firstGamePiece.IsCollectible()
                 && TryGetGamePieceAt(e.ToPosition, out GamePiece secondGamePiece))
             {
                 Direction playerSwitchGamePiecesDirection = SwitchGamePieces(firstGamePiece, secondGamePiece);

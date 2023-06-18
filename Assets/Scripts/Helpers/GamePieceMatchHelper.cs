@@ -8,6 +8,11 @@ namespace Helpers
 {
     public static class GamePieceMatchHelper
     {
+        public static bool IsCollectible(this GamePiece gamePiece)
+        {
+            return gamePiece.Type == GamePieceType.CollectibleByBomb || gamePiece.Type == GamePieceType.CollectibleByBottomRow;
+        }
+
         public static BombType GetBombTypeOnMatch(HashSet<GamePiece> allMatches, Direction playerSwitchGamePiecesDirection)
         {
             BombType bombType;

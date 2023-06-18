@@ -95,6 +95,36 @@ namespace Services.Board
             _boardState.Update(deltaTime);
         }
 
+        public void ChangeStateToCollapse(HashSet<GamePiece> gamePiecesToCollapse)
+        {
+            ChangeState(new CollapseColumnsBoardState(this, gamePiecesToCollapse));
+        }
+
+        public void ChangeStateToFill()
+        {
+            ChangeState(new FillBoardState(this));
+        }
+
+        public void ChangeStateToWaiting()
+        {
+            ChangeState(new WaitingBoardState());
+        }
+
+        public void ChangeStateToBreak(HashSet<GamePiece> gamePiecesToBreak)
+        {
+            ChangeState(new BreakGamePiecesState(this, _scoreService, _tileService, _soundMonoService, gamePiecesToBreak));
+        }
+
+        private void ChangeStateToHandlePlayerSwitchGamePieces(Direction playerSwitchGamePiecesDirection)
+        {
+            ChangeState(new HandlePlayerSwitchGamePiecesBoardState(this, _soundMonoService, playerSwitchGamePiecesDirection));
+        }
+
+        private void ChangeState(IBoardState newBoardState)
+        {
+            _boardState = newBoardState;
+        }
+
         private void SetupFromLoadData(LevelBoardData levelBoardData)
         {
             foreach (GamePieceSaveData gamePiece in levelBoardData.GamePieces)
@@ -266,31 +296,6 @@ namespace Services.Board
                     : ParticleEffectType.Clear;
                 _particleService.PlayParticleEffectAt(position, particleEffectType);
             }
-        }
-
-        public void ChangeStateToCollapse(HashSet<GamePiece> gamePiecesToCollapse)
-        {
-            _boardState = new CollapseColumnsBoardState(this, gamePiecesToCollapse);
-        }
-
-        public void ChangeStateToFill()
-        {
-            _boardState = new FillBoardState(this);
-        }
-
-        public void ChangeStateToWaiting()
-        {
-            _boardState = new WaitingBoardState();
-        }
-
-        public void ChangeStateToBreak(HashSet<GamePiece> gamePiecesToBreak)
-        {
-            _boardState = new BreakGamePiecesState(this, _scoreService, _tileService, _soundMonoService, gamePiecesToBreak);
-        }
-
-        private void ChangeStateToHandlePlayerSwitchGamePieces(Direction playerSwitchGamePiecesDirection)
-        {
-            _boardState = new HandlePlayerSwitchGamePiecesBoardState(this, _soundMonoService, playerSwitchGamePiecesDirection);
         }
 
         public IEnumerable<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)

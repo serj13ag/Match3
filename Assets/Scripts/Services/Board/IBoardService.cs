@@ -25,7 +25,7 @@ namespace Services.Board
         HashSet<GamePiece> GetBombedColumnGamePieces(int column);
         HashSet<GamePiece> GetBombedAdjacentGamePieces(Vector2Int position, int range);
         void ChangeStateToBreak(HashSet<GamePiece> gamePiecesToBreak);
-        void ChangeStateToCollapse(HashSet<GamePiece> gamePiecesToCollapse);
+        void ChangeStateToCollapse(HashSet<int> columnIndexesToCollapse);
         void ChangeStateToFill();
         void ChangeStateToWaiting();
     }

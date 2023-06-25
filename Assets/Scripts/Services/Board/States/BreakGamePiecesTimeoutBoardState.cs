@@ -2,6 +2,7 @@
 using Constants;
 using Entities;
 using Enums;
+using Helpers;
 using Services.Mono.Sound;
 
 namespace Services.Board.States
@@ -32,7 +33,7 @@ namespace Services.Board.States
         protected override void OnTimeoutEnded()
         {
             BreakGamePieces(_gamePiecesToBreak);
-            _boardService.ChangeStateToCollapse(_gamePiecesToBreak);
+            _boardService.ChangeStateToCollapse(BoardHelper.GetColumnIndexes(_gamePiecesToBreak));
         }
 
         private void BreakGamePieces(HashSet<GamePiece> gamePieces)

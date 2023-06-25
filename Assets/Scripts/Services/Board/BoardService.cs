@@ -96,9 +96,9 @@ namespace Services.Board
             _boardState.Update(deltaTime);
         }
 
-        public void ChangeStateToCollapse(HashSet<GamePiece> gamePiecesToCollapse)
+        public void ChangeStateToCollapse(HashSet<int> columnIndexesToCollapse)
         {
-            ChangeState(new CollapseColumnsTimeoutBoardState(this, gamePiecesToCollapse));
+            ChangeState(new CollapseColumnsTimeoutBoardState(this, columnIndexesToCollapse));
         }
 
         public void ChangeStateToFill()

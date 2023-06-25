@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Constants;
 using DTO;
 using Entities;
-using Helpers;
 
 namespace Services.Board.States
 {
@@ -11,30 +10,23 @@ namespace Services.Board.States
     {
         private readonly IBoardService _boardService;
 
-        private readonly HashSet<GamePiece> _gamePiecesToCollapse;
+        private readonly HashSet<int> _columnIndexesToCollapse;
 
-        private readonly GamePiece[] _movedPieces;
-        private int _numberOfMovedGamePieces;
+        private GamePiece[] _movedPieces;
+        private int _numberOfGamePiecesToMove;
         private int _movedPieceNumber;
 
-        public CollapseColumnsTimeoutBoardState(IBoardService boardService, HashSet<GamePiece> gamePiecesToCollapse)
+        public CollapseColumnsTimeoutBoardState(IBoardService boardService, HashSet<int> columnIndexesToCollapse)
             : base(Settings.Timeouts.CollapseColumnsTimeout)
         {
             _boardService = boardService;
 
-            _gamePiecesToCollapse = gamePiecesToCollapse;
-
-            _movedPieces = new GamePiece[gamePiecesToCollapse.Count];
-
-            foreach (GamePiece gamePiece in gamePiecesToCollapse)
-            {
-                gamePiece.OnPositionChanged += OnGamePiecePositionChanged;
-            }
+            _columnIndexesToCollapse = columnIndexesToCollapse;
         }
 
         protected override void OnTimeoutEnded()
         {
-            CollapseColumns(BoardHelper.GetColumnIndexes(_gamePiecesToCollapse));
+            TryCollapseColumns(_columnIndexesToCollapse);
         }
 
         private void OnGamePiecePositionChanged(GamePiece gamePiece)
@@ -44,18 +36,18 @@ namespace Services.Board.States
             _movedPieceNumber++;
             gamePiece.OnPositionChanged -= OnGamePiecePositionChanged;
 
-            if (_movedPieceNumber > _numberOfMovedGamePieces)
+            if (_movedPieceNumber > _numberOfGamePiecesToMove)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            if (_movedPieceNumber == _numberOfMovedGamePieces)
+            if (_movedPieceNumber == _numberOfGamePiecesToMove)
             {
                 HandleMovedPieces();
             }
         }
 
-        private void CollapseColumns(HashSet<int> columnIndexes)
+        private void TryCollapseColumns(HashSet<int> columnIndexes)
         {
             List<GamePieceMoveData> gamePiecesToMoveData = new List<GamePieceMoveData>();
 
@@ -69,12 +61,21 @@ namespace Services.Board.States
                 gamePieceMoveData.GamePiece.Move(gamePieceMoveData.Direction, gamePieceMoveData.Distance);
             }
 
-            if (gamePiecesToMoveData.Count == 0)
+            if (gamePiecesToMoveData.Count > 0)
             {
+                _movedPieces = new GamePiece[gamePiecesToMoveData.Count];
+                _numberOfGamePiecesToMove = gamePiecesToMoveData.Count;
+
+                foreach (GamePieceMoveData gamePieceMoveData in gamePiecesToMoveData)
+                {
+                    gamePieceMoveData.GamePiece.OnPositionChanged += OnGamePiecePositionChanged;
+                }
+            }
+            else
+            {
+                // If removed game pieces at top of columns
                 _boardService.ChangeStateToFill();
             }
-
-            _numberOfMovedGamePieces = gamePiecesToMoveData.Count;
         }
 
         private void HandleMovedPieces()

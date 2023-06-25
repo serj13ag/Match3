@@ -3,6 +3,7 @@
     public abstract class BaseTimeoutBoardState
     {
         private float _timeTillExecute;
+        private bool _isExecuted;
 
         protected BaseTimeoutBoardState(float timeTillExecute)
         {
@@ -11,9 +12,15 @@
 
         public void Update(float deltaTime)
         {
+            if (_isExecuted)
+            {
+                return;
+            }
+
             if (_timeTillExecute < 0f)
             {
                 OnTimeoutEnded();
+                _isExecuted = true;
             }
             else
             {

@@ -29,10 +29,6 @@ namespace Services.Board
             _gamePiecesToBreak = gamePiecesToBreak;
         }
 
-        public void OnGamePiecePositionChanged(GamePiece gamePiece)
-        {
-        }
-
         protected override void OnTimeoutEnded()
         {
             BreakGamePieces(_gamePiecesToBreak);
@@ -51,6 +47,8 @@ namespace Services.Board
             }
 
             _soundMonoService.PlaySound(SoundType.BreakGamePieces);
+
+            // TODO
             if (CompletedBreakIterationsAfterSwitchedGamePieces > 1)
             {
                 _soundMonoService.PlaySound(SoundType.Bonus);

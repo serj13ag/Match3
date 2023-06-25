@@ -1,5 +1,4 @@
 ﻿using Constants;
-using Entities;
 
 namespace Services.Board
 {
@@ -12,10 +11,6 @@ namespace Services.Board
             : base(Settings.Timeouts.FillBoardTimeout)
         {
             _boardService = boardService;
-        }
-
-        public void OnGamePiecePositionChanged(GamePiece gamePiece)
-        {
         }
 
         protected override void OnTimeoutEnded()

@@ -82,7 +82,7 @@ namespace Services.Board
 
             tileService.OnMoveRequested += OnMoveRequested;
 
-            _boardState = new WaitingBoardState();
+            ChangeStateToWaiting();
         }
 
         public void OnUpdate(float deltaTime)
@@ -115,9 +115,9 @@ namespace Services.Board
             ChangeState(new BreakGamePiecesState(this, _scoreService, _tileService, _soundMonoService, gamePiecesToBreak));
         }
 
-        private void ChangeStateToHandlePlayerSwitchGamePieces(Direction playerSwitchGamePiecesDirection)
+        private void ChangeStateToHandlePlayerSwitchGamePieces(GamePiece clickedGamePiece, GamePiece targetGamePiece)
         {
-            ChangeState(new HandlePlayerSwitchGamePiecesBoardState(this, _soundMonoService, playerSwitchGamePiecesDirection));
+            ChangeState(new HandlePlayerSwitchGamePiecesBoardState(this, _soundMonoService, clickedGamePiece, targetGamePiece));
         }
 
         private void ChangeState(IBoardState newBoardState)
@@ -234,36 +234,17 @@ namespace Services.Board
         private void OnGamePiecePositionChanged(GamePiece gamePiece)
         {
             _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = gamePiece;
-
-            _boardState.OnGamePiecePositionChanged(gamePiece);
         }
 
         private void OnMoveRequested(object sender, MoveRequestedEventArgs e)
         {
             if (_boardState is WaitingBoardState
-                && TryGetGamePieceAt(e.FromPosition, out GamePiece firstGamePiece)
-                && !firstGamePiece.IsCollectible()
-                && TryGetGamePieceAt(e.ToPosition, out GamePiece secondGamePiece))
+                && TryGetGamePieceAt(e.FromPosition, out GamePiece clickedGamePiece)
+                && !clickedGamePiece.IsCollectible()
+                && TryGetGamePieceAt(e.ToPosition, out GamePiece targetGamePiece))
             {
-                Direction playerSwitchGamePiecesDirection = SwitchGamePieces(firstGamePiece, secondGamePiece);
-                ChangeStateToHandlePlayerSwitchGamePieces(playerSwitchGamePiecesDirection);
-                
+                ChangeStateToHandlePlayerSwitchGamePieces(clickedGamePiece, targetGamePiece);
             }
-        }
-
-        private Direction SwitchGamePieces(GamePiece firstGamePiece, GamePiece secondGamePiece)
-        {
-            Vector2Int firstGamePiecePosition = firstGamePiece.Position;
-            Vector2Int secondGamePiecePosition = secondGamePiece.Position;
-
-            //_completedBreakIterationsAfterSwitchedGamePieces = 0;
-
-            firstGamePiece.Move(secondGamePiecePosition);
-            secondGamePiece.Move(firstGamePiecePosition);
-
-            return firstGamePiecePosition.x != secondGamePiecePosition.x
-                ? Direction.Horizontal
-                : Direction.Vertical;
         }
 
         public void ClearGamePieceAt(Vector2Int position, bool breakOnMatch = false)

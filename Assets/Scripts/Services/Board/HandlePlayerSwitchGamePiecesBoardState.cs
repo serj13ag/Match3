@@ -5,78 +5,107 @@ using Constants;
 using Entities;
 using Enums;
 using Helpers;
-using Services.Board;
 using Services.Mono.Sound;
+using UnityEngine;
 
-namespace Services
+namespace Services.Board
 {
     public class HandlePlayerSwitchGamePiecesBoardState : IBoardState
     {
         private readonly IBoardService _boardService;
         private readonly ISoundMonoService _soundMonoService;
-        private readonly Direction _playerSwitchGamePiecesDirection;
+        private readonly Direction _switchGamePiecesDirection;
 
-        private readonly Stack<GamePiece> _movedPieces;
+        private readonly GamePiece[] _movedPieces;
+        private int _movedPieceNumber;
 
         public HandlePlayerSwitchGamePiecesBoardState(IBoardService boardService, ISoundMonoService soundMonoService,
-            Direction playerSwitchGamePiecesDirection)
+            GamePiece clickedGamePiece, GamePiece targetGamePiece)
         {
             _boardService = boardService;
             _soundMonoService = soundMonoService;
-            _playerSwitchGamePiecesDirection = playerSwitchGamePiecesDirection;
 
-            _movedPieces = new Stack<GamePiece>();
+            _movedPieces = new GamePiece[2];
+
+            clickedGamePiece.OnPositionChanged += OnGamePiecePositionChanged;
+            targetGamePiece.OnPositionChanged += OnGamePiecePositionChanged;
+
+            _switchGamePiecesDirection = SwitchGamePieces(clickedGamePiece, targetGamePiece);
         }
 
         public void Update(float deltaTime)
         {
         }
 
-        public void OnGamePiecePositionChanged(GamePiece gamePiece)
+        private void OnGamePiecePositionChanged(GamePiece gamePiece)
         {
-            _movedPieces.Push(gamePiece);
+            _movedPieces[_movedPieceNumber] = gamePiece;
 
-            if (_movedPieces.Count == 2)
+            _movedPieceNumber++;
+            gamePiece.OnPositionChanged -= OnGamePiecePositionChanged;
+
+            switch (_movedPieceNumber)
             {
-                GamePiece[] movedGamePieces =
-                {
-                    _movedPieces.Pop(),
-                    _movedPieces.Pop(),
-                };
-
-                if (_boardService.PlayerMovedColorBomb(movedGamePieces[1], movedGamePieces[0],
-                        out HashSet<GamePiece> gamePiecesToClear))
-                {
-                    _boardService.InvokeGamePiecesSwitched(); // TODO one invocation
-
-                    _boardService.ChangeStateToBreak(gamePiecesToClear);
-                }
-                else if (_boardService.HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
-                {
-                    _boardService.InvokeGamePiecesSwitched(); // TODO one invocation
-
-                    HashSet<GamePiece> gamePiecesToBreak = GetGamePiecesToBreak(allMatches);
-
-                    GamePiece clickedGamePiece = movedGamePieces[1];
-                    if (allMatches.Count >= Settings.MatchesToSpawnBomb && allMatches.Contains(clickedGamePiece))
-                    {
-                        SpawnBomb(allMatches, clickedGamePiece, gamePiecesToBreak);
-                    }
-
-                    _boardService.ChangeStateToBreak(gamePiecesToBreak);
-                }
-                else
-                {
-                    RevertMovedGamePieces(movedGamePieces);
-                    _boardService.ChangeStateToWaiting();
-                }
+                case 2:
+                    HandleMovedPieces();
+                    break;
+                case > 2:
+                    throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void HandleMovedPieces()
+        {
+            GamePiece clickedGamePiece = _movedPieces[0];
+            GamePiece targetGamePiece = _movedPieces[1];
+
+            if (_boardService.PlayerMovedColorBomb(clickedGamePiece, targetGamePiece,
+                    out HashSet<GamePiece> gamePiecesToClear))
+            {
+                _boardService.InvokeGamePiecesSwitched(); // TODO one invocation
+
+                _boardService.ChangeStateToBreak(gamePiecesToClear);
+            }
+            else if (_boardService.HasMatches(_movedPieces, out HashSet<GamePiece> allMatches))
+            {
+                _boardService.InvokeGamePiecesSwitched(); // TODO one invocation
+
+                HashSet<GamePiece> gamePiecesToBreak = GetGamePiecesToBreak(allMatches);
+
+                if (allMatches.Count >= Settings.MatchesToSpawnBomb && allMatches.Contains(clickedGamePiece))
+                {
+                    SpawnBomb(allMatches, clickedGamePiece, gamePiecesToBreak);
+                }
+
+                _boardService.ChangeStateToBreak(gamePiecesToBreak);
+            }
+            else
+            {
+                RevertMovedGamePieces(_movedPieces);
+                _boardService.ChangeStateToWaiting();
+            }
+        }
+
+        private static Direction SwitchGamePieces(GamePiece clickedGamePiece, GamePiece targetGamePiece)
+        {
+            Vector2Int firstGamePiecePosition = clickedGamePiece.Position;
+            Vector2Int secondGamePiecePosition = targetGamePiece.Position;
+
+            // TODO
+            //_completedBreakIterationsAfterSwitchedGamePieces = 0;
+
+            clickedGamePiece.Move(secondGamePiecePosition);
+            targetGamePiece.Move(firstGamePiecePosition);
+
+            return firstGamePiecePosition.x != secondGamePiecePosition.x
+                ? Direction.Horizontal
+                : Direction.Vertical;
         }
 
         private void SpawnBomb(HashSet<GamePiece> allMatches, GamePiece clickedGamePiece,
             HashSet<GamePiece> gamePiecesToBreak)
         {
-            BombType bombType = GamePieceMatchHelper.GetBombTypeOnMatch(allMatches, _playerSwitchGamePiecesDirection);
+            BombType bombType = GamePieceMatchHelper.GetBombTypeOnMatch(allMatches, _switchGamePiecesDirection);
             _boardService.ClearGamePieceAt(clickedGamePiece.Position);
             _boardService.SpawnBombGamePiece(clickedGamePiece.Position.x, clickedGamePiece.Position.y, bombType,
                 clickedGamePiece.Color);
@@ -86,7 +115,7 @@ namespace Services
 
         private HashSet<GamePiece> GetGamePiecesToBreak(HashSet<GamePiece> matchedGamePieces)
         {
-            var gamePiecesToBreak = new HashSet<GamePiece>();
+            HashSet<GamePiece> gamePiecesToBreak = new HashSet<GamePiece>();
 
             foreach (GamePiece matchedGamePiece in matchedGamePieces)
             {

@@ -7,10 +7,8 @@ using Services.Mono.Sound;
 
 namespace Services.Board.States
 {
-    internal class BreakGamePiecesTimeoutBoardState : BaseTimeoutBoardState
+    public class BreakGamePiecesTimeoutBoardState : BaseTimeoutBoardState
     {
-        private const int CompletedBreakIterationsAfterSwitchedGamePieces = 1; // TODO: implement mechanic
-
         private readonly IBoardService _boardService;
         private readonly IScoreService _scoreService;
         private readonly ITileService _tileService;
@@ -18,8 +16,8 @@ namespace Services.Board.States
 
         private readonly HashSet<GamePiece> _gamePiecesToBreak;
 
-        public BreakGamePiecesTimeoutBoardState(IBoardService boardService, IScoreService scoreService, ITileService tileService,
-            ISoundMonoService soundMonoService, HashSet<GamePiece> gamePiecesToBreak)
+        public BreakGamePiecesTimeoutBoardState(IBoardService boardService, IScoreService scoreService,
+            ITileService tileService, ISoundMonoService soundMonoService, HashSet<GamePiece> gamePiecesToBreak)
             : base(Settings.Timeouts.ClearGamePiecesTimeout)
         {
             _boardService = boardService;
@@ -33,6 +31,7 @@ namespace Services.Board.States
         protected override void OnTimeoutEnded()
         {
             BreakGamePieces(_gamePiecesToBreak);
+
             _boardService.ChangeStateToCollapse(BoardHelper.GetColumnIndexes(_gamePiecesToBreak));
         }
 
@@ -40,22 +39,14 @@ namespace Services.Board.States
         {
             foreach (GamePiece gamePiece in gamePieces)
             {
-                _scoreService.AddScore(gamePiece.Score, gamePieces.Count,
-                    CompletedBreakIterationsAfterSwitchedGamePieces);
+                _scoreService.AddScore(gamePiece.Score, gamePieces.Count);
 
                 _boardService.ClearGamePieceAt(gamePiece.Position, true);
                 _tileService.ProcessTileMatchAt(gamePiece.Position);
             }
 
             _soundMonoService.PlaySound(SoundType.BreakGamePieces);
-
-            // TODO
-            if (CompletedBreakIterationsAfterSwitchedGamePieces > 1)
-            {
-                _soundMonoService.PlaySound(SoundType.Bonus);
-            }
-
-            //CompletedBreakIterationsAfterSwitchedGamePieces++;
+            _scoreService.IncrementCompletedBreakStreakIterations();
         }
     }
 }

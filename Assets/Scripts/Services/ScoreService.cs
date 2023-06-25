@@ -1,6 +1,8 @@
 ﻿using System;
 using Constants;
+using Enums;
 using EventArguments;
+using Services.Mono.Sound;
 using UnityEngine;
 
 namespace Services
@@ -9,6 +11,9 @@ namespace Services
     {
         private readonly IGameRoundService _gameRoundService;
 
+        private int _completedBreakStreakIterations;
+
+        private readonly ISoundMonoService _soundMonoService;
         private readonly int _scoreGoal;
         private int _score;
 
@@ -18,35 +23,49 @@ namespace Services
 
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
 
-        public ScoreService(IGameRoundService gameRoundService, int scoreGoal)
+        public ScoreService(ISoundMonoService soundMonoService, IGameRoundService gameRoundService, int scoreGoal)
         {
-            _scoreGoal = scoreGoal;
+            _soundMonoService = soundMonoService;
             _gameRoundService = gameRoundService;
+
+            _scoreGoal = scoreGoal;
         }
 
-        public void AddScore(int gamePieceScore, int numberOfBreakGamePieces,
-            int completedBreakIterationsAfterSwitchedGamePieces)
+        public void AddScore(int gamePieceScore, int numberOfBreakGamePieces)
         {
             int bonusScore = numberOfBreakGamePieces >= Settings.Score.MinNumberOfBreakGamePiecesToGrantBonus
                 ? Settings.Score.BonusScore
                 : 0;
-            int scoreMultiplier = completedBreakIterationsAfterSwitchedGamePieces + 1;
+            int scoreMultiplier = _completedBreakStreakIterations + 1;
             int totalScore = gamePieceScore * scoreMultiplier + bonusScore;
 
             AddScore(totalScore);
         }
 
-        private void AddScore(int scoreToAdd)
+        public void IncrementCompletedBreakStreakIterations()
         {
-            if (scoreToAdd < 0)
+            if (_completedBreakStreakIterations > 0)
             {
-                Debug.LogError($"{nameof(ScoreService)} : Attempt to add negative score: {scoreToAdd}!");
-                return;
+                _soundMonoService.PlaySound(SoundType.Bonus);
             }
 
-            if (scoreToAdd == 0)
+            _completedBreakStreakIterations++;
+        }
+
+        public void ResetBreakStreakIterations()
+        {
+            _completedBreakStreakIterations = 0;
+        }
+
+        private void AddScore(int scoreToAdd)
+        {
+            switch (scoreToAdd)
             {
-                return;
+                case < 0:
+                    Debug.LogError($"{nameof(ScoreService)} : Attempt to add negative score: {scoreToAdd}!");
+                    return;
+                case 0:
+                    return;
             }
 
             _score += scoreToAdd;

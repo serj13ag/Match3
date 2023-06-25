@@ -244,6 +244,8 @@ namespace Services.Board
                 && !clickedGamePiece.IsCollectible()
                 && TryGetGamePieceAt(e.ToPosition, out GamePiece targetGamePiece))
             {
+                _scoreService.ResetBreakStreakIterations();
+
                 ChangeStateToHandlePlayerSwitchGamePieces(clickedGamePiece, targetGamePiece);
             }
         }

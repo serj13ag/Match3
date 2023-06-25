@@ -7,9 +7,12 @@ namespace Services
     {
         int Score { get; }
         bool ScoreGoalReached { get; }
+
         event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
 
-        void AddScore(int gamePieceScore, int numberOfBreakGamePieces,
-            int completedBreakIterationsAfterSwitchedGamePieces);
+        void AddScore(int gamePieceScore, int numberOfBreakGamePieces);
+
+        void IncrementCompletedBreakStreakIterations();
+        void ResetBreakStreakIterations();
     }
 }

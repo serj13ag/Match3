@@ -91,9 +91,6 @@ namespace Services.Board.States
             Vector2Int firstGamePiecePosition = clickedGamePiece.Position;
             Vector2Int secondGamePiecePosition = targetGamePiece.Position;
 
-            // TODO
-            //_completedBreakIterationsAfterSwitchedGamePieces = 0;
-
             clickedGamePiece.Move(secondGamePiecePosition);
             targetGamePiece.Move(firstGamePiecePosition);
 

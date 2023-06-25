@@ -13,16 +13,18 @@ namespace Services.Board.States
     public class HandlePlayerSwitchGamePiecesBoardState : IBoardState
     {
         private readonly IBoardService _boardService;
+        private readonly IGamePieceService _gamePieceService;
         private readonly ISoundMonoService _soundMonoService;
         private readonly Direction _switchGamePiecesDirection;
 
         private readonly GamePiece[] _movedPieces;
         private int _movedPieceNumber;
 
-        public HandlePlayerSwitchGamePiecesBoardState(IBoardService boardService, ISoundMonoService soundMonoService,
-            GamePiece clickedGamePiece, GamePiece targetGamePiece)
+        public HandlePlayerSwitchGamePiecesBoardState(IBoardService boardService, IGamePieceService gamePieceService,
+            ISoundMonoService soundMonoService, GamePiece clickedGamePiece, GamePiece targetGamePiece)
         {
             _boardService = boardService;
+            _gamePieceService = gamePieceService;
             _soundMonoService = soundMonoService;
 
             _movedPieces = new GamePiece[2];
@@ -66,7 +68,7 @@ namespace Services.Board.States
 
                 _boardService.ChangeStateToBreak(gamePiecesToClear);
             }
-            else if (_boardService.HasMatches(_movedPieces, out HashSet<GamePiece> allMatches))
+            else if (_gamePieceService.HasMatches(_movedPieces, out HashSet<GamePiece> allMatches))
             {
                 _boardService.InvokeGamePiecesSwitched(); // TODO one invocation
 
@@ -103,8 +105,8 @@ namespace Services.Board.States
             HashSet<GamePiece> gamePiecesToBreak)
         {
             BombType bombType = GamePieceMatchHelper.GetBombTypeOnMatch(allMatches, _switchGamePiecesDirection);
-            _boardService.ClearGamePieceAt(clickedGamePiece.Position);
-            _boardService.SpawnBombGamePiece(clickedGamePiece.Position.x, clickedGamePiece.Position.y, bombType,
+            _gamePieceService.ClearGamePieceAt(clickedGamePiece.Position);
+            _gamePieceService.SpawnBombGamePiece(clickedGamePiece.Position.x, clickedGamePiece.Position.y, bombType,
                 clickedGamePiece.Color);
 
             gamePiecesToBreak.Remove(clickedGamePiece);
@@ -173,16 +175,16 @@ namespace Services.Board.States
         {
             return bombType switch
             {
-                BombType.Column => _boardService.GetBombedColumnGamePieces(matchedGamePiece.Position.x),
-                BombType.Row => _boardService.GetBombedRowGamePieces(matchedGamePiece.Position.y),
-                BombType.Adjacent => _boardService.GetBombedAdjacentGamePieces(matchedGamePiece.Position,
+                BombType.Column => _gamePieceService.GetBombedColumnGamePieces(matchedGamePiece.Position.x),
+                BombType.Row => _gamePieceService.GetBombedRowGamePieces(matchedGamePiece.Position.y),
+                BombType.Adjacent => _gamePieceService.GetBombedAdjacentGamePieces(matchedGamePiece.Position,
                     Settings.BombAdjacentGamePiecesRange),
                 BombType.Color => null,
                 _ => throw new ArgumentOutOfRangeException(),
             };
         }
 
-        private void RevertMovedGamePieces(GamePiece[] movedGamePieces)
+        private static void RevertMovedGamePieces(GamePiece[] movedGamePieces)
         {
             movedGamePieces[0].Move(movedGamePieces[1].Position);
             movedGamePieces[1].Move(movedGamePieces[0].Position);

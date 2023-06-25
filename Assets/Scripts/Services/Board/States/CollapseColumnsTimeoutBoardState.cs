@@ -9,6 +9,7 @@ namespace Services.Board.States
     public class CollapseColumnsTimeoutBoardState : BaseTimeoutBoardState
     {
         private readonly IBoardService _boardService;
+        private readonly IGamePieceService _gamePieceService;
 
         private readonly HashSet<int> _columnIndexesToCollapse;
 
@@ -16,10 +17,12 @@ namespace Services.Board.States
         private int _numberOfGamePiecesToMove;
         private int _movedPieceNumber;
 
-        public CollapseColumnsTimeoutBoardState(IBoardService boardService, HashSet<int> columnIndexesToCollapse)
+        public CollapseColumnsTimeoutBoardState(IBoardService boardService, IGamePieceService gamePieceService,
+            HashSet<int> columnIndexesToCollapse)
             : base(Settings.Timeouts.CollapseColumnsTimeout)
         {
             _boardService = boardService;
+            _gamePieceService = gamePieceService;
 
             _columnIndexesToCollapse = columnIndexesToCollapse;
         }
@@ -53,7 +56,7 @@ namespace Services.Board.States
 
             foreach (int columnIndex in columnIndexes)
             {
-                gamePiecesToMoveData.AddRange(_boardService.GetGamePiecesToCollapseMoveData(columnIndex));
+                gamePiecesToMoveData.AddRange(_gamePieceService.GetGamePiecesToCollapseMoveData(columnIndex));
             }
 
             foreach (GamePieceMoveData gamePieceMoveData in gamePiecesToMoveData)
@@ -80,11 +83,11 @@ namespace Services.Board.States
 
         private void HandleMovedPieces()
         {
-            if (_boardService.HasMatches(_movedPieces, out HashSet<GamePiece> allMatches))
+            if (_gamePieceService.HasMatches(_movedPieces, out HashSet<GamePiece> allMatches))
             {
                 _boardService.ChangeStateToBreak(allMatches);
             }
-            else if (_boardService.HasCollectiblesToBreak(out HashSet<GamePiece> collectiblesToBreak))
+            else if (_gamePieceService.HasCollectiblesToBreak(out HashSet<GamePiece> collectiblesToBreak))
             {
                 _boardService.ChangeStateToBreak(collectiblesToBreak);
             }

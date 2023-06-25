@@ -12,17 +12,20 @@ namespace Services.Board.States
         private readonly IBoardService _boardService;
         private readonly IScoreService _scoreService;
         private readonly ITileService _tileService;
+        private readonly IGamePieceService _gamePieceService;
         private readonly ISoundMonoService _soundMonoService;
 
         private readonly HashSet<GamePiece> _gamePiecesToBreak;
 
         public BreakGamePiecesTimeoutBoardState(IBoardService boardService, IScoreService scoreService,
-            ITileService tileService, ISoundMonoService soundMonoService, HashSet<GamePiece> gamePiecesToBreak)
+            ITileService tileService, IGamePieceService gamePieceService, ISoundMonoService soundMonoService,
+            HashSet<GamePiece> gamePiecesToBreak)
             : base(Settings.Timeouts.ClearGamePiecesTimeout)
         {
             _boardService = boardService;
             _scoreService = scoreService;
             _tileService = tileService;
+            _gamePieceService = gamePieceService;
             _soundMonoService = soundMonoService;
 
             _gamePiecesToBreak = gamePiecesToBreak;
@@ -41,7 +44,7 @@ namespace Services.Board.States
             {
                 _scoreService.AddScore(gamePiece.Score, gamePieces.Count);
 
-                _boardService.ClearGamePieceAt(gamePiece.Position, true);
+                _gamePieceService.ClearGamePieceAt(gamePiece.Position, true);
                 _tileService.ProcessTileMatchAt(gamePiece.Position);
             }
 

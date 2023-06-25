@@ -5,7 +5,6 @@ using Enums;
 using EventArguments;
 using Helpers;
 using Interfaces;
-using StaticData;
 using StaticData.StartingData;
 using UnityEngine;
 
@@ -13,8 +12,13 @@ namespace Services
 {
     public class TileService : ITileService
     {
+        private readonly IStaticDataService _staticDataService;
         private readonly IPersistentProgressService _persistentProgressService;
         private readonly IGameFactory _gameFactory;
+
+        private readonly string _levelName;
+        private readonly int _width;
+        private readonly int _height;
 
         private readonly ITile[,] _tiles;
 
@@ -26,36 +30,45 @@ namespace Services
         public TileService(string levelName, IStaticDataService staticDataService,
             IPersistentProgressService persistentProgressService, IGameFactory gameFactory)
         {
+            _staticDataService = staticDataService;
             _persistentProgressService = persistentProgressService;
             _gameFactory = gameFactory;
 
-            int width = staticDataService.Settings.BoardWidth;
-            int height = staticDataService.Settings.BoardHeight;
+            _levelName = levelName;
+            _width = staticDataService.Settings.BoardWidth;
+            _height = staticDataService.Settings.BoardHeight;
 
-            _tiles = new ITile[width, height];
+            _tiles = new ITile[_width, _height];
+        }
 
-            LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
-            if (levelName == levelBoardData.LevelName && levelBoardData.Tiles != null)
+        public void Initialize()
+        {
+            StartingTileStaticData[] startingTiles =
+                _staticDataService.GetDataForLevel(_levelName).StartingTiles.StartingTiles;
+
+            foreach (StartingTileStaticData startingTile in startingTiles)
             {
-                SetupFromLoadData(levelBoardData);
+                SpawnTile(startingTile.Type, startingTile.X, startingTile.Y);
             }
-            else
+
+            for (int i = 0; i < _width; i++)
             {
-                SetupNewBoard(staticDataService.GetDataForLevel(levelName), width, height);
+                for (int j = 0; j < _height; j++)
+                {
+                    if (!TryGetTileAt(i, j, out _))
+                    {
+                        SpawnTile(TileType.Normal, i, j);
+                    }
+                }
             }
         }
 
-        public void ProcessTileMatchAt(Vector2Int position)
+        public void Initialize(List<TileSaveData> tiles)
         {
-            if (TryGetTileAt(position.x, position.y, out ITile tile))
+            foreach (TileSaveData tile in tiles)
             {
-                tile.ProcessMatch();
+                SpawnTile(tile.Type, tile.Position.x, tile.Position.y);
             }
-        }
-
-        public bool IsObstacleAt(int column, int row)
-        {
-            return _tiles[column, row].IsObstacle;
         }
 
         public void UpdateProgress()
@@ -70,31 +83,17 @@ namespace Services
             _persistentProgressService.Progress.BoardData.LevelBoardData.Tiles = tilesSaveData;
         }
 
-        private void SetupFromLoadData(LevelBoardData levelBoardData)
+        public void ProcessTileMatchAt(Vector2Int position)
         {
-            foreach (TileSaveData tile in levelBoardData.Tiles)
+            if (TryGetTileAt(position.x, position.y, out ITile tile))
             {
-                SpawnTile(tile.Type, tile.Position.x, tile.Position.y);
+                tile.ProcessMatch();
             }
         }
 
-        private void SetupNewBoard(LevelStaticData levelStaticData, int width, int height)
+        public bool IsObstacleAt(int column, int row)
         {
-            foreach (StartingTileStaticData startingTile in levelStaticData.StartingTiles.StartingTiles)
-            {
-                SpawnTile(startingTile.Type, startingTile.X, startingTile.Y);
-            }
-
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    if (!TryGetTileAt(i, j, out _))
-                    {
-                        SpawnTile(TileType.Normal, i, j);
-                    }
-                }
-            }
+            return _tiles[column, row].IsObstacle;
         }
 
         private void SpawnTile(TileType tileType, int x, int y)

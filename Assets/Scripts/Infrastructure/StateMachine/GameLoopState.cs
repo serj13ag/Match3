@@ -68,10 +68,12 @@ namespace Infrastructure.StateMachine
             IScoreService scoreService = new ScoreService(_soundMonoService, gameRoundService, scoreGoal);
 
             ITileService tileService = new TileService(levelName, _staticDataService, _persistentProgressService, gameFactory);
+            IGamePieceService gamePieceService = new GamePieceService(levelName, _persistentProgressService,
+                _staticDataService, _soundMonoService, _randomService, tileService, gameFactory, particleService);
 
-            IBoardService boardService = new BoardService(levelName, _randomService, _staticDataService,
-                _soundMonoService, _updateMonoService, _persistentProgressService, _saveLoadService, gameFactory,
-                scoreService, gameRoundService, particleService, tileService);
+            IBoardService boardService = new BoardService(levelName, _soundMonoService, _updateMonoService,
+                _persistentProgressService, _saveLoadService, _staticDataService, scoreService, gameRoundService,
+                tileService, gamePieceService);
 
             IMovesLeftService movesLeftService = new MovesLeftService(boardService, scoreService, gameRoundService, movesLeft);
             ICameraService cameraService = new CameraService(boardService.BoardSize);

@@ -7,7 +7,7 @@ using Services.Mono.Sound;
 
 namespace Services.Board.States
 {
-    internal class BreakGamePiecesTimeoutBoardState : BaseTimeoutBoardState, IBoardState
+    internal class BreakGamePiecesTimeoutBoardState : BaseTimeoutBoardState
     {
         private const int CompletedBreakIterationsAfterSwitchedGamePieces = 1; // TODO: implement mechanic
 

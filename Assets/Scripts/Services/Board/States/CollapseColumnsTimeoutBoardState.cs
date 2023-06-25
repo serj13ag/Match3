@@ -6,7 +6,7 @@ using Entities;
 
 namespace Services.Board.States
 {
-    public class CollapseColumnsTimeoutBoardState : BaseTimeoutBoardState, IBoardState
+    public class CollapseColumnsTimeoutBoardState : BaseTimeoutBoardState
     {
         private readonly IBoardService _boardService;
 

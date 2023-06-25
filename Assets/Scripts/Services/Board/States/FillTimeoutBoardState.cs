@@ -2,11 +2,10 @@
 
 namespace Services.Board.States
 {
-    public class FillTimeoutBoardState : BaseTimeoutBoardState, IBoardState
+    public class FillTimeoutBoardState : BaseTimeoutBoardState
     {
         private readonly IBoardService _boardService;
 
-        // TODO : fix timeout bug because must start timeout when collapsed pieces moved to end positions
         public FillTimeoutBoardState(IBoardService boardService)
             : base(Settings.Timeouts.FillBoardTimeout)
         {

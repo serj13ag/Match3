@@ -1,6 +1,6 @@
 ﻿namespace Services.Board.States
 {
-    public abstract class BaseTimeoutBoardState
+    public abstract class BaseTimeoutBoardState : IBoardState
     {
         private float _timeTillExecute;
         private bool _isExecuted;

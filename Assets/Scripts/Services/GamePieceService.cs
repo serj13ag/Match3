@@ -88,9 +88,9 @@ namespace Services
 
         public void FillBoardWithRandomGamePieces()
         {
-            for (var i = 0; i < _width; i++)
+            for (int i = 0; i < _width; i++)
             {
-                for (var j = 0; j < _height; j++)
+                for (int j = 0; j < _height; j++)
                 {
                     if (_gamePieces[i, j] != null || _tileService.IsObstacleAt(i, j))
                     {
@@ -115,12 +115,12 @@ namespace Services
 
         public IEnumerable<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
         {
-            var availableRows = new Queue<int>();
-            var moveDataEntries = new List<GamePieceMoveData>();
+            Queue<int> availableRows = new Queue<int>();
+            List<GamePieceMoveData> moveDataEntries = new List<GamePieceMoveData>();
 
-            for (var row = 0; row < _height; row++)
+            for (int row = 0; row < _height; row++)
             {
-                var position = new Vector2Int(column, row);
+                Vector2Int position = new Vector2Int(column, row);
                 if (TryGetGamePieceAt(position, out GamePiece gamePiece))
                 {
                     int distanceToMove = availableRows.Count > 0
@@ -129,7 +129,8 @@ namespace Services
 
                     if (distanceToMove > 0)
                     {
-                        var gamePieceMoveData = new GamePieceMoveData(gamePiece, Vector2Int.down, distanceToMove);
+                        GamePieceMoveData gamePieceMoveData =
+                            new GamePieceMoveData(gamePiece, Vector2Int.down, distanceToMove);
                         moveDataEntries.Add(gamePieceMoveData);
                         availableRows.Enqueue(row);
                     }
@@ -191,19 +192,6 @@ namespace Services
             return collectiblesToBreak.Count > 0;
         }
 
-        private bool TrySpawnCollectibleGamePiece(int x, int y)
-        {
-            if (y == _height - 1
-                && _collectibleGamePieces < Settings.MaxCollectibles
-                && _randomService.Next(100) <= Settings.PercentChanceToSpawnCollectible)
-            {
-                SpawnRandomCollectibleGamePiece(x, y);
-                return true;
-            }
-
-            return false;
-        }
-
         public void ClearGamePieceAt(Vector2Int position, bool breakOnMatch = false)
         {
             GamePiece gamePiece = _gamePieces[position.x, position.y];
@@ -236,17 +224,34 @@ namespace Services
             }
         }
 
-        private GamePiece SpawnBasicGamePieceWithRandomColor(int x, int y)
+        public HashSet<GamePiece> GetGamePiecesByColor(GamePieceColor color)
         {
-            GamePiece gamePiece = _gameFactory.CreateNormalGamePieceWithRandomColor(_levelName, x, y);
-            RegisterGamePiece(gamePiece, x, y);
-            return gamePiece;
+            HashSet<GamePiece> result = new HashSet<GamePiece>();
+
+            foreach (GamePiece gamePiece in _gamePieces)
+            {
+                if (gamePiece != null && gamePiece.Color == color)
+                {
+                    result.Add(gamePiece);
+                }
+            }
+
+            return result;
         }
 
-        private void SpawnCustomGamePiece(int x, int y, GamePieceType gamePieceType, GamePieceColor gamePieceColor)
+        public HashSet<GamePiece> GetAllGamePieces()
         {
-            GamePiece gamePiece = _gameFactory.CreateGamePiece(gamePieceType, gamePieceColor, x, y);
-            RegisterGamePiece(gamePiece, x, y);
+            HashSet<GamePiece> result = new HashSet<GamePiece>();
+
+            foreach (GamePiece gamePiece in _gamePieces)
+            {
+                if (gamePiece != null)
+                {
+                    result.Add(gamePiece);
+                }
+            }
+
+            return result;
         }
 
         public void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)
@@ -257,9 +262,9 @@ namespace Services
 
         public HashSet<GamePiece> GetBombedRowGamePieces(int row)
         {
-            var rowGamePieces = new HashSet<GamePiece>();
+            HashSet<GamePiece> rowGamePieces = new HashSet<GamePiece>();
 
-            for (var column = 0; column < _width; column++)
+            for (int column = 0; column < _width; column++)
             {
                 if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
                     && CanBombGamePiece(gamePiece))
@@ -273,9 +278,9 @@ namespace Services
 
         public HashSet<GamePiece> GetBombedColumnGamePieces(int column)
         {
-            var rowGamePieces = new HashSet<GamePiece>();
+            HashSet<GamePiece> rowGamePieces = new HashSet<GamePiece>();
 
-            for (var row = 0; row < _height; row++)
+            for (int row = 0; row < _height; row++)
             {
                 if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
                     && CanBombGamePiece(gamePiece))
@@ -289,7 +294,7 @@ namespace Services
 
         public HashSet<GamePiece> GetBombedAdjacentGamePieces(Vector2Int position, int range)
         {
-            var rowGamePieces = new HashSet<GamePiece>();
+            HashSet<GamePiece> rowGamePieces = new HashSet<GamePiece>();
 
             int startColumn = position.x - range;
             int endColumn = position.x + range;
@@ -309,6 +314,32 @@ namespace Services
             }
 
             return rowGamePieces;
+        }
+
+        private bool TrySpawnCollectibleGamePiece(int x, int y)
+        {
+            if (y == _height - 1
+                && _collectibleGamePieces < Settings.MaxCollectibles
+                && _randomService.Next(100) <= Settings.PercentChanceToSpawnCollectible)
+            {
+                SpawnRandomCollectibleGamePiece(x, y);
+                return true;
+            }
+
+            return false;
+        }
+
+        private GamePiece SpawnBasicGamePieceWithRandomColor(int x, int y)
+        {
+            GamePiece gamePiece = _gameFactory.CreateNormalGamePieceWithRandomColor(_levelName, x, y);
+            RegisterGamePiece(gamePiece, x, y);
+            return gamePiece;
+        }
+
+        private void SpawnCustomGamePiece(int x, int y, GamePieceType gamePieceType, GamePieceColor gamePieceColor)
+        {
+            GamePiece gamePiece = _gameFactory.CreateGamePiece(gamePieceType, gamePieceColor, x, y);
+            RegisterGamePiece(gamePiece, x, y);
         }
 
         private void SpawnRandomCollectibleGamePiece(int x, int y)
@@ -339,36 +370,6 @@ namespace Services
         private void OnGamePiecePositionChanged(GamePiece gamePiece)
         {
             _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = gamePiece;
-        }
-
-        public HashSet<GamePiece> GetGamePiecesByColor(GamePieceColor color)
-        {
-            HashSet<GamePiece> result = new HashSet<GamePiece>();
-
-            foreach (var gamePiece in _gamePieces)
-            {
-                if (gamePiece != null && gamePiece.Color == color)
-                {
-                    result.Add(gamePiece);
-                }
-            }
-
-            return result;
-        }
-
-        public HashSet<GamePiece> GetAllGamePieces()
-        {
-            HashSet<GamePiece> result = new HashSet<GamePiece>();
-
-            foreach (var gamePiece in _gamePieces)
-            {
-                if (gamePiece != null)
-                {
-                    result.Add(gamePiece);
-                }
-            }
-
-            return result;
         }
 
         private bool CanBombGamePiece(GamePiece gamePiece)

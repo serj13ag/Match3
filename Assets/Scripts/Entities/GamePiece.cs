@@ -20,8 +20,6 @@ namespace Entities
         private Vector2Int _position;
         private int _score;
 
-        public bool IsLastMoveMadeByPlayer { get; private set; }
-
         public GamePieceType Type => _type;
         public GamePieceColor Color { get; private set; }
 
@@ -67,11 +65,10 @@ namespace Entities
             Move(destination);
         }
 
-        public void Move(Vector2Int destination, bool movedByPlayerInput = false)
+        public void Move(Vector2Int destination)
         {
             if (!_isMoving)
             {
-                IsLastMoveMadeByPlayer = movedByPlayerInput;
                 OnStartMoving?.Invoke(this);
                 StartCoroutine(MoveRoutine(destination, Settings.TimeToMoveGamePiece));
             }

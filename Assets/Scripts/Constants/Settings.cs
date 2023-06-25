@@ -19,7 +19,7 @@
         public const int MaxCollectibles = 5;
         public const int PercentChanceToSpawnCollectible = 50;
 
-        public static class Commands
+        public static class Timeouts
         {
             public const float FillBoardTimeout = 0.5f;
             public const float ClearGamePiecesTimeout = 0.5f;

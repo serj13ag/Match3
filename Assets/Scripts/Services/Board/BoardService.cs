@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Commands;
 using Constants;
 using Data;
 using DTO;
@@ -10,6 +8,7 @@ using Enums;
 using EventArguments;
 using Helpers;
 using Interfaces;
+using Services.Board.States;
 using Services.Mono;
 using Services.Mono.Sound;
 using StaticData;
@@ -17,7 +16,7 @@ using StaticData.StartingData;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Services
+namespace Services.Board
 {
     public class BoardService : IUpdatable, IBoardService
     {
@@ -37,14 +36,12 @@ namespace Services
 
         private readonly GamePiece[,] _gamePieces;
 
-        private readonly Stack<GamePiece> _movedPieces;
         private int _collapsedGamePieces;
 
-        private readonly CommandBlock _commandBlock;
         private Direction _playerSwitchGamePiecesDirection;
         private int _collectibleGamePieces;
 
-        private int _completedBreakIterationsAfterSwitchedGamePieces;
+        private IBoardState _boardState;
 
         public Vector2Int BoardSize => new Vector2Int(_width, _height);
 
@@ -66,10 +63,6 @@ namespace Services
             _saveLoadService = saveLoadService;
             _gameRoundService = gameRoundService;
 
-            _movedPieces = new Stack<GamePiece>();
-
-            _commandBlock = new CommandBlock();
-
             _levelName = levelName;
             _width = staticDataService.Settings.BoardWidth;
             _height = staticDataService.Settings.BoardHeight;
@@ -89,6 +82,8 @@ namespace Services
             updateMonoService.Register(this);
 
             tileService.OnMoveRequested += OnMoveRequested;
+
+            ChangeStateToWaiting();
         }
 
         public void OnUpdate(float deltaTime)
@@ -97,8 +92,38 @@ namespace Services
             {
                 return;
             }
-            
-            _commandBlock.Update(deltaTime);
+
+            _boardState.Update(deltaTime);
+        }
+
+        public void ChangeStateToCollapse(HashSet<int> columnIndexesToCollapse)
+        {
+            ChangeState(new CollapseColumnsTimeoutBoardState(this, columnIndexesToCollapse));
+        }
+
+        public void ChangeStateToFill()
+        {
+            ChangeState(new FillTimeoutBoardState(this));
+        }
+
+        public void ChangeStateToWaiting()
+        {
+            ChangeState(new WaitingBoardState());
+        }
+
+        public void ChangeStateToBreak(HashSet<GamePiece> gamePiecesToBreak)
+        {
+            ChangeState(new BreakGamePiecesTimeoutBoardState(this, _scoreService, _tileService, _soundMonoService, gamePiecesToBreak));
+        }
+
+        private void ChangeStateToHandlePlayerSwitchGamePieces(GamePiece clickedGamePiece, GamePiece targetGamePiece)
+        {
+            ChangeState(new HandlePlayerSwitchGamePiecesBoardState(this, _soundMonoService, clickedGamePiece, targetGamePiece));
+        }
+
+        private void ChangeState(IBoardState newBoardState)
+        {
+            _boardState = newBoardState;
         }
 
         private void SetupFromLoadData(LevelBoardData levelBoardData)
@@ -111,7 +136,8 @@ namespace Services
 
         private void SetupNewBoard(LevelStaticData levelStaticData)
         {
-            foreach (StartingGamePieceStaticData startingGamePieceEntry in levelStaticData.StartingGamePieces.StartingGamePieces)
+            foreach (StartingGamePieceStaticData startingGamePieceEntry in levelStaticData.StartingGamePieces
+                         .StartingGamePieces)
             {
                 SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y, startingGamePieceEntry.Type,
                     startingGamePieceEntry.Color);
@@ -120,7 +146,7 @@ namespace Services
             FillBoardWithRandomGamePieces();
         }
 
-        private void FillBoardWithRandomGamePieces()
+        public void FillBoardWithRandomGamePieces()
         {
             for (var i = 0; i < _width; i++)
             {
@@ -175,7 +201,7 @@ namespace Services
             RegisterGamePiece(gamePiece, x, y);
         }
 
-        private void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)
+        public void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)
         {
             GamePiece gamePiece = _gameFactory.CreateBombGamePiece(x, y, bombType, color);
             RegisterGamePiece(gamePiece, x, y);
@@ -209,252 +235,22 @@ namespace Services
         private void OnGamePiecePositionChanged(GamePiece gamePiece)
         {
             _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = gamePiece;
-
-            if (gamePiece.IsLastMoveMadeByPlayer)
-            {
-                HandlePieceMovedByPlayer(gamePiece);
-            }
-            else
-            {
-                if (_collapsedGamePieces > 0)
-                {
-                    HandlePieceCollapsed(gamePiece);
-                }
-            }
         }
 
         private void OnMoveRequested(object sender, MoveRequestedEventArgs e)
         {
-            if (!_commandBlock.IsActive
-                && TryGetGamePieceAt(e.FromPosition, out GamePiece firstGamePiece)
-                && TryGetGamePieceAt(e.ToPosition, out GamePiece secondGamePiece))
+            if (_boardState is WaitingBoardState
+                && TryGetGamePieceAt(e.FromPosition, out GamePiece clickedGamePiece)
+                && !clickedGamePiece.IsCollectible()
+                && TryGetGamePieceAt(e.ToPosition, out GamePiece targetGamePiece))
             {
-                SwitchGamePieces(firstGamePiece, secondGamePiece);
+                _scoreService.ResetBreakStreakIterations();
+
+                ChangeStateToHandlePlayerSwitchGamePieces(clickedGamePiece, targetGamePiece);
             }
         }
 
-        private void SwitchGamePieces(GamePiece firstGamePiece, GamePiece secondGamePiece)
-        {
-            Vector2Int firstGamePiecePosition = firstGamePiece.Position;
-            Vector2Int secondGamePiecePosition = secondGamePiece.Position;
-
-            _playerSwitchGamePiecesDirection = firstGamePiecePosition.x != secondGamePiecePosition.x
-                ? Direction.Horizontal
-                : Direction.Vertical;
-
-            _completedBreakIterationsAfterSwitchedGamePieces = 0;
-
-            firstGamePiece.Move(secondGamePiecePosition, true);
-            secondGamePiece.Move(firstGamePiecePosition, true);
-        }
-
-        private void HandlePieceMovedByPlayer(GamePiece gamePiece)
-        {
-            _movedPieces.Push(gamePiece);
-
-            if (_movedPieces.Count == 2)
-            {
-                GamePiece[] movedGamePieces =
-                {
-                    _movedPieces.Pop(),
-                    _movedPieces.Pop(),
-                };
-
-                if (PlayerMovedColorBomb(movedGamePieces[1], movedGamePieces[0], out var gamePiecesToClear))
-                {
-                    OnGamePiecesSwitched?.Invoke(); // TODO one invocation
-
-                    ClearAndCollapseAndRefill(gamePiecesToClear);
-                }
-                else if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
-                {
-                    OnGamePiecesSwitched?.Invoke(); // TODO one invocation
-
-                    CreateBombAndClearAndCollapseAndRefill(movedGamePieces, allMatches);
-                }
-                else
-                {
-                    RevertMovedGamePieces(movedGamePieces);
-                }
-            }
-        }
-
-        private void HandlePieceCollapsed(GamePiece gamePiece)
-        {
-            _movedPieces.Push(gamePiece);
-
-            if (_movedPieces.Count == _collapsedGamePieces)
-            {
-                _collapsedGamePieces = 0;
-
-                var movedGamePieces = new List<GamePiece>();
-                while (_movedPieces.Count > 0)
-                {
-                    movedGamePieces.Add(_movedPieces.Pop());
-                }
-
-                if (HasMatches(movedGamePieces, out HashSet<GamePiece> allMatches))
-                {
-                    ClearAndCollapseAndRefill(allMatches);
-                }
-                else if (HasCollectiblesToBreak(out HashSet<GamePiece> collectiblesToBreak))
-                {
-                    ClearAndCollapseAndRefill(collectiblesToBreak);
-                }
-                else
-                {
-                    AddFillBoardCommand();
-                }
-            }
-        }
-
-        private void RevertMovedGamePieces(GamePiece[] movedGamePieces)
-        {
-            movedGamePieces[0].Move(movedGamePieces[1].Position);
-            movedGamePieces[1].Move(movedGamePieces[0].Position);
-        }
-
-        private void CreateBombAndClearAndCollapseAndRefill(GamePiece[] movedGamePieces, HashSet<GamePiece> allMatches)
-        {
-            HashSet<GamePiece> gamePiecesToBreak = GetGamePiecesToBreak(allMatches);
-
-            var clickedGamePiece = movedGamePieces[1];
-            if (allMatches.Count >= Settings.MatchesToSpawnBomb && allMatches.Contains(clickedGamePiece))
-            {
-                var bombType = GamePieceMatchHelper.GetBombTypeOnMatch(allMatches, _playerSwitchGamePiecesDirection);
-                ClearGamePieceAt(clickedGamePiece.Position);
-                SpawnBombGamePiece(clickedGamePiece.Position.x, clickedGamePiece.Position.y, bombType,
-                    clickedGamePiece.Color);
-
-                gamePiecesToBreak.Remove(clickedGamePiece);
-            }
-
-            AddBreakGamePiecesCommand(gamePiecesToBreak);
-            AddCollapseColumnsCommand(gamePiecesToBreak);
-        }
-
-        private void ClearAndCollapseAndRefill(HashSet<GamePiece> allMatches)
-        {
-            HashSet<GamePiece> gamePiecesToBreak = GetGamePiecesToBreak(allMatches);
-
-            AddBreakGamePiecesCommand(gamePiecesToBreak);
-            AddCollapseColumnsCommand(gamePiecesToBreak);
-        }
-
-        private HashSet<GamePiece> GetGamePiecesToBreak(HashSet<GamePiece> matchedGamePieces)
-        {
-            var gamePiecesToBreak = new HashSet<GamePiece>();
-
-            foreach (GamePiece matchedGamePiece in matchedGamePieces)
-            {
-                if (TryGetBombedGamePieces(matchedGamePiece, out HashSet<GamePiece> bombedGamePieces))
-                {
-                    _soundMonoService.PlaySound(SoundType.BombGamePieces);
-                    gamePiecesToBreak.UnionWith(bombedGamePieces);
-                }
-                else
-                {
-                    gamePiecesToBreak.Add(matchedGamePiece);
-                }
-            }
-
-            return gamePiecesToBreak;
-        }
-
-        private bool TryGetBombedGamePieces(GamePiece matchedGamePiece, out HashSet<GamePiece> bombedGamePieces,
-            HashSet<GamePiece> gamePiecesToExclude = null)
-        {
-            bombedGamePieces = new HashSet<GamePiece>();
-
-            if (matchedGamePiece is not BombGamePiece bombGamePiece)
-            {
-                return false;
-            }
-
-            bombedGamePieces = GetBombedGamePieces(bombGamePiece.BombType, matchedGamePiece);
-
-            if (bombedGamePieces == null)
-            {
-                return false;
-            }
-
-            // TODO: fix later
-            foreach (GamePiece bombedGamePiece in bombedGamePieces)
-            {
-                bombedGamePiece.Bombed = true;
-            }
-
-            if (gamePiecesToExclude != null)
-            {
-                bombedGamePieces.ExceptWith(gamePiecesToExclude);
-            }
-
-            foreach (var bombedGamePiece in bombedGamePieces.ToArray())
-            {
-                if (TryGetBombedGamePieces(bombedGamePiece, out var pieces, bombedGamePieces))
-                {
-                    bombedGamePieces.UnionWith(pieces);
-                }
-            }
-
-            return true;
-        }
-
-        private HashSet<GamePiece> GetBombedGamePieces(BombType bombType, GamePiece matchedGamePiece)
-        {
-            return bombType switch
-            {
-                BombType.Column => GetBombedColumnGamePieces(matchedGamePiece.Position.x),
-                BombType.Row => GetBombedRowGamePieces(matchedGamePiece.Position.y),
-                BombType.Adjacent => GetBombedAdjacentGamePieces(matchedGamePiece.Position,
-                    Settings.BombAdjacentGamePiecesRange),
-                BombType.Color => null,
-                _ => throw new ArgumentOutOfRangeException(),
-            };
-        }
-
-        private void AddBreakGamePiecesCommand(HashSet<GamePiece> gamePiecesToBreak)
-        {
-            Command breakCommand =
-                new Command(() => BreakGamePieces(gamePiecesToBreak), Settings.Commands.ClearGamePiecesTimeout);
-            _commandBlock.AddCommand(breakCommand);
-        }
-
-        private void AddCollapseColumnsCommand(HashSet<GamePiece> gamePiecesToBreak)
-        {
-            HashSet<int> columnIndexes = BoardHelper.GetColumnIndexes(gamePiecesToBreak);
-            Command collapseCommand =
-                new Command(() => CollapseColumns(columnIndexes), Settings.Commands.CollapseColumnsTimeout);
-            _commandBlock.AddCommand(collapseCommand);
-        }
-
-        private void AddFillBoardCommand()
-        {
-            Command fillBoardCommand = new Command(FillBoardWithRandomGamePieces, Settings.Commands.FillBoardTimeout);
-            _commandBlock.AddCommand(fillBoardCommand);
-        }
-
-        private void BreakGamePieces(HashSet<GamePiece> gamePieces)
-        {
-            foreach (GamePiece gamePiece in gamePieces)
-            {
-                _scoreService.AddScore(gamePiece.Score, gamePieces.Count,
-                    _completedBreakIterationsAfterSwitchedGamePieces);
-
-                ClearGamePieceAt(gamePiece.Position, true);
-                _tileService.ProcessTileMatchAt(gamePiece.Position);
-            }
-
-            _soundMonoService.PlaySound(SoundType.BreakGamePieces);
-            if (_completedBreakIterationsAfterSwitchedGamePieces > 1)
-            {
-                _soundMonoService.PlaySound(SoundType.Bonus);
-            }
-
-            _completedBreakIterationsAfterSwitchedGamePieces++;
-        }
-
-        private void ClearGamePieceAt(Vector2Int position, bool breakOnMatch = false)
+        public void ClearGamePieceAt(Vector2Int position, bool breakOnMatch = false)
         {
             GamePiece gamePiece = _gamePieces[position.x, position.y];
 
@@ -486,29 +282,7 @@ namespace Services
             }
         }
 
-        private void CollapseColumns(HashSet<int> columnIndexes)
-        {
-            var gamePiecesToMoveData = new List<GamePieceMoveData>();
-
-            foreach (int columnIndex in columnIndexes)
-            {
-                gamePiecesToMoveData.AddRange(GetGamePiecesToCollapseMoveData(columnIndex));
-            }
-
-            foreach (GamePieceMoveData gamePieceMoveData in gamePiecesToMoveData)
-            {
-                gamePieceMoveData.GamePiece.Move(gamePieceMoveData.Direction, gamePieceMoveData.Distance);
-            }
-
-            _collapsedGamePieces = gamePiecesToMoveData.Count;
-
-            if (gamePiecesToMoveData.Count == 0)
-            {
-                AddFillBoardCommand();
-            }
-        }
-
-        private IEnumerable<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
+        public IEnumerable<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
         {
             var availableRows = new Queue<int>();
             var moveDataEntries = new List<GamePieceMoveData>();
@@ -552,7 +326,7 @@ namespace Services
             return gamePiece != null;
         }
 
-        private bool HasMatches(IEnumerable<GamePiece> gamePieces, out HashSet<GamePiece> allMatches)
+        public bool HasMatches(IEnumerable<GamePiece> gamePieces, out HashSet<GamePiece> allMatches)
         {
             allMatches = new HashSet<GamePiece>();
 
@@ -568,7 +342,7 @@ namespace Services
             return allMatches.Count > 0;
         }
 
-        private bool HasCollectiblesToBreak(out HashSet<GamePiece> collectiblesToBreak)
+        public bool HasCollectiblesToBreak(out HashSet<GamePiece> collectiblesToBreak)
         {
             collectiblesToBreak = new HashSet<GamePiece>();
 
@@ -586,7 +360,7 @@ namespace Services
             return collectiblesToBreak.Count > 0;
         }
 
-        private bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece,
+        public bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece,
             out HashSet<GamePiece> gamePiecesToClear)
         {
             gamePiecesToClear = new HashSet<GamePiece>();
@@ -614,7 +388,12 @@ namespace Services
             return false;
         }
 
-        private HashSet<GamePiece> GetBombedRowGamePieces(int row)
+        public void InvokeGamePiecesSwitched()
+        {
+            OnGamePiecesSwitched?.Invoke();
+        }
+
+        public HashSet<GamePiece> GetBombedRowGamePieces(int row)
         {
             var rowGamePieces = new HashSet<GamePiece>();
 
@@ -630,7 +409,7 @@ namespace Services
             return rowGamePieces;
         }
 
-        private HashSet<GamePiece> GetBombedColumnGamePieces(int column)
+        public HashSet<GamePiece> GetBombedColumnGamePieces(int column)
         {
             var rowGamePieces = new HashSet<GamePiece>();
 
@@ -646,7 +425,7 @@ namespace Services
             return rowGamePieces;
         }
 
-        private HashSet<GamePiece> GetBombedAdjacentGamePieces(Vector2Int position, int range)
+        public HashSet<GamePiece> GetBombedAdjacentGamePieces(Vector2Int position, int range)
         {
             var rowGamePieces = new HashSet<GamePiece>();
 

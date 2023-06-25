@@ -1,4 +1,4 @@
-﻿namespace Services.Board
+﻿namespace Services.Board.States
 {
     public interface IBoardState
     {

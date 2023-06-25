@@ -1,13 +1,13 @@
 ﻿using Constants;
 
-namespace Services.Board
+namespace Services.Board.States
 {
-    public class FillBoardState : BaseBoardStateWithTimeout, IBoardState
+    public class FillTimeoutBoardState : BaseTimeoutBoardState, IBoardState
     {
         private readonly IBoardService _boardService;
 
         // TODO : fix timeout bug because must start timeout when collapsed pieces moved to end positions
-        public FillBoardState(IBoardService boardService)
+        public FillTimeoutBoardState(IBoardService boardService)
             : base(Settings.Timeouts.FillBoardTimeout)
         {
             _boardService = boardService;

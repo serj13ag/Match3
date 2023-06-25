@@ -8,7 +8,7 @@ using Helpers;
 using Services.Mono.Sound;
 using UnityEngine;
 
-namespace Services.Board
+namespace Services.Board.States
 {
     public class HandlePlayerSwitchGamePiecesBoardState : IBoardState
     {

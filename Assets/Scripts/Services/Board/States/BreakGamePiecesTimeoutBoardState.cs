@@ -4,9 +4,9 @@ using Entities;
 using Enums;
 using Services.Mono.Sound;
 
-namespace Services.Board
+namespace Services.Board.States
 {
-    internal class BreakGamePiecesState : BaseBoardStateWithTimeout, IBoardState
+    internal class BreakGamePiecesTimeoutBoardState : BaseTimeoutBoardState, IBoardState
     {
         private const int CompletedBreakIterationsAfterSwitchedGamePieces = 1; // TODO: implement mechanic
 
@@ -17,7 +17,7 @@ namespace Services.Board
 
         private readonly HashSet<GamePiece> _gamePiecesToBreak;
 
-        public BreakGamePiecesState(IBoardService boardService, IScoreService scoreService, ITileService tileService,
+        public BreakGamePiecesTimeoutBoardState(IBoardService boardService, IScoreService scoreService, ITileService tileService,
             ISoundMonoService soundMonoService, HashSet<GamePiece> gamePiecesToBreak)
             : base(Settings.Timeouts.ClearGamePiecesTimeout)
         {

@@ -1,10 +1,10 @@
-﻿namespace Services.Board
+﻿namespace Services.Board.States
 {
-    public abstract class BaseBoardStateWithTimeout
+    public abstract class BaseTimeoutBoardState
     {
         private float _timeTillExecute;
 
-        protected BaseBoardStateWithTimeout(float timeTillExecute)
+        protected BaseTimeoutBoardState(float timeTillExecute)
         {
             _timeTillExecute = timeTillExecute;
         }

@@ -5,9 +5,9 @@ using DTO;
 using Entities;
 using Helpers;
 
-namespace Services.Board
+namespace Services.Board.States
 {
-    public class CollapseColumnsBoardState : BaseBoardStateWithTimeout, IBoardState
+    public class CollapseColumnsTimeoutBoardState : BaseTimeoutBoardState, IBoardState
     {
         private readonly IBoardService _boardService;
 
@@ -17,7 +17,7 @@ namespace Services.Board
         private int _numberOfMovedGamePieces;
         private int _movedPieceNumber;
 
-        public CollapseColumnsBoardState(IBoardService boardService, HashSet<GamePiece> gamePiecesToCollapse)
+        public CollapseColumnsTimeoutBoardState(IBoardService boardService, HashSet<GamePiece> gamePiecesToCollapse)
             : base(Settings.Timeouts.CollapseColumnsTimeout)
         {
             _boardService = boardService;

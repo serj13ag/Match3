@@ -8,6 +8,7 @@ using Enums;
 using EventArguments;
 using Helpers;
 using Interfaces;
+using Services.Board.States;
 using Services.Mono;
 using Services.Mono.Sound;
 using StaticData;
@@ -97,12 +98,12 @@ namespace Services.Board
 
         public void ChangeStateToCollapse(HashSet<GamePiece> gamePiecesToCollapse)
         {
-            ChangeState(new CollapseColumnsBoardState(this, gamePiecesToCollapse));
+            ChangeState(new CollapseColumnsTimeoutBoardState(this, gamePiecesToCollapse));
         }
 
         public void ChangeStateToFill()
         {
-            ChangeState(new FillBoardState(this));
+            ChangeState(new FillTimeoutBoardState(this));
         }
 
         public void ChangeStateToWaiting()
@@ -112,7 +113,7 @@ namespace Services.Board
 
         public void ChangeStateToBreak(HashSet<GamePiece> gamePiecesToBreak)
         {
-            ChangeState(new BreakGamePiecesState(this, _scoreService, _tileService, _soundMonoService, gamePiecesToBreak));
+            ChangeState(new BreakGamePiecesTimeoutBoardState(this, _scoreService, _tileService, _soundMonoService, gamePiecesToBreak));
         }
 
         private void ChangeStateToHandlePlayerSwitchGamePieces(GamePiece clickedGamePiece, GamePiece targetGamePiece)

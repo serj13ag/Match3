@@ -5,6 +5,7 @@ using Enums;
 using EventArguments;
 using Helpers;
 using Interfaces;
+using StaticData;
 using StaticData.StartingData;
 using UnityEngine;
 
@@ -43,12 +44,13 @@ namespace Services
 
         public void Initialize()
         {
-            StartingTileStaticData[] startingTiles =
-                _staticDataService.GetDataForLevel(_levelName).StartingTiles.StartingTiles;
-
-            foreach (StartingTileStaticData startingTile in startingTiles)
+            StartingTilesStaticData startingTilesStaticData = _staticDataService.GetDataForLevel(_levelName)?.StartingTiles;
+            if (startingTilesStaticData != null)
             {
-                SpawnTile(startingTile.Type, startingTile.X, startingTile.Y);
+                foreach (StartingTileStaticData startingTile in startingTilesStaticData.StartingTiles)
+                {
+                    SpawnTile(startingTile.Type, startingTile.X, startingTile.Y);
+                }
             }
 
             for (int i = 0; i < _width; i++)

@@ -6,6 +6,7 @@ using Entities;
 using Enums;
 using Helpers;
 using Services.Mono.Sound;
+using StaticData;
 using StaticData.StartingData;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -52,12 +53,14 @@ namespace Services
 
         public void Initialize()
         {
-            foreach (StartingGamePieceStaticData startingGamePieceEntry in _staticDataService
-                         .GetDataForLevel(_levelName).StartingGamePieces
-                         .StartingGamePieces)
+            StartingGamePiecesStaticData startingGamePiecesStaticData = _staticDataService.GetDataForLevel(_levelName)?.StartingGamePieces;
+            if (startingGamePiecesStaticData != null)
             {
-                SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y, startingGamePieceEntry.Type,
-                    startingGamePieceEntry.Color);
+                foreach (StartingGamePieceStaticData startingGamePieceEntry in startingGamePiecesStaticData.StartingGamePieces)
+                {
+                    SpawnCustomGamePiece(startingGamePieceEntry.X, startingGamePieceEntry.Y, startingGamePieceEntry.Type,
+                        startingGamePieceEntry.Color);
+                }
             }
 
             FillBoardWithRandomGamePieces();

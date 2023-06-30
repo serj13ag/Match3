@@ -17,6 +17,8 @@ namespace Services
 
         private readonly SettingsStaticData _settings;
 
+        public IEnumerable<LevelStaticData> Levels => _levels.Values;
+
         public SettingsStaticData Settings => _settings;
 
         public StaticDataService()

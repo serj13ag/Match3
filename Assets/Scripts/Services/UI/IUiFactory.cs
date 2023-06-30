@@ -1,4 +1,5 @@
 ﻿using UI;
+using UnityEngine;
 
 namespace Services.UI
 {
@@ -6,5 +7,9 @@ namespace Services.UI
     {
         void CreateUiRootCanvas();
         MessageWindow GetMessageWindow();
+        MainMenu GetMainMenu();
+        LevelsWindow GetLevelsWindow();
+        LevelButton GetLevelButton(Transform parentTransform);
+        void Cleanup();
     }
 }

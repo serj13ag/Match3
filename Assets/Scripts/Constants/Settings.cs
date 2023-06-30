@@ -3,6 +3,7 @@
     public static class Settings
     {
         public const string BootstrapSceneName = "BootstrapScene";
+        public const string MainMenuSceneName = "MainMenuScene";
         public const string GameLevelScene = "GameLevelScene";
 
         public const string FirstLevelName = "Level1";

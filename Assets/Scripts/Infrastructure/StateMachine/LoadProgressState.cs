@@ -22,7 +22,7 @@ namespace Infrastructure.StateMachine
         {
             LoadProgressOrInitNew();
 
-            _gameStateMachine.Enter<GameLoopState, string>(Settings.FirstLevelName); // TODO
+            _gameStateMachine.Enter<MainMenuState>();
         }
 
         public void Exit()

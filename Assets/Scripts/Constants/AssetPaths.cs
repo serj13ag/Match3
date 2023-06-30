@@ -8,6 +8,9 @@
         public const string UpdateMonoServicePath = "Prefabs/Services/Global/UpdateMonoService";
 
         public const string UiRootCanvasPath = "Prefabs/UI/UIRootCanvas";
+        public const string MainMenuPath = "Prefabs/UI/MainMenu";
+        public const string LevelsWindowPath = "Prefabs/UI/LevelsWindow";
+        public const string LevelButtonPath = "Prefabs/UI/LevelButton";
         public const string BackgroundScreenPath = "Prefabs/UI/BackgroundScreen";
         public const string MessageWindowPath = "Prefabs/UI/MessageWindow";
 

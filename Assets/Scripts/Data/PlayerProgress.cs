@@ -7,9 +7,9 @@ namespace Data
     {
         public BoardData BoardData;
 
-        public PlayerProgress(string levelName)
+        public PlayerProgress()
         {
-            BoardData = new BoardData(levelName);
+            BoardData = new BoardData();
         }
     }
 }

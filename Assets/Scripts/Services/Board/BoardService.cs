@@ -51,7 +51,6 @@ namespace Services.Board
             updateMonoService.Register(this);
             progressUpdateService.Register(this);
 
-            // TODO: Move to own services?
             LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
             if (levelName == levelBoardData.LevelName && levelBoardData.Tiles != null &&
                 levelBoardData.GamePieces != null)

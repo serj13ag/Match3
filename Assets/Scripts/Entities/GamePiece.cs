@@ -36,7 +36,7 @@ namespace Entities
             }
         }
 
-        public bool Bombed { get; set; } // TODO: fix later
+        public bool Bombed { get; set; } // TODO
         public int Score => _score;
 
         public event Action<GamePiece> OnPositionChanged;
@@ -74,7 +74,6 @@ namespace Entities
             }
         }
 
-        // TODO move out
         public void Destroy()
         {
             Destroy(gameObject);

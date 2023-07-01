@@ -13,11 +13,6 @@ namespace Data
         public List<GamePieceSaveData> GamePieces;
         public int Score;
         public int MovesLeft;
-
-        public LevelBoardData(string levelName)
-        {
-            LevelName = levelName;
-        }
     }
 
     [Serializable]

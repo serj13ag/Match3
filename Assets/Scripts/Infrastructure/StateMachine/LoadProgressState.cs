@@ -36,7 +36,7 @@ namespace Infrastructure.StateMachine
 
         private static PlayerProgress CreatePlayerProgress()
         {
-            return new PlayerProgress(Settings.FirstLevelName); // TODO
+            return new PlayerProgress();
         }
     }
 }

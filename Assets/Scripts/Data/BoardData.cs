@@ -7,9 +7,9 @@ namespace Data
     {
         public LevelBoardData LevelBoardData;
 
-        public BoardData(string levelName)
+        public BoardData()
         {
-            LevelBoardData = new LevelBoardData(levelName);
+            LevelBoardData = new LevelBoardData();
         }
     }
 }

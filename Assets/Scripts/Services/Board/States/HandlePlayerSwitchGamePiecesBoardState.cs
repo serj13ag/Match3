@@ -151,7 +151,6 @@ namespace Services.Board.States
                 return false;
             }
 
-            // TODO: fix later
             foreach (GamePiece bombedGamePiece in bombedGamePieces)
             {
                 bombedGamePiece.Bombed = true;

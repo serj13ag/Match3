@@ -6,7 +6,6 @@ using Entities;
 using Enums;
 using Helpers;
 using Services.Mono.Sound;
-using StaticData;
 using StaticData.StartingData;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -24,8 +23,6 @@ namespace Services
         private readonly ITileService _tileService;
 
         private readonly string _levelName;
-        private readonly int _width;
-        private readonly int _height;
         private readonly Vector2Int _boardSize;
 
         private readonly GamePiece[,] _gamePieces;
@@ -44,11 +41,9 @@ namespace Services
             _persistentProgressService = persistentProgressService;
 
             _levelName = levelName;
-            _width = staticDataService.Settings.BoardWidth;
-            _height = staticDataService.Settings.BoardHeight;
             _boardSize = new Vector2Int(staticDataService.Settings.BoardWidth, staticDataService.Settings.BoardHeight);
 
-            _gamePieces = new GamePiece[_width, _height];
+            _gamePieces = new GamePiece[staticDataService.Settings.BoardWidth, staticDataService.Settings.BoardHeight];
         }
 
         public void Initialize()
@@ -91,9 +86,9 @@ namespace Services
 
         public void FillBoardWithRandomGamePieces()
         {
-            for (int i = 0; i < _width; i++)
+            for (int i = 0; i < _gamePieces.GetWidth(); i++)
             {
-                for (int j = 0; j < _height; j++)
+                for (int j = 0; j < _gamePieces.GetHeight(); j++)
                 {
                     if (_gamePieces[i, j] != null || _tileService.IsObstacleAt(i, j))
                     {
@@ -121,7 +116,7 @@ namespace Services
             Queue<int> availableRows = new Queue<int>();
             List<GamePieceMoveData> moveDataEntries = new List<GamePieceMoveData>();
 
-            for (int row = 0; row < _height; row++)
+            for (int row = 0; row < _gamePieces.GetHeight(); row++)
             {
                 Vector2Int position = new Vector2Int(column, row);
                 if (TryGetGamePieceAt(position, out GamePiece gamePiece))
@@ -151,7 +146,7 @@ namespace Services
         {
             gamePiece = null;
 
-            if (BoardHelper.IsOutOfBounds(position, new Vector2Int(_width, _height)))
+            if (BoardHelper.IsOutOfBounds(position, new Vector2Int(_gamePieces.GetWidth(), _gamePieces.GetHeight())))
             {
                 return false;
             }
@@ -181,7 +176,7 @@ namespace Services
         {
             collectiblesToBreak = new HashSet<GamePiece>();
 
-            for (int column = 0; column < _width; column++)
+            for (int column = 0; column < _gamePieces.GetWidth(); column++)
             {
                 GamePiece bottomGamePiece = _gamePieces[column, 0];
                 if (bottomGamePiece != null
@@ -267,7 +262,7 @@ namespace Services
         {
             HashSet<GamePiece> rowGamePieces = new HashSet<GamePiece>();
 
-            for (int column = 0; column < _width; column++)
+            for (int column = 0; column < _gamePieces.GetWidth(); column++)
             {
                 if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
                     && CanBombGamePiece(gamePiece))
@@ -283,7 +278,7 @@ namespace Services
         {
             HashSet<GamePiece> rowGamePieces = new HashSet<GamePiece>();
 
-            for (int row = 0; row < _height; row++)
+            for (int row = 0; row < _gamePieces.GetHeight(); row++)
             {
                 if (TryGetGamePieceAt(new Vector2Int(column, row), out GamePiece gamePiece)
                     && CanBombGamePiece(gamePiece))
@@ -321,7 +316,7 @@ namespace Services
 
         private bool TrySpawnCollectibleGamePiece(int x, int y)
         {
-            if (y == _height - 1
+            if (y == _gamePieces.GetHeight() - 1
                 && _collectibleGamePieces < Settings.MaxCollectibles
                 && _randomService.Next(100) <= Settings.PercentChanceToSpawnCollectible)
             {

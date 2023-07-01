@@ -5,7 +5,6 @@ using Enums;
 using EventArguments;
 using Helpers;
 using Interfaces;
-using StaticData;
 using StaticData.StartingData;
 using UnityEngine;
 
@@ -18,8 +17,6 @@ namespace Services
         private readonly IGameFactory _gameFactory;
 
         private readonly string _levelName;
-        private readonly int _width;
-        private readonly int _height;
 
         private readonly ITile[,] _tiles;
 
@@ -36,10 +33,8 @@ namespace Services
             _gameFactory = gameFactory;
 
             _levelName = levelName;
-            _width = staticDataService.Settings.BoardWidth;
-            _height = staticDataService.Settings.BoardHeight;
 
-            _tiles = new ITile[_width, _height];
+            _tiles = new ITile[staticDataService.Settings.BoardWidth, staticDataService.Settings.BoardHeight];
         }
 
         public void Initialize()
@@ -53,9 +48,9 @@ namespace Services
                 }
             }
 
-            for (int i = 0; i < _width; i++)
+            for (int i = 0; i < _tiles.GetWidth(); i++)
             {
-                for (int j = 0; j < _height; j++)
+                for (int j = 0; j < _tiles.GetHeight(); j++)
                 {
                     if (!TryGetTileAt(i, j, out _))
                     {

@@ -8,9 +8,9 @@ namespace Services.Board
     {
         Vector2Int BoardSize { get; }
 
-        void InvokeGamePiecesSwitched();
+        void GamePiecesSwitched();
 
-        bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece, out HashSet<GamePiece> gamePiecesToClear);
+        bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece, out HashSet<GamePiece> gamePiecesToBreak);
 
         void ChangeStateToBreak(HashSet<GamePiece> gamePiecesToBreak);
         void ChangeStateToCollapse(HashSet<int> columnIndexesToCollapse);

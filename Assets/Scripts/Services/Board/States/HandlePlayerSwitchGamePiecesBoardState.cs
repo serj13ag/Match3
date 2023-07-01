@@ -62,30 +62,32 @@ namespace Services.Board.States
             GamePiece targetGamePiece = _movedPieces[1];
 
             if (_boardService.PlayerMovedColorBomb(clickedGamePiece, targetGamePiece,
-                    out HashSet<GamePiece> gamePiecesToClear))
+                    out HashSet<GamePiece> gamePiecesToBreak))
             {
-                _boardService.InvokeGamePiecesSwitched(); // TODO one invocation
-
-                _boardService.ChangeStateToBreak(gamePiecesToClear);
+                GamePiecesSwitched(gamePiecesToBreak);
             }
             else if (_gamePieceService.HasMatches(_movedPieces, out HashSet<GamePiece> allMatches))
             {
-                _boardService.InvokeGamePiecesSwitched(); // TODO one invocation
-
-                HashSet<GamePiece> gamePiecesToBreak = GetGamePiecesToBreak(allMatches);
+                gamePiecesToBreak = GetGamePiecesToBreak(allMatches);
 
                 if (allMatches.Count >= Settings.MatchesToSpawnBomb && allMatches.Contains(clickedGamePiece))
                 {
                     SpawnBomb(allMatches, clickedGamePiece, gamePiecesToBreak);
                 }
 
-                _boardService.ChangeStateToBreak(gamePiecesToBreak);
+                GamePiecesSwitched(gamePiecesToBreak);
             }
             else
             {
                 RevertMovedGamePieces(_movedPieces);
                 _boardService.ChangeStateToWaiting();
             }
+        }
+
+        private void GamePiecesSwitched(HashSet<GamePiece> gamePiecesToBreak)
+        {
+            _boardService.GamePiecesSwitched();
+            _boardService.ChangeStateToBreak(gamePiecesToBreak);
         }
 
         private static Direction SwitchGamePieces(GamePiece clickedGamePiece, GamePiece targetGamePiece)

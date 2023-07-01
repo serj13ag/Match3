@@ -88,9 +88,9 @@ namespace Services.Board
         }
 
         public bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece,
-            out HashSet<GamePiece> gamePiecesToClear)
+            out HashSet<GamePiece> gamePiecesToBreak)
         {
-            gamePiecesToClear = new HashSet<GamePiece>();
+            gamePiecesToBreak = new HashSet<GamePiece>();
 
             if (targetGamePiece.Color == GamePieceColor.Undefined)
             {
@@ -101,12 +101,12 @@ namespace Services.Board
             {
                 if (targetGamePiece is BombGamePiece { BombType: BombType.Color })
                 {
-                    gamePiecesToClear = _gamePieceService.GetAllGamePieces();
+                    gamePiecesToBreak = _gamePieceService.GetAllGamePieces();
                 }
                 else
                 {
-                    gamePiecesToClear = _gamePieceService.GetGamePiecesByColor(targetGamePiece.Color);
-                    gamePiecesToClear.Add(clickedGamePiece);
+                    gamePiecesToBreak = _gamePieceService.GetGamePiecesByColor(targetGamePiece.Color);
+                    gamePiecesToBreak.Add(clickedGamePiece);
                 }
 
                 return true;
@@ -115,7 +115,7 @@ namespace Services.Board
             return false;
         }
 
-        public void InvokeGamePiecesSwitched()
+        public void GamePiecesSwitched()
         {
             _movesLeftService.DecrementMovesLeft();
         }

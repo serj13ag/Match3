@@ -12,11 +12,17 @@ Also states have Enter and Exit methods where you can control the lifecycle of a
 [GameStateMachine.cs](../master/Assets/Scripts/Infrastructure/StateMachine/GameStateMachine.cs)
 
 ### Application Entry Point
-Separate [Bootstrap state](../master/Assets/Scripts/Infrastructure/StateMachine/BootstrapState.cs), Bootstrap scene with Bootstrapper GameObject and [script](../master/Assets/Scripts/Infrastructure/Bootstrapper.cs). All that combined define the single entry point in application. That approach helps you to control all services initialization and avoid problems related to Unity Script Execution Order.
+Separate Bootstrap state, Bootstrap scene with Bootstrapper GameObject and script. All that combined define the single entry point in application. That approach helps you to control all services initialization and avoid problems related to Unity Script Execution Order.
+[BootstrapState.cs](../master/Assets/Scripts/Infrastructure/StateMachine/BootstrapState.cs)
+[Bootstrapper.cs](../master/Assets/Scripts/Infrastructure/Bootstrapper.cs)
 
 ### Composition Root
 Defined places where all services initialization is placed. That approach is useful for dependencies control.
-One place is [GlobalServices.cs](../master/Assets/Scripts/Infrastructure/GlobalServices.cs) for global services that active and used application lifecycle
-Second place is [GameLoopState.cs](../master/Assets/Scripts/Infrastructure/StateMachine/GameLoopState.cs) where all game loop related services are initializing.
+One place is GlobalServices for global services that active and used application lifecycle.
+Second place is GameLoopState where all game loop related services are initializing.
+[GlobalServices.cs](../master/Assets/Scripts/Infrastructure/GlobalServices.cs)
+[GameLoopState.cs](../master/Assets/Scripts/Infrastructure/StateMachine/GameLoopState.cs)
 
 ### Dependency Injection
+All services and entities gets their dependencies in constructor or Init() method (for MonoBehaviour objects).
+Services are passed through interfaces, that allows to change concrete implementation and use DI container with easy refactoring.

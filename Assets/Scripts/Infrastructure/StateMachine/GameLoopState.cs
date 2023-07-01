@@ -70,16 +70,17 @@ namespace Infrastructure.StateMachine
             IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService);
             IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentProgressService,
                 progressUpdateService, gameRoundService, scoreGoal);
+            IMovesLeftService movesLeftService = new MovesLeftService(levelName, _persistentProgressService,
+                scoreService, gameRoundService, progressUpdateService, movesLeft);
 
             ITileService tileService = new TileService(levelName, _staticDataService, progressUpdateService, gameFactory);
             IGamePieceService gamePieceService = new GamePieceService(levelName, _staticDataService, _soundMonoService,
                 _randomService, progressUpdateService, tileService, gameFactory, particleService);
 
             IBoardService boardService = new BoardService(levelName, _soundMonoService, _updateMonoService,
-                _persistentProgressService, _staticDataService, progressUpdateService, scoreService, gameRoundService,
+                _persistentProgressService, _staticDataService, progressUpdateService, scoreService, movesLeftService, gameRoundService,
                 tileService, gamePieceService);
 
-            IMovesLeftService movesLeftService = new MovesLeftService(boardService, scoreService, gameRoundService, movesLeft);
             ICameraService cameraService = new CameraService(boardService.BoardSize);
 
             BackgroundScreen backgroundScreen = _assetProviderService.Instantiate<BackgroundScreen>(AssetPaths.BackgroundScreenPath);

@@ -4,19 +4,24 @@ using EventArguments;
 using Services;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Background
 {
     public class ScoreCounter : MonoBehaviour
     {
+        [SerializeField] private Image _circleImage;
         [SerializeField] private TMP_Text _scoreText;
 
+        private IScoreService _scoreService;
+
         private int _currentScore;
-        private Coroutine _updateScoreRoutine;
+        private Coroutine _updateScoreViewRoutine;
 
         public void Init(IScoreService scoreService)
         {
-            UpdateScoreText(scoreService.Score);
+            _scoreService = scoreService;
+            UpdateView(scoreService.Score);
 
             scoreService.OnScoreChanged += OnScoreChanged;
         }
@@ -27,10 +32,10 @@ namespace UI.Background
 
             _currentScore = e.Score;
 
-            _updateScoreRoutine ??= StartCoroutine(UpdateScoreTextRoutine(oldScore));
+            _updateScoreViewRoutine ??= StartCoroutine(UpdateScoreViewRoutine(oldScore));
         }
 
-        private IEnumerator UpdateScoreTextRoutine(int oldScore)
+        private IEnumerator UpdateScoreViewRoutine(int oldScore)
         {
             int counterValue = oldScore;
 
@@ -39,19 +44,30 @@ namespace UI.Background
                 counterValue += Settings.Score.UpdateScoreTextIncrement;
                 counterValue = Mathf.Min(counterValue, _currentScore);
 
-                UpdateScoreText(counterValue);
+                UpdateView(counterValue);
 
                 yield return new WaitForSeconds(Settings.Score.ScoreTextUpdateIntervalInSeconds);
             }
 
-            UpdateScoreText(_currentScore);
+            UpdateView(_currentScore);
 
-            _updateScoreRoutine = null;
+            _updateScoreViewRoutine = null;
+        }
+
+        private void UpdateView(int score)
+        {
+            UpdateScoreText(score);
+            UpdateImageFill(score);
         }
 
         private void UpdateScoreText(int score)
         {
             _scoreText.text = score.ToString();
+        }
+
+        private void UpdateImageFill(int score)
+        {
+            _circleImage.fillAmount = (float)score / _scoreService.ScoreGoal;
         }
     }
 }

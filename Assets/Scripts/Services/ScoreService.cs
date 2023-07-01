@@ -18,6 +18,7 @@ namespace Services
         private int _score;
 
         public int Score => _score;
+        public int ScoreGoal => _scoreGoal;
 
         public bool ScoreGoalReached => _score >= _scoreGoal;
 

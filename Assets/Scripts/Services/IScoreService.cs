@@ -7,6 +7,7 @@ namespace Services
     {
         int Score { get; }
         bool ScoreGoalReached { get; }
+        int ScoreGoal { get; }
 
         event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
 

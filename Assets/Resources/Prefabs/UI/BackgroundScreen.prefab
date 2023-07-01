@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 377ce9d9efef41d9b04bb7e08931c4e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _circleImage: {fileID: 6496748320201628854}
   _scoreText: {fileID: 6496748321336580124}
 --- !u!1 &6496748320201628852
 GameObject:
@@ -119,7 +120,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 035730767cd6418409854d2cd3271e02, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4

@@ -13,14 +13,13 @@ using UnityEngine;
 
 namespace Services.Board
 {
-    public class BoardService : IUpdatable, IBoardService
+    public class BoardService : IUpdatable, IBoardService, IProgressWriter
     {
         private readonly ITileService _tileService;
         private readonly IGamePieceService _gamePieceService;
         private readonly IScoreService _scoreService;
         private readonly ISoundMonoService _soundMonoService;
-        private readonly IPersistentProgressService _persistentProgressService;
-        private readonly ISaveLoadService _saveLoadService;
+        private readonly IProgressUpdateService _progressUpdateService;
         private readonly IGameRoundService _gameRoundService;
 
         private readonly string _levelName;
@@ -34,21 +33,23 @@ namespace Services.Board
         public event Action OnGamePiecesSwitched;
 
         public BoardService(string levelName, ISoundMonoService soundMonoService, IUpdateMonoService updateMonoService,
-            IPersistentProgressService persistentProgressService, ISaveLoadService saveLoadService,
-            IStaticDataService staticDataService, IScoreService scoreService, IGameRoundService gameRoundService,
+            IPersistentProgressService persistentProgressService, IStaticDataService staticDataService,
+            IProgressUpdateService progressUpdateService, IScoreService scoreService, IGameRoundService gameRoundService,
             ITileService tileService, IGamePieceService gamePieceService)
         {
             _scoreService = scoreService;
             _tileService = tileService;
             _gamePieceService = gamePieceService;
             _soundMonoService = soundMonoService;
-            _persistentProgressService = persistentProgressService;
-            _saveLoadService = saveLoadService;
+            _progressUpdateService = progressUpdateService;
             _gameRoundService = gameRoundService;
 
             _levelName = levelName;
 
             BoardSize = new Vector2Int(staticDataService.Settings.BoardWidth, staticDataService.Settings.BoardHeight);
+
+            updateMonoService.Register(this);
+            progressUpdateService.Register(this);
 
             LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
             if (levelName == levelBoardData.LevelName && levelBoardData.Tiles != null &&
@@ -62,10 +63,8 @@ namespace Services.Board
                 tileService.Initialize();
                 gamePieceService.Initialize();
 
-                UpdateProgressAndSave();
+                progressUpdateService.UpdateProgressAndSave();
             }
-
-            updateMonoService.Register(this);
 
             tileService.OnMoveRequested += OnMoveRequested;
 
@@ -80,6 +79,11 @@ namespace Services.Board
             }
 
             _boardState.Update(deltaTime);
+        }
+
+        public void WriteToProgress(PlayerProgress progress)
+        {
+            progress.BoardData.LevelBoardData.LevelName = _levelName;
         }
 
         public bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece,
@@ -128,7 +132,8 @@ namespace Services.Board
         public void ChangeStateToWaiting()
         {
             ChangeState(new WaitingBoardState());
-            UpdateProgressAndSave();
+
+            _progressUpdateService.UpdateProgressAndSave();
         }
 
         public void ChangeStateToBreak(HashSet<GamePiece> gamePiecesToBreak)
@@ -159,17 +164,6 @@ namespace Services.Board
 
                 ChangeStateToHandlePlayerSwitchGamePieces(clickedGamePiece, targetGamePiece);
             }
-        }
-
-        private void UpdateProgressAndSave()
-        {
-            _persistentProgressService.Progress.BoardData.LevelBoardData.LevelName = _levelName;
-
-            _tileService.UpdateProgress();
-            _gamePieceService.UpdateProgress();
-            _scoreService.UpdateProgress();
-
-            _saveLoadService.SaveProgress();
         }
     }
 }

@@ -5,6 +5,7 @@ using DTO;
 using Entities;
 using Enums;
 using Helpers;
+using Interfaces;
 using Services.Mono.Sound;
 using StaticData.StartingData;
 using UnityEngine;
@@ -12,13 +13,12 @@ using UnityEngine.Assertions;
 
 namespace Services
 {
-    public class GamePieceService : IGamePieceService
+    public class GamePieceService : IGamePieceService, IProgressWriter
     {
         private readonly ISoundMonoService _soundMonoService;
         private readonly IParticleService _particleService;
         private readonly IGameFactory _gameFactory;
         private readonly IRandomService _randomService;
-        private readonly IPersistentProgressService _persistentProgressService;
         private readonly IStaticDataService _staticDataService;
         private readonly ITileService _tileService;
 
@@ -28,9 +28,10 @@ namespace Services
         private readonly GamePiece[,] _gamePieces;
         private int _collectibleGamePieces;
 
-        public GamePieceService(string levelName, IPersistentProgressService persistentProgressService,
-            IStaticDataService staticDataService, ISoundMonoService soundMonoService, IRandomService randomService,
-            ITileService tileService, IGameFactory gameFactory, IParticleService particleService)
+        public GamePieceService(string levelName, IStaticDataService staticDataService,
+            ISoundMonoService soundMonoService, IRandomService randomService,
+            IProgressUpdateService progressUpdateService, ITileService tileService, IGameFactory gameFactory,
+            IParticleService particleService)
         {
             _soundMonoService = soundMonoService;
             _particleService = particleService;
@@ -38,12 +39,13 @@ namespace Services
             _randomService = randomService;
             _staticDataService = staticDataService;
             _tileService = tileService;
-            _persistentProgressService = persistentProgressService;
 
             _levelName = levelName;
             _boardSize = new Vector2Int(staticDataService.Settings.BoardWidth, staticDataService.Settings.BoardHeight);
 
             _gamePieces = new GamePiece[staticDataService.Settings.BoardWidth, staticDataService.Settings.BoardHeight];
+
+            progressUpdateService.Register(this);
         }
 
         public void Initialize()
@@ -69,7 +71,7 @@ namespace Services
             }
         }
 
-        public void UpdateProgress()
+        public void WriteToProgress(PlayerProgress progress)
         {
             List<GamePieceSaveData> gamePieceSaveData = new List<GamePieceSaveData>();
 
@@ -81,7 +83,7 @@ namespace Services
                 }
             }
 
-            _persistentProgressService.Progress.BoardData.LevelBoardData.GamePieces = gamePieceSaveData;
+            progress.BoardData.LevelBoardData.GamePieces = gamePieceSaveData;
         }
 
         public void FillBoardWithRandomGamePieces()

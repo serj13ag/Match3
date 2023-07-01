@@ -15,6 +15,5 @@ namespace Services
 
         void IncrementCompletedBreakStreakIterations();
         void ResetBreakStreakIterations();
-        void UpdateProgress();
     }
 }

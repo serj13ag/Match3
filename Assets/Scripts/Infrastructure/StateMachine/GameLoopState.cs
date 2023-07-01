@@ -63,17 +63,20 @@ namespace Infrastructure.StateMachine
             int scoreGoal = levelStaticData.ScoreGoal;
             int movesLeft = levelStaticData.MovesLeft;
 
+            IProgressUpdateService progressUpdateService = new ProgressUpdateService(_persistentProgressService, _saveLoadService);
+
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
             IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService);
-            IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentProgressService, gameRoundService, scoreGoal);
+            IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentProgressService,
+                progressUpdateService, gameRoundService, scoreGoal);
 
-            ITileService tileService = new TileService(levelName, _staticDataService, _persistentProgressService, gameFactory);
-            IGamePieceService gamePieceService = new GamePieceService(levelName, _persistentProgressService,
-                _staticDataService, _soundMonoService, _randomService, tileService, gameFactory, particleService);
+            ITileService tileService = new TileService(levelName, _staticDataService, progressUpdateService, gameFactory);
+            IGamePieceService gamePieceService = new GamePieceService(levelName, _staticDataService, _soundMonoService,
+                _randomService, progressUpdateService, tileService, gameFactory, particleService);
 
             IBoardService boardService = new BoardService(levelName, _soundMonoService, _updateMonoService,
-                _persistentProgressService, _saveLoadService, _staticDataService, scoreService, gameRoundService,
+                _persistentProgressService, _staticDataService, progressUpdateService, scoreService, gameRoundService,
                 tileService, gamePieceService);
 
             IMovesLeftService movesLeftService = new MovesLeftService(boardService, scoreService, gameRoundService, movesLeft);

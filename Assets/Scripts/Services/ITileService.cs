@@ -15,6 +15,5 @@ namespace Services
 
         void ProcessTileMatchAt(Vector2Int position);
         bool IsObstacleAt(int column, int row);
-        void UpdateProgress();
     }
 }

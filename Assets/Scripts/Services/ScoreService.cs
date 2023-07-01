@@ -3,19 +3,20 @@ using Constants;
 using Data;
 using Enums;
 using EventArguments;
+using Interfaces;
 using Services.Mono.Sound;
 using UnityEngine;
 
 namespace Services
 {
-    public class ScoreService : IScoreService
+    public class ScoreService : IScoreService, IProgressWriter
     {
         private readonly IGameRoundService _gameRoundService;
 
         private int _completedBreakStreakIterations;
 
         private readonly ISoundMonoService _soundMonoService;
-        private readonly IPersistentProgressService _persistentProgressService;
+        private readonly IProgressUpdateService _progressUpdateService;
 
         private readonly int _scoreGoal;
         private int _score;
@@ -28,19 +29,21 @@ namespace Services
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
 
         public ScoreService(string levelName, ISoundMonoService soundMonoService,
-            IPersistentProgressService persistentProgressService, IGameRoundService gameRoundService, int scoreGoal)
+            IPersistentProgressService persistentProgressService, IProgressUpdateService progressUpdateService,
+            IGameRoundService gameRoundService, int scoreGoal)
         {
             _soundMonoService = soundMonoService;
-            _persistentProgressService = persistentProgressService;
             _gameRoundService = gameRoundService;
 
             _scoreGoal = scoreGoal;
 
-            LevelBoardData levelBoardData = _persistentProgressService.Progress.BoardData.LevelBoardData;
+            LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
             if (levelName == levelBoardData.LevelName)
             {
                 _score = levelBoardData.Score;
             }
+
+            progressUpdateService.Register(this);
         }
 
         public void AddScore(int gamePieceScore, int numberOfBreakGamePieces)
@@ -69,9 +72,9 @@ namespace Services
             _completedBreakStreakIterations = 0;
         }
 
-        public void UpdateProgress()
+        public void WriteToProgress(PlayerProgress progress)
         {
-            _persistentProgressService.Progress.BoardData.LevelBoardData.Score = _score;
+            progress.BoardData.LevelBoardData.Score = _score;
         }
 
         private void AddScore(int scoreToAdd)

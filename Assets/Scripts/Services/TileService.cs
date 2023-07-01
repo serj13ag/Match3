@@ -10,10 +10,9 @@ using UnityEngine;
 
 namespace Services
 {
-    public class TileService : ITileService
+    public class TileService : ITileService, IProgressWriter
     {
         private readonly IStaticDataService _staticDataService;
-        private readonly IPersistentProgressService _persistentProgressService;
         private readonly IGameFactory _gameFactory;
 
         private readonly string _levelName;
@@ -26,15 +25,16 @@ namespace Services
         public event EventHandler<MoveRequestedEventArgs> OnMoveRequested;
 
         public TileService(string levelName, IStaticDataService staticDataService,
-            IPersistentProgressService persistentProgressService, IGameFactory gameFactory)
+            IProgressUpdateService progressUpdateService, IGameFactory gameFactory)
         {
             _staticDataService = staticDataService;
-            _persistentProgressService = persistentProgressService;
             _gameFactory = gameFactory;
 
             _levelName = levelName;
 
             _tiles = new ITile[staticDataService.Settings.BoardWidth, staticDataService.Settings.BoardHeight];
+
+            progressUpdateService.Register(this);
         }
 
         public void Initialize()
@@ -68,18 +68,6 @@ namespace Services
             }
         }
 
-        public void UpdateProgress()
-        {
-            List<TileSaveData> tilesSaveData = new List<TileSaveData>();
-
-            foreach (ITile tile in _tiles)
-            {
-                tilesSaveData.Add(new TileSaveData(tile.Type, tile.Position));
-            }
-
-            _persistentProgressService.Progress.BoardData.LevelBoardData.Tiles = tilesSaveData;
-        }
-
         public void ProcessTileMatchAt(Vector2Int position)
         {
             if (TryGetTileAt(position.x, position.y, out ITile tile))
@@ -91,6 +79,18 @@ namespace Services
         public bool IsObstacleAt(int column, int row)
         {
             return _tiles[column, row].IsObstacle;
+        }
+
+        public void WriteToProgress(PlayerProgress progress)
+        {
+            List<TileSaveData> tilesSaveData = new List<TileSaveData>();
+
+            foreach (ITile tile in _tiles)
+            {
+                tilesSaveData.Add(new TileSaveData(tile.Type, tile.Position));
+            }
+
+            progress.BoardData.LevelBoardData.Tiles = tilesSaveData;
         }
 
         private void SpawnTile(TileType tileType, int x, int y)

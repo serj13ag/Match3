@@ -11,7 +11,6 @@ namespace Services
     {
         void Initialize();
         void Initialize(List<GamePieceSaveData> gamePieces);
-        void UpdateProgress();
 
         void FillBoardWithRandomGamePieces();
         void ClearGamePieceAt(Vector2Int position, bool breakOnMatch = false);

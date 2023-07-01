@@ -79,7 +79,7 @@ namespace Infrastructure.StateMachine
             ICameraService cameraService = new CameraService(boardService.BoardSize);
 
             BackgroundScreen backgroundScreen = _assetProviderService.Instantiate<BackgroundScreen>(AssetPaths.BackgroundScreenPath);
-            backgroundScreen.Init(scoreService, cameraService, movesLeftService);
+            backgroundScreen.Init(levelName, scoreService, cameraService, movesLeftService);
 
             gameRoundService.StartGame(scoreGoal);
             _loadingCurtainMonoService.FadeOffWithDelay();

@@ -17,21 +17,20 @@ namespace UI.Background
         private Coroutine _updateScoreRoutine;
         private int _currentScore;
 
-        public void Init(IScoreService scoreService, ICameraService cameraService, IMovesLeftService movesLeftService)
+        public void Init(string levelName, IScoreService scoreService, ICameraService cameraService,
+            IMovesLeftService movesLeftService)
         {
             _canvas.worldCamera = cameraService.MainCamera;
 
             _scoreCounter.Init(scoreService);
             _movesLeftCounter.Init(movesLeftService);
 
-            UpdateSceneNameText();
+            UpdateSceneNameText(levelName);
         }
 
-        private void UpdateSceneNameText()
+        private void UpdateSceneNameText(string levelName)
         {
-            Scene scene = SceneManager.GetActiveScene();
-
-            _levelNameText.text = scene.name;
+            _levelNameText.text = levelName;
         }
     }
 }

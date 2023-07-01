@@ -7,5 +7,6 @@ namespace Services
     {
         int MovesLeft { get; }
         event EventHandler<MovesLeftChangedEventArgs> OnMovesLeftChanged;
+        void DecrementMovesLeft();
     }
 }

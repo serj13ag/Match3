@@ -1,10 +1,11 @@
 ﻿using System;
+using Data;
 using EventArguments;
-using Services.Board;
+using Interfaces;
 
 namespace Services
 {
-    public class MovesLeftService : IMovesLeftService
+    public class MovesLeftService : IMovesLeftService, IProgressWriter
     {
         private readonly IScoreService _scoreService;
         private readonly IGameRoundService _gameRoundService;
@@ -15,23 +16,32 @@ namespace Services
 
         public event EventHandler<MovesLeftChangedEventArgs> OnMovesLeftChanged;
 
-        public MovesLeftService(IBoardService boardService, IScoreService scoreService, IGameRoundService gameRoundService,
+        public MovesLeftService(string levelName, IPersistentProgressService persistentProgressService,
+            IScoreService scoreService, IGameRoundService gameRoundService, IProgressUpdateService progressUpdateService,
             int movesLeft)
         {
             _scoreService = scoreService;
             _gameRoundService = gameRoundService;
 
-            boardService.OnGamePiecesSwitched += OnGamePiecesSwitched;
+            progressUpdateService.Register(this);
 
-            _movesLeft = movesLeft;
+            LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
+            if (levelName == levelBoardData.LevelName && levelBoardData.MovesLeft > 0)
+            {
+                _movesLeft = levelBoardData.MovesLeft;
+            }
+            else
+            {
+                _movesLeft = movesLeft;
+            }
         }
 
-        private void OnGamePiecesSwitched()
+        public void WriteToProgress(PlayerProgress progress)
         {
-            DecrementMovesLeft();
+            progress.BoardData.LevelBoardData.MovesLeft = _movesLeft;
         }
 
-        private void DecrementMovesLeft()
+        public void DecrementMovesLeft()
         {
             _movesLeft--;
 

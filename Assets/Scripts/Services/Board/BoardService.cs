@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Data;
 using Entities;
@@ -18,6 +17,7 @@ namespace Services.Board
         private readonly ITileService _tileService;
         private readonly IGamePieceService _gamePieceService;
         private readonly IScoreService _scoreService;
+        private readonly IMovesLeftService _movesLeftService;
         private readonly ISoundMonoService _soundMonoService;
         private readonly IProgressUpdateService _progressUpdateService;
         private readonly IGameRoundService _gameRoundService;
@@ -30,14 +30,14 @@ namespace Services.Board
 
         public Vector2Int BoardSize { get; }
 
-        public event Action OnGamePiecesSwitched;
-
         public BoardService(string levelName, ISoundMonoService soundMonoService, IUpdateMonoService updateMonoService,
             IPersistentProgressService persistentProgressService, IStaticDataService staticDataService,
-            IProgressUpdateService progressUpdateService, IScoreService scoreService, IGameRoundService gameRoundService,
+            IProgressUpdateService progressUpdateService, IScoreService scoreService,
+            IMovesLeftService movesLeftService, IGameRoundService gameRoundService,
             ITileService tileService, IGamePieceService gamePieceService)
         {
             _scoreService = scoreService;
+            _movesLeftService = movesLeftService;
             _tileService = tileService;
             _gamePieceService = gamePieceService;
             _soundMonoService = soundMonoService;
@@ -51,6 +51,7 @@ namespace Services.Board
             updateMonoService.Register(this);
             progressUpdateService.Register(this);
 
+            // TODO: Move to own services?
             LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
             if (levelName == levelBoardData.LevelName && levelBoardData.Tiles != null &&
                 levelBoardData.GamePieces != null)
@@ -116,7 +117,7 @@ namespace Services.Board
 
         public void InvokeGamePiecesSwitched()
         {
-            OnGamePiecesSwitched?.Invoke();
+            _movesLeftService.DecrementMovesLeft();
         }
 
         public void ChangeStateToCollapse(HashSet<int> columnIndexesToCollapse)

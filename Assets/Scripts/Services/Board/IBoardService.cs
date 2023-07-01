@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Entities;
 using UnityEngine;
 
@@ -8,8 +7,6 @@ namespace Services.Board
     public interface IBoardService
     {
         Vector2Int BoardSize { get; }
-
-        event Action OnGamePiecesSwitched;
 
         void InvokeGamePiecesSwitched();
 

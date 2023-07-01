@@ -52,6 +52,7 @@ namespace Infrastructure.StateMachine
 
         public void Exit()
         {
+            Cleanup();
         }
 
         private void OnLevelLoaded(string levelName)
@@ -79,10 +80,15 @@ namespace Infrastructure.StateMachine
             ICameraService cameraService = new CameraService(boardService.BoardSize);
 
             BackgroundScreen backgroundScreen = _assetProviderService.Instantiate<BackgroundScreen>(AssetPaths.BackgroundScreenPath);
-            backgroundScreen.Init(levelName, scoreService, cameraService, movesLeftService);
+            backgroundScreen.Init(levelName, _gameStateMachine, scoreService, cameraService, movesLeftService);
 
             gameRoundService.StartGame(scoreGoal);
             _loadingCurtainMonoService.FadeOffWithDelay();
+        }
+
+        private void Cleanup()
+        {
+            _uiFactory.Cleanup();
         }
     }
 }

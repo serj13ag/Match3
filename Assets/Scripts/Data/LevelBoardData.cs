@@ -11,6 +11,7 @@ namespace Data
         public string LevelName;
         public List<TileSaveData> Tiles;
         public List<GamePieceSaveData> GamePieces;
+        public int Score;
 
         public LevelBoardData(string levelName)
         {

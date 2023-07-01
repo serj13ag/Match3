@@ -167,6 +167,7 @@ namespace Services.Board
 
             _tileService.UpdateProgress();
             _gamePieceService.UpdateProgress();
+            _scoreService.UpdateProgress();
 
             _saveLoadService.SaveProgress();
         }

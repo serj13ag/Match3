@@ -66,7 +66,7 @@ namespace Infrastructure.StateMachine
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
             IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService);
-            IScoreService scoreService = new ScoreService(_soundMonoService, gameRoundService, scoreGoal);
+            IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentProgressService, gameRoundService, scoreGoal);
 
             ITileService tileService = new TileService(levelName, _staticDataService, _persistentProgressService, gameFactory);
             IGamePieceService gamePieceService = new GamePieceService(levelName, _persistentProgressService,

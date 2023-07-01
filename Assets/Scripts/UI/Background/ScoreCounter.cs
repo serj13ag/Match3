@@ -21,6 +21,8 @@ namespace UI.Background
         public void Init(IScoreService scoreService)
         {
             _scoreService = scoreService;
+
+            _currentScore = _scoreService.Score;
             UpdateView(scoreService.Score);
 
             scoreService.OnScoreChanged += OnScoreChanged;

@@ -1,5 +1,6 @@
 ﻿using System;
 using Constants;
+using Data;
 using Enums;
 using EventArguments;
 using Services.Mono.Sound;
@@ -14,6 +15,8 @@ namespace Services
         private int _completedBreakStreakIterations;
 
         private readonly ISoundMonoService _soundMonoService;
+        private readonly IPersistentProgressService _persistentProgressService;
+
         private readonly int _scoreGoal;
         private int _score;
 
@@ -24,12 +27,20 @@ namespace Services
 
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
 
-        public ScoreService(ISoundMonoService soundMonoService, IGameRoundService gameRoundService, int scoreGoal)
+        public ScoreService(string levelName, ISoundMonoService soundMonoService,
+            IPersistentProgressService persistentProgressService, IGameRoundService gameRoundService, int scoreGoal)
         {
             _soundMonoService = soundMonoService;
+            _persistentProgressService = persistentProgressService;
             _gameRoundService = gameRoundService;
 
             _scoreGoal = scoreGoal;
+
+            LevelBoardData levelBoardData = _persistentProgressService.Progress.BoardData.LevelBoardData;
+            if (levelName == levelBoardData.LevelName)
+            {
+                _score = levelBoardData.Score;
+            }
         }
 
         public void AddScore(int gamePieceScore, int numberOfBreakGamePieces)
@@ -56,6 +67,11 @@ namespace Services
         public void ResetBreakStreakIterations()
         {
             _completedBreakStreakIterations = 0;
+        }
+
+        public void UpdateProgress()
+        {
+            _persistentProgressService.Progress.BoardData.LevelBoardData.Score = _score;
         }
 
         private void AddScore(int scoreToAdd)

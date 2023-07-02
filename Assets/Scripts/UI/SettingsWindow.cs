@@ -51,8 +51,7 @@ namespace UI
 
         private void ResetProgressAndSave()
         {
-            _persistentProgressService.ResetProgress();
-            _saveLoadService.SaveProgress();
+            _persistentProgressService.ResetProgressAndSave();
         }
 
         private void Back()

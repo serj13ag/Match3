@@ -31,7 +31,7 @@ namespace Services
                 progressWriter.WriteToProgress(_persistentProgressService.Progress);
             }
 
-            _saveLoadService.SaveProgress();
+            _persistentProgressService.SaveProgress();
         }
     }
 }

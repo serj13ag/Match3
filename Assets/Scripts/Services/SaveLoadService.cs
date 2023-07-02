@@ -7,13 +7,6 @@ namespace Services
     {
         private const string ProgressKey = "ProgressKey";
 
-        private readonly IPersistentProgressService _persistentProgressService;
-
-        public SaveLoadService(IPersistentProgressService persistentProgressService)
-        {
-            _persistentProgressService = persistentProgressService;
-        }
-
         public PlayerProgress LoadProgress()
         {
             string savedProgressString = PlayerPrefs.GetString(ProgressKey);
@@ -22,9 +15,9 @@ namespace Services
                 : DeserializeJson<PlayerProgress>(savedProgressString);
         }
 
-        public void SaveProgress()
+        public void SaveProgress(PlayerProgress progress)
         {
-            PlayerPrefs.SetString(ProgressKey, ToJson(_persistentProgressService.Progress));
+            PlayerPrefs.SetString(ProgressKey, ToJson(progress));
         }
 
         private static string ToJson(object obj)

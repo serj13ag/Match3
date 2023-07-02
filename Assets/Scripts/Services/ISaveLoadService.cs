@@ -5,6 +5,6 @@ namespace Services
     public interface ISaveLoadService
     {
         PlayerProgress LoadProgress();
-        void SaveProgress();
+        void SaveProgress(PlayerProgress playerProgress);
     }
 }

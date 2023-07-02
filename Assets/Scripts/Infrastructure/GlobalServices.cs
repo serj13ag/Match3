@@ -34,8 +34,10 @@ namespace Infrastructure
             IRandomService randomService = new RandomService();
             IAssetProviderService assetProviderService = new AssetProviderService();
             IStaticDataService staticDataService = new StaticDataService();
-            IPersistentProgressService persistentProgressService = new PersistentProgressService();
-            ISaveLoadService saveLoadService = new SaveLoadService(persistentProgressService);
+            ISaveLoadService saveLoadService = new SaveLoadService();
+
+            IPersistentProgressService persistentProgressService = new PersistentProgressService(saveLoadService);
+            ISettingsService settingsService = new SettingsService(saveLoadService);
 
             ILoadingCurtainMonoService loadingCurtainMonoService =
                 assetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
@@ -55,8 +57,9 @@ namespace Infrastructure
             RandomService = randomService;
             AssetProviderService = assetProviderService;
             StaticDataService = staticDataService;
-            PersistentProgressService = persistentProgressService;
             SaveLoadService = saveLoadService;
+
+            PersistentProgressService = persistentProgressService;
 
             LoadingCurtainMonoService = loadingCurtainMonoService;
             SoundMonoService = soundMonoService;

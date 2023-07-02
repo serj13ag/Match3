@@ -9,7 +9,6 @@ namespace Infrastructure
 {
     public class GlobalServices
     {
-        public GameStateMachine GameStateMachine { get; private set; }
         public SceneLoader SceneLoader { get; }
 
         public IRandomService RandomService { get; private set; }
@@ -32,24 +31,36 @@ namespace Infrastructure
 
         public void InitGlobalServices(GameStateMachine gameStateMachine)
         {
-            GameStateMachine = gameStateMachine;
+            RandomService randomService = new RandomService();
+            AssetProviderService assetProviderService = new AssetProviderService();
+            StaticDataService staticDataService = new StaticDataService();
+            PersistentProgressService persistentProgressService = new PersistentProgressService();
+            SaveLoadService saveLoadService = new SaveLoadService(persistentProgressService);
 
-            RandomService = new RandomService();
-            AssetProviderService = new AssetProviderService();
-            StaticDataService = new StaticDataService();
-            PersistentProgressService = new PersistentProgressService();
-            SaveLoadService = new SaveLoadService(PersistentProgressService);
+            UiFactory uiFactory = new UiFactory(gameStateMachine, assetProviderService, staticDataService);
+            WindowService windowService = new WindowService(uiFactory, assetProviderService);
 
-            UiFactory = new UiFactory(gameStateMachine, AssetProviderService, StaticDataService);
-            WindowService = new WindowService(UiFactory, AssetProviderService);
+            LoadingCurtainMonoService loadingCurtainMonoService =
+                assetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
 
-            LoadingCurtainMonoService = AssetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
+            SoundMonoService soundMonoService =
+                assetProviderService.Instantiate<SoundMonoService>(AssetPaths.SoundMonoServicePath);
+            soundMonoService.Init(randomService);
 
-            SoundMonoService = AssetProviderService.Instantiate<SoundMonoService>(AssetPaths.SoundMonoServicePath);
-            SoundMonoService.Init(RandomService);
+            UpdateMonoService updateMonoService =
+                assetProviderService.Instantiate<UpdateMonoService>(AssetPaths.UpdateMonoServicePath);
+            updateMonoService.Init();
 
-            UpdateMonoService = AssetProviderService.Instantiate<UpdateMonoService>(AssetPaths.UpdateMonoServicePath);
-            UpdateMonoService.Init();
+            RandomService = randomService;
+            AssetProviderService = assetProviderService;
+            StaticDataService = staticDataService;
+            PersistentProgressService = persistentProgressService;
+            SaveLoadService = saveLoadService;
+            UiFactory = uiFactory;
+            WindowService = windowService;
+            LoadingCurtainMonoService = loadingCurtainMonoService;
+            SoundMonoService = soundMonoService;
+            UpdateMonoService = updateMonoService;
         }
     }
 }

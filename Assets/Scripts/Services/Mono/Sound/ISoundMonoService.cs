@@ -4,7 +4,7 @@ namespace Services.Mono.Sound
 {
     public interface ISoundMonoService
     {
-        void Init(IRandomService randomService);
+        void Init(IRandomService randomService, ISettingsService settingsService);
 
         void SwitchSoundMode();
 

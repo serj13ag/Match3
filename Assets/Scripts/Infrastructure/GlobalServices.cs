@@ -44,14 +44,14 @@ namespace Infrastructure
 
             ISoundMonoService soundMonoService =
                 assetProviderService.Instantiate<SoundMonoService>(AssetPaths.SoundMonoServicePath);
-            soundMonoService.Init(randomService);
+            soundMonoService.Init(randomService, settingsService);
 
             IUpdateMonoService updateMonoService =
                 assetProviderService.Instantiate<UpdateMonoService>(AssetPaths.UpdateMonoServicePath);
             updateMonoService.Init();
 
             IUiFactory uiFactory = new UiFactory(gameStateMachine, assetProviderService, staticDataService,
-                persistentProgressService, saveLoadService, soundMonoService);
+                persistentProgressService, soundMonoService, settingsService);
             IWindowService windowService = new WindowService(uiFactory, assetProviderService);
 
             RandomService = randomService;

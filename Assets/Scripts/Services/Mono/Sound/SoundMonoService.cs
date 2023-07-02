@@ -19,15 +19,17 @@ namespace Services.Mono.Sound
         [SerializeField] private AudioClip _breakCollectibleClip;
 
         private IRandomService _randomService;
+        private ISettingsService _settingsService;
 
         private bool _isEnabled;
         private LoopAudioSource _backgroundMusicAudioSource;
 
-        public void Init(IRandomService randomService)
+        public void Init(IRandomService randomService, ISettingsService settingsService)
         {
+            _settingsService = settingsService;
             _randomService = randomService;
 
-            _isEnabled = true;
+            _isEnabled = _settingsService.SoundEnabled;
 
             DontDestroyOnLoad(this);
         }

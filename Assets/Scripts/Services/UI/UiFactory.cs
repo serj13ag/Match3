@@ -12,8 +12,8 @@ namespace Services.UI
         private readonly IAssetProviderService _assetProviderService;
         private readonly IStaticDataService _staticDataService;
         private readonly IPersistentProgressService _persistentProgressService;
-        private readonly ISaveLoadService _saveLoadService;
         private readonly ISoundMonoService _soundMonoService;
+        private readonly ISettingsService _settingsService;
 
         private Transform _uiRootTransform;
 
@@ -21,14 +21,14 @@ namespace Services.UI
 
         public UiFactory(GameStateMachine gameStateMachine, IAssetProviderService assetProviderService,
             IStaticDataService staticDataService, IPersistentProgressService persistentProgressService,
-            ISaveLoadService saveLoadService, ISoundMonoService soundMonoService)
+            ISoundMonoService soundMonoService, ISettingsService settingsService)
         {
             _gameStateMachine = gameStateMachine;
             _assetProviderService = assetProviderService;
             _staticDataService = staticDataService;
             _persistentProgressService = persistentProgressService;
-            _saveLoadService = saveLoadService;
             _soundMonoService = soundMonoService;
+            _settingsService = settingsService;
         }
 
         public void CreateUiRootCanvas()
@@ -47,7 +47,7 @@ namespace Services.UI
         public SettingsWindow CreateSettingsWindow()
         {
             SettingsWindow settingsWindow = _assetProviderService.Instantiate<SettingsWindow>(AssetPaths.SettingsWindowPath, _uiRootTransform);
-            settingsWindow.Init(_persistentProgressService, _saveLoadService, _soundMonoService);
+            settingsWindow.Init(_persistentProgressService, _soundMonoService, _settingsService);
             return settingsWindow;
         }
 

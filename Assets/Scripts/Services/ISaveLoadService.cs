@@ -6,5 +6,8 @@ namespace Services
     {
         PlayerProgress LoadProgress();
         void SaveProgress(PlayerProgress playerProgress);
+
+        GameSettings LoadGameSettings();
+        void SaveGameSettings(GameSettings gameSettings);
     }
 }

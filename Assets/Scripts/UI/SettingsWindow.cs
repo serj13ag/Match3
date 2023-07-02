@@ -14,8 +14,8 @@ namespace UI
         [SerializeField] private Button _backButton;
 
         private IPersistentProgressService _persistentProgressService;
-        private ISaveLoadService _saveLoadService;
         private ISoundMonoService _soundMonoService;
+        private ISettingsService _settingsService;
 
         private void OnEnable()
         {
@@ -31,17 +31,18 @@ namespace UI
             _backButton.onClick.RemoveListener(Back);
         }
 
-        public void Init(IPersistentProgressService persistentProgressService, ISaveLoadService saveLoadService,
-            ISoundMonoService soundMonoService)
+        public void Init(IPersistentProgressService persistentProgressService, ISoundMonoService soundMonoService,
+            ISettingsService settingsService)
         {
+            _settingsService = settingsService;
             _soundMonoService = soundMonoService;
-            _saveLoadService = saveLoadService;
             _persistentProgressService = persistentProgressService;
         }
 
         private void SwitchSoundMode()
         {
             _soundMonoService.SwitchSoundMode();
+            _settingsService.SoundSetActive(!_settingsService.SoundEnabled);
         }
 
         public void Show()

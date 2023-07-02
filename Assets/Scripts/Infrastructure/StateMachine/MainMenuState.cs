@@ -14,8 +14,8 @@ namespace Infrastructure.StateMachine
         private readonly ILoadingCurtainMonoService _loadingCurtainMonoService;
         private readonly IStaticDataService _staticDataService;
 
-        public MainMenuState(SceneLoader sceneLoader, IUiFactory uiFactory,
-            ISoundMonoService soundMonoService, ILoadingCurtainMonoService loadingCurtainMonoService)
+        public MainMenuState(SceneLoader sceneLoader, IUiFactory uiFactory, ISoundMonoService soundMonoService,
+            ILoadingCurtainMonoService loadingCurtainMonoService)
         {
             _sceneLoader = sceneLoader;
             _uiFactory = uiFactory;

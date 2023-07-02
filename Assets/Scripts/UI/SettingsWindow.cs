@@ -70,7 +70,7 @@ namespace UI
 
         private void Back()
         {
-            _rectTransformMover.MoveOut();
+            _rectTransformMover.MoveOut(() => Destroy(gameObject));
         }
 
         private void UpdateSoundButtonColor(bool soundEnabled)

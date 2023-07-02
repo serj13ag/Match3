@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Enums;
 using Helpers;
@@ -15,14 +16,17 @@ namespace UI
         [SerializeField] private float _timeToMove;
 
         private Coroutine _moveRoutine;
+        private Action _onMoveEndedCallback;
 
         public void MoveIn()
         {
             Move(_startPosition, _onScreenPosition, _timeToMove);
         }
 
-        public void MoveOut()
+        public void MoveOut(Action onMoveEndedCallback = null)
         {
+            _onMoveEndedCallback = onMoveEndedCallback;
+
             Move(_onScreenPosition, _endPosition, _timeToMove);
         }
 
@@ -49,6 +53,8 @@ namespace UI
             }
 
             _moveRoutine = null;
+
+            _onMoveEndedCallback?.Invoke();
         }
 
         private bool EndPositionReached(Vector3 endPosition)

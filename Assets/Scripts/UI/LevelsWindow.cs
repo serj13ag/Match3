@@ -28,12 +28,15 @@ namespace UI
 
             foreach (LevelStaticData levelStaticData in staticDataService.Levels)
             {
-                LevelButton levelButton = _uiFactory.GetLevelButton(_levelButtonsContainer);
+                LevelButton levelButton = _uiFactory.CreateLevelButton(_levelButtonsContainer);
                 levelButton.Init(levelStaticData.LevelName);
 
                 levelButton.OnButtonClicked += StartLevel;
             }
+        }
 
+        public void Show()
+        {
             _rectTransformMover.MoveIn();
         }
 

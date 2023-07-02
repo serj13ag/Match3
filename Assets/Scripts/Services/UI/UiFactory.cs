@@ -1,4 +1,5 @@
 ﻿using Constants;
+using Infrastructure.StateMachine;
 using UI;
 using UnityEngine;
 
@@ -6,15 +7,20 @@ namespace Services.UI
 {
     public class UiFactory : IUiFactory
     {
+        private readonly GameStateMachine _gameStateMachine;
         private readonly IAssetProviderService _assetProviderService;
+        private readonly IStaticDataService _staticDataService;
 
         private Transform _uiRootTransform;
 
         private MessageWindow _messageWindow;
 
-        public UiFactory(IAssetProviderService assetProviderService)
+        public UiFactory(GameStateMachine gameStateMachine, IAssetProviderService assetProviderService,
+            IStaticDataService staticDataService)
         {
+            _gameStateMachine = gameStateMachine;
             _assetProviderService = assetProviderService;
+            _staticDataService = staticDataService;
         }
 
         public void CreateUiRootCanvas()
@@ -23,17 +29,28 @@ namespace Services.UI
             _uiRootTransform = uiRoot.transform;
         }
 
-        public MainMenu GetMainMenu()
+        public MainMenu CreateMainMenu()
         {
-            return _assetProviderService.Instantiate<MainMenu>(AssetPaths.MainMenuPath, _uiRootTransform);
+            MainMenu mainMenu = _assetProviderService.Instantiate<MainMenu>(AssetPaths.MainMenuPath, _uiRootTransform);
+            mainMenu.Init(this);
+            return mainMenu;
         }
 
-        public LevelsWindow GetLevelsWindow()
+        public SettingsWindow CreateSettingsWindow()
         {
-            return _assetProviderService.Instantiate<LevelsWindow>(AssetPaths.LevelsWindowPath, _uiRootTransform);
+            SettingsWindow settingsWindow = _assetProviderService.Instantiate<SettingsWindow>(AssetPaths.SettingsWindowPath, _uiRootTransform);
+            settingsWindow.Init();
+            return settingsWindow;
         }
 
-        public LevelButton GetLevelButton(Transform parentTransform)
+        public LevelsWindow CreateLevelsWindow()
+        {
+            LevelsWindow levelsWindow = _assetProviderService.Instantiate<LevelsWindow>(AssetPaths.LevelsWindowPath, _uiRootTransform);
+            levelsWindow.Init(_gameStateMachine, this, _staticDataService);
+            return levelsWindow;
+        }
+
+        public LevelButton CreateLevelButton(Transform parentTransform)
         {
             return _assetProviderService.Instantiate<LevelButton>(AssetPaths.LevelButtonPath, parentTransform);
         }

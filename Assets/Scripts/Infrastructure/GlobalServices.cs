@@ -1,4 +1,5 @@
 ﻿using Constants;
+using Infrastructure.StateMachine;
 using Services;
 using Services.Mono;
 using Services.Mono.Sound;
@@ -8,6 +9,7 @@ namespace Infrastructure
 {
     public class GlobalServices
     {
+        public GameStateMachine GameStateMachine { get; private set; }
         public SceneLoader SceneLoader { get; }
 
         public IRandomService RandomService { get; private set; }
@@ -28,15 +30,17 @@ namespace Infrastructure
             SceneLoader = sceneLoader;
         }
 
-        public void InitGlobalServices()
+        public void InitGlobalServices(GameStateMachine gameStateMachine)
         {
+            GameStateMachine = gameStateMachine;
+
             RandomService = new RandomService();
             AssetProviderService = new AssetProviderService();
             StaticDataService = new StaticDataService();
             PersistentProgressService = new PersistentProgressService();
             SaveLoadService = new SaveLoadService(PersistentProgressService);
 
-            UiFactory = new UiFactory(AssetProviderService);
+            UiFactory = new UiFactory(gameStateMachine, AssetProviderService, StaticDataService);
             WindowService = new WindowService(UiFactory, AssetProviderService);
 
             LoadingCurtainMonoService = AssetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);

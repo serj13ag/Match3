@@ -9,6 +9,7 @@
 
         public const string UiRootCanvasPath = "Prefabs/UI/UIRootCanvas";
         public const string MainMenuPath = "Prefabs/UI/MainMenu";
+        public const string SettingsWindowPath = "Prefabs/UI/SettingsWindow";
         public const string LevelsWindowPath = "Prefabs/UI/LevelsWindow";
         public const string LevelButtonPath = "Prefabs/UI/LevelButton";
         public const string BackgroundScreenPath = "Prefabs/UI/BackgroundScreen";

@@ -7,9 +7,10 @@ namespace Services.UI
     {
         void CreateUiRootCanvas();
         MessageWindow GetMessageWindow();
-        MainMenu GetMainMenu();
-        LevelsWindow GetLevelsWindow();
-        LevelButton GetLevelButton(Transform parentTransform);
+        MainMenu CreateMainMenu();
+        SettingsWindow CreateSettingsWindow();
+        LevelsWindow CreateLevelsWindow();
+        LevelButton CreateLevelButton(Transform parentTransform);
         void Cleanup();
     }
 }

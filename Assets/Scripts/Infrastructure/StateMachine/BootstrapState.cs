@@ -12,7 +12,7 @@ namespace Infrastructure.StateMachine
             _gameStateMachine = gameStateMachine;
             _sceneLoader = services.SceneLoader;
 
-            services.InitGlobalServices();
+            services.InitGlobalServices(_gameStateMachine);
         }
 
         public void Enter()

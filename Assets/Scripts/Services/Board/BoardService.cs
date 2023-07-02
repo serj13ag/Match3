@@ -62,8 +62,6 @@ namespace Services.Board
             {
                 tileService.Initialize();
                 gamePieceService.Initialize();
-
-                progressUpdateService.UpdateProgressAndSave();
             }
 
             tileService.OnMoveRequested += OnMoveRequested;

@@ -1,4 +1,5 @@
 ﻿using UI;
+using UI.Windows;
 using UnityEngine;
 
 namespace Services.UI
@@ -6,7 +7,7 @@ namespace Services.UI
     public interface IUiFactory
     {
         void CreateUiRootCanvas();
-        MessageWindow GetMessageWindow();
+        MessageInGameWindow GetMessageWindow();
         MainMenu CreateMainMenu();
         SettingsWindow CreateSettingsWindow();
         LevelsWindow CreateLevelsWindow();

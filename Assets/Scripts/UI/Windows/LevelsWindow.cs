@@ -7,7 +7,7 @@ using StaticData;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Windows
 {
     public class LevelsWindow : BaseWindow
     {

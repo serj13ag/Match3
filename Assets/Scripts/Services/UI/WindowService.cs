@@ -33,7 +33,7 @@ namespace Services.UI
 
         private void ShowMessage(Action onButtonClickCallback, string iconSpritePath, string message, string buttonText)
         {
-            MessageWindow messageWindow = _uiFactory.GetMessageWindow();
+            MessageInGameWindow messageWindow = _uiFactory.GetMessageWindow();
             Sprite goalIcon = _assetProviderService.LoadSprite(iconSpritePath);
             messageWindow.ShowMessage(goalIcon, message, buttonText, onButtonClickCallback);
         }

@@ -1,6 +1,7 @@
 ﻿using Constants;
 using Infrastructure.StateMachine;
 using UI;
+using UI.Windows;
 using UnityEngine;
 
 namespace Services.UI
@@ -15,7 +16,7 @@ namespace Services.UI
 
         private Transform _uiRootTransform;
 
-        private MessageWindow _messageWindow;
+        private MessageInGameWindow _messageWindow;
 
         public UiFactory(GameStateMachine gameStateMachine, IAssetProviderService assetProviderService,
             IStaticDataService staticDataService, IPersistentProgressService persistentProgressService,
@@ -60,14 +61,14 @@ namespace Services.UI
             return _assetProviderService.Instantiate<LevelButton>(AssetPaths.LevelButtonPath, parentTransform);
         }
 
-        public MessageWindow GetMessageWindow()
+        public MessageInGameWindow GetMessageWindow()
         {
             if (_messageWindow != null)
             {
                 return _messageWindow;
             }
 
-            _messageWindow = _assetProviderService.Instantiate<MessageWindow>(AssetPaths.MessageWindowPath, _uiRootTransform);
+            _messageWindow = _assetProviderService.Instantiate<MessageInGameWindow>(AssetPaths.MessageWindowPath, _uiRootTransform);
             return _messageWindow;
         }
 

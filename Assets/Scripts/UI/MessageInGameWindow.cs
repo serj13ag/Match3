@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class MessageWindow : MonoBehaviour
+    public class MessageInGameWindow : MonoBehaviour
     {
         [SerializeField] private RectTransformMover _rectTransformMover;
 

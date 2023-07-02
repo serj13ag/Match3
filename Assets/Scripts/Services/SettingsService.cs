@@ -1,5 +1,6 @@
 ﻿using System;
 using Data;
+using EventArguments;
 
 namespace Services
 {
@@ -11,7 +12,7 @@ namespace Services
 
         public bool SoundEnabled => _gameSettings.SoundEnabled;
 
-        public event EventHandler<EventArgs> OnSettingsChanged;
+        public event EventHandler<SettingsChangedEventArgs> OnSettingsChanged;
 
         public SettingsService(ISaveLoadService saveLoadService)
         {
@@ -25,7 +26,7 @@ namespace Services
             _gameSettings.SoundEnabled = activate;
             _saveLoadService.SaveGameSettings(_gameSettings);
 
-            OnSettingsChanged?.Invoke(this, EventArgs.Empty);
+            OnSettingsChanged?.Invoke(this, new SettingsChangedEventArgs(_gameSettings));
         }
 
         private static GameSettings CreateDefaultGameSettings() =>

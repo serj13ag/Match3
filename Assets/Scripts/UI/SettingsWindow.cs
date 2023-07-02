@@ -1,4 +1,4 @@
-﻿using System;
+﻿using EventArguments;
 using Services;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,14 +43,14 @@ namespace UI
 
             _initialSoundButtonImageAlpha = _soundButtonImage.color.a;
 
-            UpdateSoundButtonColor();
+            UpdateSoundButtonColor(_settingsService.SoundEnabled);
 
             _settingsService.OnSettingsChanged += OnSettingsChanged;
         }
 
-        private void OnSettingsChanged(object sender, EventArgs e)
+        private void OnSettingsChanged(object sender, SettingsChangedEventArgs e)
         {
-            UpdateSoundButtonColor();
+            UpdateSoundButtonColor(e.SoundEnabled);
         }
 
         private void SwitchSoundMode()
@@ -73,10 +73,10 @@ namespace UI
             _rectTransformMover.MoveOut();
         }
 
-        private void UpdateSoundButtonColor()
+        private void UpdateSoundButtonColor(bool soundEnabled)
         {
             Color newColor = _soundButtonImage.color;
-            newColor.a = _settingsService.SoundEnabled ? _initialSoundButtonImageAlpha : SoundButtonImageInactiveAlpha;
+            newColor.a = soundEnabled ? _initialSoundButtonImageAlpha : SoundButtonImageInactiveAlpha;
             _soundButtonImage.color = newColor;
         }
     }

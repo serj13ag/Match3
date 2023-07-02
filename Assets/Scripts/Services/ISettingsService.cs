@@ -1,4 +1,5 @@
 ﻿using System;
+using EventArguments;
 
 namespace Services
 {
@@ -6,7 +7,7 @@ namespace Services
     {
         bool SoundEnabled { get; }
 
-        event EventHandler<EventArgs> OnSettingsChanged;
+        event EventHandler<SettingsChangedEventArgs> OnSettingsChanged;
 
         void SoundSetActive(bool activate);
     }

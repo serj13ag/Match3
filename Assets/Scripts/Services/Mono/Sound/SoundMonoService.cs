@@ -1,6 +1,7 @@
 using System;
 using Constants;
 using Enums;
+using EventArguments;
 using UnityEngine;
 
 namespace Services.Mono.Sound
@@ -59,14 +60,14 @@ namespace Services.Mono.Sound
             PlayOneShotClip(GetClip(soundType), GetVolume(soundType));
         }
 
-        private void OnSettingsChanged(object sender, EventArgs e)
+        private void OnSettingsChanged(object sender, SettingsChangedEventArgs e)
         {
-            if (_isEnabled == _settingsService.SoundEnabled)
+            if (_isEnabled == e.SoundEnabled)
             {
                 return;
             }
 
-            if (_settingsService.SoundEnabled)
+            if (e.SoundEnabled)
             {
                 _isEnabled = true;
 

@@ -20,17 +20,44 @@ namespace Services.Mono.Sound
 
         private IRandomService _randomService;
 
+        private bool _isEnabled;
         private LoopAudioSource _backgroundMusicAudioSource;
 
         public void Init(IRandomService randomService)
         {
             _randomService = randomService;
 
+            _isEnabled = true;
+
             DontDestroyOnLoad(this);
+        }
+
+        public void SwitchSoundMode()
+        {
+            if (_isEnabled)
+            {
+                if (_backgroundMusicAudioSource != null)
+                {
+                    TurnBackgroundMusicOff();
+                }
+
+                _isEnabled = false;
+            }
+            else
+            {
+                _isEnabled = true;
+
+                PlayBackgroundMusic();
+            }
         }
 
         public void PlayBackgroundMusic()
         {
+            if (!_isEnabled)
+            {
+                return;
+            }
+
             if (_backgroundMusicAudioSource == null)
             {
                 _backgroundMusicAudioSource = CreateBackgroundMusicAudioSource();
@@ -39,7 +66,20 @@ namespace Services.Mono.Sound
 
         public void PlaySound(SoundType soundType)
         {
+            if (!_isEnabled)
+            {
+                return;
+            }
+
             PlayOneShotClip(GetClip(soundType), GetVolume(soundType));
+        }
+
+        private void TurnBackgroundMusicOff()
+        {
+            _backgroundMusicAudioSource.Stop();
+
+            Destroy(_backgroundMusicAudioSource.gameObject);
+            _backgroundMusicAudioSource = null;
         }
 
         private static float GetVolume(SoundType soundType)

@@ -16,5 +16,10 @@ namespace Services.Mono.Sound
 
             _audioSource.Play();
         }
+
+        public void Stop()
+        {
+            _audioSource.Stop();
+        }
     }
 }

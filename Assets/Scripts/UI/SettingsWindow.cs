@@ -1,4 +1,5 @@
 ﻿using Services;
+using Services.Mono.Sound;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,19 +9,39 @@ namespace UI
     {
         [SerializeField] private RectTransformMover _rectTransformMover;
 
+        [SerializeField] private Button _soundButton;
         [SerializeField] private Button _resetButton;
         [SerializeField] private Button _backButton;
 
         private IPersistentProgressService _persistentProgressService;
         private ISaveLoadService _saveLoadService;
+        private ISoundMonoService _soundMonoService;
 
-        public void Init(IPersistentProgressService persistentProgressService, ISaveLoadService saveLoadService)
+        private void OnEnable()
         {
-            _saveLoadService = saveLoadService;
-            _persistentProgressService = persistentProgressService;
-
+            _soundButton.onClick.AddListener(SwitchSoundMode);
             _resetButton.onClick.AddListener(ResetProgressAndSave);
             _backButton.onClick.AddListener(Back);
+        }
+
+        private void OnDisable()
+        {
+            _soundButton.onClick.RemoveListener(SwitchSoundMode);
+            _resetButton.onClick.RemoveListener(ResetProgressAndSave);
+            _backButton.onClick.RemoveListener(Back);
+        }
+
+        public void Init(IPersistentProgressService persistentProgressService, ISaveLoadService saveLoadService,
+            ISoundMonoService soundMonoService)
+        {
+            _soundMonoService = soundMonoService;
+            _saveLoadService = saveLoadService;
+            _persistentProgressService = persistentProgressService;
+        }
+
+        private void SwitchSoundMode()
+        {
+            _soundMonoService.SwitchSoundMode();
         }
 
         public void Show()

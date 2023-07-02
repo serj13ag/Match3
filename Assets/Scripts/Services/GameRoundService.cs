@@ -28,7 +28,6 @@ namespace Services
 
         public void StartGame(int scoreGoal)
         {
-            _soundMonoService.PlayBackgroundMusic();
             _windowService.ShowStartGameMessageWindow(scoreGoal, StartRound);
         }
 

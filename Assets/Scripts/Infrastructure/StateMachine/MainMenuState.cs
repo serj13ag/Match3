@@ -1,5 +1,6 @@
 ﻿using Constants;
 using Services;
+using Services.Mono.Sound;
 using Services.UI;
 
 namespace Infrastructure.StateMachine
@@ -8,12 +9,15 @@ namespace Infrastructure.StateMachine
     {
         private readonly SceneLoader _sceneLoader;
         private readonly IUiFactory _uiFactory;
+        private readonly ISoundMonoService _soundMonoService;
         private readonly IStaticDataService _staticDataService;
 
-        public MainMenuState(SceneLoader sceneLoader, IUiFactory uiFactory)
+        public MainMenuState(SceneLoader sceneLoader, IUiFactory uiFactory,
+            ISoundMonoService soundMonoService)
         {
             _sceneLoader = sceneLoader;
             _uiFactory = uiFactory;
+            _soundMonoService = soundMonoService;
         }
 
         public void Enter()
@@ -30,6 +34,8 @@ namespace Infrastructure.StateMachine
         {
             _uiFactory.CreateUiRootCanvas();
             _uiFactory.CreateMainMenu();
+
+            _soundMonoService.PlayBackgroundMusic();
         }
     }
 }

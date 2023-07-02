@@ -17,12 +17,12 @@ namespace Infrastructure
         public IPersistentProgressService PersistentProgressService { get; private set; }
         public ISaveLoadService SaveLoadService { get; private set; }
 
-        public IUiFactory UiFactory { get; private set; }
-        public IWindowService WindowService { get; private set; }
-
         public ISoundMonoService SoundMonoService { get; private set; }
         public ILoadingCurtainMonoService LoadingCurtainMonoService { get; private set; }
         public IUpdateMonoService UpdateMonoService { get; private set; }
+
+        public IUiFactory UiFactory { get; private set; }
+        public IWindowService WindowService { get; private set; }
 
         public GlobalServices(SceneLoader sceneLoader)
         {
@@ -31,36 +31,39 @@ namespace Infrastructure
 
         public void InitGlobalServices(GameStateMachine gameStateMachine)
         {
-            RandomService randomService = new RandomService();
-            AssetProviderService assetProviderService = new AssetProviderService();
-            StaticDataService staticDataService = new StaticDataService();
-            PersistentProgressService persistentProgressService = new PersistentProgressService();
-            SaveLoadService saveLoadService = new SaveLoadService(persistentProgressService);
+            IRandomService randomService = new RandomService();
+            IAssetProviderService assetProviderService = new AssetProviderService();
+            IStaticDataService staticDataService = new StaticDataService();
+            IPersistentProgressService persistentProgressService = new PersistentProgressService();
+            ISaveLoadService saveLoadService = new SaveLoadService(persistentProgressService);
 
-            UiFactory uiFactory = new UiFactory(gameStateMachine, assetProviderService, staticDataService, persistentProgressService, saveLoadService);
-            WindowService windowService = new WindowService(uiFactory, assetProviderService);
-
-            LoadingCurtainMonoService loadingCurtainMonoService =
+            ILoadingCurtainMonoService loadingCurtainMonoService =
                 assetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
 
-            SoundMonoService soundMonoService =
+            ISoundMonoService soundMonoService =
                 assetProviderService.Instantiate<SoundMonoService>(AssetPaths.SoundMonoServicePath);
             soundMonoService.Init(randomService);
 
-            UpdateMonoService updateMonoService =
+            IUpdateMonoService updateMonoService =
                 assetProviderService.Instantiate<UpdateMonoService>(AssetPaths.UpdateMonoServicePath);
             updateMonoService.Init();
+
+            IUiFactory uiFactory = new UiFactory(gameStateMachine, assetProviderService, staticDataService,
+                persistentProgressService, saveLoadService, soundMonoService);
+            IWindowService windowService = new WindowService(uiFactory, assetProviderService);
 
             RandomService = randomService;
             AssetProviderService = assetProviderService;
             StaticDataService = staticDataService;
             PersistentProgressService = persistentProgressService;
             SaveLoadService = saveLoadService;
-            UiFactory = uiFactory;
-            WindowService = windowService;
+
             LoadingCurtainMonoService = loadingCurtainMonoService;
             SoundMonoService = soundMonoService;
             UpdateMonoService = updateMonoService;
+
+            UiFactory = uiFactory;
+            WindowService = windowService;
         }
     }
 }

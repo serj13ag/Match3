@@ -1,5 +1,6 @@
 ﻿using Constants;
 using Infrastructure.StateMachine;
+using Services.Mono.Sound;
 using UI;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace Services.UI
         private readonly IStaticDataService _staticDataService;
         private readonly IPersistentProgressService _persistentProgressService;
         private readonly ISaveLoadService _saveLoadService;
+        private readonly ISoundMonoService _soundMonoService;
 
         private Transform _uiRootTransform;
 
@@ -19,13 +21,14 @@ namespace Services.UI
 
         public UiFactory(GameStateMachine gameStateMachine, IAssetProviderService assetProviderService,
             IStaticDataService staticDataService, IPersistentProgressService persistentProgressService,
-            ISaveLoadService saveLoadService)
+            ISaveLoadService saveLoadService, ISoundMonoService soundMonoService)
         {
             _gameStateMachine = gameStateMachine;
             _assetProviderService = assetProviderService;
             _staticDataService = staticDataService;
             _persistentProgressService = persistentProgressService;
             _saveLoadService = saveLoadService;
+            _soundMonoService = soundMonoService;
         }
 
         public void CreateUiRootCanvas()
@@ -44,7 +47,7 @@ namespace Services.UI
         public SettingsWindow CreateSettingsWindow()
         {
             SettingsWindow settingsWindow = _assetProviderService.Instantiate<SettingsWindow>(AssetPaths.SettingsWindowPath, _uiRootTransform);
-            settingsWindow.Init(_persistentProgressService, _saveLoadService);
+            settingsWindow.Init(_persistentProgressService, _saveLoadService, _soundMonoService);
             return settingsWindow;
         }
 

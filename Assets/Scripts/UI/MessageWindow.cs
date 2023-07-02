@@ -15,9 +15,14 @@ namespace UI
 
         private Action _onButtonClickCallback;
 
-        private void Awake()
+        private void OnEnable()
         {
             _button.onClick.AddListener(OnButtonClick);
+        }
+
+        private void OnDisable()
+        {
+            _button.onClick.RemoveListener(OnButtonClick);
         }
 
         public void ShowMessage(Sprite icon = null, string message = "", string buttonMessage = "",

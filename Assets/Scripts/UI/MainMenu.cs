@@ -12,13 +12,23 @@ namespace UI
 
         private IUiFactory _uiFactory;
 
-        public void Init(IUiFactory uiFactory)
+        private void OnEnable()
         {
-            _uiFactory = uiFactory;
-
             _playButton.onClick.AddListener(ShowLevels);
             _settingsButton.onClick.AddListener(ShowSettings);
             _quitButton.onClick.AddListener(QuitGame);
+        }
+
+        private void OnDisable()
+        {
+            _playButton.onClick.RemoveListener(ShowLevels);
+            _settingsButton.onClick.RemoveListener(ShowSettings);
+            _quitButton.onClick.RemoveListener(QuitGame);
+        }
+
+        public void Init(IUiFactory uiFactory)
+        {
+            _uiFactory = uiFactory;
         }
 
         private void ShowLevels()
@@ -36,13 +46,6 @@ namespace UI
         private void QuitGame()
         {
             Application.Quit();
-        }
-
-        private void OnDestroy()
-        {
-            _playButton.onClick.RemoveListener(ShowLevels);
-            _settingsButton.onClick.RemoveListener(ShowSettings);
-            _quitButton.onClick.RemoveListener(QuitGame);
         }
     }
 }

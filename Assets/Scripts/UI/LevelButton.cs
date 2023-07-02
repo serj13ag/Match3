@@ -14,13 +14,21 @@ namespace UI
 
         public event EventHandler<LevelButtonClickedEventArgs> OnButtonClicked;
 
+        private void OnEnable()
+        {
+            _button.onClick.AddListener(OnButtonClick);
+        }
+
+        private void OnDisable()
+        {
+            _button.onClick.RemoveListener(OnButtonClick);
+        }
+
         public void Init(string levelName)
         {
             _levelName = levelName;
 
             UpdateText(levelName);
-
-            _button.onClick.AddListener(OnButtonClick);
         }
 
         private void UpdateText(string levelName)

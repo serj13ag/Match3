@@ -37,7 +37,7 @@ namespace Infrastructure
             PersistentProgressService persistentProgressService = new PersistentProgressService();
             SaveLoadService saveLoadService = new SaveLoadService(persistentProgressService);
 
-            UiFactory uiFactory = new UiFactory(gameStateMachine, assetProviderService, staticDataService);
+            UiFactory uiFactory = new UiFactory(gameStateMachine, assetProviderService, staticDataService, persistentProgressService, saveLoadService);
             WindowService windowService = new WindowService(uiFactory, assetProviderService);
 
             LoadingCurtainMonoService loadingCurtainMonoService =

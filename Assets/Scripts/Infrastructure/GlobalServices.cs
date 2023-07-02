@@ -51,7 +51,7 @@ namespace Infrastructure
             updateMonoService.Init();
 
             IUiFactory uiFactory = new UiFactory(gameStateMachine, assetProviderService, staticDataService,
-                persistentProgressService, soundMonoService, settingsService);
+                persistentProgressService, settingsService);
             IWindowService windowService = new WindowService(uiFactory, assetProviderService);
 
             RandomService = randomService;

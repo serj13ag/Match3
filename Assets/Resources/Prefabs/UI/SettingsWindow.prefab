@@ -192,6 +192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rectTransformMover: {fileID: 4946010886493732144}
   _soundButton: {fileID: 2964006957953678328}
+  _soundButtonImage: {fileID: 2964006955576221556}
   _resetButton: {fileID: 8817719981118366453}
   _backButton: {fileID: 114000013700505174}
 --- !u!1 &4654436114929950112
@@ -449,6 +450,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
+--- !u!114 &2964006955576221556 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1244780594128183467, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
+  m_PrefabInstance: {fileID: 4063405498738098143}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2964006957953678328 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1244780591744435239, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}

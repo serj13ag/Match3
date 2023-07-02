@@ -6,8 +6,6 @@ namespace Services.Mono.Sound
     {
         void Init(IRandomService randomService, ISettingsService settingsService);
 
-        void SwitchSoundMode();
-
         void PlayBackgroundMusic();
         void PlaySound(SoundType soundType);
     }

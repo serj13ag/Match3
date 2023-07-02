@@ -26,31 +26,14 @@ namespace Services.Mono.Sound
 
         public void Init(IRandomService randomService, ISettingsService settingsService)
         {
-            _settingsService = settingsService;
             _randomService = randomService;
+            _settingsService = settingsService;
 
             _isEnabled = _settingsService.SoundEnabled;
 
+            _settingsService.OnSettingsChanged += OnSettingsChanged;
+
             DontDestroyOnLoad(this);
-        }
-
-        public void SwitchSoundMode()
-        {
-            if (_isEnabled)
-            {
-                if (_backgroundMusicAudioSource != null)
-                {
-                    TurnBackgroundMusicOff();
-                }
-
-                _isEnabled = false;
-            }
-            else
-            {
-                _isEnabled = true;
-
-                PlayBackgroundMusic();
-            }
         }
 
         public void PlayBackgroundMusic()
@@ -74,6 +57,30 @@ namespace Services.Mono.Sound
             }
 
             PlayOneShotClip(GetClip(soundType), GetVolume(soundType));
+        }
+
+        private void OnSettingsChanged(object sender, EventArgs e)
+        {
+            if (_isEnabled == _settingsService.SoundEnabled)
+            {
+                return;
+            }
+
+            if (_settingsService.SoundEnabled)
+            {
+                _isEnabled = true;
+
+                PlayBackgroundMusic();
+            }
+            else
+            {
+                if (_backgroundMusicAudioSource != null)
+                {
+                    TurnBackgroundMusicOff();
+                }
+
+                _isEnabled = false;
+            }
         }
 
         private void TurnBackgroundMusicOff()

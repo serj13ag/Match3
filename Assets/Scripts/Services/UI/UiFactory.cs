@@ -1,6 +1,5 @@
 ﻿using Constants;
 using Infrastructure.StateMachine;
-using Services.Mono.Sound;
 using UI;
 using UnityEngine;
 
@@ -12,7 +11,6 @@ namespace Services.UI
         private readonly IAssetProviderService _assetProviderService;
         private readonly IStaticDataService _staticDataService;
         private readonly IPersistentProgressService _persistentProgressService;
-        private readonly ISoundMonoService _soundMonoService;
         private readonly ISettingsService _settingsService;
 
         private Transform _uiRootTransform;
@@ -21,13 +19,12 @@ namespace Services.UI
 
         public UiFactory(GameStateMachine gameStateMachine, IAssetProviderService assetProviderService,
             IStaticDataService staticDataService, IPersistentProgressService persistentProgressService,
-            ISoundMonoService soundMonoService, ISettingsService settingsService)
+            ISettingsService settingsService)
         {
             _gameStateMachine = gameStateMachine;
             _assetProviderService = assetProviderService;
             _staticDataService = staticDataService;
             _persistentProgressService = persistentProgressService;
-            _soundMonoService = soundMonoService;
             _settingsService = settingsService;
         }
 
@@ -47,7 +44,7 @@ namespace Services.UI
         public SettingsWindow CreateSettingsWindow()
         {
             SettingsWindow settingsWindow = _assetProviderService.Instantiate<SettingsWindow>(AssetPaths.SettingsWindowPath, _uiRootTransform);
-            settingsWindow.Init(_persistentProgressService, _soundMonoService, _settingsService);
+            settingsWindow.Init(_persistentProgressService, _settingsService);
             return settingsWindow;
         }
 

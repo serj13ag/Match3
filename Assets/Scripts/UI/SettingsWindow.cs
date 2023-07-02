@@ -5,11 +5,9 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class SettingsWindow : MonoBehaviour
+    public class SettingsWindow : BaseWindow
     {
         private const float SoundButtonImageInactiveAlpha = 0.3f;
-
-        [SerializeField] private RectTransformMover _rectTransformMover;
 
         [SerializeField] private Button _soundButton;
         [SerializeField] private Image _soundButtonImage;
@@ -58,11 +56,6 @@ namespace UI
             _settingsService.SoundSetActive(!_settingsService.SoundEnabled);
         }
 
-        public void Show()
-        {
-            _rectTransformMover.MoveIn();
-        }
-
         private void ResetProgressAndSave()
         {
             _persistentProgressService.ResetProgressAndSave();
@@ -70,7 +63,7 @@ namespace UI
 
         private void Back()
         {
-            _rectTransformMover.MoveOut(() => Destroy(gameObject));
+            Hide();
         }
 
         private void UpdateSoundButtonColor(bool soundEnabled)

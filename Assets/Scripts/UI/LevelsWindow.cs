@@ -9,10 +9,8 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class LevelsWindow : MonoBehaviour
+    public class LevelsWindow : BaseWindow
     {
-        [SerializeField] private RectTransformMover _rectTransformMover;
-
         [SerializeField] private Transform _levelButtonsContainer;
 
         [SerializeField] private Button _backButton;
@@ -40,11 +38,6 @@ namespace UI
             CreateLevelButtons(staticDataService);
         }
 
-        public void Show()
-        {
-            _rectTransformMover.MoveIn();
-        }
-
         private void CreateLevelButtons(IStaticDataService staticDataService)
         {
             _levelButtons = new List<LevelButton>();
@@ -68,7 +61,7 @@ namespace UI
 
         private void Back()
         {
-            _rectTransformMover.MoveOut();
+            Hide();
         }
 
         private void Cleanup()

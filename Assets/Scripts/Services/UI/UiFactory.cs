@@ -66,12 +66,11 @@ namespace Services.UI
 
         public MessageInGameWindow GetMessageWindow()
         {
-            if (_messageWindow != null)
+            if (_messageWindow == null)
             {
-                return _messageWindow;
+                _messageWindow = _assetProviderService.Instantiate<MessageInGameWindow>(AssetPaths.MessageWindowPath, _uiRootTransform);
             }
 
-            _messageWindow = _assetProviderService.Instantiate<MessageInGameWindow>(AssetPaths.MessageWindowPath, _uiRootTransform);
             return _messageWindow;
         }
 

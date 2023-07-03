@@ -10,5 +10,7 @@ namespace Services.UI
         void ShowGameOverMessageWindow(Action onButtonClickCallback);
 
         void ShowWindow(WindowType windowType);
+
+        void Cleanup();
     }
 }

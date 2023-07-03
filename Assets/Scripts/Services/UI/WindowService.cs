@@ -13,6 +13,8 @@ namespace Services.UI
         private readonly IAssetProviderService _assetProviderService;
 
         private BackgroundBlocker _backgroundBlocker;
+        
+        // TODO refactor
 
         public WindowService(IUiFactory uiFactory, IAssetProviderService assetProviderService)
         {
@@ -22,17 +24,17 @@ namespace Services.UI
 
         public void ShowStartGameMessageWindow(int scoreGoal, Action onButtonClickCallback)
         {
-            ShowMessage(onButtonClickCallback, AssetPaths.GoalIconSpritePath, $"score goal\n{scoreGoal}", "start");
+            ShowMessageWindow(onButtonClickCallback, AssetPaths.GoalIconSpritePath, $"score goal\n{scoreGoal}", "start");
         }
 
         public void ShowGameWinMessageWindow(Action onButtonClickCallback)
         {
-            ShowMessage(onButtonClickCallback, AssetPaths.WinIconSpritePath, "you win!", "ok");
+            ShowMessageWindow(onButtonClickCallback, AssetPaths.WinIconSpritePath, "you win!", "ok");
         }
 
         public void ShowGameOverMessageWindow(Action onButtonClickCallback)
         {
-            ShowMessage(onButtonClickCallback, AssetPaths.LoseIconSpritePath, "you lose!", "ok");
+            ShowMessageWindow(onButtonClickCallback, AssetPaths.LoseIconSpritePath, "you lose!", "ok");
         }
 
         public void ShowWindow(WindowType windowType)
@@ -51,6 +53,11 @@ namespace Services.UI
             baseWindow.OnHided += OnWindowHided;
         }
 
+        public void Cleanup()
+        {
+            _backgroundBlocker = null;
+        }
+
         private void OnWindowHided(object sender, EventArgs e)
         {
             BaseWindow baseWindow = (BaseWindow)sender;
@@ -59,7 +66,7 @@ namespace Services.UI
             _backgroundBlocker.Deactivate();
         }
 
-        private void ShowMessage(Action onButtonClickCallback, string iconSpritePath, string message, string buttonText)
+        private void ShowMessageWindow(Action onButtonClickCallback, string iconSpritePath, string message, string buttonText)
         {
             ShowBackgroundBlocker();
 

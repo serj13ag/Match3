@@ -33,6 +33,7 @@ namespace Infrastructure.StateMachine
         public void Exit()
         {
             _uiFactory.Cleanup();
+            _windowService.Cleanup();
         }
 
         private void OnSceneLoaded()

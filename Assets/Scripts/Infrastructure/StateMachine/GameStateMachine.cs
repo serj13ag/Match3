@@ -16,7 +16,7 @@ namespace Infrastructure.StateMachine
                 [typeof(BootstrapState)] = new BootstrapState(this, globalServices),
                 [typeof(LoadProgressState)] = new LoadProgressState(this, globalServices.PersistentProgressService),
                 [typeof(MainMenuState)] = new MainMenuState(globalServices.SceneLoader, globalServices.UiFactory,
-                    globalServices.SoundMonoService, globalServices.LoadingCurtainMonoService),
+                    globalServices.SoundMonoService, globalServices.LoadingCurtainMonoService, globalServices.WindowService),
                 [typeof(GameLoopState)] = new GameLoopState(this, globalServices.SceneLoader,
                     globalServices.LoadingCurtainMonoService, globalServices.AssetProviderService,
                     globalServices.RandomService, globalServices.StaticDataService, globalServices.SoundMonoService,

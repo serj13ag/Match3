@@ -1,13 +1,12 @@
 using System;
+using UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
-    public class MessageInGameWindow : MonoBehaviour
+    public class MessageInGameWindow : BaseWindow
     {
-        [SerializeField] private RectTransformMover _rectTransformMover;
-
         [SerializeField] private Button _button;
         [SerializeField] private Image _image;
         [SerializeField] private Text _messageText;
@@ -45,14 +44,14 @@ namespace UI
 
             _onButtonClickCallback = onButtonClickCallback;
 
-            _rectTransformMover.MoveIn();
+            Show();
         }
 
         private void OnButtonClick()
         {
             _onButtonClickCallback?.Invoke();
 
-            _rectTransformMover.MoveOut();
+            Hide();
         }
     }
 }

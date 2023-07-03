@@ -1,8 +1,8 @@
 ﻿using Constants;
-using Services;
 using Services.Mono;
 using Services.Mono.Sound;
 using Services.UI;
+using UI;
 
 namespace Infrastructure.StateMachine
 {
@@ -12,15 +12,16 @@ namespace Infrastructure.StateMachine
         private readonly IUiFactory _uiFactory;
         private readonly ISoundMonoService _soundMonoService;
         private readonly ILoadingCurtainMonoService _loadingCurtainMonoService;
-        private readonly IStaticDataService _staticDataService;
+        private readonly IWindowService _windowService;
 
         public MainMenuState(SceneLoader sceneLoader, IUiFactory uiFactory, ISoundMonoService soundMonoService,
-            ILoadingCurtainMonoService loadingCurtainMonoService)
+            ILoadingCurtainMonoService loadingCurtainMonoService, IWindowService windowService)
         {
             _sceneLoader = sceneLoader;
             _uiFactory = uiFactory;
             _soundMonoService = soundMonoService;
             _loadingCurtainMonoService = loadingCurtainMonoService;
+            _windowService = windowService;
         }
 
         public void Enter()
@@ -37,7 +38,9 @@ namespace Infrastructure.StateMachine
         private void OnSceneLoaded()
         {
             _uiFactory.CreateUiRootCanvas();
-            _uiFactory.CreateMainMenu();
+
+            MainMenu mainMenu = _uiFactory.CreateMainMenu();
+            mainMenu.Init(_windowService);
 
             _soundMonoService.PlayBackgroundMusic();
 

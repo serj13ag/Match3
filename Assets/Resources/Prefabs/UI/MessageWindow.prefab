@@ -266,7 +266,7 @@ MonoBehaviour:
   _startPosition: {x: 0, y: 1500, z: 0}
   _onScreenPosition: {x: 0, y: 0, z: 0}
   _endPosition: {x: 0, y: 1500, z: 0}
-  _timeToMove: 1
+  _timeToMove: 0.2
 --- !u!114 &3399721616253139711
 MonoBehaviour:
   m_ObjectHideFlags: 0

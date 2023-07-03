@@ -72,5 +72,10 @@ namespace UI.Windows
             newColor.a = soundEnabled ? _initialSoundButtonImageAlpha : SoundButtonImageInactiveAlpha;
             _soundButtonImage.color = newColor;
         }
+
+        private void OnDestroy()
+        {
+            _settingsService.OnSettingsChanged -= OnSettingsChanged;
+        }
     }
 }

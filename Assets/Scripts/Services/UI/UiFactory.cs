@@ -37,9 +37,12 @@ namespace Services.UI
 
         public MainMenu CreateMainMenu()
         {
-            MainMenu mainMenu = _assetProviderService.Instantiate<MainMenu>(AssetPaths.MainMenuPath, _uiRootTransform);
-            mainMenu.Init(this);
-            return mainMenu;
+            return _assetProviderService.Instantiate<MainMenu>(AssetPaths.MainMenuPath, _uiRootTransform);
+        }
+
+        public BackgroundBlocker CreateBackgroundBlocker()
+        {
+            return _assetProviderService.Instantiate<BackgroundBlocker>(AssetPaths.BackgroundBlockerPath, _uiRootTransform);
         }
 
         public SettingsWindow CreateSettingsWindow()

@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace UI.Windows
 {
     public abstract class BaseWindow : MonoBehaviour
     {
         [SerializeField] private RectTransformMover _rectTransformMover;
+
+        public event EventHandler<EventArgs> OnHided;
 
         public void Show()
         {
@@ -13,7 +16,14 @@ namespace UI.Windows
 
         protected void Hide()
         {
-            _rectTransformMover.MoveOut(() => Destroy(gameObject));
+            _rectTransformMover.MoveOut(OnMoveEnded);
+        }
+
+        private void OnMoveEnded()
+        {
+            OnHided?.Invoke(this, EventArgs.Empty);
+
+            Destroy(gameObject); // TODO use pooling
         }
     }
 }

@@ -1,5 +1,5 @@
+using Enums;
 using Services.UI;
-using UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +11,7 @@ namespace UI
         [SerializeField] private Button _settingsButton;
         [SerializeField] private Button _quitButton;
 
-        private IUiFactory _uiFactory;
+        private IWindowService _windowService;
 
         private void OnEnable()
         {
@@ -27,21 +27,19 @@ namespace UI
             _quitButton.onClick.RemoveListener(QuitGame);
         }
 
-        public void Init(IUiFactory uiFactory)
+        public void Init(IWindowService windowService)
         {
-            _uiFactory = uiFactory;
+            _windowService = windowService;
         }
 
         private void ShowLevels()
         {
-            LevelsWindow levelsWindow = _uiFactory.CreateLevelsWindow();
-            levelsWindow.Show();
+            _windowService.ShowWindow(WindowType.Levels);
         }
 
         private void ShowSettings()
         {
-            SettingsWindow settingsWindow = _uiFactory.CreateSettingsWindow();
-            settingsWindow.Show();
+            _windowService.ShowWindow(WindowType.Settings);
         }
 
         private void QuitGame()

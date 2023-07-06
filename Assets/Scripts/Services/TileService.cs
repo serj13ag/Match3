@@ -14,6 +14,7 @@ namespace Services
     {
         private readonly IStaticDataService _staticDataService;
         private readonly IGameFactory _gameFactory;
+        private readonly IGameRoundService _gameRoundService;
 
         private readonly string _levelName;
 
@@ -25,10 +26,11 @@ namespace Services
         public event EventHandler<MoveRequestedEventArgs> OnMoveRequested;
 
         public TileService(string levelName, IStaticDataService staticDataService,
-            IProgressUpdateService progressUpdateService, IGameFactory gameFactory)
+            IProgressUpdateService progressUpdateService, IGameFactory gameFactory, IGameRoundService gameRoundService)
         {
             _staticDataService = staticDataService;
             _gameFactory = gameFactory;
+            _gameRoundService = gameRoundService;
 
             _levelName = levelName;
 
@@ -110,6 +112,11 @@ namespace Services
 
         private void OnTileClicked(ITile tile)
         {
+            if (!_gameRoundService.RoundIsActive)
+            {
+                return;
+            }
+
             _clickedTile ??= tile;
         }
 

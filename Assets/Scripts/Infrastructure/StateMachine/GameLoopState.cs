@@ -73,7 +73,7 @@ namespace Infrastructure.StateMachine
             IMovesLeftService movesLeftService = new MovesLeftService(levelName, _persistentProgressService,
                 scoreService, gameRoundService, progressUpdateService, movesLeft);
 
-            ITileService tileService = new TileService(levelName, _staticDataService, progressUpdateService, gameFactory);
+            ITileService tileService = new TileService(levelName, _staticDataService, progressUpdateService, gameFactory, gameRoundService);
             IGamePieceService gamePieceService = new GamePieceService(levelName, _staticDataService, _soundMonoService,
                 _randomService, progressUpdateService, tileService, gameFactory, particleService);
 

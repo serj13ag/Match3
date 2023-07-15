@@ -43,9 +43,9 @@ namespace Services
             return tile;
         }
 
-        public GamePiece CreateNormalGamePieceWithRandomColor(string levelName, int x, int y)
+        public GamePiece CreateNormalGamePieceWithRandomColor(string levelName, int x, int y, int offsetY = 0)
         {
-            return CreateGamePiece(GamePieceType.Normal, GetRandomGamePieceColor(levelName), x, y);
+            return CreateGamePiece(GamePieceType.Normal, GetRandomGamePieceColor(levelName), x, y, offsetY);
         }
 
         public GamePiece CreateBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)
@@ -58,16 +58,16 @@ namespace Services
             return CreateGamePiece(GetGamePieceType(bombType), color, x, y);
         }
 
-        public GamePiece CreateRandomCollectibleGamePiece(int x, int y)
+        public GamePiece CreateRandomCollectibleGamePiece(int x, int y, int offsetY = 0)
         {
-            return CreateGamePiece(GetRandomCollectibleGamePieceType(), GamePieceColor.Undefined, x, y);
+            return CreateGamePiece(GetRandomCollectibleGamePieceType(), GamePieceColor.Undefined, x, y, offsetY);
         }
 
-        public GamePiece CreateGamePiece(GamePieceType gamePieceType, GamePieceColor color, int x, int y)
+        public GamePiece CreateGamePiece(GamePieceType gamePieceType, GamePieceColor color, int x, int y, int offsetY = 0)
         {
             GamePieceStaticData gamePieceData = _staticDataService.GetDataForGamePiece(gamePieceType);
             GamePiece gamePiece = Instantiate(gamePieceData.Prefab, Vector3.zero);
-            gamePiece.Init(gamePieceData, color, x, y, _gamePiecesContainerTransform, _staticDataService);
+            gamePiece.Init(gamePieceData, color, x, y, offsetY, _gamePiecesContainerTransform, _staticDataService);
             return gamePiece;
         }
 

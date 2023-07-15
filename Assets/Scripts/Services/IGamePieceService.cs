@@ -12,7 +12,7 @@ namespace Services
         void Initialize();
         void Initialize(List<GamePieceSaveData> gamePieces);
 
-        void FillBoardWithRandomGamePieces();
+        List<GamePiece> FillBoardWithRandomGamePieces(int offsetY = 0);
         void ClearGamePieceAt(Vector2Int position, bool breakOnMatch = false);
         void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color);
         bool TryGetGamePieceAt(Vector2Int position, out GamePiece gamePiece);
@@ -25,5 +25,7 @@ namespace Services
         HashSet<GamePiece> GetBombedAdjacentGamePieces(Vector2Int position, int range);
         HashSet<GamePiece> GetGamePiecesByColor(GamePieceColor color);
         HashSet<GamePiece> GetAllGamePieces();
+
+        bool TryGetLowestRowWithEmptyGamePiece(out int lowestEmptyRow);
     }
 }

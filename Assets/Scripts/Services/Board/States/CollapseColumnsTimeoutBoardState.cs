@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Constants;
 using DTO;
 using Entities;
@@ -38,11 +37,6 @@ namespace Services.Board.States
 
             _movedPieceNumber++;
             gamePiece.OnPositionChanged -= OnGamePiecePositionChanged;
-
-            if (_movedPieceNumber > _numberOfGamePiecesToMove)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
 
             if (_movedPieceNumber == _numberOfGamePiecesToMove)
             {

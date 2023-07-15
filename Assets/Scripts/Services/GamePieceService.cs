@@ -86,8 +86,10 @@ namespace Services
             progress.BoardData.LevelBoardData.GamePieces = gamePieceSaveData;
         }
 
-        public void FillBoardWithRandomGamePieces()
+        public List<GamePiece> FillBoardWithRandomGamePieces(int offsetY = 0)
         {
+            List<GamePiece> spawnedGamePieces = new List<GamePiece>();
+
             for (int i = 0; i < _gamePieces.GetWidth(); i++)
             {
                 for (int j = 0; j < _gamePieces.GetHeight(); j++)
@@ -97,20 +99,25 @@ namespace Services
                         continue;
                     }
 
-                    if (TrySpawnCollectibleGamePiece(i, j))
+                    if (TrySpawnCollectibleGamePiece(i, j, out GamePiece spawnedCollectableGamePiece, offsetY))
                     {
+                        spawnedGamePieces.Add(spawnedCollectableGamePiece);
                         continue;
                     }
 
-                    GamePiece gamePiece = SpawnBasicGamePieceWithRandomColor(i, j);
+                    GamePiece gamePiece = SpawnBasicGamePieceWithRandomColor(i, j, offsetY);
 
                     while (GamePieceMatchHelper.HasMatchAtFillBoard(new Vector2Int(i, j), _gamePieces, _boardSize))
                     {
                         ClearGamePieceAt(gamePiece.Position);
-                        gamePiece = SpawnBasicGamePieceWithRandomColor(i, j);
+                        gamePiece = SpawnBasicGamePieceWithRandomColor(i, j, offsetY);
                     }
+
+                    spawnedGamePieces.Add(gamePiece);
                 }
             }
+
+            return spawnedGamePieces;
         }
 
         public IEnumerable<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
@@ -254,6 +261,25 @@ namespace Services
             return result;
         }
 
+        public bool TryGetLowestRowWithEmptyGamePiece(out int lowestEmptyRow)
+        {
+            lowestEmptyRow = default;
+
+            for (int row = 0; row < _boardSize.y; row++)
+            {
+                for (int column = 0; column < _boardSize.x; column++)
+                {
+                    if (_gamePieces[column, row] == null)
+                    {
+                        lowestEmptyRow = row;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)
         {
             GamePiece gamePiece = _gameFactory.CreateBombGamePiece(x, y, bombType, color);
@@ -316,22 +342,24 @@ namespace Services
             return rowGamePieces;
         }
 
-        private bool TrySpawnCollectibleGamePiece(int x, int y)
+        private bool TrySpawnCollectibleGamePiece(int x, int y, out GamePiece spawnedGamePiece, int offset = 0)
         {
+            spawnedGamePiece = null;
+
             if (y == _gamePieces.GetHeight() - 1
                 && _collectibleGamePieces < Settings.MaxCollectibles
                 && _randomService.Next(100) <= Settings.PercentChanceToSpawnCollectible)
             {
-                SpawnRandomCollectibleGamePiece(x, y);
+                spawnedGamePiece = SpawnRandomCollectibleGamePiece(x, y, offset);
                 return true;
             }
 
             return false;
         }
 
-        private GamePiece SpawnBasicGamePieceWithRandomColor(int x, int y)
+        private GamePiece SpawnBasicGamePieceWithRandomColor(int x, int y, int offsetY = 0)
         {
-            GamePiece gamePiece = _gameFactory.CreateNormalGamePieceWithRandomColor(_levelName, x, y);
+            GamePiece gamePiece = _gameFactory.CreateNormalGamePieceWithRandomColor(_levelName, x, y, offsetY);
             RegisterGamePiece(gamePiece, x, y);
             return gamePiece;
         }
@@ -342,10 +370,11 @@ namespace Services
             RegisterGamePiece(gamePiece, x, y);
         }
 
-        private void SpawnRandomCollectibleGamePiece(int x, int y)
+        private GamePiece SpawnRandomCollectibleGamePiece(int x, int y, int offset = 0)
         {
-            GamePiece gamePiece = _gameFactory.CreateRandomCollectibleGamePiece(x, y);
+            GamePiece gamePiece = _gameFactory.CreateRandomCollectibleGamePiece(x, y, offset);
             RegisterGamePiece(gamePiece, x, y);
+            return gamePiece;
         }
 
         private void RegisterGamePiece(GamePiece gamePiece, int x, int y)
@@ -364,6 +393,11 @@ namespace Services
 
         private void OnGamePieceStartMoving(GamePiece gamePiece)
         {
+            if (BoardHelper.IsOutOfBounds(gamePiece.Position, _boardSize))
+            {
+                return;
+            }
+
             _gamePieces[gamePiece.Position.x, gamePiece.Position.y] = null;
         }
 

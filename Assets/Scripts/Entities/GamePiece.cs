@@ -28,11 +28,8 @@ namespace Entities
             get => _position;
             private set
             {
-                if (_position != value)
-                {
-                    _position = value;
-                    OnPositionChanged?.Invoke(this);
-                }
+                _position = value;
+                OnPositionChanged?.Invoke(this);
             }
         }
 
@@ -42,7 +39,7 @@ namespace Entities
         public event Action<GamePiece> OnPositionChanged;
         public event Action<GamePiece> OnStartMoving;
 
-        public void Init(GamePieceStaticData gamePieceData, GamePieceColor color, int x, int y,
+        public void Init(GamePieceStaticData gamePieceData, GamePieceColor color, int x, int y, int offsetY,
             Transform parentTransform, IStaticDataService staticDataService)
         {
             _staticDataService = staticDataService;
@@ -54,7 +51,7 @@ namespace Entities
             SetPosition(x, y);
 
             Transform trm = transform;
-            trm.position = new Vector3(x, y, 0f);
+            trm.position = new Vector3(x, y + offsetY, 0f);
             trm.rotation = Quaternion.identity;
             trm.SetParent(parentTransform);
         }

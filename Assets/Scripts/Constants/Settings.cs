@@ -20,9 +20,11 @@
         public const int MaxCollectibles = 5;
         public const int PercentChanceToSpawnCollectible = 50;
 
+        public const int FillBoardOffsetY = 5;
+
         public static class Timeouts
         {
-            public const float FillBoardTimeout = 0.3f;
+            public const float FillBoardTimeout = 0f;
             public const float ClearGamePiecesTimeout = 0.3f;
             public const float CollapseColumnsTimeout = 0.3f;
         }

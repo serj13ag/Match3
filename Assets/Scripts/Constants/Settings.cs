@@ -10,7 +10,7 @@
 
         public const float CameraPositionZ = -10f;
 
-        public const float TimeToMoveGamePiece = 0.5f;
+        public const float TimeToMoveGamePiece = 0.3f;
         public const int MinMatchesCount = 3;
 
         public const int BombAdjacentGamePiecesRange = 2;
@@ -22,9 +22,9 @@
 
         public static class Timeouts
         {
-            public const float FillBoardTimeout = 0.5f;
-            public const float ClearGamePiecesTimeout = 0.5f;
-            public const float CollapseColumnsTimeout = 0.5f;
+            public const float FillBoardTimeout = 0.3f;
+            public const float ClearGamePiecesTimeout = 0.3f;
+            public const float CollapseColumnsTimeout = 0.3f;
         }
 
         public static class ScreenFader

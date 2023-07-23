@@ -120,6 +120,14 @@ namespace Services
             return spawnedGamePieces;
         }
 
+        public void ClearBoard()
+        {
+            foreach (GamePiece gamePiece in _gamePieces)
+            {
+                ClearGamePieceAt(gamePiece.Position);
+            }
+        }
+
         public IEnumerable<GamePieceMoveData> GetGamePiecesToCollapseMoveData(int column)
         {
             Queue<int> availableRows = new Queue<int>();
@@ -171,7 +179,7 @@ namespace Services
 
             foreach (GamePiece gamePiece in gamePieces)
             {
-                if (GamePieceMatchHelper.TryFindMatches(gamePiece.Position, 3, _gamePieces,
+                if (GamePieceMatchHelper.TryFindMatches(gamePiece.Position, Settings.MinMatchesCount, _gamePieces,
                         _boardSize, out HashSet<GamePiece> matches))
                 {
                     allMatches.UnionWith(matches);
@@ -278,6 +286,11 @@ namespace Services
             }
 
             return false;
+        }
+
+        public bool HasAvailableMoves()
+        {
+            return GamePieceMatchHelper.HasAvailableMoves(_gamePieces, _boardSize);
         }
 
         public void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)

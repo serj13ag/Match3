@@ -10,10 +10,12 @@ namespace Helpers
     {
         public static bool IsCollectible(this GamePiece gamePiece)
         {
-            return gamePiece.Type == GamePieceType.CollectibleByBomb || gamePiece.Type == GamePieceType.CollectibleByBottomRow;
+            return gamePiece.Type == GamePieceType.CollectibleByBomb ||
+                   gamePiece.Type == GamePieceType.CollectibleByBottomRow;
         }
 
-        public static BombType GetBombTypeOnMatch(HashSet<GamePiece> allMatches, Direction playerSwitchGamePiecesDirection)
+        public static BombType GetBombTypeOnMatch(HashSet<GamePiece> allMatches,
+            Direction playerSwitchGamePiecesDirection)
         {
             BombType bombType;
             if (allMatches.Count >= Settings.MatchesToSpawnColorBomb)
@@ -181,6 +183,59 @@ namespace Helpers
             }
 
             return horizontalMatches && verticalMatches;
+        }
+
+        public static bool HasAvailableMoves(GamePiece[,] gamePieces, Vector2Int boardSize)
+        {
+            GamePiece[,] tempGamePieces = (GamePiece[,])gamePieces.Clone();
+
+            for (int y = 0; y < boardSize.y; y++)
+            {
+                for (int x = 0; x < boardSize.x; x++)
+                {
+                    if (x < boardSize.x - 1)
+                    {
+                        SwapItems(tempGamePieces, x, y, x + 1, y);
+                        if (HasMatches(tempGamePieces, boardSize))
+                        {
+                            return true;
+                        }
+
+                        SwapItems(tempGamePieces, x, y, x + 1, y);
+                    }
+
+                    if (y < boardSize.y - 1)
+                    {
+                        SwapItems(tempGamePieces, x, y, x, y + 1);
+                        if (HasMatches(tempGamePieces, boardSize))
+                        {
+                            return true;
+                        }
+
+                        SwapItems(tempGamePieces, x, y, x, y + 1);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool HasMatches(GamePiece[,] gamePieces, Vector2Int boardSize)
+        {
+            foreach (GamePiece gamePiece in gamePieces)
+            {
+                if (TryFindMatches(gamePiece.Position, Settings.MinMatchesCount, gamePieces, boardSize, out _))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static void SwapItems(GamePiece[,] boardToSwap, int x1, int y1, int x2, int y2)
+        {
+            (boardToSwap[x1, y1], boardToSwap[x2, y2]) = (boardToSwap[x2, y2], boardToSwap[x1, y1]);
         }
     }
 }

@@ -74,7 +74,7 @@ namespace Services.Board.States
             }
             else // If removed game pieces at top of columns
             {
-                NewMethod();
+                ChangeStateOrEndGame();
             }
         }
 
@@ -90,11 +90,11 @@ namespace Services.Board.States
             }
             else
             {
-                NewMethod();
+                ChangeStateOrEndGame();
             }
         }
 
-        private void NewMethod()
+        private void ChangeStateOrEndGame()
         {
             if (_movesLeftService.MovesLeft > 0)
             {

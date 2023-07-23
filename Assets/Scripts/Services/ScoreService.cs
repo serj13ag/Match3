@@ -11,8 +11,6 @@ namespace Services
 {
     public class ScoreService : IScoreService, IProgressWriter
     {
-        private readonly IGameRoundService _gameRoundService;
-
         private int _completedBreakStreakIterations;
 
         private readonly ISoundMonoService _soundMonoService;
@@ -30,10 +28,9 @@ namespace Services
 
         public ScoreService(string levelName, ISoundMonoService soundMonoService,
             IPersistentProgressService persistentProgressService, IProgressUpdateService progressUpdateService,
-            IGameRoundService gameRoundService, int scoreGoal)
+            int scoreGoal)
         {
             _soundMonoService = soundMonoService;
-            _gameRoundService = gameRoundService;
 
             _scoreGoal = scoreGoal;
 
@@ -91,11 +88,6 @@ namespace Services
             _score += scoreToAdd;
 
             OnScoreChanged?.Invoke(this, new ScoreChangedEventArgs(_score));
-
-            if (ScoreGoalReached)
-            {
-                _gameRoundService.EndRound(true);
-            }
         }
     }
 }

@@ -3,7 +3,7 @@
     public interface IGameRoundService
     {
         bool RoundIsActive { get; }
-        void StartGame(int scoreGoal);
-        void EndRound(bool scoreGoalReached);
+        void StartGame();
+        void EndRound();
     }
 }

@@ -67,11 +67,9 @@ namespace Infrastructure.StateMachine
 
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
-            IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService);
-            IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentProgressService,
-                progressUpdateService, gameRoundService, scoreGoal);
-            IMovesLeftService movesLeftService = new MovesLeftService(levelName, _persistentProgressService,
-                scoreService, gameRoundService, progressUpdateService, movesLeft);
+            IMovesLeftService movesLeftService = new MovesLeftService(levelName, _persistentProgressService, progressUpdateService, movesLeft);
+            IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentProgressService, progressUpdateService, scoreGoal);
+            IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService, scoreService);
 
             ITileService tileService = new TileService(levelName, _staticDataService, progressUpdateService, gameFactory, gameRoundService);
             IGamePieceService gamePieceService = new GamePieceService(levelName, _staticDataService, _soundMonoService,
@@ -86,7 +84,7 @@ namespace Infrastructure.StateMachine
             BackgroundScreen backgroundScreen = _assetProviderService.Instantiate<BackgroundScreen>(AssetPaths.BackgroundScreenPath);
             backgroundScreen.Init(levelName, _gameStateMachine, scoreService, cameraService, movesLeftService);
 
-            gameRoundService.StartGame(scoreGoal);
+            gameRoundService.StartGame();
             _loadingCurtainMonoService.FadeOffWithDelay();
         }
 

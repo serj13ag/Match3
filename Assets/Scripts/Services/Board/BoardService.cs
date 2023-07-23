@@ -119,7 +119,7 @@ namespace Services.Board
 
         public void ChangeStateToCollapse(HashSet<int> columnIndexesToCollapse)
         {
-            ChangeState(new CollapseColumnsTimeoutBoardState(this, _gamePieceService, columnIndexesToCollapse));
+            ChangeState(new CollapseColumnsTimeoutBoardState(this, _gamePieceService, _gameRoundService, _movesLeftService, columnIndexesToCollapse));
         }
 
         public void ChangeStateToFill()

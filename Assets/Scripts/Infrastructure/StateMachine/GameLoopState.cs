@@ -22,13 +22,12 @@ namespace Infrastructure.StateMachine
         private readonly IPersistentProgressService _persistentProgressService;
         private readonly IUiFactory _uiFactory;
         private readonly IWindowService _windowService;
-        private readonly ISaveLoadService _saveLoadService;
 
         public GameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             ILoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
             IRandomService randomService, IStaticDataService staticDataService, ISoundMonoService soundMonoService,
             IUpdateMonoService updateMonoService, IPersistentProgressService persistentProgressService,
-            IUiFactory uiFactory, IWindowService windowService, ISaveLoadService saveLoadService)
+            IUiFactory uiFactory, IWindowService windowService)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
@@ -41,7 +40,6 @@ namespace Infrastructure.StateMachine
             _persistentProgressService = persistentProgressService;
             _uiFactory = uiFactory;
             _windowService = windowService;
-            _saveLoadService = saveLoadService;
         }
 
         public void Enter(string levelName)
@@ -63,13 +61,13 @@ namespace Infrastructure.StateMachine
             int scoreGoal = levelStaticData.ScoreGoal;
             int movesLeft = levelStaticData.MovesLeft;
 
-            IProgressUpdateService progressUpdateService = new ProgressUpdateService(_persistentProgressService, _saveLoadService);
+            IProgressUpdateService progressUpdateService = new ProgressUpdateService(_persistentProgressService);
 
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
             IMovesLeftService movesLeftService = new MovesLeftService(levelName, _persistentProgressService, progressUpdateService, movesLeft);
             IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentProgressService, progressUpdateService, scoreGoal);
-            IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService, scoreService);
+            IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService, _persistentProgressService, scoreService);
 
             ITileService tileService = new TileService(levelName, _staticDataService, progressUpdateService, gameFactory, gameRoundService);
             IGamePieceService gamePieceService = new GamePieceService(levelName, _staticDataService, _soundMonoService,

@@ -21,7 +21,7 @@ namespace Infrastructure.StateMachine
                     globalServices.LoadingCurtainMonoService, globalServices.AssetProviderService,
                     globalServices.RandomService, globalServices.StaticDataService, globalServices.SoundMonoService,
                     globalServices.UpdateMonoService, globalServices.PersistentProgressService,
-                    globalServices.UiFactory, globalServices.WindowService, globalServices.SaveLoadService),
+                    globalServices.UiFactory, globalServices.WindowService),
             };
         }
 

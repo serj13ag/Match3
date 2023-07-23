@@ -6,15 +6,12 @@ namespace Services
     public class ProgressUpdateService : IProgressUpdateService
     {
         private readonly IPersistentProgressService _persistentProgressService;
-        private readonly ISaveLoadService _saveLoadService;
 
         private readonly List<IProgressWriter> _progressWriters;
 
-        public ProgressUpdateService(IPersistentProgressService persistentProgressService,
-            ISaveLoadService saveLoadService)
+        public ProgressUpdateService(IPersistentProgressService persistentProgressService)
         {
             _persistentProgressService = persistentProgressService;
-            _saveLoadService = saveLoadService;
 
             _progressWriters = new List<IProgressWriter>();
         }

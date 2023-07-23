@@ -11,6 +11,7 @@ namespace Services
         private readonly GameStateMachine _gameStateMachine;
         private readonly ISoundMonoService _soundMonoService;
         private readonly IWindowService _windowService;
+        private readonly IPersistentProgressService _persistentProgressService;
         private readonly IScoreService _scoreService;
 
         private readonly string _levelName;
@@ -20,12 +21,13 @@ namespace Services
         public bool RoundIsActive => _roundIsActive;
 
         public GameRoundService(string levelName, GameStateMachine gameStateMachine, ISoundMonoService soundMonoService,
-            IWindowService windowService, IScoreService scoreService)
+            IWindowService windowService, IPersistentProgressService persistentProgressService, IScoreService scoreService)
         {
             _levelName = levelName;
             _gameStateMachine = gameStateMachine;
             _soundMonoService = soundMonoService;
             _windowService = windowService;
+            _persistentProgressService = persistentProgressService;
             _scoreService = scoreService;
 
             scoreService.OnScoreChanged += OnScoreChanged;
@@ -48,6 +50,8 @@ namespace Services
                 _soundMonoService.PlaySound(SoundType.Lose);
                 _windowService.ShowGameOverMessageWindow(ReloadLevel);
             }
+
+            _persistentProgressService.ResetProgressAndSave();
 
             _roundIsActive = false;
         }

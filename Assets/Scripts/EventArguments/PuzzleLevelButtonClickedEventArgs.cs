@@ -2,11 +2,11 @@
 
 namespace EventArguments
 {
-    public class LevelButtonClickedEventArgs : EventArgs
+    public class PuzzleLevelButtonClickedEventArgs : EventArgs
     {
         public string LevelName { get; }
 
-        public LevelButtonClickedEventArgs(string levelName)
+        public PuzzleLevelButtonClickedEventArgs(string levelName)
         {
             LevelName = levelName;
         }

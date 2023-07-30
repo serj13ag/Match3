@@ -9,7 +9,7 @@ using UI.Background;
 
 namespace Infrastructure.StateMachine
 {
-    public class GameLoopState : IPayloadedState<string>
+    public class PuzzleGameLoopState : IPayloadedState<string>
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -23,7 +23,7 @@ namespace Infrastructure.StateMachine
         private readonly IUiFactory _uiFactory;
         private readonly IWindowService _windowService;
 
-        public GameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
+        public PuzzleGameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             ILoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
             IRandomService randomService, IStaticDataService staticDataService, ISoundMonoService soundMonoService,
             IUpdateMonoService updateMonoService, IPersistentProgressService persistentProgressService,

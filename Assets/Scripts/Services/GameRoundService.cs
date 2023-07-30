@@ -71,7 +71,7 @@ namespace Services
 
         private void ReloadLevel()
         {
-            _gameStateMachine.Enter<GameLoopState, string>(_levelName);
+            _gameStateMachine.Enter<PuzzleGameLoopState, string>(_levelName);
         }
     }
 }

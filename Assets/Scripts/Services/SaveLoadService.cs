@@ -1,4 +1,5 @@
 ﻿using Data;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Services
@@ -31,9 +32,9 @@ namespace Services
             PlayerPrefs.SetString(SettingsKey, ToJson(gameSettings));
 
         private static string ToJson(object obj) =>
-            JsonUtility.ToJson(obj);
+            JsonConvert.SerializeObject(obj);
 
         private static T DeserializeJson<T>(string json) =>
-            JsonUtility.FromJson<T>(json);
+            JsonConvert.DeserializeObject<T>(json);
     }
 }

@@ -6,8 +6,8 @@ namespace Data
     [Serializable]
     public class PlayerProgress
     {
-        public int PlayerLevel;
-        public Dictionary<string, LevelBoardData> BoardData;
+        public int PlayerLevel { get; set; }
+        public Dictionary<string, LevelBoardData> BoardData { get; set; }
 
         public PlayerProgress()
         {

@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace Services.Board
 {
-    public class BoardService : IUpdatable, IBoardService, IProgressWriter
+    public class BoardService : IUpdatable, IBoardService
     {
         private readonly ITileService _tileService;
         private readonly IGamePieceService _gamePieceService;
@@ -23,8 +23,6 @@ namespace Services.Board
         private readonly ISoundMonoService _soundMonoService;
         private readonly IProgressUpdateService _progressUpdateService;
         private readonly IGameRoundService _gameRoundService;
-
-        private readonly string _levelName;
 
         private Direction _playerSwitchGamePiecesDirection;
 
@@ -46,12 +44,9 @@ namespace Services.Board
             _progressUpdateService = progressUpdateService;
             _gameRoundService = gameRoundService;
 
-            _levelName = levelName;
-
             BoardSize = new Vector2Int(staticDataService.Settings.BoardWidth, staticDataService.Settings.BoardHeight);
 
             updateMonoService.Register(this);
-            progressUpdateService.Register(this);
 
             if (persistentProgressService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
             {
@@ -77,11 +72,6 @@ namespace Services.Board
             }
 
             _boardState.Update(deltaTime);
-        }
-
-        public void WriteToProgress(PlayerProgress progress)
-        {
-            progress.BoardData[_levelName].LevelName = _levelName;
         }
 
         public bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece,

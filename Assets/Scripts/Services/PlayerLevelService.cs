@@ -1,21 +1,44 @@
-﻿namespace Services
+﻿using Data;
+using Interfaces;
+
+namespace Services
 {
-    public class PlayerLevelService : IPlayerLevelService
+    public class PlayerLevelService : IPlayerLevelService, IProgressWriter
     {
-        private const int ScoreToNextLevelConst = 500;
+        private readonly IStaticDataService _staticDataService;
 
         private int _scoreToNextLevel;
+        private int _currentLevel;
 
         public int ScoreToNextLevel => _scoreToNextLevel;
 
-        public PlayerLevelService()
+        public PlayerLevelService(IPersistentProgressService persistentProgressService,
+            IStaticDataService staticDataService, IProgressUpdateService progressUpdateService)
         {
-            _scoreToNextLevel = ScoreToNextLevelConst;
+            _staticDataService = staticDataService;
+            _currentLevel = persistentProgressService.Progress.PlayerLevel;
+
+            UpdateScoreToNextLevel(_currentLevel);
+
+            progressUpdateService.Register(this);
         }
 
         public void GoToNextLevel()
         {
-            _scoreToNextLevel = ScoreToNextLevelConst;
+            _currentLevel++;
+            UpdateScoreToNextLevel(_currentLevel);
+        }
+
+        public void WriteToProgress(PlayerProgress progress)
+        {
+            progress.PlayerLevel = _currentLevel;
+        }
+
+        private void UpdateScoreToNextLevel(int currentLevel)
+        {
+            _scoreToNextLevel = currentLevel < _staticDataService.Settings.ScorePerLevel.Length
+                ? _staticDataService.Settings.ScorePerLevel[currentLevel - 1]
+                : _staticDataService.Settings.ScorePerLevel[^1];
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Infrastructure.StateMachine
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
             IMovesLeftService movesLeftService = new InfiniteMovesLeftService();
-            IPlayerLevelService playerLevelService = new PlayerLevelService();
+            IPlayerLevelService playerLevelService = new PlayerLevelService(_persistentProgressService, _staticDataService, progressUpdateService);
             IScoreService scoreService = new ScoreService(Settings.EndlessLevelName, _soundMonoService, _persistentProgressService, progressUpdateService, playerLevelService.ScoreToNextLevel);
             IGameRoundService gameRoundService = new EndlessGameRoundService(_soundMonoService, _windowService, scoreService, playerLevelService);
 

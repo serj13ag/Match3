@@ -58,15 +58,14 @@ namespace Infrastructure.StateMachine
         {
             _uiFactory.CreateUiRootCanvas();
 
-            int scoreGoal = 300;
-
             IProgressUpdateService progressUpdateService = new ProgressUpdateService(_persistentProgressService);
 
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
             IMovesLeftService movesLeftService = new InfiniteMovesLeftService();
-            IScoreService scoreService = new ScoreService(Settings.EndlessLevelName, _soundMonoService, _persistentProgressService, progressUpdateService, scoreGoal);
-            IGameRoundService gameRoundService = new EndlessGameRoundService(Settings.EndlessLevelName, _gameStateMachine, _soundMonoService, _windowService, _persistentProgressService, scoreService);
+            IPlayerLevelService playerLevelService = new PlayerLevelService();
+            IScoreService scoreService = new ScoreService(Settings.EndlessLevelName, _soundMonoService, _persistentProgressService, progressUpdateService, playerLevelService.ScoreToNextLevel);
+            IGameRoundService gameRoundService = new EndlessGameRoundService(_soundMonoService, _windowService, scoreService, playerLevelService);
 
             ITileService tileService = new TileService(Settings.EndlessLevelName, _staticDataService, progressUpdateService, gameFactory, gameRoundService);
             IGamePieceService gamePieceService = new GamePieceService(Settings.EndlessLevelName, _staticDataService, _soundMonoService,

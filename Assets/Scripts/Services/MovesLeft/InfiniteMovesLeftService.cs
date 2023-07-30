@@ -7,7 +7,11 @@ namespace Services.MovesLeft
     {
         public int MovesLeft => int.MaxValue;
 
-        public event EventHandler<MovesLeftChangedEventArgs> OnMovesLeftChanged;
+        public event EventHandler<MovesLeftChangedEventArgs> OnMovesLeftChanged
+        {
+            add => throw new NotImplementedException();
+            remove => throw new NotImplementedException();
+        }
 
         public void DecrementMovesLeft()
         {

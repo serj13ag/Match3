@@ -53,9 +53,7 @@ namespace Services.Board
             updateMonoService.Register(this);
             progressUpdateService.Register(this);
 
-            LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
-            if (levelName == levelBoardData.LevelName && levelBoardData.Tiles != null &&
-                levelBoardData.GamePieces != null)
+            if (persistentProgressService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
             {
                 tileService.Initialize(levelBoardData.Tiles);
                 gamePieceService.Initialize(levelBoardData.GamePieces);
@@ -83,7 +81,7 @@ namespace Services.Board
 
         public void WriteToProgress(PlayerProgress progress)
         {
-            progress.BoardData.LevelBoardData.LevelName = _levelName;
+            progress.BoardData[_levelName].LevelName = _levelName;
         }
 
         public bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Data
 {
@@ -6,12 +7,12 @@ namespace Data
     public class PlayerProgress
     {
         public int PlayerLevel;
-        public BoardData BoardData;
+        public Dictionary<string, LevelBoardData> BoardData;
 
         public PlayerProgress()
         {
             PlayerLevel = 1;
-            BoardData = new BoardData();
+            BoardData = new Dictionary<string, LevelBoardData>();
         }
     }
 }

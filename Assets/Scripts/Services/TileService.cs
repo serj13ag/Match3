@@ -93,7 +93,7 @@ namespace Services
                 tilesSaveData.Add(new TileSaveData(tile.Type, tile.Position));
             }
 
-            progress.BoardData.LevelBoardData.Tiles = tilesSaveData;
+            progress.BoardData[_levelName].Tiles = tilesSaveData;
         }
 
         private void SpawnTile(TileType tileType, int x, int y)

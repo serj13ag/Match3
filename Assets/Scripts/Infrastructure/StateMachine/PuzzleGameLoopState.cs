@@ -63,7 +63,7 @@ namespace Infrastructure.StateMachine
             int scoreGoal = levelStaticData.ScoreGoal;
             int movesLeft = levelStaticData.MovesLeft;
 
-            IProgressUpdateService progressUpdateService = new ProgressUpdateService(_persistentProgressService);
+            IProgressUpdateService progressUpdateService = new ProgressUpdateService(levelName, _persistentProgressService);
 
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);

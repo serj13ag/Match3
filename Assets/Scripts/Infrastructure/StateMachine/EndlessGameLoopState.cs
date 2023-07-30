@@ -58,7 +58,7 @@ namespace Infrastructure.StateMachine
         {
             _uiFactory.CreateUiRootCanvas();
 
-            IProgressUpdateService progressUpdateService = new ProgressUpdateService(_persistentProgressService);
+            IProgressUpdateService progressUpdateService = new ProgressUpdateService(Settings.EndlessLevelName, _persistentProgressService);
 
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);

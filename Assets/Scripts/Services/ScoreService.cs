@@ -13,6 +13,7 @@ namespace Services
     {
         private int _completedBreakStreakIterations;
 
+        private readonly string _levelName;
         private readonly ISoundMonoService _soundMonoService;
         private readonly IProgressUpdateService _progressUpdateService;
 
@@ -39,12 +40,12 @@ namespace Services
             IPersistentProgressService persistentProgressService, IProgressUpdateService progressUpdateService,
             int scoreGoal)
         {
+            _levelName = levelName;
             _soundMonoService = soundMonoService;
 
             _scoreGoal = scoreGoal;
 
-            LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
-            if (levelName == levelBoardData.LevelName)
+            if (persistentProgressService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
             {
                 _score = levelBoardData.Score;
             }
@@ -86,7 +87,7 @@ namespace Services
 
         public void WriteToProgress(PlayerProgress progress)
         {
-            progress.BoardData.LevelBoardData.Score = _score;
+            progress.BoardData[_levelName].Score = _score;
         }
 
         private void AddScore(int scoreToAdd)

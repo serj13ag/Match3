@@ -7,6 +7,7 @@ namespace Services.MovesLeft
 {
     public class MovesLeftService : IMovesLeftService, IProgressWriter
     {
+        private readonly string _levelName;
         private int _movesLeft;
 
         public int MovesLeft => _movesLeft;
@@ -16,10 +17,11 @@ namespace Services.MovesLeft
         public MovesLeftService(string levelName, IPersistentProgressService persistentProgressService,
             IProgressUpdateService progressUpdateService, int movesLeft)
         {
+            _levelName = levelName;
+
             progressUpdateService.Register(this);
 
-            LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
-            if (levelName == levelBoardData.LevelName && levelBoardData.MovesLeft > 0)
+            if (persistentProgressService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
             {
                 _movesLeft = levelBoardData.MovesLeft;
             }
@@ -31,7 +33,7 @@ namespace Services.MovesLeft
 
         public void WriteToProgress(PlayerProgress progress)
         {
-            progress.BoardData.LevelBoardData.MovesLeft = _movesLeft;
+            progress.BoardData[_levelName].MovesLeft = _movesLeft;
         }
 
         public void DecrementMovesLeft()

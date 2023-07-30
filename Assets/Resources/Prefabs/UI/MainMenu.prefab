@@ -447,10 +447,6 @@ PrefabInstance:
       propertyPath: m_Text
       value: puzzle mode
       objectReference: {fileID: 0}
-    - target: {fileID: 1244780591744435239, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
-      propertyPath: m_Interactable
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1425554073389320821, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

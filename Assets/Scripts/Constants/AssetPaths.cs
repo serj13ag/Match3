@@ -13,7 +13,8 @@
         public const string SettingsWindowPath = "Prefabs/UI/SettingsWindow";
         public const string PuzzleLevelsWindowPath = "Prefabs/UI/PuzzleLevelsWindow";
         public const string PuzzleLevelButtonPath = "Prefabs/UI/PuzzleLevelButton";
-        public const string BackgroundScreenPath = "Prefabs/UI/BackgroundScreen";
+        public const string PuzzleBackgroundScreenPath = "Prefabs/UI/PuzzleBackgroundScreen";
+        public const string EndlessBackgroundScreenPath = "Prefabs/UI/EndlessBackgroundScreen";
         public const string MessageWindowPath = "Prefabs/UI/MessageWindow";
 
         // GameData

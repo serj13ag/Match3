@@ -78,7 +78,7 @@ namespace Infrastructure.StateMachine
             ICameraService cameraService = new CameraService(boardService.BoardSize);
 
             EndlessBackgroundScreen endlessBackgroundScreen = _assetProviderService.Instantiate<EndlessBackgroundScreen>(AssetPaths.EndlessBackgroundScreenPath);
-            endlessBackgroundScreen.Init(_gameStateMachine, scoreService, cameraService);
+            endlessBackgroundScreen.Init(_gameStateMachine, playerLevelService, scoreService, cameraService);
 
             gameRoundService.StartGame();
             _loadingCurtainMonoService.FadeOffWithDelay();

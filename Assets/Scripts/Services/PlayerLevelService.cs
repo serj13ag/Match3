@@ -1,4 +1,6 @@
-﻿using Data;
+﻿using System;
+using Data;
+using EventArguments;
 using Interfaces;
 
 namespace Services
@@ -11,6 +13,18 @@ namespace Services
         private int _currentLevel;
 
         public int ScoreToNextLevel => _scoreToNextLevel;
+
+        public int CurrentLevel
+        {
+            get => _currentLevel;
+            private set
+            {
+                _currentLevel = value;
+                OnCurrentLevelChanged?.Invoke(this, new PlayerLevelChangedEventArgs(value));
+            }
+        }
+
+        public event EventHandler<PlayerLevelChangedEventArgs> OnCurrentLevelChanged;
 
         public PlayerLevelService(IPersistentProgressService persistentProgressService,
             IStaticDataService staticDataService, IProgressUpdateService progressUpdateService)
@@ -25,7 +39,7 @@ namespace Services
 
         public void GoToNextLevel()
         {
-            _currentLevel++;
+            CurrentLevel++;
             UpdateScoreToNextLevel(_currentLevel);
         }
 

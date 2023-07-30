@@ -224,7 +224,8 @@ namespace Helpers
         {
             foreach (GamePiece gamePiece in gamePieces)
             {
-                if (TryFindMatches(gamePiece.Position, Settings.MinMatchesCount, gamePieces, boardSize, out _))
+                if (!ReferenceEquals(gamePiece, null)
+                    && TryFindMatches(gamePiece.Position, Settings.MinMatchesCount, gamePieces, boardSize, out _))
                 {
                     return true;
                 }

@@ -1,4 +1,4 @@
-﻿namespace Services
+﻿namespace Services.GameRound
 {
     public interface IGameRoundService
     {

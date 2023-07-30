@@ -6,7 +6,7 @@
         public const string MainMenuSceneName = "MainMenuScene";
         public const string GameLevelScene = "GameLevelScene";
 
-        public const string FirstLevelName = "Level1";
+        public const string EndlessLevelName = "EndlessLevel";
 
         public const float CameraPositionZ = -10f;
 

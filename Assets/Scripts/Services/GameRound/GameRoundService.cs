@@ -4,7 +4,7 @@ using Infrastructure.StateMachine;
 using Services.Mono.Sound;
 using Services.UI;
 
-namespace Services
+namespace Services.GameRound
 {
     public class GameRoundService : IGameRoundService
     {

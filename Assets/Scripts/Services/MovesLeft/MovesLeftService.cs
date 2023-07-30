@@ -3,7 +3,7 @@ using Data;
 using EventArguments;
 using Interfaces;
 
-namespace Services
+namespace Services.MovesLeft
 {
     public class MovesLeftService : IMovesLeftService, IProgressWriter
     {

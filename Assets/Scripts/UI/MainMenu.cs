@@ -1,4 +1,5 @@
 using Enums;
+using Infrastructure.StateMachine;
 using Services.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,7 @@ namespace UI
         [SerializeField] private Button _quitButton;
 
         private IWindowService _windowService;
+        private GameStateMachine _gameStateMachine;
 
         private void OnEnable()
         {
@@ -30,14 +32,15 @@ namespace UI
             _quitButton.onClick.RemoveListener(QuitGame);
         }
 
-        public void Init(IWindowService windowService)
+        public void Init(GameStateMachine gameStateMachine, IWindowService windowService)
         {
+            _gameStateMachine = gameStateMachine;
             _windowService = windowService;
         }
 
         private void StartDefaultMode()
         {
-            throw new System.NotImplementedException();
+            _gameStateMachine.Enter<EndlessGameLoopState>();
         }
 
         private void ShowPuzzleLevels()

@@ -3,7 +3,6 @@ using EventArguments;
 using Infrastructure.StateMachine;
 using Services;
 using Services.UI;
-using StaticData;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,10 +41,10 @@ namespace UI.Windows
         {
             _levelButtons = new List<PuzzleLevelButton>();
 
-            foreach (LevelStaticData levelStaticData in staticDataService.Levels)
+            foreach (string puzzleLevelName in staticDataService.PuzzleLevelNames)
             {
                 PuzzleLevelButton puzzleLevelButton = _uiFactory.CreateLevelButton(_levelButtonsContainer);
-                puzzleLevelButton.Init(levelStaticData.LevelName);
+                puzzleLevelButton.Init(puzzleLevelName);
 
                 puzzleLevelButton.OnButtonClicked += StartPuzzleLevel;
 

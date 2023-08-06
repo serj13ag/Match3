@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Constants;
 using Entities;
 using Enums;
@@ -186,7 +187,7 @@ namespace Helpers
         }
 
         public static bool HasAvailableMoves(GamePiece[,] gamePieces, Vector2Int boardSize,
-            out GamePiece[] gamePiecesForMatch)
+            out Tuple<GamePiece, GamePiece> gamePiecesForMatch)
         {
             gamePiecesForMatch = null;
 
@@ -201,7 +202,7 @@ namespace Helpers
                         SwapItems(tempGamePieces, x, y, x + 1, y);
                         if (HasMatches(tempGamePieces, boardSize))
                         {
-                            gamePiecesForMatch = new GamePiece[] { tempGamePieces[x,y], tempGamePieces[x + 1, y] };
+                            gamePiecesForMatch = new Tuple<GamePiece, GamePiece>(tempGamePieces[x,y], tempGamePieces[x + 1, y]);
                             return true;
                         }
 
@@ -213,7 +214,7 @@ namespace Helpers
                         SwapItems(tempGamePieces, x, y, x, y + 1);
                         if (HasMatches(tempGamePieces, boardSize))
                         {
-                            gamePiecesForMatch = new GamePiece[] { tempGamePieces[x,y], tempGamePieces[x, y + 1] };
+                            gamePiecesForMatch = new Tuple<GamePiece, GamePiece>(tempGamePieces[x,y], tempGamePieces[x, y + 1]);
                             return true;
                         }
 

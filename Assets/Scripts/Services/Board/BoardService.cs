@@ -18,6 +18,7 @@ namespace Services.Board
     {
         private readonly ITileService _tileService;
         private readonly IGamePieceService _gamePieceService;
+        private readonly IParticleService _particleService;
         private readonly IScoreService _scoreService;
         private readonly IMovesLeftService _movesLeftService;
         private readonly ISoundMonoService _soundMonoService;
@@ -34,12 +35,13 @@ namespace Services.Board
             IPersistentProgressService persistentProgressService, IStaticDataService staticDataService,
             IProgressUpdateService progressUpdateService, IScoreService scoreService,
             IMovesLeftService movesLeftService, IGameRoundService gameRoundService,
-            ITileService tileService, IGamePieceService gamePieceService)
+            ITileService tileService, IGamePieceService gamePieceService, IParticleService particleService)
         {
             _scoreService = scoreService;
             _movesLeftService = movesLeftService;
             _tileService = tileService;
             _gamePieceService = gamePieceService;
+            _particleService = particleService;
             _soundMonoService = soundMonoService;
             _progressUpdateService = progressUpdateService;
             _gameRoundService = gameRoundService;
@@ -119,7 +121,7 @@ namespace Services.Board
 
         public void ChangeStateToWaiting()
         {
-            ChangeState(new WaitingBoardState(this, _gamePieceService));
+            ChangeState(new WaitingBoardState(this, _gamePieceService, _particleService));
 
             _progressUpdateService.UpdateProgressAndSave();
         }

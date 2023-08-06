@@ -22,6 +22,9 @@
 
         public const int FillBoardOffsetY = 5;
 
+        public const float SecondsTillShowHint = 5f;
+        public const float SecondsBetweenReshowHint = 2f;
+
         public static class Timeouts
         {
             public const float FillBoardTimeout = 0f;

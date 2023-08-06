@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Data;
 using DTO;
 using Entities;
@@ -28,6 +29,6 @@ namespace Services
         HashSet<GamePiece> GetAllGamePieces();
 
         bool TryGetLowestRowWithEmptyGamePiece(out int lowestEmptyRow);
-        bool HasAvailableMoves(out GamePiece[] gamePiecesForMatch);
+        bool HasAvailableMoves(out Tuple<GamePiece, GamePiece> gamePiecesForMatch);
     }
 }

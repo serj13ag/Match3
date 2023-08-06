@@ -2,9 +2,10 @@
 {
     public enum ParticleEffectType
     {
-        Clear,
-        Break,
-        DoubleBreak,
-        Bomb,
+        Clear = 1,
+        Break = 2,
+        DoubleBreak = 3,
+        Bomb = 4,
+        Hint = 5,
     }
 }

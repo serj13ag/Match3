@@ -77,7 +77,7 @@ namespace Infrastructure.StateMachine
 
             IBoardService boardService = new BoardService(levelName, _soundMonoService, _updateMonoService,
                 _persistentProgressService, _staticDataService, progressUpdateService, scoreService, movesLeftService, gameRoundService,
-                tileService, gamePieceService);
+                tileService, gamePieceService, particleService);
 
             ICameraService cameraService = new CameraService(boardService.BoardSize);
 

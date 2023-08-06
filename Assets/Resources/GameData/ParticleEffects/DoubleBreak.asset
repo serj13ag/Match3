@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cf408310a2f40189e50e061f626ad6e, type: 3}
   m_Name: DoubleBreak
   m_EditorClassIdentifier: 
-  Type: 2
+  Type: 3
   Prefab: {fileID: 7643373790698149596, guid: a511891983476d04cae5ec4cd105565f, type: 3}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Constants;
 using Data;
 using DTO;
@@ -288,7 +289,7 @@ namespace Services
             return false;
         }
 
-        public bool HasAvailableMoves(out GamePiece[] gamePiecesForMatch)
+        public bool HasAvailableMoves(out Tuple<GamePiece, GamePiece> gamePiecesForMatch)
         {
             return GamePieceMatchHelper.HasAvailableMoves(_gamePieces, _boardSize, out gamePiecesForMatch);
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using EventArguments;
-using Infrastructure.StateMachine;
 using Services;
+using Services.UI;
 using TMPro;
 using UnityEngine;
 
@@ -12,10 +12,10 @@ namespace UI.Background
         [SerializeField] private TMP_Text _playerLevel;
         [SerializeField] private ScoreCounter _scoreCounter;
 
-        public void Init(GameStateMachine gameStateMachine, IPlayerLevelService playerLevelService,
-            IScoreService scoreService, ICameraService cameraService)
+        public void Init(IPlayerLevelService playerLevelService, IScoreService scoreService,
+            ICameraService cameraService, IWindowService windowService)
         {
-            InitInner(gameStateMachine, cameraService);
+            InitInner(cameraService, windowService);
 
             _scoreCounter.Init(scoreService);
 

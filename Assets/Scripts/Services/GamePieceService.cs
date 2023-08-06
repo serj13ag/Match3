@@ -100,7 +100,7 @@ namespace Services
                         continue;
                     }
 
-                    if (TrySpawnCollectibleGamePiece(i, j, out GamePiece spawnedCollectableGamePiece, offsetY))
+                    if (Settings.CollectibleGamePieceEnabled && TrySpawnCollectibleGamePiece(i, j, out GamePiece spawnedCollectableGamePiece, offsetY))
                     {
                         spawnedGamePieces.Add(spawnedCollectableGamePiece);
                         continue;

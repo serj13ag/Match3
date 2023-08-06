@@ -9,6 +9,8 @@ namespace Infrastructure.StateMachine
 
         private IExitableState _currentState;
 
+        public bool InGameLoopState => _currentState.IsGameLoopState;
+
         public GameStateMachine(GlobalServices globalServices)
         {
             _states = new Dictionary<Type, IExitableState>

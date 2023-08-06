@@ -24,6 +24,8 @@ namespace Infrastructure.StateMachine
         private readonly IUiFactory _uiFactory;
         private readonly IWindowService _windowService;
 
+        public bool IsGameLoopState => true;
+
         public EndlessGameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             ILoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
             IRandomService randomService, IStaticDataService staticDataService, ISoundMonoService soundMonoService,
@@ -78,7 +80,7 @@ namespace Infrastructure.StateMachine
             ICameraService cameraService = new CameraService(boardService.BoardSize);
 
             EndlessBackgroundScreen endlessBackgroundScreen = _assetProviderService.Instantiate<EndlessBackgroundScreen>(AssetPaths.EndlessBackgroundScreenPath);
-            endlessBackgroundScreen.Init(_gameStateMachine, playerLevelService, scoreService, cameraService);
+            endlessBackgroundScreen.Init(playerLevelService, scoreService, cameraService, _windowService);
 
             gameRoundService.StartGame();
             _loadingCurtainMonoService.FadeOffWithDelay();

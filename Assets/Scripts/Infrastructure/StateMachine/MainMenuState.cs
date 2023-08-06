@@ -15,6 +15,8 @@ namespace Infrastructure.StateMachine
         private readonly ILoadingCurtainMonoService _loadingCurtainMonoService;
         private readonly IWindowService _windowService;
 
+        public bool IsGameLoopState => false;
+
         public MainMenuState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, IUiFactory uiFactory,
             ISoundMonoService soundMonoService, ILoadingCurtainMonoService loadingCurtainMonoService,
             IWindowService windowService)

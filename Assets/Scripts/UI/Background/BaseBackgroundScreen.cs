@@ -1,5 +1,6 @@
-﻿using Infrastructure.StateMachine;
+﻿using Enums;
 using Services;
+using Services.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,11 +11,11 @@ namespace UI.Background
         [SerializeField] private Canvas _canvas;
         [SerializeField] private Button _menuButton;
 
-        private GameStateMachine _gameStateMachine;
+        private IWindowService _windowService;
 
-        protected void InitInner(GameStateMachine gameStateMachine, ICameraService cameraService)
+        protected void InitInner(ICameraService cameraService, IWindowService windowService)
         {
-            _gameStateMachine = gameStateMachine;
+            _windowService = windowService;
             _canvas.worldCamera = cameraService.MainCamera;
 
             _menuButton.onClick.AddListener(GoToMainMenu);
@@ -22,7 +23,7 @@ namespace UI.Background
 
         private void GoToMainMenu()
         {
-            _gameStateMachine.Enter<MainMenuState>();
+            _windowService.ShowWindow(WindowType.Settings);
         }
     }
 }

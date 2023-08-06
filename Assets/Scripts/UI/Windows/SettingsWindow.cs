@@ -1,4 +1,5 @@
 ﻿using EventArguments;
+using Infrastructure.StateMachine;
 using Services;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,17 +14,20 @@ namespace UI.Windows
         [SerializeField] private Image _soundButtonImage;
 
         [SerializeField] private Button _resetButton;
+        [SerializeField] private Button _menuButton;
         [SerializeField] private Button _backButton;
 
         private IPersistentProgressService _persistentProgressService;
         private ISettingsService _settingsService;
 
         private float _initialSoundButtonImageAlpha;
+        private GameStateMachine _gameStateMachine;
 
         private void OnEnable()
         {
             _soundButton.onClick.AddListener(SwitchSoundMode);
             _resetButton.onClick.AddListener(ResetProgressAndSave);
+            _menuButton.onClick.AddListener(SwitchToMenu);
             _backButton.onClick.AddListener(Back);
         }
 
@@ -31,17 +35,23 @@ namespace UI.Windows
         {
             _soundButton.onClick.RemoveListener(SwitchSoundMode);
             _resetButton.onClick.RemoveListener(ResetProgressAndSave);
+            _menuButton.onClick.RemoveListener(SwitchToMenu);
             _backButton.onClick.RemoveListener(Back);
         }
 
-        public void Init(IPersistentProgressService persistentProgressService, ISettingsService settingsService)
+        public void Init(GameStateMachine gameStateMachine, IPersistentProgressService persistentProgressService,
+            ISettingsService settingsService)
         {
+            _gameStateMachine = gameStateMachine;
             _settingsService = settingsService;
             _persistentProgressService = persistentProgressService;
 
             _initialSoundButtonImageAlpha = _soundButtonImage.color.a;
 
             UpdateSoundButtonColor(_settingsService.SoundEnabled);
+
+            _resetButton.gameObject.SetActive(Debug.isDebugBuild);
+            _menuButton.gameObject.SetActive(_gameStateMachine.InGameLoopState);
 
             _settingsService.OnSettingsChanged += OnSettingsChanged;
         }
@@ -59,6 +69,11 @@ namespace UI.Windows
         private void ResetProgressAndSave()
         {
             _persistentProgressService.ResetProgressAndSave();
+        }
+
+        private void SwitchToMenu()
+        {
+            _gameStateMachine.Enter<MainMenuState>();
         }
 
         private void Back()

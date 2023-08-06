@@ -25,6 +25,8 @@ namespace Infrastructure.StateMachine
         private readonly IUiFactory _uiFactory;
         private readonly IWindowService _windowService;
 
+        public bool IsGameLoopState => true;
+
         public PuzzleGameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             ILoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
             IRandomService randomService, IStaticDataService staticDataService, ISoundMonoService soundMonoService,
@@ -82,7 +84,7 @@ namespace Infrastructure.StateMachine
             ICameraService cameraService = new CameraService(boardService.BoardSize);
 
             PuzzleBackgroundScreen puzzleBackgroundScreen = _assetProviderService.Instantiate<PuzzleBackgroundScreen>(AssetPaths.PuzzleBackgroundScreenPath);
-            puzzleBackgroundScreen.Init(levelName, _gameStateMachine, scoreService, cameraService, movesLeftService);
+            puzzleBackgroundScreen.Init(levelName, scoreService, cameraService, movesLeftService, _windowService);
 
             gameRoundService.StartGame();
             _loadingCurtainMonoService.FadeOffWithDelay();

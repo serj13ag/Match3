@@ -7,6 +7,8 @@ namespace Infrastructure.StateMachine
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
 
+        public bool IsGameLoopState => false;
+
         public BootstrapState(GameStateMachine gameStateMachine, GlobalServices services)
         {
             _gameStateMachine = gameStateMachine;

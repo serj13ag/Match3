@@ -7,6 +7,8 @@ namespace Infrastructure.StateMachine
         private readonly GameStateMachine _gameStateMachine;
         private readonly IPersistentProgressService _persistentProgressService;
 
+        public bool IsGameLoopState => false;
+
         public LoadProgressState(GameStateMachine gameStateMachine, IPersistentProgressService persistentProgressService)
         {
             _gameStateMachine = gameStateMachine;

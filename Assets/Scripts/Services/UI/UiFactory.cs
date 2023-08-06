@@ -48,7 +48,7 @@ namespace Services.UI
         public SettingsWindow CreateSettingsWindow()
         {
             SettingsWindow settingsWindow = _assetProviderService.Instantiate<SettingsWindow>(AssetPaths.SettingsWindowPath, _uiRootTransform);
-            settingsWindow.Init(_persistentProgressService, _settingsService);
+            settingsWindow.Init(_gameStateMachine, _persistentProgressService, _settingsService);
             return settingsWindow;
         }
 

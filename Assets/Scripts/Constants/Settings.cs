@@ -8,6 +8,8 @@
 
         public const string EndlessLevelName = "EndlessLevel";
 
+        public const bool CollectibleGamePieceEnabled = false;
+
         public const float CameraPositionZ = -10f;
 
         public const float TimeToMoveGamePiece = 0.3f;

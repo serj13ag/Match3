@@ -1,6 +1,6 @@
-using Infrastructure.StateMachine;
 using Services;
 using Services.MovesLeft;
+using Services.UI;
 using TMPro;
 using UnityEngine;
 
@@ -13,10 +13,10 @@ namespace UI.Background
 
         [SerializeField] private TMP_Text _levelNameText;
 
-        public void Init(string levelName, GameStateMachine gameStateMachine, IScoreService scoreService,
-            ICameraService cameraService, IMovesLeftService movesLeftService)
+        public void Init(string levelName, IScoreService scoreService, ICameraService cameraService,
+            IMovesLeftService movesLeftService, IWindowService windowService)
         {
-            InitInner(gameStateMachine, cameraService);
+            InitInner(cameraService, windowService);
 
             _scoreCounter.Init(scoreService);
             _movesLeftCounter.Init(movesLeftService);

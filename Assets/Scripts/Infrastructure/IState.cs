@@ -2,6 +2,7 @@
 {
     public interface IExitableState
     {
+        bool IsGameLoopState { get; }
         void Exit();
     }
 

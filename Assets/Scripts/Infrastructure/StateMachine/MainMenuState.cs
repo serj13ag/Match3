@@ -8,15 +8,18 @@ namespace Infrastructure.StateMachine
 {
     public class MainMenuState : IState
     {
+        private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly IUiFactory _uiFactory;
         private readonly ISoundMonoService _soundMonoService;
         private readonly ILoadingCurtainMonoService _loadingCurtainMonoService;
         private readonly IWindowService _windowService;
 
-        public MainMenuState(SceneLoader sceneLoader, IUiFactory uiFactory, ISoundMonoService soundMonoService,
-            ILoadingCurtainMonoService loadingCurtainMonoService, IWindowService windowService)
+        public MainMenuState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, IUiFactory uiFactory,
+            ISoundMonoService soundMonoService, ILoadingCurtainMonoService loadingCurtainMonoService,
+            IWindowService windowService)
         {
+            _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
             _uiFactory = uiFactory;
             _soundMonoService = soundMonoService;
@@ -41,7 +44,7 @@ namespace Infrastructure.StateMachine
             _uiFactory.CreateUiRootCanvas();
 
             MainMenu mainMenu = _uiFactory.CreateMainMenu();
-            mainMenu.Init(_windowService);
+            mainMenu.Init(_gameStateMachine, _windowService);
 
             _soundMonoService.PlayBackgroundMusic();
 

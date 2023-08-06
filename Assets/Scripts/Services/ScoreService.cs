@@ -13,13 +13,23 @@ namespace Services
     {
         private int _completedBreakStreakIterations;
 
+        private readonly string _levelName;
         private readonly ISoundMonoService _soundMonoService;
         private readonly IProgressUpdateService _progressUpdateService;
 
-        private readonly int _scoreGoal;
+        private int _scoreGoal;
         private int _score;
 
-        public int Score => _score;
+        public int Score
+        {
+            get => _score;
+            private set
+            {
+                _score = value;
+                OnScoreChanged?.Invoke(this, new ScoreChangedEventArgs(value));
+            }
+        }
+
         public int ScoreGoal => _scoreGoal;
 
         public bool ScoreGoalReached => _score >= _scoreGoal;
@@ -30,12 +40,12 @@ namespace Services
             IPersistentProgressService persistentProgressService, IProgressUpdateService progressUpdateService,
             int scoreGoal)
         {
+            _levelName = levelName;
             _soundMonoService = soundMonoService;
 
             _scoreGoal = scoreGoal;
 
-            LevelBoardData levelBoardData = persistentProgressService.Progress.BoardData.LevelBoardData;
-            if (levelName == levelBoardData.LevelName)
+            if (persistentProgressService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
             {
                 _score = levelBoardData.Score;
             }
@@ -69,9 +79,15 @@ namespace Services
             _completedBreakStreakIterations = 0;
         }
 
+        public void SetScoreGoal(int scoreToNextLevel)
+        {
+            _scoreGoal = scoreToNextLevel;
+            Score = 0;
+        }
+
         public void WriteToProgress(PlayerProgress progress)
         {
-            progress.BoardData.LevelBoardData.Score = _score;
+            progress.BoardData[_levelName].Score = _score;
         }
 
         private void AddScore(int scoreToAdd)
@@ -85,9 +101,7 @@ namespace Services
                     return;
             }
 
-            _score += scoreToAdd;
-
-            OnScoreChanged?.Invoke(this, new ScoreChangedEventArgs(_score));
+            Score += scoreToAdd;
         }
     }
 }

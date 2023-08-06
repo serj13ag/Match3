@@ -15,5 +15,6 @@ namespace Services
 
         void IncrementCompletedBreakStreakIterations();
         void ResetBreakStreakIterations();
+        void SetScoreGoal(int scoreToNextLevel);
     }
 }

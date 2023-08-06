@@ -83,7 +83,7 @@ namespace Services
                 }
             }
 
-            progress.BoardData.LevelBoardData.GamePieces = gamePieceSaveData;
+            progress.BoardData[_levelName].GamePieces = gamePieceSaveData;
         }
 
         public List<GamePiece> FillBoardWithRandomGamePieces(int offsetY = 0)

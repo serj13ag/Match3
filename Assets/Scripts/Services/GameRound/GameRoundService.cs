@@ -4,7 +4,7 @@ using Infrastructure.StateMachine;
 using Services.Mono.Sound;
 using Services.UI;
 
-namespace Services
+namespace Services.GameRound
 {
     public class GameRoundService : IGameRoundService
     {
@@ -71,7 +71,7 @@ namespace Services
 
         private void ReloadLevel()
         {
-            _gameStateMachine.Enter<GameLoopState, string>(_levelName);
+            _gameStateMachine.Enter<PuzzleGameLoopState, string>(_levelName);
         }
     }
 }

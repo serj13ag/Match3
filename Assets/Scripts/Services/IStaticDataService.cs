@@ -8,7 +8,7 @@ namespace Services
     public interface IStaticDataService
     {
         SettingsStaticData Settings { get; }
-        IEnumerable<LevelStaticData> Levels { get; }
+        IEnumerable<string> PuzzleLevelNames { get; }
 
         TileStaticData GetDataForTile(TileType tileType);
         GamePieceStaticData GetDataForGamePiece(GamePieceType gamePieceType);

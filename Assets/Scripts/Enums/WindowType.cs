@@ -2,7 +2,7 @@
 {
     public enum WindowType
     {
-        Levels,
+        PuzzleLevels,
         Settings,
     }
 }

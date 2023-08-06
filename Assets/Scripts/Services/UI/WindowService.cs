@@ -43,7 +43,7 @@ namespace Services.UI
 
             BaseWindow baseWindow = windowType switch
             {
-                WindowType.Levels => _uiFactory.CreateLevelsWindow(),
+                WindowType.PuzzleLevels => _uiFactory.CreatePuzzleLevelsWindow(),
                 WindowType.Settings => _uiFactory.CreateSettingsWindow(),
                 _ => throw new ArgumentOutOfRangeException(nameof(windowType), windowType, null),
             };

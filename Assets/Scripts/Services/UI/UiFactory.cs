@@ -52,16 +52,16 @@ namespace Services.UI
             return settingsWindow;
         }
 
-        public LevelsWindow CreateLevelsWindow()
+        public PuzzleLevelsWindow CreatePuzzleLevelsWindow()
         {
-            LevelsWindow levelsWindow = _assetProviderService.Instantiate<LevelsWindow>(AssetPaths.LevelsWindowPath, _uiRootTransform);
-            levelsWindow.Init(_gameStateMachine, this, _staticDataService);
-            return levelsWindow;
+            PuzzleLevelsWindow puzzleLevelsWindow = _assetProviderService.Instantiate<PuzzleLevelsWindow>(AssetPaths.PuzzleLevelsWindowPath, _uiRootTransform);
+            puzzleLevelsWindow.Init(_gameStateMachine, this, _staticDataService);
+            return puzzleLevelsWindow;
         }
 
-        public LevelButton CreateLevelButton(Transform parentTransform)
+        public PuzzleLevelButton CreateLevelButton(Transform parentTransform)
         {
-            return _assetProviderService.Instantiate<LevelButton>(AssetPaths.LevelButtonPath, parentTransform);
+            return _assetProviderService.Instantiate<PuzzleLevelButton>(AssetPaths.PuzzleLevelButtonPath, parentTransform);
         }
 
         public MessageInGameWindow GetMessageWindow()

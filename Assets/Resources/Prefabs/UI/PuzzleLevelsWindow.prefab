@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 4946010886493732144}
   - component: {fileID: 725643806971011438}
   m_Layer: 5
-  m_Name: LevelsWindow
+  m_Name: PuzzleLevelsWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

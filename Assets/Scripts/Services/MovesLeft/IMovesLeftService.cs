@@ -1,7 +1,7 @@
 ﻿using System;
 using EventArguments;
 
-namespace Services
+namespace Services.MovesLeft
 {
     public interface IMovesLeftService
     {

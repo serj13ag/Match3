@@ -8,19 +8,19 @@ namespace Data
     [Serializable]
     public class LevelBoardData
     {
-        public string LevelName;
-        public List<TileSaveData> Tiles;
-        public List<GamePieceSaveData> GamePieces;
-        public int Score;
-        public int MovesLeft;
+        public string LevelName { get; set; }
+        public List<TileSaveData> Tiles { get; set; }
+        public List<GamePieceSaveData> GamePieces { get; set; }
+        public int Score { get; set; }
+        public int MovesLeft { get; set; }
     }
 
     [Serializable]
     public class GamePieceSaveData
     {
-        public GamePieceType Type;
-        public Vector2Int Position;
-        public GamePieceColor Color;
+        public GamePieceType Type { get; set; }
+        public Vector2Int Position { get; set; }
+        public GamePieceColor Color { get; set; }
 
         public GamePieceSaveData(GamePieceType type, Vector2Int position, GamePieceColor color)
         {
@@ -33,8 +33,8 @@ namespace Data
     [Serializable]
     public class TileSaveData
     {
-        public TileType Type;
-        public Vector2Int Position;
+        public TileType Type { get; set; }
+        public Vector2Int Position { get; set; }
 
         public TileSaveData(TileType type, Vector2Int position)
         {

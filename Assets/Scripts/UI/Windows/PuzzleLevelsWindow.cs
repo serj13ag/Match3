@@ -3,13 +3,12 @@ using EventArguments;
 using Infrastructure.StateMachine;
 using Services;
 using Services.UI;
-using StaticData;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Windows
 {
-    public class LevelsWindow : BaseWindow
+    public class PuzzleLevelsWindow : BaseWindow
     {
         [SerializeField] private Transform _levelButtonsContainer;
 
@@ -18,7 +17,7 @@ namespace UI.Windows
         private GameStateMachine _gameStateMachine;
         private IUiFactory _uiFactory;
 
-        private List<LevelButton> _levelButtons;
+        private List<PuzzleLevelButton> _levelButtons;
 
         private void OnEnable()
         {
@@ -40,23 +39,23 @@ namespace UI.Windows
 
         private void CreateLevelButtons(IStaticDataService staticDataService)
         {
-            _levelButtons = new List<LevelButton>();
+            _levelButtons = new List<PuzzleLevelButton>();
 
-            foreach (LevelStaticData levelStaticData in staticDataService.Levels)
+            foreach (string puzzleLevelName in staticDataService.PuzzleLevelNames)
             {
-                LevelButton levelButton = _uiFactory.CreateLevelButton(_levelButtonsContainer);
-                levelButton.Init(levelStaticData.LevelName);
+                PuzzleLevelButton puzzleLevelButton = _uiFactory.CreateLevelButton(_levelButtonsContainer);
+                puzzleLevelButton.Init(puzzleLevelName);
 
-                levelButton.OnButtonClicked += StartLevel;
+                puzzleLevelButton.OnButtonClicked += StartPuzzleLevel;
 
-                _levelButtons.Add(levelButton);
+                _levelButtons.Add(puzzleLevelButton);
             }
         }
 
-        private void StartLevel(object sender, LevelButtonClickedEventArgs e)
+        private void StartPuzzleLevel(object sender, PuzzleLevelButtonClickedEventArgs e)
         {
             Cleanup();
-            _gameStateMachine.Enter<GameLoopState, string>(e.LevelName);
+            _gameStateMachine.Enter<PuzzleGameLoopState, string>(e.LevelName);
         }
 
         private void Back()
@@ -66,9 +65,9 @@ namespace UI.Windows
 
         private void Cleanup()
         {
-            foreach (LevelButton levelButton in _levelButtons)
+            foreach (PuzzleLevelButton levelButton in _levelButtons)
             {
-                levelButton.OnButtonClicked -= StartLevel;
+                levelButton.OnButtonClicked -= StartPuzzleLevel;
             }
 
             _levelButtons.Clear();

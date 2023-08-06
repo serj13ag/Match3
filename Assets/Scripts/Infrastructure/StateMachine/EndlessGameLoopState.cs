@@ -1,15 +1,16 @@
 ﻿using Constants;
 using Services;
 using Services.Board;
+using Services.GameRound;
 using Services.Mono;
 using Services.Mono.Sound;
+using Services.MovesLeft;
 using Services.UI;
-using StaticData;
 using UI.Background;
 
 namespace Infrastructure.StateMachine
 {
-    public class GameLoopState : IPayloadedState<string>
+    public class EndlessGameLoopState : IState
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -23,7 +24,7 @@ namespace Infrastructure.StateMachine
         private readonly IUiFactory _uiFactory;
         private readonly IWindowService _windowService;
 
-        public GameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
+        public EndlessGameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
             ILoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
             IRandomService randomService, IStaticDataService staticDataService, ISoundMonoService soundMonoService,
             IUpdateMonoService updateMonoService, IPersistentProgressService persistentProgressService,
@@ -42,10 +43,10 @@ namespace Infrastructure.StateMachine
             _windowService = windowService;
         }
 
-        public void Enter(string levelName)
+        public void Enter()
         {
             _loadingCurtainMonoService.FadeOnInstantly();
-            _sceneLoader.LoadScene(Settings.GameLevelScene, () => OnLevelLoaded(levelName), true);
+            _sceneLoader.LoadScene(Settings.GameLevelScene, OnSceneLoaded, true);
         }
 
         public void Exit()
@@ -53,34 +54,31 @@ namespace Infrastructure.StateMachine
             Cleanup();
         }
 
-        private void OnLevelLoaded(string levelName)
+        private void OnSceneLoaded()
         {
             _uiFactory.CreateUiRootCanvas();
 
-            LevelStaticData levelStaticData = _staticDataService.GetDataForLevel(levelName);
-            int scoreGoal = levelStaticData.ScoreGoal;
-            int movesLeft = levelStaticData.MovesLeft;
-
-            IProgressUpdateService progressUpdateService = new ProgressUpdateService(_persistentProgressService);
+            IProgressUpdateService progressUpdateService = new ProgressUpdateService(Settings.EndlessLevelName, _persistentProgressService);
 
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
-            IMovesLeftService movesLeftService = new MovesLeftService(levelName, _persistentProgressService, progressUpdateService, movesLeft);
-            IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentProgressService, progressUpdateService, scoreGoal);
-            IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService, _persistentProgressService, scoreService);
+            IMovesLeftService movesLeftService = new InfiniteMovesLeftService();
+            IPlayerLevelService playerLevelService = new PlayerLevelService(_persistentProgressService, _staticDataService, progressUpdateService);
+            IScoreService scoreService = new ScoreService(Settings.EndlessLevelName, _soundMonoService, _persistentProgressService, progressUpdateService, playerLevelService.ScoreToNextLevel);
+            IGameRoundService gameRoundService = new EndlessGameRoundService(_soundMonoService, _windowService, scoreService, playerLevelService);
 
-            ITileService tileService = new TileService(levelName, _staticDataService, progressUpdateService, gameFactory, gameRoundService);
-            IGamePieceService gamePieceService = new GamePieceService(levelName, _staticDataService, _soundMonoService,
+            ITileService tileService = new TileService(Settings.EndlessLevelName, _staticDataService, progressUpdateService, gameFactory, gameRoundService);
+            IGamePieceService gamePieceService = new GamePieceService(Settings.EndlessLevelName, _staticDataService, _soundMonoService,
                 _randomService, progressUpdateService, tileService, gameFactory, particleService);
 
-            IBoardService boardService = new BoardService(levelName, _soundMonoService, _updateMonoService,
+            IBoardService boardService = new BoardService(Settings.EndlessLevelName, _soundMonoService, _updateMonoService,
                 _persistentProgressService, _staticDataService, progressUpdateService, scoreService, movesLeftService, gameRoundService,
                 tileService, gamePieceService);
 
             ICameraService cameraService = new CameraService(boardService.BoardSize);
 
-            BackgroundScreen backgroundScreen = _assetProviderService.Instantiate<BackgroundScreen>(AssetPaths.BackgroundScreenPath);
-            backgroundScreen.Init(levelName, _gameStateMachine, scoreService, cameraService, movesLeftService);
+            EndlessBackgroundScreen endlessBackgroundScreen = _assetProviderService.Instantiate<EndlessBackgroundScreen>(AssetPaths.EndlessBackgroundScreenPath);
+            endlessBackgroundScreen.Init(_gameStateMachine, playerLevelService, scoreService, cameraService);
 
             gameRoundService.StartGame();
             _loadingCurtainMonoService.FadeOffWithDelay();

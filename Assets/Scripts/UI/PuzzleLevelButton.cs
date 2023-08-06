@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class LevelButton : MonoBehaviour
+    public class PuzzleLevelButton : MonoBehaviour
     {
         [SerializeField] private Button _button;
         [SerializeField] private Text _text;
 
         private string _levelName;
 
-        public event EventHandler<LevelButtonClickedEventArgs> OnButtonClicked;
+        public event EventHandler<PuzzleLevelButtonClickedEventArgs> OnButtonClicked;
 
         private void OnEnable()
         {
@@ -38,7 +38,7 @@ namespace UI
 
         private void OnButtonClick()
         {
-            OnButtonClicked?.Invoke(this, new LevelButtonClickedEventArgs(_levelName));
+            OnButtonClicked?.Invoke(this, new PuzzleLevelButtonClickedEventArgs(_levelName));
         }
     }
 }

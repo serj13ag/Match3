@@ -11,8 +11,8 @@ namespace Services.UI
         MainMenu CreateMainMenu();
         BackgroundBlocker CreateBackgroundBlocker();
         SettingsWindow CreateSettingsWindow();
-        LevelsWindow CreateLevelsWindow();
-        LevelButton CreateLevelButton(Transform parentTransform);
+        PuzzleLevelsWindow CreatePuzzleLevelsWindow();
+        PuzzleLevelButton CreateLevelButton(Transform parentTransform);
         void Cleanup();
     }
 }

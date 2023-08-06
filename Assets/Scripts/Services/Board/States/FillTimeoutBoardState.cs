@@ -42,15 +42,7 @@ namespace Services.Board.States
 
             if (_numberOfMovedGamePieces == _numberOfGamePiecesToMove)
             {
-                if (_gamePieceService.HasAvailableMoves())
-                {
-                    _boardService.ChangeStateToWaiting();
-                }
-                else
-                {
-                    _gamePieceService.ClearBoard();
-                    _boardService.ChangeStateToFill();
-                }
+                _boardService.ChangeStateToWaiting();
             }
         }
     }

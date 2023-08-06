@@ -119,7 +119,7 @@ namespace Services.Board
 
         public void ChangeStateToWaiting()
         {
-            ChangeState(new WaitingBoardState());
+            ChangeState(new WaitingBoardState(this, _gamePieceService));
 
             _progressUpdateService.UpdateProgressAndSave();
         }

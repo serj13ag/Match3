@@ -28,6 +28,6 @@ namespace Services
         HashSet<GamePiece> GetAllGamePieces();
 
         bool TryGetLowestRowWithEmptyGamePiece(out int lowestEmptyRow);
-        bool HasAvailableMoves();
+        bool HasAvailableMoves(out GamePiece[] gamePiecesForMatch);
     }
 }

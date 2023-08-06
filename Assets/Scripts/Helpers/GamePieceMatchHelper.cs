@@ -185,8 +185,11 @@ namespace Helpers
             return horizontalMatches && verticalMatches;
         }
 
-        public static bool HasAvailableMoves(GamePiece[,] gamePieces, Vector2Int boardSize)
+        public static bool HasAvailableMoves(GamePiece[,] gamePieces, Vector2Int boardSize,
+            out GamePiece[] gamePiecesForMatch)
         {
+            gamePiecesForMatch = null;
+
             GamePiece[,] tempGamePieces = (GamePiece[,])gamePieces.Clone();
 
             for (int y = 0; y < boardSize.y; y++)
@@ -198,6 +201,7 @@ namespace Helpers
                         SwapItems(tempGamePieces, x, y, x + 1, y);
                         if (HasMatches(tempGamePieces, boardSize))
                         {
+                            gamePiecesForMatch = new GamePiece[] { tempGamePieces[x,y], tempGamePieces[x + 1, y] };
                             return true;
                         }
 
@@ -209,6 +213,7 @@ namespace Helpers
                         SwapItems(tempGamePieces, x, y, x, y + 1);
                         if (HasMatches(tempGamePieces, boardSize))
                         {
+                            gamePiecesForMatch = new GamePiece[] { tempGamePieces[x,y], tempGamePieces[x, y + 1] };
                             return true;
                         }
 

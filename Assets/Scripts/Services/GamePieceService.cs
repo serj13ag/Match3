@@ -288,9 +288,9 @@ namespace Services
             return false;
         }
 
-        public bool HasAvailableMoves()
+        public bool HasAvailableMoves(out GamePiece[] gamePiecesForMatch)
         {
-            return GamePieceMatchHelper.HasAvailableMoves(_gamePieces, _boardSize);
+            return GamePieceMatchHelper.HasAvailableMoves(_gamePieces, _boardSize, out gamePiecesForMatch);
         }
 
         public void SpawnBombGamePiece(int x, int y, BombType bombType, GamePieceColor color)

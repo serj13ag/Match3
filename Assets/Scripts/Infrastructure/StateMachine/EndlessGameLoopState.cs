@@ -12,7 +12,6 @@ namespace Infrastructure.StateMachine
 {
     public class EndlessGameLoopState : IState
     {
-        private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly ILoadingCurtainMonoService _loadingCurtainMonoService;
         private readonly IAssetProviderService _assetProviderService;
@@ -24,15 +23,16 @@ namespace Infrastructure.StateMachine
         private readonly IUiFactory _uiFactory;
         private readonly IWindowService _windowService;
 
+        private IBoardService _boardService;
+
         public bool IsGameLoopState => true;
 
-        public EndlessGameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
-            ILoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
-            IRandomService randomService, IStaticDataService staticDataService, ISoundMonoService soundMonoService,
+        public EndlessGameLoopState(SceneLoader sceneLoader, ILoadingCurtainMonoService loadingCurtainMonoService,
+            IAssetProviderService assetProviderService, IRandomService randomService,
+            IStaticDataService staticDataService, ISoundMonoService soundMonoService,
             IUpdateMonoService updateMonoService, IPersistentProgressService persistentProgressService,
             IUiFactory uiFactory, IWindowService windowService)
         {
-            _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
             _loadingCurtainMonoService = loadingCurtainMonoService;
             _assetProviderService = assetProviderService;
@@ -84,11 +84,14 @@ namespace Infrastructure.StateMachine
 
             gameRoundService.StartGame();
             _loadingCurtainMonoService.FadeOffWithDelay();
+
+            _boardService = boardService;
         }
 
         private void Cleanup()
         {
             _uiFactory.Cleanup();
+            _boardService.Cleanup();
         }
     }
 }

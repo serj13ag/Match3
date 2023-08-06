@@ -19,7 +19,7 @@ namespace Infrastructure.StateMachine
                 [typeof(LoadProgressState)] = new LoadProgressState(this, globalServices.PersistentProgressService),
                 [typeof(MainMenuState)] = new MainMenuState(this, globalServices.SceneLoader, globalServices.UiFactory,
                     globalServices.SoundMonoService, globalServices.LoadingCurtainMonoService, globalServices.WindowService),
-                [typeof(EndlessGameLoopState)] = new EndlessGameLoopState(this, globalServices.SceneLoader,
+                [typeof(EndlessGameLoopState)] = new EndlessGameLoopState(globalServices.SceneLoader,
                     globalServices.LoadingCurtainMonoService, globalServices.AssetProviderService,
                     globalServices.RandomService, globalServices.StaticDataService, globalServices.SoundMonoService,
                     globalServices.UpdateMonoService, globalServices.PersistentProgressService,

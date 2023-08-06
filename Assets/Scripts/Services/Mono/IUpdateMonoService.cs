@@ -6,5 +6,6 @@ namespace Services.Mono
     {
         void Init();
         void Register(IUpdatable updatable);
+        void Remove(IUpdatable updatable);
     }
 }

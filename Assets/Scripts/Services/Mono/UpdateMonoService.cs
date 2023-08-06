@@ -27,5 +27,10 @@ namespace Services.Mono
         {
             _updatableEntities.Add(updatable);
         }
+
+        public void Remove(IUpdatable updatable)
+        {
+            _updatableEntities.Remove(updatable);
+        }
     }
 }

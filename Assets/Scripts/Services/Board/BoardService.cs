@@ -22,6 +22,7 @@ namespace Services.Board
         private readonly IScoreService _scoreService;
         private readonly IMovesLeftService _movesLeftService;
         private readonly ISoundMonoService _soundMonoService;
+        private readonly IUpdateMonoService _updateMonoService;
         private readonly IProgressUpdateService _progressUpdateService;
         private readonly IGameRoundService _gameRoundService;
 
@@ -43,6 +44,7 @@ namespace Services.Board
             _gamePieceService = gamePieceService;
             _particleService = particleService;
             _soundMonoService = soundMonoService;
+            _updateMonoService = updateMonoService;
             _progressUpdateService = progressUpdateService;
             _gameRoundService = gameRoundService;
 
@@ -154,6 +156,13 @@ namespace Services.Board
 
                 ChangeStateToHandlePlayerSwitchGamePieces(clickedGamePiece, targetGamePiece);
             }
+        }
+
+        public void Cleanup()
+        {
+            _boardState = null;
+
+            _updateMonoService.Remove(this);
         }
     }
 }

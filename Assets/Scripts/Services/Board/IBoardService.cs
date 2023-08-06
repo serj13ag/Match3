@@ -16,5 +16,6 @@ namespace Services.Board
         void ChangeStateToCollapse(HashSet<int> columnIndexesToCollapse);
         void ChangeStateToFill();
         void ChangeStateToWaiting();
+        void Cleanup();
     }
 }

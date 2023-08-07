@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,8 +10,8 @@ namespace UI
     {
         [SerializeField] private Button _button;
         [SerializeField] private Image _image;
-        [SerializeField] private Text _messageText;
-        [SerializeField] private Text _buttonText;
+        [SerializeField] private TMP_Text _messageText;
+        [SerializeField] private TMP_Text _buttonText;
 
         private Action _onButtonClickCallback;
 

@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1211704364471700053, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
       propertyPath: m_Name
-      value: LevelButton
+      value: PuzzleLevelButton
       objectReference: {fileID: 0}
     - target: {fileID: 1244780569423318393, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
       propertyPath: m_Text
@@ -117,6 +117,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
+--- !u!114 &2245838445008063703 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4176072578381824230, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
+  m_PrefabInstance: {fileID: 2800871494835358769}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3895164509828777572 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1211704364471700053, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
@@ -135,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _button: {fileID: 4006207584676055062}
-  _text: {fileID: 4006207632789782856}
+  _text: {fileID: 2245838445008063703}
 --- !u!114 &4006207584676055062 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1244780591744435239, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
@@ -145,16 +156,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4006207632789782856 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1244780569423318393, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
-  m_PrefabInstance: {fileID: 2800871494835358769}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

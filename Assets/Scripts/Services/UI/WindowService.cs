@@ -24,17 +24,17 @@ namespace Services.UI
 
         public void ShowStartGameMessageWindow(int scoreGoal, Action onButtonClickCallback)
         {
-            ShowMessageWindow(onButtonClickCallback, AssetPaths.GoalIconSpritePath, $"score goal\n{scoreGoal}", "start");
+            ShowMessageWindow(onButtonClickCallback, AssetPaths.GoalIconSpritePath, $"SCORE GOAL\n{scoreGoal}", "START");
         }
 
         public void ShowGameWinMessageWindow(Action onButtonClickCallback)
         {
-            ShowMessageWindow(onButtonClickCallback, AssetPaths.WinIconSpritePath, "you win!", "ok");
+            ShowMessageWindow(onButtonClickCallback, AssetPaths.WinIconSpritePath, "YOU WIN!", "OK");
         }
 
         public void ShowGameOverMessageWindow(Action onButtonClickCallback)
         {
-            ShowMessageWindow(onButtonClickCallback, AssetPaths.LoseIconSpritePath, "you lose!", "ok");
+            ShowMessageWindow(onButtonClickCallback, AssetPaths.LoseIconSpritePath, "YOU LOSE!", "OK");
         }
 
         public void ShowWindow(WindowType windowType)

@@ -1,5 +1,6 @@
 ﻿using System;
 using EventArguments;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,7 @@ namespace UI
     public class PuzzleLevelButton : MonoBehaviour
     {
         [SerializeField] private Button _button;
-        [SerializeField] private Text _text;
+        [SerializeField] private TMP_Text _text;
 
         private string _levelName;
 

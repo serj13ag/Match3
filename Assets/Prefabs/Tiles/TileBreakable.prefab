@@ -53,14 +53,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1908415108861199723, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
       propertyPath: m_Name
-      value: TileBreak
+      value: TileBreakable
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8639118720009340608, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
---- !u!212 &6089745978599416484 stripped
+--- !u!212 &1394400503664116678 stripped
 SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 1908415108861199717, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6748350484943709191, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
   m_PrefabInstance: {fileID: 5692289197728147393}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6089745978599416490 stripped
@@ -80,4 +80,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c3831ff94df41699c0ec665982c2489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spriteRenderer: {fileID: 6089745978599416484}
+  _spriteRenderer: {fileID: 1394400503664116678}

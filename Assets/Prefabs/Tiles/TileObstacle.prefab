@@ -69,16 +69,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1908415108861199723, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
       propertyPath: m_Name
-      value: TileObs
+      value: TileObstacle
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8639118720009340608, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
---- !u!212 &1768557501601739605 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 1908415108861199717, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
-  m_PrefabInstance: {fileID: 213675530430182960}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1768557501601739611 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1908415108861199723, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
@@ -96,4 +91,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec5711cc672548209c230a094a5dc707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spriteRenderer: {fileID: 1768557501601739605}
+  _spriteRenderer: {fileID: 6868505928578912823}
+--- !u!212 &6868505928578912823 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 6748350484943709191, guid: f082314ab585c2b45a155724e2b1770a, type: 3}
+  m_PrefabInstance: {fileID: 213675530430182960}
+  m_PrefabAsset: {fileID: 0}

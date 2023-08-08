@@ -95,8 +95,8 @@ namespace Services.Board.States
             Vector2Int firstGamePiecePosition = clickedGamePiece.Position;
             Vector2Int secondGamePiecePosition = targetGamePiece.Position;
 
-            clickedGamePiece.Move(secondGamePiecePosition);
-            targetGamePiece.Move(firstGamePiecePosition);
+            clickedGamePiece.Move(secondGamePiecePosition, true);
+            targetGamePiece.Move(firstGamePiecePosition, true);
 
             return firstGamePiecePosition.x != secondGamePiecePosition.x
                 ? Direction.Horizontal

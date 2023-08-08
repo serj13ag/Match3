@@ -11,7 +11,10 @@ namespace Entities
 {
     public class GamePiece : MonoBehaviour
     {
+        private static readonly int Rotate = Animator.StringToHash("Rotate");
+
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private Animator _animator;
 
         private IStaticDataService _staticDataService;
 
@@ -62,12 +65,17 @@ namespace Entities
             Move(destination);
         }
 
-        public void Move(Vector2Int destination)
+        public void Move(Vector2Int destination, bool byPlayer = false)
         {
             if (!_isMoving)
             {
                 OnStartMoving?.Invoke(this);
                 StartCoroutine(MoveRoutine(destination, Settings.TimeToMoveGamePiece));
+
+                if (_animator != null && byPlayer)
+                {
+                    _animator.SetTrigger(Rotate);
+                }
             }
         }
 

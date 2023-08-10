@@ -5,6 +5,6 @@ namespace Services
 {
     public interface IParticleService
     {
-        void PlayParticleEffectAt(Vector2Int position, ParticleEffectType particleEffectType, int z = 0);
+        void PlayParticleEffectAt(Vector2Int position, ParticleEffectType particleEffectType, int z = 0, Color? color = null);
     }
 }

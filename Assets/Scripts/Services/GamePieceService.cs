@@ -236,7 +236,7 @@ namespace Services
                 ParticleEffectType particleEffectType = gamePiece.Bombed
                     ? ParticleEffectType.Bomb
                     : ParticleEffectType.Clear;
-                _particleService.PlayParticleEffectAt(position, particleEffectType);
+                _particleService.PlayParticleEffectAt(position, particleEffectType, 0, _staticDataService.GetColorForGamePiece(gamePiece.Color));
             }
         }
 

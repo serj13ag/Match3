@@ -14,6 +14,7 @@ namespace Services
         private const string TilesContainerName = "Tiles";
         private const string GamePiecesContainerName = "GamePieces";
 
+        private readonly string _levelName;
         private readonly IRandomService _randomService;
         private readonly IStaticDataService _staticDataService;
         private readonly IParticleService _particleService;
@@ -21,9 +22,10 @@ namespace Services
         private readonly Transform _tilesContainerTransform;
         private readonly Transform _gamePiecesContainerTransform;
 
-        public GameFactory(IRandomService randomService, IStaticDataService staticDataService,
+        public GameFactory(string levelName, IRandomService randomService, IStaticDataService staticDataService,
             IParticleService particleService)
         {
+            _levelName = levelName;
             _randomService = randomService;
             _staticDataService = staticDataService;
             _particleService = particleService;
@@ -67,7 +69,7 @@ namespace Services
         {
             GamePieceStaticData gamePieceData = _staticDataService.GetDataForGamePiece(gamePieceType);
             GamePiece gamePiece = Instantiate(gamePieceData.Prefab, Vector3.zero);
-            gamePiece.Init(gamePieceData, color, x, y, offsetY, _gamePiecesContainerTransform, _staticDataService);
+            gamePiece.Init(_levelName, gamePieceData, color, x, y, offsetY, _gamePiecesContainerTransform, _staticDataService);
             return gamePiece;
         }
 

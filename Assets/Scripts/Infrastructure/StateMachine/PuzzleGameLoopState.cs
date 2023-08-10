@@ -68,7 +68,7 @@ namespace Infrastructure.StateMachine
             IProgressUpdateService progressUpdateService = new ProgressUpdateService(levelName, _persistentProgressService);
 
             IParticleService particleService = new ParticleService(_staticDataService);
-            IGameFactory gameFactory = new GameFactory(_randomService, _staticDataService, particleService);
+            IGameFactory gameFactory = new GameFactory(levelName, _randomService, _staticDataService, particleService);
             IMovesLeftService movesLeftService = new MovesLeftService(levelName, _persistentProgressService, progressUpdateService, movesLeft);
             IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentProgressService, progressUpdateService, scoreGoal);
             IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService, _persistentProgressService, scoreService);

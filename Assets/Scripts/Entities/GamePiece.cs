@@ -42,8 +42,8 @@ namespace Entities
         public event Action<GamePiece> OnPositionChanged;
         public event Action<GamePiece> OnStartMoving;
 
-        public void Init(GamePieceStaticData gamePieceData, GamePieceColor color, int x, int y, int offsetY,
-            Transform parentTransform, IStaticDataService staticDataService)
+        public virtual void Init(string levelName, GamePieceStaticData gamePieceData, GamePieceColor color, int x,
+            int y, int offsetY, Transform parentTransform, IStaticDataService staticDataService)
         {
             _staticDataService = staticDataService;
 
@@ -125,8 +125,13 @@ namespace Entities
 
             if (color != GamePieceColor.Undefined)
             {
-                _spriteRenderer.color = _staticDataService.GetColorForGamePiece(color);
+                SetSpriteColor(color);
             }
+        }
+
+        protected void SetSpriteColor(GamePieceColor color)
+        {
+            _spriteRenderer.color = _staticDataService.GetColorForGamePiece(color);
         }
     }
 }

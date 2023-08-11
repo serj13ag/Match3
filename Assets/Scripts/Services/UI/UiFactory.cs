@@ -8,21 +8,14 @@ namespace Services.UI
     public class UiFactory : IUiFactory
     {
         private readonly IAssetProviderService _assetProviderService;
-        private readonly IStaticDataService _staticDataService;
-        private readonly IPersistentProgressService _persistentProgressService;
-        private readonly ISettingsService _settingsService;
 
         private Transform _uiRootTransform;
 
         private MessageInGameWindow _messageWindow;
 
-        public UiFactory(IAssetProviderService assetProviderService, IStaticDataService staticDataService,
-            IPersistentProgressService persistentProgressService, ISettingsService settingsService)
+        public UiFactory(IAssetProviderService assetProviderService)
         {
             _assetProviderService = assetProviderService;
-            _staticDataService = staticDataService;
-            _persistentProgressService = persistentProgressService;
-            _settingsService = settingsService;
         }
 
         public void CreateUiRootCanvas()
@@ -43,16 +36,12 @@ namespace Services.UI
 
         public SettingsWindow CreateSettingsWindow()
         {
-            SettingsWindow settingsWindow = _assetProviderService.Instantiate<SettingsWindow>(AssetPaths.SettingsWindowPath, _uiRootTransform);
-            settingsWindow.Init(_persistentProgressService, _settingsService);
-            return settingsWindow;
+            return _assetProviderService.Instantiate<SettingsWindow>(AssetPaths.SettingsWindowPath, _uiRootTransform);
         }
 
         public PuzzleLevelsWindow CreatePuzzleLevelsWindow()
         {
-            PuzzleLevelsWindow puzzleLevelsWindow = _assetProviderService.Instantiate<PuzzleLevelsWindow>(AssetPaths.PuzzleLevelsWindowPath, _uiRootTransform);
-            puzzleLevelsWindow.Init(this, _staticDataService);
-            return puzzleLevelsWindow;
+            return _assetProviderService.Instantiate<PuzzleLevelsWindow>(AssetPaths.PuzzleLevelsWindowPath, _uiRootTransform);
         }
 
         public PuzzleLevelButton CreateLevelButton(Transform parentTransform)

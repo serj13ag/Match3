@@ -40,12 +40,11 @@ namespace UI.Windows
             _backButton.onClick.RemoveListener(Back);
         }
 
-        public void Init(IPersistentProgressService persistentProgressService, ISettingsService settingsService)
+        private void Awake()
         {
             _gameStateMachine = ServiceLocator.Instance.Get<IGameStateMachine>();
-            
-            _settingsService = settingsService;
-            _persistentProgressService = persistentProgressService;
+            _settingsService = ServiceLocator.Instance.Get<ISettingsService>();
+            _persistentProgressService = ServiceLocator.Instance.Get<IPersistentProgressService>();
 
             _initialSoundButtonImageAlpha = _soundButtonImage.color.a;
 

@@ -30,12 +30,12 @@ namespace UI.Windows
             _backButton.onClick.RemoveListener(Back);
         }
 
-        public void Init(IUiFactory uiFactory, IStaticDataService staticDataService)
+        private void Awake()
         {
             _gameStateMachine = ServiceLocator.Instance.Get<IGameStateMachine>();
+            _uiFactory = ServiceLocator.Instance.Get<IUiFactory>();
 
-            _uiFactory = uiFactory;
-
+            IStaticDataService staticDataService = ServiceLocator.Instance.Get<IStaticDataService>();
             CreateLevelButtons(staticDataService);
         }
 

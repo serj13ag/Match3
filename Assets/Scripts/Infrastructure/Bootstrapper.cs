@@ -44,7 +44,7 @@ namespace Infrastructure
             IUpdateMonoService updateMonoService = assetProviderService.Instantiate<UpdateMonoService>(AssetPaths.UpdateMonoServicePath);
             updateMonoService.Init();
 
-            IUiFactory uiFactory = new UiFactory(assetProviderService, staticDataService, persistentProgressService, settingsService);
+            IUiFactory uiFactory = new UiFactory(assetProviderService);
             IWindowService windowService = new WindowService(uiFactory, assetProviderService);
 
             serviceLocator.Register(sceneLoader);

@@ -2,7 +2,7 @@
 
 namespace Services.Mono.Sound
 {
-    public interface ISoundMonoService
+    public interface ISoundMonoService : IService
     {
         void Init(IRandomService randomService, ISettingsService settingsService);
 

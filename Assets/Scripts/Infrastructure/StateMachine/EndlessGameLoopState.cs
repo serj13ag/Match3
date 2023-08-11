@@ -12,7 +12,7 @@ namespace Infrastructure.StateMachine
 {
     public class EndlessGameLoopState : IState
     {
-        private readonly SceneLoader _sceneLoader;
+        private readonly ISceneLoader _sceneLoader;
         private readonly ILoadingCurtainMonoService _loadingCurtainMonoService;
         private readonly IAssetProviderService _assetProviderService;
         private readonly IRandomService _randomService;
@@ -27,7 +27,7 @@ namespace Infrastructure.StateMachine
 
         public bool IsGameLoopState => true;
 
-        public EndlessGameLoopState(SceneLoader sceneLoader, ILoadingCurtainMonoService loadingCurtainMonoService,
+        public EndlessGameLoopState(ISceneLoader sceneLoader, ILoadingCurtainMonoService loadingCurtainMonoService,
             IAssetProviderService assetProviderService, IRandomService randomService,
             IStaticDataService staticDataService, ISoundMonoService soundMonoService,
             IUpdateMonoService updateMonoService, IPersistentProgressService persistentProgressService,

@@ -2,7 +2,7 @@
 
 namespace Services
 {
-    public interface IPersistentProgressService
+    public interface IPersistentProgressService : IService
     {
         PlayerProgress Progress { get; }
 

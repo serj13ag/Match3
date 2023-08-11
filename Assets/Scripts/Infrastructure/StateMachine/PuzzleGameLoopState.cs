@@ -13,8 +13,8 @@ namespace Infrastructure.StateMachine
 {
     public class PuzzleGameLoopState : IPayloadedState<string>
     {
-        private readonly GameStateMachine _gameStateMachine;
-        private readonly SceneLoader _sceneLoader;
+        private readonly IGameStateMachine _gameStateMachine;
+        private readonly ISceneLoader _sceneLoader;
         private readonly ILoadingCurtainMonoService _loadingCurtainMonoService;
         private readonly IAssetProviderService _assetProviderService;
         private readonly IRandomService _randomService;
@@ -27,7 +27,7 @@ namespace Infrastructure.StateMachine
 
         public bool IsGameLoopState => true;
 
-        public PuzzleGameLoopState(GameStateMachine gameStateMachine, SceneLoader sceneLoader,
+        public PuzzleGameLoopState(IGameStateMachine gameStateMachine, ISceneLoader sceneLoader,
             ILoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
             IRandomService randomService, IStaticDataService staticDataService, ISoundMonoService soundMonoService,
             IUpdateMonoService updateMonoService, IPersistentProgressService persistentProgressService,

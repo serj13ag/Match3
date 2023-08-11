@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Services;
+using Services.Mono;
+using Services.Mono.Sound;
+using Services.UI;
 
 namespace Infrastructure.StateMachine
 {
-    public class GameStateMachine
+    public class GameStateMachine : IGameStateMachine
     {
         private readonly Dictionary<Type, IExitableState> _states;
 
@@ -11,24 +15,43 @@ namespace Infrastructure.StateMachine
 
         public bool InGameLoopState => _currentState.IsGameLoopState;
 
-        public GameStateMachine(GlobalServices globalServices)
+        public GameStateMachine(ServiceLocator serviceLocator)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, globalServices),
-                [typeof(LoadProgressState)] = new LoadProgressState(this, globalServices.PersistentProgressService),
-                [typeof(MainMenuState)] = new MainMenuState(this, globalServices.SceneLoader, globalServices.UiFactory,
-                    globalServices.SoundMonoService, globalServices.LoadingCurtainMonoService, globalServices.WindowService),
-                [typeof(EndlessGameLoopState)] = new EndlessGameLoopState(globalServices.SceneLoader,
-                    globalServices.LoadingCurtainMonoService, globalServices.AssetProviderService,
-                    globalServices.RandomService, globalServices.StaticDataService, globalServices.SoundMonoService,
-                    globalServices.UpdateMonoService, globalServices.PersistentProgressService,
-                    globalServices.UiFactory, globalServices.WindowService),
-                [typeof(PuzzleGameLoopState)] = new PuzzleGameLoopState(this, globalServices.SceneLoader,
-                    globalServices.LoadingCurtainMonoService, globalServices.AssetProviderService,
-                    globalServices.RandomService, globalServices.StaticDataService, globalServices.SoundMonoService,
-                    globalServices.UpdateMonoService, globalServices.PersistentProgressService,
-                    globalServices.UiFactory, globalServices.WindowService),
+                [typeof(LoadProgressState)] = new LoadProgressState(
+                    this,
+                    serviceLocator.Get<IPersistentProgressService>()),
+                [typeof(MainMenuState)] = new MainMenuState(
+                    this,
+                    serviceLocator.Get<ISceneLoader>(),
+                    serviceLocator.Get<IUiFactory>(),
+                    serviceLocator.Get<ISoundMonoService>(),
+                    serviceLocator.Get<ILoadingCurtainMonoService>(),
+                    serviceLocator.Get<IWindowService>()),
+                [typeof(EndlessGameLoopState)] = new EndlessGameLoopState(
+                    serviceLocator.Get<ISceneLoader>(),
+                    serviceLocator.Get<ILoadingCurtainMonoService>(),
+                    serviceLocator.Get<IAssetProviderService>(),
+                    serviceLocator.Get<IRandomService>(),
+                    serviceLocator.Get<IStaticDataService>(),
+                    serviceLocator.Get<ISoundMonoService>(),
+                    serviceLocator.Get<IUpdateMonoService>(),
+                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<IUiFactory>(),
+                    serviceLocator.Get<IWindowService>()),
+                [typeof(PuzzleGameLoopState)] = new PuzzleGameLoopState(
+                    this,
+                    serviceLocator.Get<ISceneLoader>(),
+                    serviceLocator.Get<ILoadingCurtainMonoService>(),
+                    serviceLocator.Get<IAssetProviderService>(),
+                    serviceLocator.Get<IRandomService>(),
+                    serviceLocator.Get<IStaticDataService>(),
+                    serviceLocator.Get<ISoundMonoService>(),
+                    serviceLocator.Get<IUpdateMonoService>(),
+                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<IUiFactory>(),
+                    serviceLocator.Get<IWindowService>()),
             };
         }
 

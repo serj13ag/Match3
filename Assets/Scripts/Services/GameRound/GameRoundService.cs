@@ -8,7 +8,7 @@ namespace Services.GameRound
 {
     public class GameRoundService : IGameRoundService
     {
-        private readonly GameStateMachine _gameStateMachine;
+        private readonly IGameStateMachine _gameStateMachine;
         private readonly ISoundMonoService _soundMonoService;
         private readonly IWindowService _windowService;
         private readonly IPersistentProgressService _persistentProgressService;
@@ -20,7 +20,7 @@ namespace Services.GameRound
 
         public bool RoundIsActive => _roundIsActive;
 
-        public GameRoundService(string levelName, GameStateMachine gameStateMachine, ISoundMonoService soundMonoService,
+        public GameRoundService(string levelName, IGameStateMachine gameStateMachine, ISoundMonoService soundMonoService,
             IWindowService windowService, IPersistentProgressService persistentProgressService, IScoreService scoreService)
         {
             _levelName = levelName;

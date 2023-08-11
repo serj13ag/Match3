@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Services.UI
 {
-    public interface IUiFactory
+    public interface IUiFactory : IService
     {
         void CreateUiRootCanvas();
         MessageInGameWindow GetMessageWindow();

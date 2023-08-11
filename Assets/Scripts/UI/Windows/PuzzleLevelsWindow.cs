@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using EventArguments;
+using Infrastructure;
 using Infrastructure.StateMachine;
 using Services;
 using Services.UI;
@@ -14,7 +15,7 @@ namespace UI.Windows
 
         [SerializeField] private Button _backButton;
 
-        private GameStateMachine _gameStateMachine;
+        private IGameStateMachine _gameStateMachine;
         private IUiFactory _uiFactory;
 
         private List<PuzzleLevelButton> _levelButtons;
@@ -29,10 +30,11 @@ namespace UI.Windows
             _backButton.onClick.RemoveListener(Back);
         }
 
-        public void Init(GameStateMachine gameStateMachine, IUiFactory uiFactory, IStaticDataService staticDataService)
+        public void Init(IUiFactory uiFactory, IStaticDataService staticDataService)
         {
+            _gameStateMachine = ServiceLocator.Instance.Get<IGameStateMachine>();
+
             _uiFactory = uiFactory;
-            _gameStateMachine = gameStateMachine;
 
             CreateLevelButtons(staticDataService);
         }

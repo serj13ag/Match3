@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Services
 {
-    public interface IStaticDataService
+    public interface IStaticDataService : IService
     {
         SettingsStaticData Settings { get; }
         IEnumerable<string> PuzzleLevelNames { get; }

@@ -1,5 +1,4 @@
 ﻿using Constants;
-using Infrastructure.StateMachine;
 using UI;
 using UI.Windows;
 using UnityEngine;
@@ -8,7 +7,6 @@ namespace Services.UI
 {
     public class UiFactory : IUiFactory
     {
-        private readonly GameStateMachine _gameStateMachine;
         private readonly IAssetProviderService _assetProviderService;
         private readonly IStaticDataService _staticDataService;
         private readonly IPersistentProgressService _persistentProgressService;
@@ -18,11 +16,9 @@ namespace Services.UI
 
         private MessageInGameWindow _messageWindow;
 
-        public UiFactory(GameStateMachine gameStateMachine, IAssetProviderService assetProviderService,
-            IStaticDataService staticDataService, IPersistentProgressService persistentProgressService,
-            ISettingsService settingsService)
+        public UiFactory(IAssetProviderService assetProviderService, IStaticDataService staticDataService,
+            IPersistentProgressService persistentProgressService, ISettingsService settingsService)
         {
-            _gameStateMachine = gameStateMachine;
             _assetProviderService = assetProviderService;
             _staticDataService = staticDataService;
             _persistentProgressService = persistentProgressService;
@@ -48,14 +44,14 @@ namespace Services.UI
         public SettingsWindow CreateSettingsWindow()
         {
             SettingsWindow settingsWindow = _assetProviderService.Instantiate<SettingsWindow>(AssetPaths.SettingsWindowPath, _uiRootTransform);
-            settingsWindow.Init(_gameStateMachine, _persistentProgressService, _settingsService);
+            settingsWindow.Init(_persistentProgressService, _settingsService);
             return settingsWindow;
         }
 
         public PuzzleLevelsWindow CreatePuzzleLevelsWindow()
         {
             PuzzleLevelsWindow puzzleLevelsWindow = _assetProviderService.Instantiate<PuzzleLevelsWindow>(AssetPaths.PuzzleLevelsWindowPath, _uiRootTransform);
-            puzzleLevelsWindow.Init(_gameStateMachine, this, _staticDataService);
+            puzzleLevelsWindow.Init(this, _staticDataService);
             return puzzleLevelsWindow;
         }
 

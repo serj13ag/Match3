@@ -2,7 +2,7 @@
 
 namespace Services.Mono
 {
-    public interface IUpdateMonoService
+    public interface IUpdateMonoService : IService
     {
         void Init();
         void Register(IUpdatable updatable);

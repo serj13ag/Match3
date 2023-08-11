@@ -1,4 +1,5 @@
 ﻿using EventArguments;
+using Infrastructure;
 using Infrastructure.StateMachine;
 using Services;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace UI.Windows
         private ISettingsService _settingsService;
 
         private float _initialSoundButtonImageAlpha;
-        private GameStateMachine _gameStateMachine;
+        private IGameStateMachine _gameStateMachine;
 
         private void OnEnable()
         {
@@ -39,10 +40,10 @@ namespace UI.Windows
             _backButton.onClick.RemoveListener(Back);
         }
 
-        public void Init(GameStateMachine gameStateMachine, IPersistentProgressService persistentProgressService,
-            ISettingsService settingsService)
+        public void Init(IPersistentProgressService persistentProgressService, ISettingsService settingsService)
         {
-            _gameStateMachine = gameStateMachine;
+            _gameStateMachine = ServiceLocator.Instance.Get<IGameStateMachine>();
+            
             _settingsService = settingsService;
             _persistentProgressService = persistentProgressService;
 

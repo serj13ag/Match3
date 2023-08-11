@@ -3,7 +3,7 @@ using Enums;
 
 namespace Services.UI
 {
-    public interface IWindowService
+    public interface IWindowService : IService
     {
         void ShowStartGameMessageWindow(int scoreGoal, Action onButtonClickCallback);
         void ShowGameWinMessageWindow(Action onButtonClickCallback);

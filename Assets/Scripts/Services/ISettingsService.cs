@@ -3,7 +3,7 @@ using EventArguments;
 
 namespace Services
 {
-    public interface ISettingsService
+    public interface ISettingsService : IService
     {
         bool SoundEnabled { get; }
 

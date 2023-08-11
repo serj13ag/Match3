@@ -14,7 +14,7 @@ namespace UI
         [SerializeField] private Button _quitButton;
 
         private IWindowService _windowService;
-        private GameStateMachine _gameStateMachine;
+        private IGameStateMachine _gameStateMachine;
 
         private void OnEnable()
         {
@@ -32,7 +32,7 @@ namespace UI
             _quitButton.onClick.RemoveListener(QuitGame);
         }
 
-        public void Init(GameStateMachine gameStateMachine, IWindowService windowService)
+        public void Init(IGameStateMachine gameStateMachine, IWindowService windowService)
         {
             _gameStateMachine = gameStateMachine;
             _windowService = windowService;

@@ -8,8 +8,8 @@ namespace Infrastructure.StateMachine
 {
     public class MainMenuState : IState
     {
-        private readonly GameStateMachine _gameStateMachine;
-        private readonly SceneLoader _sceneLoader;
+        private readonly IGameStateMachine _gameStateMachine;
+        private readonly ISceneLoader _sceneLoader;
         private readonly IUiFactory _uiFactory;
         private readonly ISoundMonoService _soundMonoService;
         private readonly ILoadingCurtainMonoService _loadingCurtainMonoService;
@@ -17,7 +17,7 @@ namespace Infrastructure.StateMachine
 
         public bool IsGameLoopState => false;
 
-        public MainMenuState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, IUiFactory uiFactory,
+        public MainMenuState(IGameStateMachine gameStateMachine, ISceneLoader sceneLoader, IUiFactory uiFactory,
             ISoundMonoService soundMonoService, ILoadingCurtainMonoService loadingCurtainMonoService,
             IWindowService windowService)
         {

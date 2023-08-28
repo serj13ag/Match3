@@ -19,9 +19,6 @@ namespace Infrastructure.StateMachine
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(LoadProgressState)] = new LoadProgressState(
-                    this,
-                    serviceLocator.Get<IPersistentProgressService>()),
                 [typeof(MainMenuState)] = new MainMenuState(
                     this,
                     serviceLocator.Get<ISceneLoader>(),

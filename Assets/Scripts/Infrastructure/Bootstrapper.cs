@@ -19,7 +19,7 @@ namespace Infrastructure
             InitAndRegisterGlobalServices(serviceLocator);
 
             _gameStateMachine = new GameStateMachine(serviceLocator);
-            _gameStateMachine.Enter<LoadProgressState>();
+            _gameStateMachine.Enter<MainMenuState>();
 
             serviceLocator.Register(_gameStateMachine);
 

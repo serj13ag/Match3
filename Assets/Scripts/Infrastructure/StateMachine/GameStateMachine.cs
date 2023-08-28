@@ -36,7 +36,8 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<IUpdateMonoService>(),
                     serviceLocator.Get<IPersistentProgressService>(),
                     serviceLocator.Get<IUiFactory>(),
-                    serviceLocator.Get<IWindowService>()),
+                    serviceLocator.Get<IWindowService>(),
+                    serviceLocator.Get<ICoinService>()),
                 [typeof(PuzzleGameLoopState)] = new PuzzleGameLoopState(
                     this,
                     serviceLocator.Get<ISceneLoader>(),

@@ -1,3 +1,4 @@
+using EventArguments;
 using Infrastructure;
 using Services;
 using TMPro;
@@ -16,9 +17,29 @@ namespace UI.Background
             _coinService = ServiceLocator.Instance.Get<ICoinService>();
         }
 
+        private void OnEnable()
+        {
+            _coinService.OnCoinsChanged += OnCoinsChanged;
+        }
+
         private void Start()
         {
-            _coinsText.text = _coinService.Coins.ToString();
+            UpdateCoinsText(_coinService.Coins);
+        }
+
+        private void OnCoinsChanged(object sender, CoinsChangedEventArgs e)
+        {
+            UpdateCoinsText(e.Coins);
+        }
+
+        private void UpdateCoinsText(int coins)
+        {
+            _coinsText.text = coins.ToString();
+        }
+
+        private void OnDisable()
+        {
+            _coinService.OnCoinsChanged -= OnCoinsChanged;
         }
     }
 }

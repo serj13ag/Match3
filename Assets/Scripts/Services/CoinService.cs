@@ -1,4 +1,7 @@
-﻿namespace Services
+﻿using System;
+using EventArguments;
+
+namespace Services
 {
     public class CoinService : ICoinService
     {
@@ -6,7 +9,20 @@
 
         private int _coins;
 
-        public int Coins => _coins;
+        public int Coins
+        {
+            get => _coins;
+            private set
+            {
+                if (value != _coins)
+                {
+                    _coins = value;
+                    OnCoinsChanged?.Invoke(this, new CoinsChangedEventArgs(_coins));
+                }
+            }
+        }
+
+        public event EventHandler<CoinsChangedEventArgs> OnCoinsChanged;
 
         public CoinService(IPersistentProgressService persistentProgressService)
         {
@@ -17,8 +33,13 @@
 
         public void IncrementCoins()
         {
-            _coins++;
+            Coins++;
 
+            UpdateAndSaveProgress();
+        }
+
+        private void UpdateAndSaveProgress()
+        {
             _persistentProgressService.Progress.Coins = _coins;
             _persistentProgressService.SaveProgress();
         }

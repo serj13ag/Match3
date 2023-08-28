@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Bomb
   m_EditorClassIdentifier: 
   Type: 4
-  Prefab: {fileID: 1895834081504828337, guid: f095d128e44bf62459e74fbee4b2699c, type: 3}
+  Prefab: {fileID: 1895834081504828337, guid: d3c4d017074f687469c3a4a44230e624, type: 3}

@@ -36,8 +36,6 @@ namespace UI
         {
             _gameStateMachine = gameStateMachine;
             _windowService = windowService;
-
-            _puzzleModeButton.gameObject.SetActive(Debug.isDebugBuild);
         }
 
         private void StartDefaultMode()

@@ -50,7 +50,6 @@ namespace UI.Windows
 
             UpdateSoundButtonColor(_settingsService.SoundEnabled);
 
-            _resetButton.gameObject.SetActive(Debug.isDebugBuild);
             _menuButton.gameObject.SetActive(_gameStateMachine.InGameLoopState);
 
             _settingsService.OnSettingsChanged += OnSettingsChanged;

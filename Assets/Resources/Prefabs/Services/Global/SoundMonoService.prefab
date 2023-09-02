@@ -48,14 +48,15 @@ MonoBehaviour:
   _oneShotAudioSourcePrefab: {fileID: 3684730967644596617, guid: 5c97e2f4a2f8f9e479be1ba3c4713b99, type: 3}
   _loopAudioSource: {fileID: 1157548054346473849, guid: c0f73f05880ac8b4aa34e26a10a71431, type: 3}
   _musicClips:
-  - {fileID: 8300000, guid: e75e89afb6e1648e7a4a2ac64328a7c0, type: 3}
-  - {fileID: 8300000, guid: e5e029a21fda14206a9ff1423a1302a9, type: 3}
-  _winClip: {fileID: 8300000, guid: 5f9fb0bfcf06e4304aab13b97645fe13, type: 3}
-  _loseClip: {fileID: 8300000, guid: ed4ad50d33af142e6be4b65f4d37e37c, type: 3}
-  _bonusClip: {fileID: 8300000, guid: eadcfb9a0c2cb4bea8112ac470640c8e, type: 3}
-  _breakGamePieceClip: {fileID: 8300000, guid: 6dce900c6b57748dbb2ee112588b2bd9, type: 3}
-  _bombGamePieceClip: {fileID: 8300000, guid: 8743038399aa64c5db230df6c26f4b71, type: 3}
-  _breakCollectibleClip: {fileID: 8300000, guid: eadcfb9a0c2cb4bea8112ac470640c8e, type: 3}
+  - {fileID: 8300000, guid: d43a4c40201b1f1499cfe76e28e274b3, type: 3}
+  - {fileID: 8300000, guid: 9f05322019f45d04ca9e496240021e2c, type: 3}
+  - {fileID: 8300000, guid: caa380be5c3cdf54ca8b66e485827239, type: 3}
+  _winClip: {fileID: 8300000, guid: 82adeadbf05a9f64597d78dcce95baa3, type: 3}
+  _loseClip: {fileID: 8300000, guid: d98c5fc3c5301ff4ea7291465e4aa8bf, type: 3}
+  _bonusClip: {fileID: 8300000, guid: da98c15d4218fc2498e8590977d375d7, type: 3}
+  _breakGamePieceClip: {fileID: 8300000, guid: 0238819b6f6ab744fbe759f63429aa1d, type: 3}
+  _bombGamePieceClip: {fileID: 8300000, guid: 7d7271f416166cb46ab7373c2495b568, type: 3}
+  _breakCollectibleClip: {fileID: 8300000, guid: 289f3d4e888f3114bb8281af58948368, type: 3}
 --- !u!81 &2468989950422725975
 AudioListener:
   m_ObjectHideFlags: 0

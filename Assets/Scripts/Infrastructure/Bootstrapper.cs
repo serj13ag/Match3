@@ -35,6 +35,7 @@ namespace Infrastructure
             ISaveLoadService saveLoadService = new SaveLoadService();
             IPersistentProgressService persistentProgressService = new PersistentProgressService(saveLoadService);
             ISettingsService settingsService = new SettingsService(saveLoadService);
+            ICoinService coinService = new CoinService(persistentProgressService);
 
             ILoadingCurtainMonoService loadingCurtainMonoService = assetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
 
@@ -54,6 +55,7 @@ namespace Infrastructure
             serviceLocator.Register(saveLoadService);
             serviceLocator.Register(persistentProgressService);
             serviceLocator.Register(settingsService);
+            serviceLocator.Register(coinService);
 
             serviceLocator.Register(loadingCurtainMonoService);
             serviceLocator.Register(soundMonoService);

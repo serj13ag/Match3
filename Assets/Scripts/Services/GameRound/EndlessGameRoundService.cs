@@ -10,6 +10,7 @@ namespace Services.GameRound
     {
         private readonly ISoundMonoService _soundMonoService;
         private readonly IWindowService _windowService;
+        private readonly ICoinService _coinService;
         private readonly IScoreService _scoreService;
         private readonly IPlayerLevelService _playerLevelService;
 
@@ -18,10 +19,11 @@ namespace Services.GameRound
         public bool RoundIsActive => _roundIsActive;
 
         public EndlessGameRoundService(ISoundMonoService soundMonoService, IWindowService windowService,
-            IScoreService scoreService, IPlayerLevelService playerLevelService)
+            ICoinService coinService, IScoreService scoreService, IPlayerLevelService playerLevelService)
         {
             _soundMonoService = soundMonoService;
             _windowService = windowService;
+            _coinService = coinService;
             _scoreService = scoreService;
             _playerLevelService = playerLevelService;
 
@@ -52,6 +54,7 @@ namespace Services.GameRound
         private void UpdatePlayerLevel()
         {
             _playerLevelService.GoToNextLevel();
+            _coinService.IncrementCoins();
             _scoreService.SetScoreGoal(_playerLevelService.ScoreToNextLevel);
 
             StartRound();

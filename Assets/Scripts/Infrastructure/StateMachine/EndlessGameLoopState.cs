@@ -22,6 +22,7 @@ namespace Infrastructure.StateMachine
         private readonly IPersistentProgressService _persistentProgressService;
         private readonly IUiFactory _uiFactory;
         private readonly IWindowService _windowService;
+        private readonly ICoinService _coinService;
 
         private IBoardService _boardService;
 
@@ -31,7 +32,7 @@ namespace Infrastructure.StateMachine
             IAssetProviderService assetProviderService, IRandomService randomService,
             IStaticDataService staticDataService, ISoundMonoService soundMonoService,
             IUpdateMonoService updateMonoService, IPersistentProgressService persistentProgressService,
-            IUiFactory uiFactory, IWindowService windowService)
+            IUiFactory uiFactory, IWindowService windowService, ICoinService coinService)
         {
             _sceneLoader = sceneLoader;
             _loadingCurtainMonoService = loadingCurtainMonoService;
@@ -43,6 +44,7 @@ namespace Infrastructure.StateMachine
             _persistentProgressService = persistentProgressService;
             _uiFactory = uiFactory;
             _windowService = windowService;
+            _coinService = coinService;
         }
 
         public void Enter()
@@ -67,7 +69,7 @@ namespace Infrastructure.StateMachine
             IMovesLeftService movesLeftService = new InfiniteMovesLeftService();
             IPlayerLevelService playerLevelService = new PlayerLevelService(_persistentProgressService, _staticDataService, progressUpdateService);
             IScoreService scoreService = new ScoreService(Settings.EndlessLevelName, _soundMonoService, _persistentProgressService, progressUpdateService, playerLevelService.ScoreToNextLevel);
-            IGameRoundService gameRoundService = new EndlessGameRoundService(_soundMonoService, _windowService, scoreService, playerLevelService);
+            IGameRoundService gameRoundService = new EndlessGameRoundService(_soundMonoService, _windowService, _coinService, scoreService, playerLevelService);
 
             ITileService tileService = new TileService(Settings.EndlessLevelName, _staticDataService, progressUpdateService, gameFactory, gameRoundService);
             IGamePieceService gamePieceService = new GamePieceService(Settings.EndlessLevelName, _staticDataService, _soundMonoService,

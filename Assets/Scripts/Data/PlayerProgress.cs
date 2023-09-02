@@ -7,6 +7,7 @@ namespace Data
     public class PlayerProgress
     {
         public int PlayerLevel { get; set; }
+        public int Coins { get; set; }
         public Dictionary<string, LevelBoardData> BoardData { get; set; }
 
         public PlayerProgress()

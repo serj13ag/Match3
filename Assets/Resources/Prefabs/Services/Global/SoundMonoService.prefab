@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39bc2ba9d70d474cb811ac8b7cc0c53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _oneShotAudioSourcePrefab: {fileID: 3684730967644596617, guid: 5c97e2f4a2f8f9e479be1ba3c4713b99, type: 3}
-  _loopAudioSource: {fileID: 1157548054346473849, guid: c0f73f05880ac8b4aa34e26a10a71431, type: 3}
+  _SFXAudioSourcePrefab: {fileID: 3684730967644596617, guid: 5c97e2f4a2f8f9e479be1ba3c4713b99, type: 3}
+  _musicAudioSourcePrefab: {fileID: 1157548054346473849, guid: c0f73f05880ac8b4aa34e26a10a71431, type: 3}
   _musicClips:
   - {fileID: 8300000, guid: d43a4c40201b1f1499cfe76e28e274b3, type: 3}
   - {fileID: 8300000, guid: 9f05322019f45d04ca9e496240021e2c, type: 3}
@@ -57,6 +57,8 @@ MonoBehaviour:
   _breakGamePieceClip: {fileID: 8300000, guid: 0238819b6f6ab744fbe759f63429aa1d, type: 3}
   _bombGamePieceClip: {fileID: 8300000, guid: 7d7271f416166cb46ab7373c2495b568, type: 3}
   _breakCollectibleClip: {fileID: 8300000, guid: 289f3d4e888f3114bb8281af58948368, type: 3}
+  _musicMixer: {fileID: 24100000, guid: 483f2e334ee6f294c8ad43387a8cdd3e, type: 2}
+  _SFXMixer: {fileID: 24100000, guid: f05a7752be9c2fc4499c1a2f910a0bee, type: 2}
 --- !u!81 &2468989950422725975
 AudioListener:
   m_ObjectHideFlags: 0

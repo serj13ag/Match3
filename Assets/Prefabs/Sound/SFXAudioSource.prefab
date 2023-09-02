@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 814389760599922546}
   - component: {fileID: 3684730967644596617}
   m_Layer: 0
-  m_Name: OneShotAudioSource
+  m_Name: SFXAudioSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ AudioSource:
   m_GameObject: {fileID: 2832791417201195682}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: f05a7752be9c2fc4499c1a2f910a0bee, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1

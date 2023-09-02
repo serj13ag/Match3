@@ -8,9 +8,11 @@ namespace Services.Mono.Sound
 {
     public class SoundMonoService : MonoBehaviour, ISoundMonoService
     {
-        [SerializeField] private OneShotAudioSource _oneShotAudioSourcePrefab;
-        [SerializeField] private LoopAudioSource _loopAudioSource;
+        [Header("AudioSource Prefabs")]
+        [SerializeField] private OneShotAudioSource _SFXAudioSourcePrefab;
+        [SerializeField] private LoopAudioSource _musicAudioSourcePrefab;
 
+        [Header("Clips")]
         [SerializeField] private AudioClip[] _musicClips;
         [SerializeField] private AudioClip _winClip;
         [SerializeField] private AudioClip _loseClip;
@@ -22,7 +24,8 @@ namespace Services.Mono.Sound
         private IRandomService _randomService;
         private ISettingsService _settingsService;
 
-        private bool _isEnabled;
+        private bool _musicEnabled;
+        private bool _soundEnabled;
         private LoopAudioSource _backgroundMusicAudioSource;
 
         public void Init(IRandomService randomService, ISettingsService settingsService)
@@ -30,7 +33,8 @@ namespace Services.Mono.Sound
             _randomService = randomService;
             _settingsService = settingsService;
 
-            _isEnabled = _settingsService.SoundEnabled;
+            _musicEnabled = _settingsService.MusicEnabled;
+            _soundEnabled = _settingsService.SoundEnabled;
 
             _settingsService.OnSettingsChanged += OnSettingsChanged;
 
@@ -39,7 +43,7 @@ namespace Services.Mono.Sound
 
         public void PlayBackgroundMusic()
         {
-            if (!_isEnabled)
+            if (!_musicEnabled)
             {
                 return;
             }
@@ -52,7 +56,7 @@ namespace Services.Mono.Sound
 
         public void PlaySound(SoundType soundType)
         {
-            if (!_isEnabled)
+            if (!_soundEnabled)
             {
                 return;
             }
@@ -62,26 +66,26 @@ namespace Services.Mono.Sound
 
         private void OnSettingsChanged(object sender, SettingsChangedEventArgs e)
         {
-            if (_isEnabled == e.SoundEnabled)
+            if (_musicEnabled != e.MusicEnabled)
             {
-                return;
-            }
-
-            if (e.SoundEnabled)
-            {
-                _isEnabled = true;
-
-                PlayBackgroundMusic();
-            }
-            else
-            {
-                if (_backgroundMusicAudioSource != null)
+                if (e.MusicEnabled)
                 {
-                    TurnBackgroundMusicOff();
-                }
+                    _musicEnabled = true;
 
-                _isEnabled = false;
+                    PlayBackgroundMusic();
+                }
+                else
+                {
+                    if (_backgroundMusicAudioSource != null)
+                    {
+                        TurnBackgroundMusicOff();
+                    }
+
+                    _musicEnabled = false;
+                }
             }
+
+            _soundEnabled = e.SoundEnabled;
         }
 
         private void TurnBackgroundMusicOff()
@@ -129,7 +133,7 @@ namespace Services.Mono.Sound
 
         private void PlayOneShotClip(AudioClip audioClip, float volume)
         {
-            OneShotAudioSource oneShotAudioSource = Instantiate(_oneShotAudioSourcePrefab, transform);
+            OneShotAudioSource oneShotAudioSource = Instantiate(_SFXAudioSourcePrefab, transform);
 
             float randomPitch = _randomService.Next(Settings.Sound.LowPitch, Settings.Sound.HighPitch);
             oneShotAudioSource.Init(audioClip, volume, randomPitch);
@@ -137,7 +141,7 @@ namespace Services.Mono.Sound
 
         private LoopAudioSource CreateBackgroundMusicAudioSource()
         {
-            LoopAudioSource backgroundMusicAudioSource = Instantiate(_loopAudioSource, transform);
+            LoopAudioSource backgroundMusicAudioSource = Instantiate(_musicAudioSourcePrefab, transform);
             backgroundMusicAudioSource.Init(GetClip(SoundType.Music), GetVolume(SoundType.Music));
             return backgroundMusicAudioSource;
         }

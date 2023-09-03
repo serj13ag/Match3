@@ -10,31 +10,41 @@ namespace Services.UI
     public class WindowService : IWindowService
     {
         private readonly IUiFactory _uiFactory;
+        private readonly ILocalizationService _localizationService;
         private readonly IAssetProviderService _assetProviderService;
 
         private BackgroundBlocker _backgroundBlocker;
-        
+
         // TODO refactor
 
-        public WindowService(IUiFactory uiFactory, IAssetProviderService assetProviderService)
+        public WindowService(IUiFactory uiFactory, ILocalizationService localizationService,
+            IAssetProviderService assetProviderService)
         {
             _uiFactory = uiFactory;
+            _localizationService = localizationService;
             _assetProviderService = assetProviderService;
         }
 
         public void ShowStartGameMessageWindow(int scoreGoal, Action onButtonClickCallback)
         {
-            ShowMessageWindow(onButtonClickCallback, AssetPaths.GoalIconSpritePath, $"SCORE GOAL\n{scoreGoal}", "START");
+            string translation = _localizationService.GetTranslation(TranslationKeys.ScoreGoal);
+            string message = string.Format(translation, scoreGoal);
+            string buttonText = _localizationService.GetTranslation(TranslationKeys.Start);
+            ShowMessageWindow(onButtonClickCallback, AssetPaths.GoalIconSpritePath, message, buttonText);
         }
 
         public void ShowGameWinMessageWindow(Action onButtonClickCallback)
         {
-            ShowMessageWindow(onButtonClickCallback, AssetPaths.WinIconSpritePath, "YOU WIN!", "OK");
+            string message = _localizationService.GetTranslation(TranslationKeys.GameWinMessage);
+            string buttonText = _localizationService.GetTranslation(TranslationKeys.Ok);
+            ShowMessageWindow(onButtonClickCallback, AssetPaths.WinIconSpritePath, message, buttonText);
         }
 
         public void ShowGameOverMessageWindow(Action onButtonClickCallback)
         {
-            ShowMessageWindow(onButtonClickCallback, AssetPaths.LoseIconSpritePath, "YOU LOSE!", "OK");
+            string message = _localizationService.GetTranslation(TranslationKeys.GameOverMessage);
+            string buttonText = _localizationService.GetTranslation(TranslationKeys.Ok);
+            ShowMessageWindow(onButtonClickCallback, AssetPaths.LoseIconSpritePath, message, buttonText);
         }
 
         public void ShowWindow(WindowType windowType)
@@ -66,7 +76,8 @@ namespace Services.UI
             _backgroundBlocker.Deactivate();
         }
 
-        private void ShowMessageWindow(Action onButtonClickCallback, string iconSpritePath, string message, string buttonText)
+        private void ShowMessageWindow(Action onButtonClickCallback, string iconSpritePath, string message,
+            string buttonText)
         {
             ShowBackgroundBlocker();
 

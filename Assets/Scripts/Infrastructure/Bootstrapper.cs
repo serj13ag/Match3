@@ -35,6 +35,7 @@ namespace Infrastructure
             ISaveLoadService saveLoadService = new SaveLoadService();
             IPersistentProgressService persistentProgressService = new PersistentProgressService(saveLoadService);
             ISettingsService settingsService = new SettingsService(saveLoadService);
+            ILocalizationService localizationService = new LocalizationService(staticDataService, settingsService);
             ICoinService coinService = new CoinService(persistentProgressService);
 
             ILoadingCurtainMonoService loadingCurtainMonoService = assetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
@@ -46,7 +47,7 @@ namespace Infrastructure
             updateMonoService.Init();
 
             IUiFactory uiFactory = new UiFactory(assetProviderService);
-            IWindowService windowService = new WindowService(uiFactory, assetProviderService);
+            IWindowService windowService = new WindowService(uiFactory, localizationService, assetProviderService);
 
             serviceLocator.Register(sceneLoader);
             serviceLocator.Register(randomService);
@@ -55,6 +56,7 @@ namespace Infrastructure
             serviceLocator.Register(saveLoadService);
             serviceLocator.Register(persistentProgressService);
             serviceLocator.Register(settingsService);
+            serviceLocator.Register(localizationService);
             serviceLocator.Register(coinService);
 
             serviceLocator.Register(loadingCurtainMonoService);

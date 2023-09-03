@@ -24,6 +24,7 @@
         public const string ParticleEffectsDataPath = "GameData/ParticleEffects/";
         public const string ColorsDataPath = "GameData/ColorsData";
         public const string SettingsDataPath = "GameData/SettingsData";
+        public const string LanguagesDataPath = "GameData/LanguagesData";
 
         // Images
         public const string GoalIconSpritePath = "Images/GoalIcon";

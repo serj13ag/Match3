@@ -338,6 +338,10 @@ PrefabInstance:
       propertyPath: m_text
       value: MENU
       objectReference: {fileID: 0}
+    - target: {fileID: 5670065203702912938, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
+      propertyPath: _key
+      value: menu
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
 --- !u!114 &1582960834751647964 stripped
@@ -458,6 +462,10 @@ PrefabInstance:
     - target: {fileID: 4176072578381824230, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
       propertyPath: m_text
       value: BACK
+      objectReference: {fileID: 0}
+    - target: {fileID: 5670065203702912938, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
+      propertyPath: _key
+      value: back
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
@@ -580,6 +588,10 @@ PrefabInstance:
       propertyPath: m_text
       value: SOUND
       objectReference: {fileID: 0}
+    - target: {fileID: 5637148641628258708, guid: 506c38874c6fb994aab936e9e3862a37, type: 3}
+      propertyPath: _key
+      value: sound
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 506c38874c6fb994aab936e9e3862a37, type: 3}
 --- !u!224 &516528933432696290 stripped
@@ -700,6 +712,10 @@ PrefabInstance:
     - target: {fileID: 4176072578381824230, guid: 506c38874c6fb994aab936e9e3862a37, type: 3}
       propertyPath: m_text
       value: MUSIC
+      objectReference: {fileID: 0}
+    - target: {fileID: 5637148641628258708, guid: 506c38874c6fb994aab936e9e3862a37, type: 3}
+      propertyPath: _key
+      value: music
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 506c38874c6fb994aab936e9e3862a37, type: 3}

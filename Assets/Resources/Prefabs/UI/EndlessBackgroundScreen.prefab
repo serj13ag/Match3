@@ -319,6 +319,7 @@ GameObject:
   - component: {fileID: 7608330490974506777}
   - component: {fileID: 6613835386766746409}
   - component: {fileID: 5165528274246847667}
+  - component: {fileID: 5226765603200857325}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -443,6 +444,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5226765603200857325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668097285918266936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2eaa6f8455548f9bd1c78a2dc951d90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _key: level
 --- !u!1 &6496748320048320378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,6 +1210,7 @@ GameObject:
   - component: {fileID: 3076563610883282821}
   - component: {fileID: 472357283008111699}
   - component: {fileID: 540341556929755613}
+  - component: {fileID: 4729358370851481817}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -1320,6 +1335,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4729358370851481817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7815211208837309122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2eaa6f8455548f9bd1c78a2dc951d90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _key: coins
 --- !u!1001 &7524535765881220150
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1454,6 +1482,10 @@ PrefabInstance:
     - target: {fileID: 4176072578381824230, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
       propertyPath: m_fontSizeBase
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5670065203702912938, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
+      propertyPath: _key
+      value: menu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}

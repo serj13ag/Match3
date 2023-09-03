@@ -15,5 +15,6 @@ namespace Services
         Color GetColorForGamePiece(GamePieceColor gamePieceColor);
         LevelStaticData GetDataForLevel(string levelName);
         ParticleEffectStaticData GetDataForParticleEffect(ParticleEffectType particleEffectType);
+        TextAsset GetDataForLanguage(LanguageType languageType);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Data;
+using Enums;
 using EventArguments;
 
 namespace Services
@@ -12,6 +13,7 @@ namespace Services
 
         public bool MusicEnabled => _gameSettings.MusicEnabled;
         public bool SoundEnabled => _gameSettings.SoundEnabled;
+        public LanguageType Language => _gameSettings.Language;
 
         public event EventHandler<SettingsChangedEventArgs> OnSettingsChanged;
 

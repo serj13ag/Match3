@@ -1,4 +1,5 @@
 ﻿using System;
+using Enums;
 using EventArguments;
 
 namespace Services
@@ -7,6 +8,7 @@ namespace Services
     {
         bool MusicEnabled { get; }
         bool SoundEnabled { get; }
+        LanguageType Language { get; }
 
         event EventHandler<SettingsChangedEventArgs> OnSettingsChanged;
 

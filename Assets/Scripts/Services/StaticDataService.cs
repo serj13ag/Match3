@@ -14,6 +14,7 @@ namespace Services
         private readonly Dictionary<GamePieceColor, Color> _colors;
         private readonly Dictionary<string, LevelStaticData> _levels;
         private readonly Dictionary<ParticleEffectType, ParticleEffectStaticData> _particleEffects;
+        private readonly Dictionary<LanguageType, TextAsset> _languages;
 
         private readonly SettingsStaticData _settings;
 
@@ -40,6 +41,10 @@ namespace Services
 
             _particleEffects = LoadFilesFromResources<ParticleEffectStaticData>(AssetPaths.ParticleEffectsDataPath)
                 .ToDictionary(x => x.Type, x => x);
+
+            _languages = LoadFileFromResources<LanguagesStaticData>(AssetPaths.LanguagesDataPath)
+                .Languages
+                .ToDictionary(x => x.Type, x => x.Translations);
         }
 
         public TileStaticData GetDataForTile(TileType tileType)
@@ -87,6 +92,16 @@ namespace Services
             if (_particleEffects.TryGetValue(particleEffectType, out ParticleEffectStaticData particleEffectStaticData))
             {
                 return particleEffectStaticData;
+            }
+
+            return null;
+        }
+
+        public TextAsset GetDataForLanguage(LanguageType languageType)
+        {
+            if (_languages.TryGetValue(languageType, out TextAsset languageString))
+            {
+                return languageString;
             }
 
             return null;

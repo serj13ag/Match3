@@ -1,0 +1,18 @@
+{
+	"start": "START",
+	"settings": "SETTINGS",
+	"music": "MUSIC",
+	"sound": "SOUND",
+	"back": "BACK",
+	"menu": "MENU",
+	
+	"level": "LEVEL",
+	"coins": "COINS",
+	
+	"ok": "OK",
+	
+	"gameOverMessage": "YOU LOSE!",
+	"gameWinMessage": "YOU WIN!",
+	
+	"scoreGoal": "SCORE GOAL {0}"
+}

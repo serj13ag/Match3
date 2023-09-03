@@ -1,3 +1,18 @@
 {
-	"start": "START",
+	"start": "СТАРТ",
+	"settings": "НАСТРОЙКИ",
+	"music": "МУЗЫКА",
+	"sound": "ЗВУКИ",
+	"back": "НАЗАД",
+	"menu": "МЕНЮ",
+	
+	"level": "УРОВЕНЬ",
+	"coins": "МОНЕТЫ",
+	
+	"ok": "OK",
+	
+	"gameOverMessage": "ВЫ ПРОИГРАЛИ!",
+	"gameWinMessage": "ВЫ ВЫЙГРАЛИ!",
+	
+	"scoreGoal": "ЦЕЛЬ\n{0}"
 }

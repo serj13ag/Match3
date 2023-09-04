@@ -15,5 +15,6 @@ namespace StaticData
     {
         public LanguageType Type;
         public TextAsset Translations;
+        public string NameString;
     }
 }

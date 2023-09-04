@@ -15,5 +15,7 @@ MonoBehaviour:
   Languages:
   - Type: 1
     Translations: {fileID: 4900000, guid: 14f049522b3943f47b9c81c4f9ad3bc1, type: 3}
+    NameString: English
   - Type: 2
     Translations: {fileID: 4900000, guid: 0e4e1f55f37e680449b57eb9eb36f347, type: 3}
+    NameString: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439"

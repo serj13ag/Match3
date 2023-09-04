@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Enums;
+using EventArguments;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -9,26 +11,46 @@ namespace Services
     {
         private const string MissingTranslationString = "TRNSLMS";
 
-        private readonly LanguageType _localizationType;
-        private readonly Dictionary<string, string> _localization;
+        private readonly IStaticDataService _staticDataService;
+
+        private LanguageType _currentLocalizationType;
+        private Dictionary<string, string> _currentLocalization;
+
+        public event EventHandler<EventArgs> LocalizationChanged;
 
         public LocalizationService(IStaticDataService staticDataService, ISettingsService settingsService)
         {
-            _localizationType = settingsService.Language;
+            _staticDataService = staticDataService;
 
-            TextAsset localizationAsset = staticDataService.GetDataForLanguage(_localizationType);
-            _localization = JsonConvert.DeserializeObject<Dictionary<string, string>>(localizationAsset.text);
+            SetLocalization(settingsService.Language);
+
+            settingsService.OnSettingsChanged += OnSettingsChanged;
         }
 
         public string GetTranslation(string key)
         {
-            if (_localization.TryGetValue(key, out string translation))
+            if (_currentLocalization.TryGetValue(key, out string translation))
             {
                 return translation;
             }
 
-            Debug.LogWarning($"Missing translation key {key} in {_localizationType}");
+            Debug.LogWarning($"Missing translation key {key} in {_currentLocalizationType}");
             return MissingTranslationString;
+        }
+
+        private void OnSettingsChanged(object sender, SettingsChangedEventArgs e)
+        {
+            SetLocalization(e.GameSettings.Language);
+
+            LocalizationChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void SetLocalization(LanguageType languageType)
+        {
+            _currentLocalizationType = languageType;
+
+            TextAsset localizationAsset = _staticDataService.GetDataForLanguage(_currentLocalizationType).Translations;
+            _currentLocalization = JsonConvert.DeserializeObject<Dictionary<string, string>>(localizationAsset.text);
         }
     }
 }

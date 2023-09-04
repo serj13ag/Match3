@@ -14,5 +14,6 @@ namespace Services
 
         void MusicSetActive(bool activate);
         void SoundSetActive(bool activate);
+        void SetLanguage(LanguageType language);
     }
 }

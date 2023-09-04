@@ -1,4 +1,5 @@
-﻿using Infrastructure;
+﻿using System;
+using Infrastructure;
 using Services;
 using TMPro;
 using UnityEngine;
@@ -20,7 +21,27 @@ namespace Components
             _localizationService = ServiceLocator.Instance.Get<ILocalizationService>();
         }
 
+        private void OnEnable()
+        {
+            _localizationService.LocalizationChanged += UpdateTranslation;
+        }
+
+        private void OnDisable()
+        {
+            _localizationService.LocalizationChanged -= UpdateTranslation;
+        }
+
         private void Start()
+        {
+            UpdateText();
+        }
+
+        private void UpdateTranslation(object sender, EventArgs e)
+        {
+            UpdateText();
+        }
+
+        private void UpdateText()
         {
             if (!string.IsNullOrEmpty(_key))
             {

@@ -9,12 +9,13 @@ namespace Services
     {
         SettingsStaticData Settings { get; }
         IEnumerable<string> PuzzleLevelNames { get; }
+        List<LanguageType> AvailableLanguages { get; }
 
         TileStaticData GetDataForTile(TileType tileType);
         GamePieceStaticData GetDataForGamePiece(GamePieceType gamePieceType);
         Color GetColorForGamePiece(GamePieceColor gamePieceColor);
         LevelStaticData GetDataForLevel(string levelName);
         ParticleEffectStaticData GetDataForParticleEffect(ParticleEffectType particleEffectType);
-        TextAsset GetDataForLanguage(LanguageType languageType);
+        LanguageStaticData GetDataForLanguage(LanguageType languageType);
     }
 }

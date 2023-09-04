@@ -14,13 +14,15 @@ namespace Services
         private readonly Dictionary<GamePieceColor, Color> _colors;
         private readonly Dictionary<string, LevelStaticData> _levels;
         private readonly Dictionary<ParticleEffectType, ParticleEffectStaticData> _particleEffects;
-        private readonly Dictionary<LanguageType, TextAsset> _languages;
+        private readonly Dictionary<LanguageType, LanguageStaticData> _languages;
 
         private readonly SettingsStaticData _settings;
 
         public SettingsStaticData Settings => _settings;
 
         public IEnumerable<string> PuzzleLevelNames => _settings.PuzzleLevels.Select(x => x.LevelName);
+
+        public List<LanguageType> AvailableLanguages => _languages.Keys.ToList();
 
         public StaticDataService()
         {
@@ -44,7 +46,7 @@ namespace Services
 
             _languages = LoadFileFromResources<LanguagesStaticData>(AssetPaths.LanguagesDataPath)
                 .Languages
-                .ToDictionary(x => x.Type, x => x.Translations);
+                .ToDictionary(x => x.Type, x => x);
         }
 
         public TileStaticData GetDataForTile(TileType tileType)
@@ -97,11 +99,11 @@ namespace Services
             return null;
         }
 
-        public TextAsset GetDataForLanguage(LanguageType languageType)
+        public LanguageStaticData GetDataForLanguage(LanguageType languageType)
         {
-            if (_languages.TryGetValue(languageType, out TextAsset languageString))
+            if (_languages.TryGetValue(languageType, out LanguageStaticData languageStaticData))
             {
-                return languageString;
+                return languageStaticData;
             }
 
             return null;

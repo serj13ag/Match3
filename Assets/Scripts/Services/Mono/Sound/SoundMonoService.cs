@@ -66,9 +66,9 @@ namespace Services.Mono.Sound
 
         private void OnSettingsChanged(object sender, SettingsChangedEventArgs e)
         {
-            if (_musicEnabled != e.MusicEnabled)
+            if (_musicEnabled != e.GameSettings.MusicEnabled)
             {
-                if (e.MusicEnabled)
+                if (e.GameSettings.MusicEnabled)
                 {
                     _musicEnabled = true;
 
@@ -85,7 +85,7 @@ namespace Services.Mono.Sound
                 }
             }
 
-            _soundEnabled = e.SoundEnabled;
+            _soundEnabled = e.GameSettings.SoundEnabled;
         }
 
         private void TurnBackgroundMusicOff()

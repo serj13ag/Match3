@@ -27,19 +27,34 @@ namespace Services
         public void MusicSetActive(bool activate)
         {
             _gameSettings.MusicEnabled = activate;
-            _saveLoadService.SaveGameSettings(_gameSettings);
 
-            OnSettingsChanged?.Invoke(this, new SettingsChangedEventArgs(_gameSettings));
+            SaveAndInvokeSettingsChanged();
         }
 
         public void SoundSetActive(bool activate)
         {
             _gameSettings.SoundEnabled = activate;
+
+            SaveAndInvokeSettingsChanged();
+        }
+
+        public void SetLanguage(LanguageType language)
+        {
+            _gameSettings.Language = language;
+
+            SaveAndInvokeSettingsChanged();
+        }
+
+        private void SaveAndInvokeSettingsChanged()
+        {
             _saveLoadService.SaveGameSettings(_gameSettings);
 
             OnSettingsChanged?.Invoke(this, new SettingsChangedEventArgs(_gameSettings));
         }
 
-        private static GameSettings CreateDefaultGameSettings() => new GameSettings();
+        private static GameSettings CreateDefaultGameSettings()
+        {
+            return new GameSettings();
+        }
     }
 }

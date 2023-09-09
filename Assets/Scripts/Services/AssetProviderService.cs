@@ -7,13 +7,19 @@ namespace Services
         public T Instantiate<T>(string path) where T : Object
         {
             T prefab = LoadAsset<T>(path);
-            return Object.Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            T instance = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            instance.name = prefab.name;
+
+            return instance;
         }
 
         public T Instantiate<T>(string path, Transform parentTransform) where T : Object
         {
             T prefab = LoadAsset<T>(path);
-            return Object.Instantiate(prefab, parentTransform);
+            T instance = Object.Instantiate(prefab, parentTransform);
+            instance.name = prefab.name;
+
+            return instance;
         }
 
         public Sprite LoadSprite(string path)

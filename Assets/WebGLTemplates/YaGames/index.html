@@ -158,6 +158,48 @@
         });
     }
 
+    function ShowFullAd() {
+        ysdk.adv.showFullscreenAdv({
+            callbacks: {
+                onOpen: () => {
+                    console.log('Open Fullscreen Ad');
+                },
+                onClose: (wasShown) => {
+                    if (wasShown) {
+                        console.log('Fullscreen Ad was shown');
+                    } else {
+                        console.log('Fullscreen Ad was not shown');
+                    }
+                    window.focus();
+                },
+                onError: (error) => {
+                    console.error('Error Fullscreen Ad', error);
+                    window.focus();
+                }
+            }
+        });
+    }
+
+    function ShowRewardedAd() {
+        ysdk.adv.showRewardedVideo({
+            callbacks: {
+                onOpen: () => {
+                    console.log('Open Rewarded Ad');
+                },
+                onRewarded: () => {
+                    console.log('Rewarded Ad was shown. Rewarded!');
+                    myGameInstance.SendMessage('YaGamesMonoService', 'OnRewardedVideoWatched');
+                },
+                onClose: () => {
+                    console.log('Rewarded Ad closed');
+                },
+                onError: (e) => {
+                    console.log('Error Rewarded Ad', e);
+                }
+            }
+        });
+    }
+
     <!-- Yandex Games SDK -->
 
     document.body.appendChild(script);

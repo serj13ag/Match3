@@ -11,4 +11,12 @@ mergeInto(LibraryManager.library, {
   LoadFromPlayerData: function (key) {
     LoadFromPlayerData(UTF8ToString(key));
   },
+
+  ShowFullAd: function () {
+    ShowFullAd();
+  },
+
+  ShowRewardedAd: function () {
+    ShowRewardedAd();
+  },
 });

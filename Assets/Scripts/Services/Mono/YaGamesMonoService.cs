@@ -13,6 +13,9 @@ namespace Services.Mono
         [DllImport("__Internal")]
         private static extern void SaveToPlayerData(string key, string jsonDataString);
 
+        [DllImport("__Internal")]
+        private static extern void ShowFullAd();
+
         private void Awake()
         {
             DontDestroyOnLoad(this);
@@ -24,6 +27,13 @@ namespace Services.Mono
         public void OnPlayerDataLoaded(string dataString)
         {
             JsonConvert.DeserializeObject<PlayerProgress>(dataString);
+        }
+
+        [DllImport("__Internal")]
+        private static extern void ShowRewardedAd();
+
+        public void OnRewardedVideoWatched()
+        {
         }
     }
 }

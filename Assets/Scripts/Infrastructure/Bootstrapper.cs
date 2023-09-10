@@ -19,7 +19,7 @@ namespace Infrastructure
             InitAndRegisterGlobalServices(serviceLocator);
 
             _gameStateMachine = new GameStateMachine(serviceLocator);
-            _gameStateMachine.Enter<MainMenuState>();
+            _gameStateMachine.Enter<LoadLocalSaveDataState>();
 
             serviceLocator.Register(_gameStateMachine);
 
@@ -35,8 +35,8 @@ namespace Infrastructure
             ISaveLoadService saveLoadService = new SaveLoadService();
             IPersistentProgressService persistentProgressService = new PersistentProgressService(saveLoadService);
             ISettingsService settingsService = new SettingsService(saveLoadService);
-            ILocalizationService localizationService = new LocalizationService(staticDataService, settingsService);
             ICoinService coinService = new CoinService(persistentProgressService);
+            ILocalizationService localizationService = new LocalizationService(staticDataService, settingsService);
 
             ILoadingCurtainMonoService loadingCurtainMonoService = assetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
 

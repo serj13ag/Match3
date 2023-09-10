@@ -19,6 +19,11 @@ namespace Infrastructure.StateMachine
         {
             _states = new Dictionary<Type, IExitableState>
             {
+                [typeof(LoadLocalSaveDataState)] = new LoadLocalSaveDataState(
+                    this,
+                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<ISettingsService>(),
+                    serviceLocator.Get<ICoinService>()),
                 [typeof(MainMenuState)] = new MainMenuState(
                     this,
                     serviceLocator.Get<ISceneLoader>(),

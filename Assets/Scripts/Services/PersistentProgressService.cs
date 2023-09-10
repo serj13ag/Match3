@@ -11,8 +11,11 @@ namespace Services
         public PersistentProgressService(ISaveLoadService saveLoadService)
         {
             _saveLoadService = saveLoadService;
+        }
 
-            LoadProgressOrInitNew();
+        public void LoadProgressOrInitNew()
+        {
+            Progress = _saveLoadService.LoadProgress() ?? CreateEmptyPlayerProgress();
         }
 
         public void SaveProgress()
@@ -25,11 +28,6 @@ namespace Services
             Progress = CreateEmptyPlayerProgress();
 
             _saveLoadService.SaveProgress(Progress);
-        }
-
-        private void LoadProgressOrInitNew()
-        {
-            Progress = _saveLoadService.LoadProgress() ?? CreateEmptyPlayerProgress();
         }
 
         private static PlayerProgress CreateEmptyPlayerProgress()

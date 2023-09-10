@@ -22,8 +22,6 @@ namespace Services
         {
             _staticDataService = staticDataService;
 
-            SetLocalization(settingsService.Language);
-
             settingsService.OnSettingsChanged += OnSettingsChanged;
         }
 

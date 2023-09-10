@@ -9,7 +9,7 @@ namespace Services
     {
         private readonly ISaveLoadService _saveLoadService;
 
-        private readonly GameSettings _gameSettings;
+        private GameSettings _gameSettings;
 
         public bool MusicEnabled => _gameSettings.MusicEnabled;
         public bool SoundEnabled => _gameSettings.SoundEnabled;
@@ -20,8 +20,13 @@ namespace Services
         public SettingsService(ISaveLoadService saveLoadService)
         {
             _saveLoadService = saveLoadService;
+        }
 
+        public void LoadGameSettings()
+        {
             _gameSettings = _saveLoadService.LoadGameSettings() ?? CreateDefaultGameSettings();
+
+            SaveAndInvokeSettingsChanged();
         }
 
         public void MusicSetActive(bool activate)

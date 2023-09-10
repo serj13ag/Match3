@@ -27,8 +27,11 @@ namespace Services
         public CoinService(IPersistentProgressService persistentProgressService)
         {
             _persistentProgressService = persistentProgressService;
+        }
 
-            _coins = persistentProgressService.Progress.Coins;
+        public void UpdateCoinsFromProgress()
+        {
+            _coins = _persistentProgressService.Progress.Coins;
         }
 
         public void IncrementCoins()

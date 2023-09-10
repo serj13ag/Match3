@@ -12,6 +12,7 @@ namespace Services
 
         event EventHandler<SettingsChangedEventArgs> OnSettingsChanged;
 
+        void LoadGameSettings();
         void MusicSetActive(bool activate);
         void SoundSetActive(bool activate);
         void SetLanguage(LanguageType language);

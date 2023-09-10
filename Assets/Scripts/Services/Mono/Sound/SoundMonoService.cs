@@ -33,9 +33,6 @@ namespace Services.Mono.Sound
             _randomService = randomService;
             _settingsService = settingsService;
 
-            _musicEnabled = _settingsService.MusicEnabled;
-            _soundEnabled = _settingsService.SoundEnabled;
-
             _settingsService.OnSettingsChanged += OnSettingsChanged;
 
             DontDestroyOnLoad(this);

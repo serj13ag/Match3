@@ -1,37 +1,52 @@
-﻿using System.Runtime.InteropServices;
-using Data;
+﻿using System;
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using UnityEngine;
-using Newtonsoft.Json;
 
 namespace Services.Mono
 {
     public class YaGamesMonoService : MonoBehaviour, IYaGamesMonoService
     {
-        [DllImport("__Internal")]
-        private static extern void InitYandexSDK();
+        private Action<string> _onLoadedCallback;
 
         [DllImport("__Internal")]
         private static extern void SaveToPlayerData(string key, string jsonDataString);
 
         [DllImport("__Internal")]
+        private static extern void LoadFromPlayerData();
+
+        [DllImport("__Internal")]
         private static extern void ShowFullAd();
+
+        [DllImport("__Internal")]
+        private static extern void ShowRewardedAd();
 
         private void Awake()
         {
             DontDestroyOnLoad(this);
         }
 
-        [DllImport("__Internal")]
-        private static extern void LoadFromPlayerData(string key);
-
-        public void OnPlayerDataLoaded(string dataString)
+        public void Save(string key, string jsonDataString)
         {
-            JsonConvert.DeserializeObject<PlayerProgress>(dataString);
+            SaveToPlayerData(key, jsonDataString);
         }
 
-        [DllImport("__Internal")]
-        private static extern void ShowRewardedAd();
+        public void Load(Action<string> onLoadedCallback)
+        {
+            _onLoadedCallback = onLoadedCallback;
+            LoadFromPlayerData();
+        }
 
+        // Call from YaAPI
+        [UsedImplicitly]
+        public void OnPlayerDataLoaded(string dataString)
+        {
+            _onLoadedCallback?.Invoke(dataString);
+            _onLoadedCallback = null;
+        }
+
+        // Call from YaAPI
+        [UsedImplicitly]
         public void OnRewardedVideoWatched()
         {
         }

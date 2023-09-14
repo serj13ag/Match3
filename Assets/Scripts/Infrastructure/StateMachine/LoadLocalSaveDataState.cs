@@ -1,4 +1,8 @@
+using Constants;
+using Data;
+using Helpers;
 using Services;
+using UnityEngine;
 
 namespace Infrastructure.StateMachine
 {
@@ -22,8 +26,20 @@ namespace Infrastructure.StateMachine
 
         public void Enter()
         {
-            _persistentProgressService.LoadProgressOrInitNew();
-            _settingsService.LoadGameSettings();
+            string savedProgressString = PlayerPrefs.GetString(Settings.ProgressKey);
+            PlayerProgress progress = string.IsNullOrEmpty(savedProgressString)
+                ? null
+                : JsonHelper.FromJson<PlayerProgress>(savedProgressString);
+
+            _persistentProgressService.InitProgress(progress);
+
+            string savedSettingsString = PlayerPrefs.GetString(Settings.SettingsKey);
+            GameSettings gameSettings = string.IsNullOrEmpty(savedSettingsString)
+                ? null
+                : JsonHelper.FromJson<GameSettings>(savedSettingsString);
+
+            _settingsService.InitGameSettings(gameSettings);
+
             _coinService.UpdateCoinsFromProgress();
 
             _gameStateMachine.Enter<MainMenuState>();

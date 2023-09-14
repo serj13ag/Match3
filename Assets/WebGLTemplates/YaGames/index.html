@@ -74,8 +74,7 @@
         container.className = "unity-mobile";
         config.devicePixelRatio = 1;
     }
-    #if
-    BACKGROUND_FILENAME
+    #if BACKGROUND_FILENAME
     canvas.style.background = "url('" + buildUrl + "/{{{ BACKGROUND_FILENAME.replace(/'/g, '%27') }}}') center / cover";
     #endif
     loadingCover.style.display = "";
@@ -113,23 +112,19 @@
 
     <!-- Yandex Games SDK -->
 
-    function InitYandexSDK() {
-        console.log('Yandex SDK Init started');
+    YaGames
+        .init()
+        .then(_sdk => {
+            ysdk = _sdk;
 
-        YaGames
-            .init()
-            .then(_sdk => {
-                ysdk = _sdk;
+            InitPlayer();
 
-                InitPlayer();
-
-                ysdk.features.LoadingAPI?.ready();
-                console.log('Yandex SDK Init completed');
-            })
-            .catch(e => {
-                console.error('InitYandexSDK err: ', e.message);
-            });
-    }
+            ysdk.features.LoadingAPI?.ready();
+            console.log('Yandex SDK Init completed');
+        })
+        .catch(e => {
+            console.error('InitYandexSDK err: ', e.message);
+        });
 
     function InitPlayer() {
         ysdk.getPlayer().then(_player => {
@@ -143,15 +138,15 @@
 
     function SaveToPlayerData(key, jsonDataString) {
         player.setData({
-            key: [jsonDataString],
+            [key]: [jsonDataString],
         }).then(() => {
             console.log('Player data set')
         });
     }
 
-    function LoadFromPlayerData(key) {
-        player.getData([key]).then(data => {
-            let dataString = data.key ? JSON.stringify(data.key) : '';
+    function LoadFromPlayerData() {
+        player.getData().then(data => {
+            let dataString = data ? JSON.stringify(data) : '';
             myGameInstance.SendMessage('YaGamesMonoService', 'OnPlayerDataLoaded', dataString);
         }).catch(e => {
             console.error('LoadFromPlayerData err: ', e.message)

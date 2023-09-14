@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Enums;
 using EventArguments;
+using Helpers;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -48,7 +49,7 @@ namespace Services
             _currentLocalizationType = languageType;
 
             TextAsset localizationAsset = _staticDataService.GetDataForLanguage(_currentLocalizationType).Translations;
-            _currentLocalization = JsonConvert.DeserializeObject<Dictionary<string, string>>(localizationAsset.text);
+            _currentLocalization =JsonHelper.FromJson<Dictionary<string, string>>(localizationAsset.text);
         }
     }
 }

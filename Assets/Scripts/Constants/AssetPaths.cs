@@ -6,6 +6,7 @@
         public const string SoundMonoServicePath = "Prefabs/Services/Global/SoundMonoService";
         public const string LoadingCurtainMonoServicePath = "Prefabs/Services/Global/LoadingCurtainMonoService";
         public const string UpdateMonoServicePath = "Prefabs/Services/Global/UpdateMonoService";
+        public const string YaGamesMonoServicePath = "Prefabs/Services/Global/YaGamesMonoService";
 
         public const string UiRootCanvasPath = "Prefabs/UI/UIRootCanvas";
         public const string MainMenuPath = "Prefabs/UI/MainMenu";

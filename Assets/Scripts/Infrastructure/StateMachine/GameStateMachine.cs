@@ -4,6 +4,7 @@ using Services;
 using Services.Mono;
 using Services.Mono.Sound;
 using Services.UI;
+using UnityEngine;
 
 namespace Infrastructure.StateMachine
 {
@@ -56,6 +57,16 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<IUiFactory>(),
                     serviceLocator.Get<IWindowService>()),
             };
+
+            if (!Application.isEditor)
+            {
+                _states.Add(typeof(LoadYaSaveDataState), new LoadYaSaveDataState(
+                    this,
+                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<ISettingsService>(),
+                    serviceLocator.Get<ICoinService>(),
+                    serviceLocator.Get<IYaGamesMonoService>()));
+            }
         }
 
         public void Enter<TState>() where TState : class, IState

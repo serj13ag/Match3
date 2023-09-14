@@ -6,7 +6,7 @@ namespace Services
     {
         PlayerProgress Progress { get; }
 
-        void LoadProgressOrInitNew();
+        void InitProgress(PlayerProgress playerProgress);
         void ResetProgressAndSave();
         void SaveProgress();
     }

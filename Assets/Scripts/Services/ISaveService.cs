@@ -2,12 +2,9 @@
 
 namespace Services
 {
-    public interface ISaveLoadService : IService
+    public interface ISaveService : IService
     {
-        PlayerProgress LoadProgress();
         void SaveProgress(PlayerProgress playerProgress);
-
-        GameSettings LoadGameSettings();
         void SaveGameSettings(GameSettings gameSettings);
     }
 }

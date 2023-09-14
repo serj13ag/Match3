@@ -7,7 +7,7 @@ namespace Services
 {
     public class SettingsService : ISettingsService
     {
-        private readonly ISaveLoadService _saveLoadService;
+        private readonly ISaveService _saveService;
 
         private GameSettings _gameSettings;
 
@@ -17,16 +17,16 @@ namespace Services
 
         public event EventHandler<SettingsChangedEventArgs> OnSettingsChanged;
 
-        public SettingsService(ISaveLoadService saveLoadService)
+        public SettingsService(ISaveService saveService)
         {
-            _saveLoadService = saveLoadService;
+            _saveService = saveService;
         }
 
-        public void LoadGameSettings()
+        public void InitGameSettings(GameSettings gameSettings)
         {
-            _gameSettings = _saveLoadService.LoadGameSettings() ?? CreateDefaultGameSettings();
+            _gameSettings = gameSettings ?? CreateDefaultGameSettings();
 
-            SaveAndInvokeSettingsChanged();
+            OnSettingsChanged?.Invoke(this, new SettingsChangedEventArgs(_gameSettings));
         }
 
         public void MusicSetActive(bool activate)
@@ -52,7 +52,7 @@ namespace Services
 
         private void SaveAndInvokeSettingsChanged()
         {
-            _saveLoadService.SaveGameSettings(_gameSettings);
+            _saveService.SaveGameSettings(_gameSettings);
 
             OnSettingsChanged?.Invoke(this, new SettingsChangedEventArgs(_gameSettings));
         }

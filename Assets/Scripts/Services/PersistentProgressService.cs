@@ -4,30 +4,30 @@ namespace Services
 {
     public class PersistentProgressService : IPersistentProgressService
     {
-        private readonly ISaveLoadService _saveLoadService;
+        private readonly ISaveService _saveService;
 
         public PlayerProgress Progress { get; private set; }
 
-        public PersistentProgressService(ISaveLoadService saveLoadService)
+        public PersistentProgressService(ISaveService saveService)
         {
-            _saveLoadService = saveLoadService;
+            _saveService = saveService;
         }
 
-        public void LoadProgressOrInitNew()
+        public void InitProgress(PlayerProgress playerProgress)
         {
-            Progress = _saveLoadService.LoadProgress() ?? CreateEmptyPlayerProgress();
+            Progress = playerProgress ?? CreateEmptyPlayerProgress();
         }
 
         public void SaveProgress()
         {
-            _saveLoadService.SaveProgress(Progress);
+            _saveService.SaveProgress(Progress);
         }
 
         public void ResetProgressAndSave()
         {
             Progress = CreateEmptyPlayerProgress();
 
-            _saveLoadService.SaveProgress(Progress);
+            _saveService.SaveProgress(Progress);
         }
 
         private static PlayerProgress CreateEmptyPlayerProgress()

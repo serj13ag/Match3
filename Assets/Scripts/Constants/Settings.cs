@@ -8,6 +8,9 @@
 
         public const string EndlessLevelName = "EndlessLevel";
 
+        public const string ProgressKey = "ProgressKey";
+        public const string SettingsKey = "SettingsKey";
+
         public const bool CollectibleGamePieceEnabled = false;
 
         public const float CameraPositionZ = -10f;

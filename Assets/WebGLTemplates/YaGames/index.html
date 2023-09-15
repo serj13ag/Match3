@@ -79,11 +79,11 @@
     #endif
     loadingCover.style.display = "";
 
-    <!-- Yandex Games SDK -->
+    <!-- YaGames SDK -->
     let myGameInstance = null;
-    let ysdk;
-    let player;
-    <!-- Yandex Games SDK -->
+    let ysdk = null;
+    let player = null;
+    <!-- YaGames SDK -->
 
     const script = document.createElement("script");
     script.src = loaderUrl;
@@ -93,9 +93,9 @@
             progressBarEmpty.style.display = "";
             progressBarFull.style.width = `${100 * progress}%`;
         }).then((unityInstance) => {
-            <!-- Yandex Games SDK -->
+            <!-- YaGames SDK -->
             myGameInstance = unityInstance;
-            <!-- Yandex Games SDK -->
+            <!-- YaGames SDK -->
             loadingCover.style.display = "none";
             if (canFullscreen) {
                 if (!hideFullScreenButton) {
@@ -110,7 +110,7 @@
         });
     };
 
-    <!-- Yandex Games SDK -->
+    <!-- YaGames SDK -->
 
     YaGames
         .init()
@@ -195,7 +195,7 @@
         });
     }
 
-    <!-- Yandex Games SDK -->
+    <!-- YaGames SDK -->
 
     document.body.appendChild(script);
 </script>

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Constants;
 using Data;
 using Helpers;
@@ -41,34 +40,49 @@ namespace Infrastructure.StateMachine
 
         private void OnPlayerDataLoaded(string dataString)
         {
-            Debug.Log(dataString);
-
-            PlayerData playerData = null;
-
-            try
-            {
-                dataString = dataString.Remove(0, 2);
-                dataString = dataString.Remove(dataString.Length - 2, 2);
-                dataString = dataString.Replace(@"\\\", '\u0002'.ToString());
-                dataString = dataString.Replace(@"\", "");
-                dataString = dataString.Replace('\u0002'.ToString(), @"\");
-                
-                Debug.Log(dataString);
-                
-                playerData = string.IsNullOrEmpty(dataString)
-                    ? null
-                    : JsonHelper.FromJson<PlayerData>(dataString);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            PlayerData playerData = GetPlayerData(dataString);
 
             _persistentDataService.InitData(playerData);
             _settingsService.InitGameSettings();
             _coinService.UpdateCoinsFromProgress();
 
             _gameStateMachine.Enter<MainMenuState>();
+        }
+
+        private static PlayerData GetPlayerData(string dataString)
+        {
+            Debug.Log($"Raw player data string: {dataString}");
+
+            dataString = PrepareDataStringForDeserializing(dataString);
+
+            Debug.Log($"Prepared player data string: {dataString}");
+
+            PlayerData playerData = null;
+
+            try
+            {
+                playerData = string.IsNullOrEmpty(dataString)
+                    ? null
+                    : JsonHelper.FromJson<PlayerData>(dataString);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error when deserializing player data: {e}");
+                Console.WriteLine(e);
+            }
+
+            return playerData;
+        }
+
+        private static string PrepareDataStringForDeserializing(string dataString)
+        {
+            dataString = dataString.Remove(0, 2);
+            dataString = dataString.Remove(dataString.Length - 2, 2);
+            dataString = dataString.Replace(@"\\\", '\u0002'.ToString());
+            dataString = dataString.Replace(@"\", "");
+            dataString = dataString.Replace('\u0002'.ToString(), @"\");
+
+            return dataString;
         }
     }
 }

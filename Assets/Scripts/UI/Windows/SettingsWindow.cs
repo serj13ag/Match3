@@ -22,7 +22,7 @@ namespace UI.Windows
         [SerializeField] private Button _menuButton;
         [SerializeField] private Button _backButton;
 
-        private IPersistentProgressService _persistentProgressService;
+        private IPersistentDataService _persistentDataService;
         private ISettingsService _settingsService;
         private IStaticDataService _staticDataService;
         private IGameStateMachine _gameStateMachine;
@@ -53,7 +53,7 @@ namespace UI.Windows
         {
             _gameStateMachine = ServiceLocator.Instance.Get<IGameStateMachine>();
             _settingsService = ServiceLocator.Instance.Get<ISettingsService>();
-            _persistentProgressService = ServiceLocator.Instance.Get<IPersistentProgressService>();
+            _persistentDataService = ServiceLocator.Instance.Get<IPersistentDataService>();
             _staticDataService = ServiceLocator.Instance.Get<IStaticDataService>();
 
             InitLanguagesDropdown();
@@ -104,7 +104,7 @@ namespace UI.Windows
 
         private void ResetProgressAndSave()
         {
-            _persistentProgressService.ResetProgressAndSave();
+            _persistentDataService.ResetProgressAndSave();
         }
 
         private void SwitchToMenu()

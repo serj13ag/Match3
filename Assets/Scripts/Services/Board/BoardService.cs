@@ -33,7 +33,7 @@ namespace Services.Board
         public Vector2Int BoardSize { get; }
 
         public BoardService(string levelName, ISoundMonoService soundMonoService, IUpdateMonoService updateMonoService,
-            IPersistentProgressService persistentProgressService, IStaticDataService staticDataService,
+            IPersistentDataService persistentDataService, IStaticDataService staticDataService,
             IProgressUpdateService progressUpdateService, IScoreService scoreService,
             IMovesLeftService movesLeftService, IGameRoundService gameRoundService,
             ITileService tileService, IGamePieceService gamePieceService, IParticleService particleService)
@@ -52,7 +52,7 @@ namespace Services.Board
 
             updateMonoService.Register(this);
 
-            if (persistentProgressService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
+            if (persistentDataService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
             {
                 tileService.Initialize(levelBoardData.Tiles);
                 gamePieceService.Initialize(levelBoardData.GamePieces);

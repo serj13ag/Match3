@@ -144,9 +144,9 @@
         });
     }
 
-    function LoadFromPlayerData() {
-        player.getData().then(data => {
-            let dataString = data ? JSON.stringify(data) : '';
+    function LoadFromPlayerData(key) {
+        player.getData([key]).then(data => {
+            let dataString = data[key] ? JSON.stringify(data[key]) : '';
             myGameInstance.SendMessage('YaGamesMonoService', 'OnPlayerDataLoaded', dataString);
         }).catch(e => {
             console.error('LoadFromPlayerData err: ', e.message)

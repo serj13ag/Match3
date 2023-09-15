@@ -12,7 +12,7 @@ namespace Infrastructure.StateMachine
     public class LoadYaSaveDataState : IState
     {
         private readonly GameStateMachine _gameStateMachine;
-        private readonly IPersistentProgressService _persistentProgressService;
+        private readonly IPersistentDataService _persistentDataService;
         private readonly ISettingsService _settingsService;
         private readonly ICoinService _coinService;
         private readonly IYaGamesMonoService _yaGamesMonoService;
@@ -20,11 +20,11 @@ namespace Infrastructure.StateMachine
         public bool IsGameLoopState => false;
 
         public LoadYaSaveDataState(GameStateMachine gameStateMachine,
-            IPersistentProgressService persistentProgressService, ISettingsService settingsService,
+            IPersistentDataService persistentDataService, ISettingsService settingsService,
             ICoinService coinService, IYaGamesMonoService yaGamesMonoService)
         {
             _gameStateMachine = gameStateMachine;
-            _persistentProgressService = persistentProgressService;
+            _persistentDataService = persistentDataService;
             _settingsService = settingsService;
             _coinService = coinService;
             _yaGamesMonoService = yaGamesMonoService;
@@ -32,7 +32,7 @@ namespace Infrastructure.StateMachine
 
         public void Enter()
         {
-            _yaGamesMonoService.Load(OnPlayerDataLoaded);
+            _yaGamesMonoService.Load(Settings.SavedPlayerDataKey, OnPlayerDataLoaded);
         }
 
         public void Exit()
@@ -43,35 +43,29 @@ namespace Infrastructure.StateMachine
         {
             Debug.Log(dataString);
 
-            PlayerProgress progress = null;
-            GameSettings settings = null;
+            PlayerData playerData = null;
 
             try
             {
-                Dictionary<string, string> dataDict = JsonHelper.FromJson<Dictionary<string, string>>(dataString);
-                Debug.Log("dict parsed");
-
-                foreach (string dataDictKey in dataDict.Keys)
-                {
-                    Debug.Log(dataDictKey);
-                }
-
-                progress = dataDict.TryGetValue(Settings.ProgressKey, out string progressDataString)
-                    ? JsonHelper.FromJson<PlayerProgress>(progressDataString)
-                    : null;
-                settings = dataDict.TryGetValue(Settings.ProgressKey, out string settingsDataString)
-                    ? JsonHelper.FromJson<GameSettings>(settingsDataString)
-                    : null;
-
+                dataString = dataString.Remove(0, 2);
+                dataString = dataString.Remove(dataString.Length - 2, 2);
+                dataString = dataString.Replace(@"\\\", '\u0002'.ToString());
+                dataString = dataString.Replace(@"\", "");
+                dataString = dataString.Replace('\u0002'.ToString(), @"\");
+                
+                Debug.Log(dataString);
+                
+                playerData = string.IsNullOrEmpty(dataString)
+                    ? null
+                    : JsonHelper.FromJson<PlayerData>(dataString);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
 
-            _persistentProgressService.InitProgress(progress);
-            _settingsService.InitGameSettings(settings);
-
+            _persistentDataService.InitData(playerData);
+            _settingsService.InitGameSettings();
             _coinService.UpdateCoinsFromProgress();
 
             _gameStateMachine.Enter<MainMenuState>();

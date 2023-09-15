@@ -14,14 +14,14 @@ namespace Services.MovesLeft
 
         public event EventHandler<MovesLeftChangedEventArgs> OnMovesLeftChanged;
 
-        public MovesLeftService(string levelName, IPersistentProgressService persistentProgressService,
+        public MovesLeftService(string levelName, IPersistentDataService persistentDataService,
             IProgressUpdateService progressUpdateService, int movesLeft)
         {
             _levelName = levelName;
 
             progressUpdateService.Register(this);
 
-            if (persistentProgressService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
+            if (persistentDataService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
             {
                 _movesLeft = levelBoardData.MovesLeft;
             }

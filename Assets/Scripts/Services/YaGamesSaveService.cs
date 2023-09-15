@@ -14,16 +14,10 @@ namespace Services
             _yaGamesMonoService = yaGamesMonoService;
         }
 
-        public void SaveProgress(PlayerProgress playerProgress)
+        public void SaveData(PlayerData playerData)
         {
-            string jsonProgressString = JsonHelper.ToJson(playerProgress);
-            _yaGamesMonoService.Save(Settings.ProgressKey, jsonProgressString);
-        }
-
-        public void SaveGameSettings(GameSettings gameSettings)
-        {
-            string jsonSettingsString = JsonHelper.ToJson(gameSettings);
-            _yaGamesMonoService.Save(Settings.SettingsKey, jsonSettingsString);
+            string jsonPlayerDataString = JsonHelper.ToJson(playerData);
+            _yaGamesMonoService.Save(Settings.SavedPlayerDataKey, jsonPlayerDataString);
         }
     }
 }

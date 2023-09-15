@@ -1,5 +1,4 @@
 ﻿using System;
-using Data;
 using Enums;
 using EventArguments;
 
@@ -13,7 +12,7 @@ namespace Services
 
         event EventHandler<SettingsChangedEventArgs> OnSettingsChanged;
 
-        void InitGameSettings(GameSettings gameSettings);
+        void InitGameSettings();
         void MusicSetActive(bool activate);
         void SoundSetActive(bool activate);
         void SetLanguage(LanguageType language);

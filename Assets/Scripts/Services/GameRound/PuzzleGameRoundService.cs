@@ -6,12 +6,12 @@ using Services.UI;
 
 namespace Services.GameRound
 {
-    public class GameRoundService : IGameRoundService
+    public class PuzzleGameRoundService : IGameRoundService
     {
         private readonly IGameStateMachine _gameStateMachine;
         private readonly ISoundMonoService _soundMonoService;
         private readonly IWindowService _windowService;
-        private readonly IPersistentProgressService _persistentProgressService;
+        private readonly IPersistentDataService _persistentDataService;
         private readonly IScoreService _scoreService;
 
         private readonly string _levelName;
@@ -20,14 +20,14 @@ namespace Services.GameRound
 
         public bool RoundIsActive => _roundIsActive;
 
-        public GameRoundService(string levelName, IGameStateMachine gameStateMachine, ISoundMonoService soundMonoService,
-            IWindowService windowService, IPersistentProgressService persistentProgressService, IScoreService scoreService)
+        public PuzzleGameRoundService(string levelName, IGameStateMachine gameStateMachine, ISoundMonoService soundMonoService,
+            IWindowService windowService, IPersistentDataService persistentDataService, IScoreService scoreService)
         {
             _levelName = levelName;
             _gameStateMachine = gameStateMachine;
             _soundMonoService = soundMonoService;
             _windowService = windowService;
-            _persistentProgressService = persistentProgressService;
+            _persistentDataService = persistentDataService;
             _scoreService = scoreService;
 
             scoreService.OnScoreChanged += OnScoreChanged;
@@ -51,7 +51,7 @@ namespace Services.GameRound
                 _windowService.ShowGameOverMessageWindow(ReloadLevel);
             }
 
-            _persistentProgressService.ResetProgressAndSave();
+            _persistentDataService.ResetProgressAndSave();
 
             _roundIsActive = false;
         }

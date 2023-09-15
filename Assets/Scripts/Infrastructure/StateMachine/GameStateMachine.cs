@@ -22,7 +22,7 @@ namespace Infrastructure.StateMachine
             {
                 [typeof(LoadLocalSaveDataState)] = new LoadLocalSaveDataState(
                     this,
-                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<IPersistentDataService>(),
                     serviceLocator.Get<ISettingsService>(),
                     serviceLocator.Get<ICoinService>()),
                 [typeof(MainMenuState)] = new MainMenuState(
@@ -40,7 +40,7 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<IStaticDataService>(),
                     serviceLocator.Get<ISoundMonoService>(),
                     serviceLocator.Get<IUpdateMonoService>(),
-                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<IPersistentDataService>(),
                     serviceLocator.Get<IUiFactory>(),
                     serviceLocator.Get<IWindowService>(),
                     serviceLocator.Get<ICoinService>()),
@@ -53,7 +53,7 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<IStaticDataService>(),
                     serviceLocator.Get<ISoundMonoService>(),
                     serviceLocator.Get<IUpdateMonoService>(),
-                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<IPersistentDataService>(),
                     serviceLocator.Get<IUiFactory>(),
                     serviceLocator.Get<IWindowService>()),
             };
@@ -62,7 +62,7 @@ namespace Infrastructure.StateMachine
             {
                 _states.Add(typeof(LoadYaSaveDataState), new LoadYaSaveDataState(
                     this,
-                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<IPersistentDataService>(),
                     serviceLocator.Get<ISettingsService>(),
                     serviceLocator.Get<ICoinService>(),
                     serviceLocator.Get<IYaGamesMonoService>()));

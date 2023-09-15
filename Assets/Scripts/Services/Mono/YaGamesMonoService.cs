@@ -13,7 +13,7 @@ namespace Services.Mono
         private static extern void SaveToPlayerData(string key, string jsonDataString);
 
         [DllImport("__Internal")]
-        private static extern void LoadFromPlayerData();
+        private static extern void LoadFromPlayerData(string key);
 
         [DllImport("__Internal")]
         private static extern void ShowFullAd();
@@ -31,10 +31,10 @@ namespace Services.Mono
             SaveToPlayerData(key, jsonDataString);
         }
 
-        public void Load(Action<string> onLoadedCallback)
+        public void Load(string key, Action<string> onLoadedCallback)
         {
             _onLoadedCallback = onLoadedCallback;
-            LoadFromPlayerData();
+            LoadFromPlayerData(key);
         }
 
         // Call from YaAPI

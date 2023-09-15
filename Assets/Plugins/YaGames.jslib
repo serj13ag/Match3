@@ -4,8 +4,8 @@ mergeInto(LibraryManager.library, {
     SaveToPlayerData(UTF8ToString(key), UTF8ToString(jsonDataString));
   },
 
-  LoadFromPlayerData: function () {
-    LoadFromPlayerData();
+  LoadFromPlayerData: function (key) {
+    LoadFromPlayerData(UTF8ToString(key));
   },
 
   ShowFullAd: function () {

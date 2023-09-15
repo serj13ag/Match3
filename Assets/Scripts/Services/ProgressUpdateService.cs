@@ -7,14 +7,14 @@ namespace Services
     public class ProgressUpdateService : IProgressUpdateService
     {
         private readonly string _levelName;
-        private readonly IPersistentProgressService _persistentProgressService;
+        private readonly IPersistentDataService _persistentDataService;
 
         private readonly List<IProgressWriter> _progressWriters;
 
-        public ProgressUpdateService(string levelName, IPersistentProgressService persistentProgressService)
+        public ProgressUpdateService(string levelName, IPersistentDataService persistentDataService)
         {
             _levelName = levelName;
-            _persistentProgressService = persistentProgressService;
+            _persistentDataService = persistentDataService;
 
             _progressWriters = new List<IProgressWriter>();
         }
@@ -26,17 +26,17 @@ namespace Services
 
         public void UpdateProgressAndSave()
         {
-            if (!_persistentProgressService.Progress.BoardData.ContainsKey(_levelName))
+            if (!_persistentDataService.Progress.BoardData.ContainsKey(_levelName))
             {
-                _persistentProgressService.Progress.BoardData.Add(_levelName, new LevelBoardData());
+                _persistentDataService.Progress.BoardData.Add(_levelName, new LevelBoardData());
             }
 
             foreach (IProgressWriter progressWriter in _progressWriters)
             {
-                progressWriter.WriteToProgress(_persistentProgressService.Progress);
+                progressWriter.WriteToProgress(_persistentDataService.Progress);
             }
 
-            _persistentProgressService.SaveProgress();
+            _persistentDataService.Save();
         }
     }
 }

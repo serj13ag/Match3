@@ -5,7 +5,7 @@ namespace Services
 {
     public class CoinService : ICoinService
     {
-        private readonly IPersistentProgressService _persistentProgressService;
+        private readonly IPersistentDataService _persistentDataService;
 
         private int _coins;
 
@@ -24,14 +24,14 @@ namespace Services
 
         public event EventHandler<CoinsChangedEventArgs> OnCoinsChanged;
 
-        public CoinService(IPersistentProgressService persistentProgressService)
+        public CoinService(IPersistentDataService persistentDataService)
         {
-            _persistentProgressService = persistentProgressService;
+            _persistentDataService = persistentDataService;
         }
 
         public void UpdateCoinsFromProgress()
         {
-            _coins = _persistentProgressService.Progress.Coins;
+            _coins = _persistentDataService.Progress.Coins;
         }
 
         public void IncrementCoins()
@@ -43,8 +43,8 @@ namespace Services
 
         private void UpdateAndSaveProgress()
         {
-            _persistentProgressService.Progress.Coins = _coins;
-            _persistentProgressService.SaveProgress();
+            _persistentDataService.Progress.Coins = _coins;
+            _persistentDataService.Save();
         }
     }
 }

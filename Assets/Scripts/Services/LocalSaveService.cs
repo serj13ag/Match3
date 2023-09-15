@@ -7,14 +7,9 @@ namespace Services
 {
     public class LocalSaveService : ISaveService
     {
-        public void SaveProgress(PlayerProgress progress)
+        public void SaveData(PlayerData playerData)
         {
-            PlayerPrefs.SetString(Settings.ProgressKey, JsonHelper.ToJson(progress));
-        }
-
-        public void SaveGameSettings(GameSettings gameSettings)
-        {
-            PlayerPrefs.SetString(Settings.SettingsKey, JsonHelper.ToJson(gameSettings));
+            PlayerPrefs.SetString(Settings.SavedPlayerDataKey, JsonHelper.ToJson(playerData));
         }
     }
 }

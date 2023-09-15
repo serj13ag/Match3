@@ -54,9 +54,9 @@ namespace Infrastructure
                 saveService = new YaGamesSaveService(yaGamesMonoService);
             }
 
-            IPersistentProgressService persistentProgressService = new PersistentProgressService(saveService);
-            ISettingsService settingsService = new SettingsService(saveService);
-            ICoinService coinService = new CoinService(persistentProgressService);
+            IPersistentDataService persistentDataService = new PersistentDataService(saveService);
+            ISettingsService settingsService = new SettingsService(persistentDataService);
+            ICoinService coinService = new CoinService(persistentDataService);
             ILocalizationService localizationService = new LocalizationService(staticDataService, settingsService);
 
             ILoadingCurtainMonoService loadingCurtainMonoService = assetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
@@ -75,7 +75,7 @@ namespace Infrastructure
             serviceLocator.Register(assetProviderService);
             serviceLocator.Register(staticDataService);
             serviceLocator.Register(saveService);
-            serviceLocator.Register(persistentProgressService);
+            serviceLocator.Register(persistentDataService);
             serviceLocator.Register(settingsService);
             serviceLocator.Register(localizationService);
             serviceLocator.Register(coinService);

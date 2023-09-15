@@ -21,7 +21,7 @@ namespace Infrastructure.StateMachine
         private readonly IStaticDataService _staticDataService;
         private readonly ISoundMonoService _soundMonoService;
         private readonly IUpdateMonoService _updateMonoService;
-        private readonly IPersistentProgressService _persistentProgressService;
+        private readonly IPersistentDataService _persistentDataService;
         private readonly IUiFactory _uiFactory;
         private readonly IWindowService _windowService;
 
@@ -30,7 +30,7 @@ namespace Infrastructure.StateMachine
         public PuzzleGameLoopState(IGameStateMachine gameStateMachine, ISceneLoader sceneLoader,
             ILoadingCurtainMonoService loadingCurtainMonoService, IAssetProviderService assetProviderService,
             IRandomService randomService, IStaticDataService staticDataService, ISoundMonoService soundMonoService,
-            IUpdateMonoService updateMonoService, IPersistentProgressService persistentProgressService,
+            IUpdateMonoService updateMonoService, IPersistentDataService persistentDataService,
             IUiFactory uiFactory, IWindowService windowService)
         {
             _gameStateMachine = gameStateMachine;
@@ -41,7 +41,7 @@ namespace Infrastructure.StateMachine
             _staticDataService = staticDataService;
             _soundMonoService = soundMonoService;
             _updateMonoService = updateMonoService;
-            _persistentProgressService = persistentProgressService;
+            _persistentDataService = persistentDataService;
             _uiFactory = uiFactory;
             _windowService = windowService;
         }
@@ -65,20 +65,20 @@ namespace Infrastructure.StateMachine
             int scoreGoal = levelStaticData.ScoreGoal;
             int movesLeft = levelStaticData.MovesLeft;
 
-            IProgressUpdateService progressUpdateService = new ProgressUpdateService(levelName, _persistentProgressService);
+            IProgressUpdateService progressUpdateService = new ProgressUpdateService(levelName, _persistentDataService);
 
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(levelName, _randomService, _staticDataService, particleService);
-            IMovesLeftService movesLeftService = new MovesLeftService(levelName, _persistentProgressService, progressUpdateService, movesLeft);
-            IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentProgressService, progressUpdateService, scoreGoal);
-            IGameRoundService gameRoundService = new GameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService, _persistentProgressService, scoreService);
+            IMovesLeftService movesLeftService = new MovesLeftService(levelName, _persistentDataService, progressUpdateService, movesLeft);
+            IScoreService scoreService = new ScoreService(levelName, _soundMonoService, _persistentDataService, progressUpdateService, scoreGoal);
+            IGameRoundService gameRoundService = new PuzzleGameRoundService(levelName, _gameStateMachine, _soundMonoService, _windowService, _persistentDataService, scoreService);
 
             ITileService tileService = new TileService(levelName, _staticDataService, progressUpdateService, gameFactory, gameRoundService);
             IGamePieceService gamePieceService = new GamePieceService(levelName, _staticDataService, _soundMonoService,
                 _randomService, progressUpdateService, tileService, gameFactory, particleService);
 
             IBoardService boardService = new BoardService(levelName, _soundMonoService, _updateMonoService,
-                _persistentProgressService, _staticDataService, progressUpdateService, scoreService, movesLeftService, gameRoundService,
+                _persistentDataService, _staticDataService, progressUpdateService, scoreService, movesLeftService, gameRoundService,
                 tileService, gamePieceService, particleService);
 
             ICameraService cameraService = new CameraService(boardService.BoardSize);

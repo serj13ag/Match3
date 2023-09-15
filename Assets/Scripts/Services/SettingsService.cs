@@ -1,5 +1,4 @@
 ﻿using System;
-using Data;
 using Enums;
 using EventArguments;
 
@@ -7,59 +6,50 @@ namespace Services
 {
     public class SettingsService : ISettingsService
     {
-        private readonly ISaveLoadService _saveLoadService;
+        private readonly IPersistentDataService _persistentDataService;
 
-        private GameSettings _gameSettings;
-
-        public bool MusicEnabled => _gameSettings.MusicEnabled;
-        public bool SoundEnabled => _gameSettings.SoundEnabled;
-        public LanguageType Language => _gameSettings.Language;
+        public bool MusicEnabled => _persistentDataService.GameSettings.MusicEnabled;
+        public bool SoundEnabled => _persistentDataService.GameSettings.SoundEnabled;
+        public LanguageType Language => _persistentDataService.GameSettings.Language;
 
         public event EventHandler<SettingsChangedEventArgs> OnSettingsChanged;
 
-        public SettingsService(ISaveLoadService saveLoadService)
+        public SettingsService(IPersistentDataService persistentDataService)
         {
-            _saveLoadService = saveLoadService;
+            _persistentDataService = persistentDataService;
         }
 
-        public void LoadGameSettings()
+        public void InitGameSettings()
         {
-            _gameSettings = _saveLoadService.LoadGameSettings() ?? CreateDefaultGameSettings();
-
-            SaveAndInvokeSettingsChanged();
+            OnSettingsChanged?.Invoke(this, new SettingsChangedEventArgs(_persistentDataService.GameSettings));
         }
 
         public void MusicSetActive(bool activate)
         {
-            _gameSettings.MusicEnabled = activate;
+            _persistentDataService.GameSettings.MusicEnabled = activate;
 
             SaveAndInvokeSettingsChanged();
         }
 
         public void SoundSetActive(bool activate)
         {
-            _gameSettings.SoundEnabled = activate;
+            _persistentDataService.GameSettings.SoundEnabled = activate;
 
             SaveAndInvokeSettingsChanged();
         }
 
         public void SetLanguage(LanguageType language)
         {
-            _gameSettings.Language = language;
+            _persistentDataService.GameSettings.Language = language;
 
             SaveAndInvokeSettingsChanged();
         }
 
         private void SaveAndInvokeSettingsChanged()
         {
-            _saveLoadService.SaveGameSettings(_gameSettings);
+            _persistentDataService.Save();
 
-            OnSettingsChanged?.Invoke(this, new SettingsChangedEventArgs(_gameSettings));
-        }
-
-        private static GameSettings CreateDefaultGameSettings()
-        {
-            return new GameSettings();
+            OnSettingsChanged?.Invoke(this, new SettingsChangedEventArgs(_persistentDataService.GameSettings));
         }
     }
 }

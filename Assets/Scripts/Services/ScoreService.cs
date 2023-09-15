@@ -37,7 +37,7 @@ namespace Services
         public event EventHandler<ScoreChangedEventArgs> OnScoreChanged;
 
         public ScoreService(string levelName, ISoundMonoService soundMonoService,
-            IPersistentProgressService persistentProgressService, IProgressUpdateService progressUpdateService,
+            IPersistentDataService persistentDataService, IProgressUpdateService progressUpdateService,
             int scoreGoal)
         {
             _levelName = levelName;
@@ -45,7 +45,7 @@ namespace Services
 
             _scoreGoal = scoreGoal;
 
-            if (persistentProgressService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
+            if (persistentDataService.Progress.BoardData.TryGetValue(levelName, out LevelBoardData levelBoardData))
             {
                 _score = levelBoardData.Score;
             }

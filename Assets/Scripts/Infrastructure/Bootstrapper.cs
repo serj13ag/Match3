@@ -19,7 +19,15 @@ namespace Infrastructure
             InitAndRegisterGlobalServices(serviceLocator);
 
             _gameStateMachine = new GameStateMachine(serviceLocator);
-            _gameStateMachine.Enter<LoadLocalSaveDataState>();
+
+            if (Application.isEditor)
+            {
+                _gameStateMachine.Enter<LoadLocalSaveDataState>();
+            }
+            else
+            {
+                _gameStateMachine.Enter<LoadYaSaveDataState>();
+            }
 
             serviceLocator.Register(_gameStateMachine);
 
@@ -32,10 +40,23 @@ namespace Infrastructure
             IRandomService randomService = new RandomService();
             IAssetProviderService assetProviderService = new AssetProviderService();
             IStaticDataService staticDataService = new StaticDataService();
-            ISaveLoadService saveLoadService = new SaveLoadService();
-            IPersistentProgressService persistentProgressService = new PersistentProgressService(saveLoadService);
-            ISettingsService settingsService = new SettingsService(saveLoadService);
-            ICoinService coinService = new CoinService(persistentProgressService);
+
+            ISaveService saveService;
+            if (Application.isEditor)
+            {
+                saveService = new LocalSaveService();
+            }
+            else
+            {
+                IYaGamesMonoService yaGamesMonoService = assetProviderService.Instantiate<YaGamesMonoService>(AssetPaths.YaGamesMonoServicePath);
+                serviceLocator.Register(yaGamesMonoService);
+
+                saveService = new YaGamesSaveService(yaGamesMonoService);
+            }
+
+            IPersistentDataService persistentDataService = new PersistentDataService(saveService);
+            ISettingsService settingsService = new SettingsService(persistentDataService);
+            ICoinService coinService = new CoinService(persistentDataService);
             ILocalizationService localizationService = new LocalizationService(staticDataService, settingsService);
 
             ILoadingCurtainMonoService loadingCurtainMonoService = assetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
@@ -53,8 +74,8 @@ namespace Infrastructure
             serviceLocator.Register(randomService);
             serviceLocator.Register(assetProviderService);
             serviceLocator.Register(staticDataService);
-            serviceLocator.Register(saveLoadService);
-            serviceLocator.Register(persistentProgressService);
+            serviceLocator.Register(saveService);
+            serviceLocator.Register(persistentDataService);
             serviceLocator.Register(settingsService);
             serviceLocator.Register(localizationService);
             serviceLocator.Register(coinService);

@@ -26,11 +26,11 @@ namespace Services
 
         public event EventHandler<PlayerLevelChangedEventArgs> OnCurrentLevelChanged;
 
-        public PlayerLevelService(IPersistentProgressService persistentProgressService,
+        public PlayerLevelService(IPersistentDataService persistentDataService,
             IStaticDataService staticDataService, IProgressUpdateService progressUpdateService)
         {
             _staticDataService = staticDataService;
-            _currentLevel = persistentProgressService.Progress.PlayerLevel;
+            _currentLevel = persistentDataService.Progress.PlayerLevel;
 
             UpdateScoreToNextLevel(_currentLevel);
 

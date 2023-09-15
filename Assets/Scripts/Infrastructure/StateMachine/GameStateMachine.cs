@@ -4,6 +4,7 @@ using Services;
 using Services.Mono;
 using Services.Mono.Sound;
 using Services.UI;
+using UnityEngine;
 
 namespace Infrastructure.StateMachine
 {
@@ -21,7 +22,7 @@ namespace Infrastructure.StateMachine
             {
                 [typeof(LoadLocalSaveDataState)] = new LoadLocalSaveDataState(
                     this,
-                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<IPersistentDataService>(),
                     serviceLocator.Get<ISettingsService>(),
                     serviceLocator.Get<ICoinService>()),
                 [typeof(MainMenuState)] = new MainMenuState(
@@ -39,7 +40,7 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<IStaticDataService>(),
                     serviceLocator.Get<ISoundMonoService>(),
                     serviceLocator.Get<IUpdateMonoService>(),
-                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<IPersistentDataService>(),
                     serviceLocator.Get<IUiFactory>(),
                     serviceLocator.Get<IWindowService>(),
                     serviceLocator.Get<ICoinService>()),
@@ -52,10 +53,20 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<IStaticDataService>(),
                     serviceLocator.Get<ISoundMonoService>(),
                     serviceLocator.Get<IUpdateMonoService>(),
-                    serviceLocator.Get<IPersistentProgressService>(),
+                    serviceLocator.Get<IPersistentDataService>(),
                     serviceLocator.Get<IUiFactory>(),
                     serviceLocator.Get<IWindowService>()),
             };
+
+            if (!Application.isEditor)
+            {
+                _states.Add(typeof(LoadYaSaveDataState), new LoadYaSaveDataState(
+                    this,
+                    serviceLocator.Get<IPersistentDataService>(),
+                    serviceLocator.Get<ISettingsService>(),
+                    serviceLocator.Get<ICoinService>(),
+                    serviceLocator.Get<IYaGamesMonoService>()));
+            }
         }
 
         public void Enter<TState>() where TState : class, IState

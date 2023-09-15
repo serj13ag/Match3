@@ -19,7 +19,7 @@ namespace Infrastructure.StateMachine
         private readonly IStaticDataService _staticDataService;
         private readonly ISoundMonoService _soundMonoService;
         private readonly IUpdateMonoService _updateMonoService;
-        private readonly IPersistentProgressService _persistentProgressService;
+        private readonly IPersistentDataService _persistentDataService;
         private readonly IUiFactory _uiFactory;
         private readonly IWindowService _windowService;
         private readonly ICoinService _coinService;
@@ -31,7 +31,7 @@ namespace Infrastructure.StateMachine
         public EndlessGameLoopState(ISceneLoader sceneLoader, ILoadingCurtainMonoService loadingCurtainMonoService,
             IAssetProviderService assetProviderService, IRandomService randomService,
             IStaticDataService staticDataService, ISoundMonoService soundMonoService,
-            IUpdateMonoService updateMonoService, IPersistentProgressService persistentProgressService,
+            IUpdateMonoService updateMonoService, IPersistentDataService persistentDataService,
             IUiFactory uiFactory, IWindowService windowService, ICoinService coinService)
         {
             _sceneLoader = sceneLoader;
@@ -41,7 +41,7 @@ namespace Infrastructure.StateMachine
             _staticDataService = staticDataService;
             _soundMonoService = soundMonoService;
             _updateMonoService = updateMonoService;
-            _persistentProgressService = persistentProgressService;
+            _persistentDataService = persistentDataService;
             _uiFactory = uiFactory;
             _windowService = windowService;
             _coinService = coinService;
@@ -62,13 +62,13 @@ namespace Infrastructure.StateMachine
         {
             _uiFactory.CreateUiRootCanvas();
 
-            IProgressUpdateService progressUpdateService = new ProgressUpdateService(Settings.EndlessLevelName, _persistentProgressService);
+            IProgressUpdateService progressUpdateService = new ProgressUpdateService(Settings.EndlessLevelName, _persistentDataService);
 
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(Settings.EndlessLevelName, _randomService, _staticDataService, particleService);
             IMovesLeftService movesLeftService = new InfiniteMovesLeftService();
-            IPlayerLevelService playerLevelService = new PlayerLevelService(_persistentProgressService, _staticDataService, progressUpdateService);
-            IScoreService scoreService = new ScoreService(Settings.EndlessLevelName, _soundMonoService, _persistentProgressService, progressUpdateService, playerLevelService.ScoreToNextLevel);
+            IPlayerLevelService playerLevelService = new PlayerLevelService(_persistentDataService, _staticDataService, progressUpdateService);
+            IScoreService scoreService = new ScoreService(Settings.EndlessLevelName, _soundMonoService, _persistentDataService, progressUpdateService, playerLevelService.ScoreToNextLevel);
             IGameRoundService gameRoundService = new EndlessGameRoundService(_soundMonoService, _windowService, _coinService, scoreService, playerLevelService);
 
             ITileService tileService = new TileService(Settings.EndlessLevelName, _staticDataService, progressUpdateService, gameFactory, gameRoundService);
@@ -76,7 +76,7 @@ namespace Infrastructure.StateMachine
                 _randomService, progressUpdateService, tileService, gameFactory, particleService);
 
             IBoardService boardService = new BoardService(Settings.EndlessLevelName, _soundMonoService, _updateMonoService,
-                _persistentProgressService, _staticDataService, progressUpdateService, scoreService, movesLeftService, gameRoundService,
+                _persistentDataService, _staticDataService, progressUpdateService, scoreService, movesLeftService, gameRoundService,
                 tileService, gamePieceService, particleService);
 
             ICameraService cameraService = new CameraService(boardService.BoardSize);

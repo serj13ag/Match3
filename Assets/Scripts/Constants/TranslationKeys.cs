@@ -4,7 +4,8 @@
     {
         public const string Start = "start";
         public const string Ok = "ok";
-        
+        public const string Continue = "continue";
+
         public const string ScoreGoal = "scoreGoal";
         public const string GameWinMessage = "gameWinMessage";
         public const string GameOverMessage = "gameOverMessage";

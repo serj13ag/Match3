@@ -5,14 +5,16 @@
 	"sound": "SOUND",
 	"back": "BACK",
 	"menu": "MENU",
+	"reset": "RESET",
 	
 	"level": "LEVEL",
 	"coins": "COINS",
 	
 	"ok": "OK",
+	"continue": "CONTINUE",
 	
-	"gameOverMessage": "YOU LOSE!",
-	"gameWinMessage": "YOU WIN!",
+	"gameOverMessage": "YOU LOSE",
+	"gameWinMessage": "YOU WIN",
 	
 	"scoreGoal": "SCORE GOAL\n{0}"
 }

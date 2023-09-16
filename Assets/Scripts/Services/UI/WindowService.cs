@@ -32,7 +32,7 @@ namespace Services.UI
         public void ShowGameWinMessageWindow(Action onButtonClickCallback)
         {
             string message = _localizationService.GetTranslation(TranslationKeys.GameWinMessage);
-            string buttonText = _localizationService.GetTranslation(TranslationKeys.Ok);
+            string buttonText = _localizationService.GetTranslation(TranslationKeys.Continue);
             ShowMessageWindow(onButtonClickCallback, message, buttonText);
         }
 

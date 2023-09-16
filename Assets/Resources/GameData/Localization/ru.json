@@ -5,14 +5,16 @@
 	"sound": "ЗВУКИ",
 	"back": "НАЗАД",
 	"menu": "МЕНЮ",
+	"reset": "СБРОС",
 	
 	"level": "УРОВЕНЬ",
 	"coins": "МОНЕТЫ",
 	
 	"ok": "OK",
+	"continue": "ПРОДОЛЖИТЬ",
 	
-	"gameOverMessage": "ВЫ ПРОИГРАЛИ!",
-	"gameWinMessage": "ВЫ ВЫЙГРАЛИ!",
+	"gameOverMessage": "ВЫ ПРОИГРАЛИ",
+	"gameWinMessage": "ВЫ ВЫЙГРАЛИ",
 	
 	"scoreGoal": "ЦЕЛЬ\n{0}"
 }

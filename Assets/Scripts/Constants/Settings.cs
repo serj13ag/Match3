@@ -10,6 +10,7 @@
 
         public const string SavedPlayerDataKey = "SavedPlayerData";
         public const float TimeTillRequestLoadData = 3f;
+        public const int MinPlayerLevelToShowAds = 10;
 
         public const bool CollectibleGamePieceEnabled = false;
 

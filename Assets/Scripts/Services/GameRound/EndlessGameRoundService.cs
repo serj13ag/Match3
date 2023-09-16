@@ -1,4 +1,5 @@
 ﻿using System;
+using Constants;
 using Enums;
 using EventArguments;
 using Services.Mono.Sound;
@@ -11,6 +12,7 @@ namespace Services.GameRound
         private readonly ISoundMonoService _soundMonoService;
         private readonly IWindowService _windowService;
         private readonly ICoinService _coinService;
+        private readonly IAdsService _adsService;
         private readonly IScoreService _scoreService;
         private readonly IPlayerLevelService _playerLevelService;
 
@@ -19,11 +21,13 @@ namespace Services.GameRound
         public bool RoundIsActive => _roundIsActive;
 
         public EndlessGameRoundService(ISoundMonoService soundMonoService, IWindowService windowService,
-            ICoinService coinService, IScoreService scoreService, IPlayerLevelService playerLevelService)
+            ICoinService coinService, IAdsService adsService, IScoreService scoreService,
+            IPlayerLevelService playerLevelService)
         {
             _soundMonoService = soundMonoService;
             _windowService = windowService;
             _coinService = coinService;
+            _adsService = adsService;
             _scoreService = scoreService;
             _playerLevelService = playerLevelService;
 
@@ -46,6 +50,11 @@ namespace Services.GameRound
             {
                 _soundMonoService.PlaySound(SoundType.Win);
                 _windowService.ShowGameWinMessageWindow(UpdatePlayerLevel); // TODO new level window
+
+                if (_playerLevelService.CurrentLevel >= Settings.MinPlayerLevelToShowAds)
+                {
+                    _adsService.ShowFullAd();
+                }
 
                 _roundIsActive = false;
             }

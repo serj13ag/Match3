@@ -62,6 +62,7 @@ namespace UI.Windows
             _soundsButton.Init(_settingsService.SoundEnabled);
 
             _menuButton.gameObject.SetActive(_gameStateMachine.InGameLoopState);
+            _resetButton.gameObject.SetActive(!_gameStateMachine.InGameLoopState);
 
             _settingsService.OnSettingsChanged += OnSettingsChanged;
         }

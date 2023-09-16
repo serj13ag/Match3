@@ -1,5 +1,4 @@
-﻿using System;
-using Constants;
+﻿using Constants;
 using Infrastructure.StateMachine;
 using Services;
 using Services.Mono;
@@ -48,9 +47,11 @@ namespace Infrastructure
             IStaticDataService staticDataService = new StaticDataService();
 
             ISaveService saveService;
+            IAdsService adsService;
             if (Application.isEditor)
             {
                 saveService = new LocalSaveService();
+                adsService = new EmptyAdsService();
             }
             else
             {
@@ -58,6 +59,7 @@ namespace Infrastructure
                 serviceLocator.Register(yaGamesMonoService);
 
                 saveService = new YaGamesSaveService(yaGamesMonoService);
+                adsService = new YaGamesAdsService(yaGamesMonoService);
             }
 
             IPersistentDataService persistentDataService = new PersistentDataService(saveService);
@@ -81,6 +83,7 @@ namespace Infrastructure
             serviceLocator.Register(assetProviderService);
             serviceLocator.Register(staticDataService);
             serviceLocator.Register(saveService);
+            serviceLocator.Register(adsService);
             serviceLocator.Register(persistentDataService);
             serviceLocator.Register(settingsService);
             serviceLocator.Register(localizationService);

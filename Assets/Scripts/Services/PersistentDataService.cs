@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using System;
+using Data;
 
 namespace Services
 {
@@ -10,6 +11,8 @@ namespace Services
 
         public PlayerProgress Progress => _playerData.PlayerProgress;
         public GameSettings GameSettings => _playerData.GameSettings;
+
+        public event EventHandler<EventArgs> OnResetProgress;
 
         public PersistentDataService(ISaveService saveService)
         {
@@ -31,6 +34,8 @@ namespace Services
             _playerData.PlayerProgress = new PlayerProgress();
 
             Save();
+
+            OnResetProgress?.Invoke(this, EventArgs.Empty);
         }
     }
 }

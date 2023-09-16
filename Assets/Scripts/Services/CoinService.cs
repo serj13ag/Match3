@@ -27,6 +27,8 @@ namespace Services
         public CoinService(IPersistentDataService persistentDataService)
         {
             _persistentDataService = persistentDataService;
+
+            persistentDataService.OnResetProgress += OnResetProgress;
         }
 
         public void UpdateCoinsFromProgress()
@@ -39,6 +41,11 @@ namespace Services
             Coins++;
 
             UpdateAndSaveProgress();
+        }
+
+        private void OnResetProgress(object sender, EventArgs e)
+        {
+            UpdateCoinsFromProgress();
         }
 
         private void UpdateAndSaveProgress()

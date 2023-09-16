@@ -13,6 +13,7 @@ namespace Data
         public PlayerProgress()
         {
             PlayerLevel = 1;
+            Coins = 0;
             BoardData = new Dictionary<string, LevelBoardData>();
         }
     }

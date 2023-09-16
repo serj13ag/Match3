@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using System;
+using Data;
 
 namespace Services
 {
@@ -10,5 +11,6 @@ namespace Services
         void InitData(PlayerData savedPlayerData);
         void ResetProgressAndSave();
         void Save();
+        event EventHandler<EventArgs> OnResetProgress;
     }
 }

@@ -49,6 +49,13 @@ namespace Services.Mono
             _onLoadedCallback = null;
         }
 
+        public void ShowFullScreenAd()
+        {
+            ShowFullAd();
+
+            Debug.Log($"{nameof(YaGamesMonoService)}: Showing full ad");
+        }
+
         // Call from YaAPI
         [UsedImplicitly]
         public void OnRewardedVideoWatched()

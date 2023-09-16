@@ -9,6 +9,7 @@
         public const string EndlessLevelName = "EndlessLevel";
 
         public const string SavedPlayerDataKey = "SavedPlayerData";
+        public const float TimeTillRequestLoadData = 3f;
 
         public const bool CollectibleGamePieceEnabled = false;
 

@@ -2,19 +2,23 @@ using System;
 using Constants;
 using Data;
 using Helpers;
+using Interfaces;
 using Services;
 using Services.Mono;
 using UnityEngine;
 
 namespace Infrastructure.StateMachine
 {
-    public class LoadYaSaveDataState : IState
+    public class LoadYaSaveDataState : IState, IUpdatable
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly IPersistentDataService _persistentDataService;
         private readonly ISettingsService _settingsService;
         private readonly ICoinService _coinService;
         private readonly IYaGamesMonoService _yaGamesMonoService;
+
+        private float _timeTillRequestLoadData;
+        private bool _loadDataRequestInvoked;
 
         public bool IsGameLoopState => false;
 
@@ -27,20 +31,42 @@ namespace Infrastructure.StateMachine
             _settingsService = settingsService;
             _coinService = coinService;
             _yaGamesMonoService = yaGamesMonoService;
+
+            _timeTillRequestLoadData = Settings.TimeTillRequestLoadData;
         }
 
         public void Enter()
         {
-            _yaGamesMonoService.Load(Settings.SavedPlayerDataKey, OnPlayerDataLoaded);
+            Debug.Log($"Entered {nameof(LoadYaSaveDataState)}");
         }
 
         public void Exit()
         {
         }
 
+        public void OnUpdate(float deltaTime)
+        {
+            if (_loadDataRequestInvoked)
+            {
+                return;
+            }
+
+            if (_timeTillRequestLoadData < 0)
+            {
+                _yaGamesMonoService.Load(Settings.SavedPlayerDataKey, OnPlayerDataLoaded);
+                _loadDataRequestInvoked = true;
+            }
+            else
+            {
+                _timeTillRequestLoadData -= deltaTime;
+            }
+        }
+
         private void OnPlayerDataLoaded(string dataString)
         {
-            PlayerData playerData = GetPlayerData(dataString);
+            PlayerData playerData = string.IsNullOrEmpty(dataString)
+                ? null
+                : GetPlayerData(dataString);
 
             _persistentDataService.InitData(playerData);
             _settingsService.InitGameSettings();
@@ -61,9 +87,7 @@ namespace Infrastructure.StateMachine
 
             try
             {
-                playerData = string.IsNullOrEmpty(dataString)
-                    ? null
-                    : JsonHelper.FromJson<PlayerData>(dataString);
+                playerData = JsonHelper.FromJson<PlayerData>(dataString);
             }
             catch (Exception e)
             {

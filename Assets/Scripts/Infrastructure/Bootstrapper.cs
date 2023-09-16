@@ -1,4 +1,5 @@
-﻿using Constants;
+﻿using System;
+using Constants;
 using Infrastructure.StateMachine;
 using Services;
 using Services.Mono;
@@ -32,6 +33,11 @@ namespace Infrastructure
             serviceLocator.Register(_gameStateMachine);
 
             DontDestroyOnLoad(this);
+        }
+
+        private void Update()
+        {
+            _gameStateMachine.Update(Time.deltaTime);
         }
 
         private void InitAndRegisterGlobalServices(ServiceLocator serviceLocator)

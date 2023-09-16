@@ -35,12 +35,16 @@ namespace Services.Mono
         {
             _onLoadedCallback = onLoadedCallback;
             LoadFromPlayerData(key);
+
+            Debug.Log($"{nameof(YaGamesMonoService)}: Loading from player data");
         }
 
         // Call from YaAPI
         [UsedImplicitly]
         public void OnPlayerDataLoaded(string dataString)
         {
+            Debug.Log($"{nameof(YaGamesMonoService)}: Call from YaAPI received, invoking {nameof(_onLoadedCallback)}");
+
             _onLoadedCallback?.Invoke(dataString);
             _onLoadedCallback = null;
         }

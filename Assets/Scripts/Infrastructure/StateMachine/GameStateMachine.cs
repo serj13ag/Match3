@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interfaces;
 using Services;
 using Services.Mono;
 using Services.Mono.Sound;
@@ -79,6 +80,14 @@ namespace Infrastructure.StateMachine
         {
             TState state = ChangeState<TState>();
             state.Enter(payload);
+        }
+
+        public void Update(float deltaTime)
+        {
+            if (_currentState is IUpdatable updatableState)
+            {
+                updatableState.OnUpdate(deltaTime);
+            }
         }
 
         private TState ChangeState<TState>() where TState : class, IExitableState

@@ -76,7 +76,7 @@ namespace Infrastructure
             updateMonoService.Init();
 
             IUiFactory uiFactory = new UiFactory(assetProviderService);
-            IWindowService windowService = new WindowService(uiFactory, localizationService, assetProviderService);
+            IWindowService windowService = new WindowService(uiFactory, localizationService);
 
             serviceLocator.Register(sceneLoader);
             serviceLocator.Register(randomService);

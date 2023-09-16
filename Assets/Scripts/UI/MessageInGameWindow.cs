@@ -9,7 +9,6 @@ namespace UI
     public class MessageInGameWindow : BaseWindow
     {
         [SerializeField] private Button _button;
-        [SerializeField] private Image _image;
         [SerializeField] private TMP_Text _messageText;
         [SerializeField] private TMP_Text _buttonText;
 
@@ -25,14 +24,8 @@ namespace UI
             _button.onClick.RemoveListener(OnButtonClick);
         }
 
-        public void ShowMessage(Sprite icon = null, string message = "", string buttonMessage = "",
-            Action onButtonClickCallback = null)
+        public void ShowMessage(string message = "", string buttonMessage = "", Action onButtonClickCallback = null)
         {
-            if (icon != null)
-            {
-                _image.sprite = icon;
-            }
-
             if (!string.IsNullOrEmpty(message))
             {
                 _messageText.text = message;

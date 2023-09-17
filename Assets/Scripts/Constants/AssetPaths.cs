@@ -28,6 +28,8 @@
         public const string SettingsDataPath = "GameData/SettingsData";
         public const string LanguagesDataPath = "GameData/LanguagesData";
 
+        public const string BackgroundShopItemsDataPath = "GameData/Shop/Backgrounds";
+
         // Images
         public const string GoalIconSpritePath = "Images/GoalIcon";
         public const string WinIconSpritePath = "Images/WinIcon";

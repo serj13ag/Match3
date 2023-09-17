@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Enums;
 using StaticData;
+using StaticData.Shop;
 using UnityEngine;
 
 namespace Services
@@ -10,6 +11,7 @@ namespace Services
         SettingsStaticData Settings { get; }
         IEnumerable<string> PuzzleLevelNames { get; }
         List<LanguageType> AvailableLanguages { get; }
+        IEnumerable<BackgroundShopItemStaticData> BackgroundShopItems { get; }
 
         TileStaticData GetDataForTile(TileType tileType);
         GamePieceStaticData GetDataForGamePiece(GamePieceType gamePieceType);

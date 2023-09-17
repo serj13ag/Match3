@@ -3,6 +3,7 @@ using System.Linq;
 using Constants;
 using Enums;
 using StaticData;
+using StaticData.Shop;
 using UnityEngine;
 
 namespace Services
@@ -16,6 +17,8 @@ namespace Services
         private readonly Dictionary<ParticleEffectType, ParticleEffectStaticData> _particleEffects;
         private readonly Dictionary<LanguageType, LanguageStaticData> _languages;
 
+        private readonly Dictionary<string, BackgroundShopItemStaticData> _backgroundShopItems;
+
         private readonly SettingsStaticData _settings;
 
         public SettingsStaticData Settings => _settings;
@@ -23,6 +26,8 @@ namespace Services
         public IEnumerable<string> PuzzleLevelNames => _settings.PuzzleLevels.Select(x => x.LevelName);
 
         public List<LanguageType> AvailableLanguages => _languages.Keys.ToList();
+
+        public IEnumerable<BackgroundShopItemStaticData> BackgroundShopItems => _backgroundShopItems.Values;
 
         public StaticDataService()
         {
@@ -47,6 +52,10 @@ namespace Services
             _languages = LoadFileFromResources<LanguagesStaticData>(AssetPaths.LanguagesDataPath)
                 .Languages
                 .ToDictionary(x => x.Type, x => x);
+
+            _backgroundShopItems =
+                LoadFilesFromResources<BackgroundShopItemStaticData>(AssetPaths.BackgroundShopItemsDataPath)
+                    .ToDictionary(x => x.Code, x => x);
         }
 
         public TileStaticData GetDataForTile(TileType tileType)

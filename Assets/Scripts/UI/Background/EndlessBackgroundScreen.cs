@@ -3,22 +3,25 @@ using Services;
 using Services.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Background
 {
     public class EndlessBackgroundScreen : BaseBackgroundScreen
     {
+        [SerializeField] private Image _backgroundImage;
         [SerializeField] private TMP_Text _playerLevel;
         [SerializeField] private ScoreCounter _scoreCounter;
 
         public void Init(IPlayerLevelService playerLevelService, IScoreService scoreService,
-            ICameraService cameraService, IWindowService windowService)
+            ICameraService cameraService, IWindowService windowService, ICustomizationService customizationService)
         {
             InitInner(cameraService, windowService);
 
             _scoreCounter.Init(scoreService);
 
-            UpdatePlayerLevelText(playerLevelService.CurrentLevel);
+            _backgroundImage.color = customizationService.GetCurrentBackgroundColor();
+
             playerLevelService.OnCurrentLevelChanged += UpdatePlayerLevelText;
         }
 

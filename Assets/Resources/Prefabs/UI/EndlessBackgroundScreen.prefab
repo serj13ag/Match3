@@ -743,6 +743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvas: {fileID: 6496748320264840132}
   _menuButton: {fileID: 8731032943292065809}
+  _backgroundImage: {fileID: 6496748321529172286}
   _playerLevel: {fileID: 7490569013846973724}
   _scoreCounter: {fileID: 2067153902873328594}
 --- !u!1 &6496748321163169250

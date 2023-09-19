@@ -20,6 +20,7 @@ namespace UI.Windows
         private IStaticDataService _staticDataService;
         private ICoinService _coinService;
         private IPurchaseService _purchaseService;
+        private ICustomizationService _customizationService;
 
         private List<BackgroundShopItem> _prefabs;
 
@@ -38,6 +39,7 @@ namespace UI.Windows
             _staticDataService = ServiceLocator.Instance.Get<IStaticDataService>();
             _coinService = ServiceLocator.Instance.Get<ICoinService>();
             _purchaseService = ServiceLocator.Instance.Get<IPurchaseService>();
+            _customizationService = ServiceLocator.Instance.Get<ICustomizationService>();
 
             _prefabs = new List<BackgroundShopItem>();
 
@@ -55,7 +57,9 @@ namespace UI.Windows
 
         public void SelectPurchasedBackgroundItem(string itemCode)
         {
-            // TODO add
+            _customizationService.SetBackgroundItem(itemCode);
+
+            UpdateView();
         }
 
         private void CreateBackgroundShopItems()
@@ -63,7 +67,7 @@ namespace UI.Windows
             foreach (BackgroundShopItemStaticData backgroundShopItem in _staticDataService.BackgroundShopItems.OrderBy(x => x.CoinPrice))
             {
                 BackgroundShopItem prefab = Instantiate(_backgroundShopItemPrefab, _backgroundShopItemsContainer);
-                prefab.Init(this, backgroundShopItem, _coinService, _purchaseService);
+                prefab.Init(this, backgroundShopItem, _coinService, _purchaseService, _customizationService);
                 _prefabs.Add(prefab);
             }
         }
@@ -84,6 +88,14 @@ namespace UI.Windows
         private void Back()
         {
             Hide();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F1))
+            {
+                _coinService.IncrementCoins();
+            }
         }
     }
 }

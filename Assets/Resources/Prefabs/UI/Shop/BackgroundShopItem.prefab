@@ -480,3 +480,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backgroundImage: {fileID: 1960667807343049886}
+  _button: {fileID: 399255448156695733}
+  _buttonText: {fileID: 3258435757723641972}

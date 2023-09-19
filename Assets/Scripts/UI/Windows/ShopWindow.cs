@@ -50,10 +50,7 @@ namespace UI.Windows
         {
             _purchaseService.PurchaseItemAndSave(itemCode);
 
-            foreach (BackgroundShopItem backgroundShopItem in _prefabs)
-            {
-                backgroundShopItem.UpdateView();
-            }
+            UpdateView();
         }
 
         public void SelectPurchasedBackgroundItem(string itemCode)
@@ -68,6 +65,14 @@ namespace UI.Windows
                 BackgroundShopItem prefab = Instantiate(_backgroundShopItemPrefab, _backgroundShopItemsContainer);
                 prefab.Init(this, backgroundShopItem, _coinService, _purchaseService);
                 _prefabs.Add(prefab);
+            }
+        }
+
+        private void UpdateView()
+        {
+            foreach (BackgroundShopItem backgroundShopItem in _prefabs)
+            {
+                backgroundShopItem.UpdateView();
             }
         }
 

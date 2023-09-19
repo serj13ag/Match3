@@ -23,9 +23,7 @@ namespace Infrastructure.StateMachine
             {
                 [typeof(LoadLocalSaveDataState)] = new LoadLocalSaveDataState(
                     this,
-                    serviceLocator.Get<IPersistentDataService>(),
-                    serviceLocator.Get<ISettingsService>(),
-                    serviceLocator.Get<ICoinService>()),
+                    serviceLocator.Get<IPersistentDataService>()),
                 [typeof(MainMenuState)] = new MainMenuState(
                     this,
                     serviceLocator.Get<ISceneLoader>(),
@@ -66,8 +64,6 @@ namespace Infrastructure.StateMachine
                 _states.Add(typeof(LoadYaSaveDataState), new LoadYaSaveDataState(
                     this,
                     serviceLocator.Get<IPersistentDataService>(),
-                    serviceLocator.Get<ISettingsService>(),
-                    serviceLocator.Get<ICoinService>(),
                     serviceLocator.Get<IYaGamesMonoService>()));
             }
         }

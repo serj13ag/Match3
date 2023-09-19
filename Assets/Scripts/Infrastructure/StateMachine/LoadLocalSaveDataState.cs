@@ -10,18 +10,13 @@ namespace Infrastructure.StateMachine
     {
         private readonly IGameStateMachine _gameStateMachine;
         private readonly IPersistentDataService _persistentDataService;
-        private readonly ISettingsService _settingsService;
-        private readonly ICoinService _coinService;
+
         public bool IsGameLoopState => false;
 
-        public LoadLocalSaveDataState(IGameStateMachine gameStateMachine,
-            IPersistentDataService persistentDataService, ISettingsService settingsService,
-            ICoinService coinService)
+        public LoadLocalSaveDataState(IGameStateMachine gameStateMachine, IPersistentDataService persistentDataService)
         {
             _gameStateMachine = gameStateMachine;
             _persistentDataService = persistentDataService;
-            _settingsService = settingsService;
-            _coinService = coinService;
         }
 
         public void Enter()
@@ -31,10 +26,7 @@ namespace Infrastructure.StateMachine
                 ? null
                 : JsonHelper.FromJson<PlayerData>(savedDataString);
 
-            // TODO remove direct calls
-            _persistentDataService.InitData(savedPlayerData);
-            _settingsService.InitGameSettings();
-            _coinService.UpdateCoinsFromProgress();
+            _persistentDataService.InitWithLoadedData(savedPlayerData);
 
             _gameStateMachine.Enter<MainMenuState>();
         }

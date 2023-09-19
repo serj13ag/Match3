@@ -13,8 +13,6 @@ namespace Infrastructure.StateMachine
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly IPersistentDataService _persistentDataService;
-        private readonly ISettingsService _settingsService;
-        private readonly ICoinService _coinService;
         private readonly IYaGamesMonoService _yaGamesMonoService;
 
         private float _timeTillRequestLoadData;
@@ -22,14 +20,11 @@ namespace Infrastructure.StateMachine
 
         public bool IsGameLoopState => false;
 
-        public LoadYaSaveDataState(GameStateMachine gameStateMachine,
-            IPersistentDataService persistentDataService, ISettingsService settingsService,
-            ICoinService coinService, IYaGamesMonoService yaGamesMonoService)
+        public LoadYaSaveDataState(GameStateMachine gameStateMachine, IPersistentDataService persistentDataService,
+            IYaGamesMonoService yaGamesMonoService)
         {
             _gameStateMachine = gameStateMachine;
             _persistentDataService = persistentDataService;
-            _settingsService = settingsService;
-            _coinService = coinService;
             _yaGamesMonoService = yaGamesMonoService;
 
             _timeTillRequestLoadData = Settings.TimeTillRequestLoadData;
@@ -68,9 +63,7 @@ namespace Infrastructure.StateMachine
                 ? null
                 : GetPlayerData(dataString);
 
-            _persistentDataService.InitData(playerData);
-            _settingsService.InitGameSettings();
-            _coinService.UpdateCoinsFromProgress();
+            _persistentDataService.InitWithLoadedData(playerData);
 
             _gameStateMachine.Enter<MainMenuState>();
         }

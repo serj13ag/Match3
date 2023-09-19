@@ -19,8 +19,8 @@ namespace UI.Background
             InitInner(cameraService, windowService);
 
             _scoreCounter.Init(scoreService);
-
             _backgroundImage.color = customizationService.GetCurrentBackgroundColor();
+            UpdatePlayerLevelText(playerLevelService.CurrentLevel);
 
             playerLevelService.OnCurrentLevelChanged += UpdatePlayerLevelText;
         }

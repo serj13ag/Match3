@@ -1,5 +1,5 @@
-﻿using System;
-using Data;
+﻿using Data;
+using Interfaces;
 
 namespace Services
 {
@@ -10,9 +10,9 @@ namespace Services
         Purchases Purchases { get; }
         Customizations Customizations { get; }
 
-        void InitData(PlayerData savedPlayerData);
+        void InitWithLoadedData(PlayerData loadedPlayerData);
+        void RegisterDataReader(IPersistentDataReader reader);
         void ResetProgressAndSave();
         void Save();
-        event EventHandler<EventArgs> OnResetProgress;
     }
 }

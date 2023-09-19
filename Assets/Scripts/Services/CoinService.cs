@@ -14,6 +14,11 @@ namespace Services
             get => _coins;
             private set
             {
+                if (value < 0)
+                {
+                    value = 0;
+                }
+
                 if (value != _coins)
                 {
                     _coins = value;
@@ -39,6 +44,13 @@ namespace Services
         public void IncrementCoins()
         {
             Coins++;
+
+            UpdateAndSaveProgress();
+        }
+
+        public void SpendCoins(int amount)
+        {
+            Coins -= amount;
 
             UpdateAndSaveProgress();
         }

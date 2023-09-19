@@ -19,5 +19,6 @@ namespace Services
         LevelStaticData GetDataForLevel(string levelName);
         ParticleEffectStaticData GetDataForParticleEffect(ParticleEffectType particleEffectType);
         LanguageStaticData GetDataForLanguage(LanguageType languageType);
+        BackgroundShopItemStaticData GetBackgroundShopItem(string itemCode);
     }
 }

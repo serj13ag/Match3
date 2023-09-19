@@ -31,6 +31,7 @@ namespace Infrastructure.StateMachine
                 ? null
                 : JsonHelper.FromJson<PlayerData>(savedDataString);
 
+            // TODO remove direct calls
             _persistentDataService.InitData(savedPlayerData);
             _settingsService.InitGameSettings();
             _coinService.UpdateCoinsFromProgress();

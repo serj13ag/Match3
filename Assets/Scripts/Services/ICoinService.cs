@@ -8,6 +8,7 @@ namespace Services
         int Coins { get; }
         void UpdateCoinsFromProgress();
         void IncrementCoins();
+        void SpendCoins(int amount);
         event EventHandler<CoinsChangedEventArgs> OnCoinsChanged;
     }
 }

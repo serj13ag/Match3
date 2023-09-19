@@ -118,6 +118,16 @@ namespace Services
             return null;
         }
 
+        public BackgroundShopItemStaticData GetBackgroundShopItem(string itemCode)
+        {
+            if (_backgroundShopItems.TryGetValue(itemCode, out BackgroundShopItemStaticData shopItem))
+            {
+                return shopItem;
+            }
+
+            return null;
+        }
+
         private static T LoadFileFromResources<T>(string path) where T : Object
         {
             return Resources.Load<T>(path);

@@ -10,6 +10,7 @@ namespace Services
         private PlayerData _playerData;
 
         public PlayerProgress Progress => _playerData.PlayerProgress;
+        public Purchases Purchases => _playerData.Purchases;
         public GameSettings GameSettings => _playerData.GameSettings;
 
         public event EventHandler<EventArgs> OnResetProgress;

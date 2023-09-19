@@ -7,6 +7,7 @@ namespace Services
     {
         PlayerProgress Progress { get; }
         GameSettings GameSettings { get; }
+        Purchases Purchases { get; }
 
         void InitData(PlayerData savedPlayerData);
         void ResetProgressAndSave();

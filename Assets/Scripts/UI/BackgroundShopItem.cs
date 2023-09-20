@@ -10,8 +10,11 @@ namespace UI
     public class BackgroundShopItem : MonoBehaviour
     {
         [SerializeField] private Image _backgroundImage;
+        [SerializeField] private Image _lockImage;
+        [SerializeField] private Image _checkmarkImage;
 
         [SerializeField] private Button _button;
+        [SerializeField] private Image _buttonCoinImage;
         [SerializeField] private TMP_Text _buttonText;
 
         private IPurchaseService _purchaseService;
@@ -55,12 +58,22 @@ namespace UI
                 _isPurchased = true;
 
                 bool isCurrentlySelectedBackgroundItem = itemCode == _customizationService.CurrentBackgroundItemCode;
-                _buttonText.text = isCurrentlySelectedBackgroundItem ? "V" : string.Empty;
+
+                _lockImage.gameObject.SetActive(false);
+                _checkmarkImage.gameObject.SetActive(isCurrentlySelectedBackgroundItem);
+
+                _buttonCoinImage.gameObject.SetActive(false);
+                _buttonText.text = string.Empty;
                 _button.interactable = !isCurrentlySelectedBackgroundItem;
             }
             else
             {
                 _isPurchased = false;
+
+                _lockImage.gameObject.SetActive(true);
+                _checkmarkImage.gameObject.SetActive(false);
+
+                _buttonCoinImage.gameObject.SetActive(true);
                 _buttonText.text = _backgroundShopItem.CoinPrice.ToString();
 
                 bool canBuyItem = _coinService.Coins >= _backgroundShopItem.CoinPrice;

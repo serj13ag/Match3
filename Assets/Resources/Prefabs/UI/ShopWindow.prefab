@@ -167,6 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rectTransformMover: {fileID: 4946010886493732144}
   _backButton: {fileID: 114000013700505174}
+  _showRewardedAdButton: {fileID: 1387353529868257856}
   _coinsCountText: {fileID: 6646864759936350499}
   _backgroundShopItemPrefab: {fileID: 6835900075976371789, guid: 9f1bf0ad4709fd44181ed2a9b5633f57, type: 3}
   _backgroundShopItemsContainer: {fileID: 3217924280758328336}
@@ -1608,7 +1609,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1211704364471700053, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
       propertyPath: m_Name
-      value: BackButton
+      value: WatchAdButton
       objectReference: {fileID: 0}
     - target: {fileID: 1244780569423318393, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
       propertyPath: m_Text
@@ -1725,6 +1726,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1425554073389320821, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
   m_PrefabInstance: {fileID: 145953525205356135}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1387353529868257856 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1244780591744435239, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
+  m_PrefabInstance: {fileID: 145953525205356135}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1212412999079844465
 PrefabInstance:
   m_ObjectHideFlags: 0

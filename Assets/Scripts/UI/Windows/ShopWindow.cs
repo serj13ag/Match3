@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using EventArguments;
 using Infrastructure;
 using Services;
 using StaticData.Shop;
@@ -12,6 +13,7 @@ namespace UI.Windows
     public class ShopWindow : BaseWindow
     {
         [SerializeField] private Button _backButton;
+        [SerializeField] private Button _showRewardedAdButton;
         [SerializeField] private TMP_Text _coinsCountText;
 
         [SerializeField] private BackgroundShopItem _backgroundShopItemPrefab;
@@ -21,17 +23,24 @@ namespace UI.Windows
         private ICoinService _coinService;
         private IPurchaseService _purchaseService;
         private ICustomizationService _customizationService;
+        private IAdsService _adsService;
 
         private List<BackgroundShopItem> _prefabs;
 
         private void OnEnable()
         {
             _backButton.onClick.AddListener(Back);
+            _showRewardedAdButton.onClick.AddListener(ShowRewardedAd);
+
+            _coinService.OnCoinsChanged += OnCoinsChanged;
         }
 
         private void OnDisable()
         {
             _backButton.onClick.RemoveListener(Back);
+            _showRewardedAdButton.onClick.RemoveListener(ShowRewardedAd);
+
+            _coinService.OnCoinsChanged -= OnCoinsChanged;
         }
 
         private void Awake()
@@ -40,6 +49,7 @@ namespace UI.Windows
             _coinService = ServiceLocator.Instance.Get<ICoinService>();
             _purchaseService = ServiceLocator.Instance.Get<IPurchaseService>();
             _customizationService = ServiceLocator.Instance.Get<ICustomizationService>();
+            _adsService = ServiceLocator.Instance.Get<IAdsService>();
 
             _prefabs = new List<BackgroundShopItem>();
 
@@ -85,17 +95,24 @@ namespace UI.Windows
             _coinsCountText.text = _coinService.Coins.ToString();
         }
 
+        private void ShowRewardedAd()
+        {
+            _adsService.ShowRewardedAd(AddCoins);
+        }
+
+        private void AddCoins()
+        {
+            _coinService.IncrementCoins();
+        }
+
+        private void OnCoinsChanged(object sender, CoinsChangedEventArgs e)
+        {
+            UpdateView();
+        }
+
         private void Back()
         {
             Hide();
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.F1))
-            {
-                _coinService.IncrementCoins();
-            }
         }
     }
 }

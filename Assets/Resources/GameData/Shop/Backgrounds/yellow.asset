@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Code: yellow
   Color: {r: 0.5647059, g: 0.4862745, b: 0.08627451, a: 1}
-  CoinPrice: 10
+  CoinPrice: 20

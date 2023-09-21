@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d79185bd86d84d3b8b8dfa0dc536cbda, type: 3}
-  m_Name: pink
+  m_Name: dark_blue
   m_EditorClassIdentifier: 
-  Code: pink
-  Color: {r: 0.42352942, g: 0.14117648, b: 0.3254902, a: 1}
+  Code: dark_blue
+  Color: {r: 0.061810058, g: 0.04988429, b: 0.5566038, a: 1}
   CoinPrice: 10

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: blue
   m_EditorClassIdentifier: 
   Code: blue
-  Color: {r: 0.41960788, g: 0.5372549, b: 0.8235295, a: 1}
+  Color: {r: 0.3137255, g: 0.40392157, b: 0.62352943, a: 1}
   CoinPrice: 5

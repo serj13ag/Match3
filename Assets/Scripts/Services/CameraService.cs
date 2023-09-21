@@ -5,7 +5,7 @@ namespace Services
 {
     public class CameraService : ICameraService
     {
-        private const int BorderSize = 2;
+        private const int BorderSize = 1;
 
         public Camera MainCamera { get; }
 

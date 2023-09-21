@@ -1,10 +1,12 @@
 ﻿using System;
+using Data;
 using Enums;
 using EventArguments;
+using Interfaces;
 
 namespace Services
 {
-    public class SettingsService : ISettingsService
+    public class SettingsService : ISettingsService, IPersistentDataReader
     {
         private readonly IPersistentDataService _persistentDataService;
 
@@ -17,11 +19,13 @@ namespace Services
         public SettingsService(IPersistentDataService persistentDataService)
         {
             _persistentDataService = persistentDataService;
+
+            persistentDataService.RegisterDataReader(this);
         }
 
-        public void InitGameSettings()
+        public void ReadData(PlayerData playerData)
         {
-            OnSettingsChanged?.Invoke(this, new SettingsChangedEventArgs(_persistentDataService.GameSettings));
+            OnSettingsChanged?.Invoke(this, new SettingsChangedEventArgs(playerData.GameSettings));
         }
 
         public void MusicSetActive(bool activate)

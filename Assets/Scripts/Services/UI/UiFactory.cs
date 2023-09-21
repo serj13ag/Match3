@@ -34,6 +34,11 @@ namespace Services.UI
             return _assetProviderService.Instantiate<BackgroundBlocker>(AssetPaths.BackgroundBlockerPath, _uiRootTransform);
         }
 
+        public BaseWindow CreateShopWindow()
+        {
+            return _assetProviderService.Instantiate<ShopWindow>(AssetPaths.ShopWindowPath, _uiRootTransform);
+        }
+
         public SettingsWindow CreateSettingsWindow()
         {
             return _assetProviderService.Instantiate<SettingsWindow>(AssetPaths.SettingsWindowPath, _uiRootTransform);

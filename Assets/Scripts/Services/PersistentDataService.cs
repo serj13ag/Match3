@@ -1,5 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Data;
+using Interfaces;
 
 namespace Services
 {
@@ -7,26 +8,32 @@ namespace Services
     {
         private readonly ISaveService _saveService;
 
+        private readonly List<IPersistentDataReader> _dataReaders;
+
         private PlayerData _playerData;
 
         public PlayerProgress Progress => _playerData.PlayerProgress;
+        public Purchases Purchases => _playerData.Purchases;
+        public Customizations Customizations => _playerData.Customizations;
         public GameSettings GameSettings => _playerData.GameSettings;
-
-        public event EventHandler<EventArgs> OnResetProgress;
 
         public PersistentDataService(ISaveService saveService)
         {
             _saveService = saveService;
+
+            _dataReaders = new List<IPersistentDataReader>();
         }
 
-        public void InitData(PlayerData savedPlayerData)
+        public void InitWithLoadedData(PlayerData loadedPlayerData)
         {
-            _playerData = savedPlayerData ?? new PlayerData();
+            _playerData = loadedPlayerData ?? new PlayerData();
+
+            NotifyDataReaders();
         }
 
-        public void Save()
+        public void RegisterDataReader(IPersistentDataReader reader)
         {
-            _saveService.SaveData(_playerData);
+            _dataReaders.Add(reader);
         }
 
         public void ResetProgressAndSave()
@@ -35,7 +42,20 @@ namespace Services
 
             Save();
 
-            OnResetProgress?.Invoke(this, EventArgs.Empty);
+            NotifyDataReaders();
+        }
+
+        public void Save()
+        {
+            _saveService.SaveData(_playerData);
+        }
+
+        private void NotifyDataReaders()
+        {
+            foreach (IPersistentDataReader dataReader in _dataReaders)
+            {
+                dataReader.ReadData(_playerData);
+            }
         }
     }
 }

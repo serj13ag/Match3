@@ -31,6 +31,8 @@
         public const float SecondsTillShowHint = 5f;
         public const float SecondsBetweenReshowHint = 2f;
 
+        public const string InitiallyPurchasedBackgroundItemCode = "default_purple";
+
         public static class Timeouts
         {
             public const float FillBoardTimeout = 0f;

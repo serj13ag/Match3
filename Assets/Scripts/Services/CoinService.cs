@@ -1,9 +1,11 @@
 ﻿using System;
+using Data;
 using EventArguments;
+using Interfaces;
 
 namespace Services
 {
-    public class CoinService : ICoinService
+    public class CoinService : ICoinService, IPersistentDataReader
     {
         private readonly IPersistentDataService _persistentDataService;
 
@@ -14,6 +16,11 @@ namespace Services
             get => _coins;
             private set
             {
+                if (value < 0)
+                {
+                    value = 0;
+                }
+
                 if (value != _coins)
                 {
                     _coins = value;
@@ -28,12 +35,12 @@ namespace Services
         {
             _persistentDataService = persistentDataService;
 
-            persistentDataService.OnResetProgress += OnResetProgress;
+            persistentDataService.RegisterDataReader(this);
         }
 
-        public void UpdateCoinsFromProgress()
+        public void ReadData(PlayerData playerData)
         {
-            _coins = _persistentDataService.Progress.Coins;
+            _coins = playerData.PlayerProgress.Coins;
         }
 
         public void IncrementCoins()
@@ -43,9 +50,11 @@ namespace Services
             UpdateAndSaveProgress();
         }
 
-        private void OnResetProgress(object sender, EventArgs e)
+        public void SpendCoins(int amount)
         {
-            UpdateCoinsFromProgress();
+            Coins -= amount;
+
+            UpdateAndSaveProgress();
         }
 
         private void UpdateAndSaveProgress()

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Services
 {
@@ -7,6 +8,11 @@ namespace Services
         public void ShowFullAd()
         {
             Debug.Log($"{nameof(EmptyAdsService)}: {nameof(ShowFullAd)} call");
+        }
+
+        public void ShowRewardedAd(Action onRewardedAdWatchedCallback)
+        {
+            onRewardedAdWatchedCallback?.Invoke();
         }
     }
 }

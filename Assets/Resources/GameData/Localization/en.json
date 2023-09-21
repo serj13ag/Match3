@@ -1,5 +1,6 @@
 {
 	"start": "START",
+	"shop": "SHOP",
 	"settings": "SETTINGS",
 	"music": "MUSIC",
 	"sound": "SOUND",
@@ -9,6 +10,8 @@
 	
 	"level": "LEVEL",
 	"coins": "COINS",
+	"background": "BACKGROUND",
+	"watch_ad": "WATCH AD",
 	
 	"ok": "OK",
 	"continue": "CONTINUE",

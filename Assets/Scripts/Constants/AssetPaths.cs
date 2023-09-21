@@ -11,6 +11,7 @@
         public const string UiRootCanvasPath = "Prefabs/UI/UIRootCanvas";
         public const string MainMenuPath = "Prefabs/UI/MainMenu";
         public const string BackgroundBlockerPath = "Prefabs/UI/BackgroundBlocker";
+        public const string ShopWindowPath = "Prefabs/UI/ShopWindow";
         public const string SettingsWindowPath = "Prefabs/UI/SettingsWindow";
         public const string PuzzleLevelsWindowPath = "Prefabs/UI/PuzzleLevelsWindow";
         public const string PuzzleLevelButtonPath = "Prefabs/UI/PuzzleLevelButton";
@@ -26,6 +27,8 @@
         public const string ColorsDataPath = "GameData/ColorsData";
         public const string SettingsDataPath = "GameData/SettingsData";
         public const string LanguagesDataPath = "GameData/LanguagesData";
+
+        public const string BackgroundShopItemsDataPath = "GameData/Shop/Backgrounds";
 
         // Images
         public const string GoalIconSpritePath = "Images/GoalIcon";

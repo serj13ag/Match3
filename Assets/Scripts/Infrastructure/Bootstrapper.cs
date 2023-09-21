@@ -63,8 +63,10 @@ namespace Infrastructure
             }
 
             IPersistentDataService persistentDataService = new PersistentDataService(saveService);
+            ICustomizationService customizationService = new CustomizationService(staticDataService, persistentDataService);
             ISettingsService settingsService = new SettingsService(persistentDataService);
             ICoinService coinService = new CoinService(persistentDataService);
+            IPurchaseService purchaseService = new PurchaseService(staticDataService, persistentDataService, coinService);
             ILocalizationService localizationService = new LocalizationService(staticDataService, settingsService);
 
             ILoadingCurtainMonoService loadingCurtainMonoService = assetProviderService.Instantiate<LoadingCurtainMonoService>(AssetPaths.LoadingCurtainMonoServicePath);
@@ -85,6 +87,8 @@ namespace Infrastructure
             serviceLocator.Register(saveService);
             serviceLocator.Register(adsService);
             serviceLocator.Register(persistentDataService);
+            serviceLocator.Register(customizationService);
+            serviceLocator.Register(purchaseService);
             serviceLocator.Register(settingsService);
             serviceLocator.Register(localizationService);
             serviceLocator.Register(coinService);

@@ -4,5 +4,6 @@
     {
         PuzzleLevels,
         Settings,
+        Shop,
     }
 }

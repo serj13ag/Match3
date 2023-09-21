@@ -10,6 +10,7 @@ namespace Services.UI
         MessageInGameWindow GetMessageWindow();
         MainMenu CreateMainMenu();
         BackgroundBlocker CreateBackgroundBlocker();
+        BaseWindow CreateShopWindow();
         SettingsWindow CreateSettingsWindow();
         PuzzleLevelsWindow CreatePuzzleLevelsWindow();
         PuzzleLevelButton CreateLevelButton(Transform parentTransform);

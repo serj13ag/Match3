@@ -7,5 +7,6 @@ namespace Services.Mono
         void Save(string key, string jsonDataString);
         void Load(string key, Action<string> onLoadedCallback);
         void ShowFullScreenAd();
+        void ShowRewardedScreenAd(Action onRewardedAdWatchedCallback);
     }
 }

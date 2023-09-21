@@ -23,9 +23,7 @@ namespace Infrastructure.StateMachine
             {
                 [typeof(LoadLocalSaveDataState)] = new LoadLocalSaveDataState(
                     this,
-                    serviceLocator.Get<IPersistentDataService>(),
-                    serviceLocator.Get<ISettingsService>(),
-                    serviceLocator.Get<ICoinService>()),
+                    serviceLocator.Get<IPersistentDataService>()),
                 [typeof(MainMenuState)] = new MainMenuState(
                     this,
                     serviceLocator.Get<ISceneLoader>(),
@@ -45,7 +43,8 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<IUiFactory>(),
                     serviceLocator.Get<IWindowService>(),
                     serviceLocator.Get<ICoinService>(),
-                    serviceLocator.Get<IAdsService>()),
+                    serviceLocator.Get<IAdsService>(),
+                    serviceLocator.Get<ICustomizationService>()),
                 [typeof(PuzzleGameLoopState)] = new PuzzleGameLoopState(
                     this,
                     serviceLocator.Get<ISceneLoader>(),
@@ -65,8 +64,6 @@ namespace Infrastructure.StateMachine
                 _states.Add(typeof(LoadYaSaveDataState), new LoadYaSaveDataState(
                     this,
                     serviceLocator.Get<IPersistentDataService>(),
-                    serviceLocator.Get<ISettingsService>(),
-                    serviceLocator.Get<ICoinService>(),
                     serviceLocator.Get<IYaGamesMonoService>()));
             }
         }

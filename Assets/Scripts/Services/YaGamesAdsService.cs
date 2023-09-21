@@ -1,4 +1,5 @@
-﻿using Services.Mono;
+﻿using System;
+using Services.Mono;
 
 namespace Services
 {
@@ -14,6 +15,11 @@ namespace Services
         public void ShowFullAd()
         {
             _yaGamesMonoService.ShowFullScreenAd();
+        }
+
+        public void ShowRewardedAd(Action onRewardedAdWatchedCallback)
+        {
+            _yaGamesMonoService.ShowRewardedScreenAd(onRewardedAdWatchedCallback);
         }
     }
 }

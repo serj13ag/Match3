@@ -24,6 +24,7 @@ namespace Infrastructure.StateMachine
         private readonly IWindowService _windowService;
         private readonly ICoinService _coinService;
         private readonly IAdsService _adsService;
+        private readonly ICustomizationService _customizationService;
 
         private IBoardService _boardService;
 
@@ -33,7 +34,8 @@ namespace Infrastructure.StateMachine
             IAssetProviderService assetProviderService, IRandomService randomService,
             IStaticDataService staticDataService, ISoundMonoService soundMonoService,
             IUpdateMonoService updateMonoService, IPersistentDataService persistentDataService,
-            IUiFactory uiFactory, IWindowService windowService, ICoinService coinService, IAdsService adsService)
+            IUiFactory uiFactory, IWindowService windowService, ICoinService coinService, IAdsService adsService,
+            ICustomizationService customizationService)
         {
             _sceneLoader = sceneLoader;
             _loadingCurtainMonoService = loadingCurtainMonoService;
@@ -47,6 +49,7 @@ namespace Infrastructure.StateMachine
             _windowService = windowService;
             _coinService = coinService;
             _adsService = adsService;
+            _customizationService = customizationService;
         }
 
         public void Enter()
@@ -84,7 +87,7 @@ namespace Infrastructure.StateMachine
             ICameraService cameraService = new CameraService(boardService.BoardSize);
 
             EndlessBackgroundScreen endlessBackgroundScreen = _assetProviderService.Instantiate<EndlessBackgroundScreen>(AssetPaths.EndlessBackgroundScreenPath);
-            endlessBackgroundScreen.Init(playerLevelService, scoreService, cameraService, _windowService);
+            endlessBackgroundScreen.Init(playerLevelService, scoreService, cameraService, _windowService, _customizationService);
 
             gameRoundService.StartGame();
             _loadingCurtainMonoService.FadeOffWithDelay();

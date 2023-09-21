@@ -64,6 +64,7 @@ namespace UI
 
                 _buttonCoinImage.gameObject.SetActive(false);
                 _buttonText.text = string.Empty;
+                _buttonText.color = Color.white;
                 _button.interactable = !isCurrentlySelectedBackgroundItem;
             }
             else
@@ -74,9 +75,10 @@ namespace UI
                 _checkmarkImage.gameObject.SetActive(false);
 
                 _buttonCoinImage.gameObject.SetActive(true);
-                _buttonText.text = _backgroundShopItem.CoinPrice.ToString();
-
+                
                 bool canBuyItem = _coinService.Coins >= _backgroundShopItem.CoinPrice;
+                _buttonText.text = _backgroundShopItem.CoinPrice.ToString();
+                _buttonText.color = canBuyItem ? Color.white : Color.red;
                 _button.interactable = canBuyItem;
             }
         }

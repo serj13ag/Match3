@@ -59,7 +59,7 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<IWindowService>()),
             };
 
-            if (!Application.isEditor)
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
                 _states.Add(typeof(LoadYaSaveDataState), new LoadYaSaveDataState(
                     this,

@@ -20,13 +20,13 @@ namespace Infrastructure
 
             _gameStateMachine = new GameStateMachine(serviceLocator);
 
-            if (Application.isEditor)
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
-                _gameStateMachine.Enter<LoadLocalSaveDataState>();
+                _gameStateMachine.Enter<LoadYaSaveDataState>();
             }
             else
             {
-                _gameStateMachine.Enter<LoadYaSaveDataState>();
+                _gameStateMachine.Enter<LoadLocalSaveDataState>();
             }
 
             serviceLocator.Register(_gameStateMachine);
@@ -48,18 +48,18 @@ namespace Infrastructure
 
             ISaveService saveService;
             IAdsService adsService;
-            if (Application.isEditor)
-            {
-                saveService = new LocalSaveService();
-                adsService = new EmptyAdsService();
-            }
-            else
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
                 IYaGamesMonoService yaGamesMonoService = assetProviderService.Instantiate<YaGamesMonoService>(AssetPaths.YaGamesMonoServicePath);
                 serviceLocator.Register(yaGamesMonoService);
 
                 saveService = new YaGamesSaveService(yaGamesMonoService);
                 adsService = new YaGamesAdsService(yaGamesMonoService);
+            }
+            else
+            {
+                saveService = new LocalSaveService();
+                adsService = new EmptyAdsService();
             }
 
             IPersistentDataService persistentDataService = new PersistentDataService(saveService);

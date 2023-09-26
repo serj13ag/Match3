@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Constants;
 using Entities;
+using Helpers;
 
 namespace Services.Board.States
 {
@@ -42,7 +43,16 @@ namespace Services.Board.States
 
             if (_numberOfMovedGamePieces == _numberOfGamePiecesToMove)
             {
-                _boardService.ChangeStateToWaiting();
+                if (_gamePieceService.HasMatches(_gamePieceService.GetAllGamePieces(), out HashSet<GamePiece> matches))
+                {
+                    HashSet<GamePiece> gamePiecesToBreak = GamePieceMatchHelper.GetGamePiecesToBreak(matches, _gamePieceService);
+
+                    _boardService.ChangeStateToBreak(gamePiecesToBreak);
+                }
+                else
+                {
+                    _boardService.ChangeStateToWaiting();
+                }
             }
         }
     }

@@ -65,7 +65,7 @@ namespace Services.Board
 
             tileService.OnMoveRequested += OnMoveRequested;
 
-            ChangeStateToWaiting();
+            ChangeStateToWaiting(true);
         }
 
         public void OnUpdate(float deltaTime)
@@ -117,11 +117,14 @@ namespace Services.Board
             ChangeState(new FillTimeoutBoardState(this, _gamePieceService));
         }
 
-        public void ChangeStateToWaiting()
+        public void ChangeStateToWaiting(bool needSave = false)
         {
             ChangeState(new WaitingBoardState(this, _gamePieceService, _particleService));
 
-            _progressUpdateService.UpdateProgressAndSave();
+            if (needSave)
+            {
+                _progressUpdateService.UpdateProgressAndSave();
+            }
         }
 
         public void ChangeStateToBreak(HashSet<GamePiece> gamePiecesToBreak)

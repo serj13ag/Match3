@@ -51,7 +51,7 @@ namespace Services.Board.States
                 }
                 else
                 {
-                    _boardService.ChangeStateToWaiting();
+                    _boardService.ChangeStateToWaiting(true);
                 }
             }
         }

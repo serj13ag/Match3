@@ -15,7 +15,7 @@ namespace Services.Board
         void ChangeStateToBreak(HashSet<GamePiece> gamePiecesToBreak);
         void ChangeStateToCollapse(HashSet<int> columnIndexesToCollapse);
         void ChangeStateToFill();
-        void ChangeStateToWaiting();
+        void ChangeStateToWaiting(bool needSave = false);
         void Cleanup();
     }
 }

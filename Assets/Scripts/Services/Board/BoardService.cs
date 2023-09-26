@@ -83,27 +83,23 @@ namespace Services.Board
         {
             gamePiecesToBreak = new HashSet<GamePiece>();
 
-            if (targetGamePiece.Color == GamePieceColor.Undefined)
+            if (clickedGamePiece is not BombGamePiece bombGamePiece || bombGamePiece.BombType != BombType.Color)
             {
                 return false;
             }
 
-            if (clickedGamePiece is BombGamePiece { BombType: BombType.Color })
+            if (targetGamePiece is BombGamePiece { BombType: BombType.Color })
             {
-                if (targetGamePiece is BombGamePiece { BombType: BombType.Color })
-                {
-                    gamePiecesToBreak = _gamePieceService.GetAllGamePieces();
-                }
-                else
-                {
-                    gamePiecesToBreak = _gamePieceService.GetGamePiecesByColor(targetGamePiece.Color);
-                    gamePiecesToBreak.Add(clickedGamePiece);
-                }
-
-                return true;
+                gamePiecesToBreak = _gamePieceService.GetAllGamePieces();
+            }
+            else
+            {
+                gamePiecesToBreak = _gamePieceService.GetGamePiecesByColor(targetGamePiece.Color);
+                gamePiecesToBreak = GamePieceMatchHelper.GetGamePiecesToBreak(gamePiecesToBreak, _gamePieceService);
+                gamePiecesToBreak.Add(clickedGamePiece);
             }
 
-            return false;
+            return gamePiecesToBreak.Count > 0;
         }
 
         public void GamePiecesSwitched()
@@ -136,8 +132,8 @@ namespace Services.Board
 
         private void ChangeStateToHandlePlayerSwitchGamePieces(GamePiece clickedGamePiece, GamePiece targetGamePiece)
         {
-            ChangeState(new HandlePlayerSwitchGamePiecesBoardState(this, _gamePieceService, _soundMonoService,
-                clickedGamePiece, targetGamePiece));
+            ChangeState(new HandlePlayerSwitchGamePiecesBoardState(this, _gamePieceService, clickedGamePiece,
+                targetGamePiece));
         }
 
         private void ChangeState(IBoardState newBoardState)

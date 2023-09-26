@@ -2,6 +2,7 @@
 using Constants;
 using DTO;
 using Entities;
+using Helpers;
 using Services.GameRound;
 using Services.MovesLeft;
 
@@ -84,7 +85,9 @@ namespace Services.Board.States
         {
             if (_gamePieceService.HasMatches(_movedPieces, out HashSet<GamePiece> allMatches))
             {
-                _boardService.ChangeStateToBreak(allMatches);
+                HashSet<GamePiece> gamePiecesToBreak = GamePieceMatchHelper.GetGamePiecesToBreak(allMatches, _gamePieceService);
+
+                _boardService.ChangeStateToBreak(gamePiecesToBreak);
             }
             else if (_gamePieceService.HasCollectiblesToBreak(out HashSet<GamePiece> collectiblesToBreak))
             {

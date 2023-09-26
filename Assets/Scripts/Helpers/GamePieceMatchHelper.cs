@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Constants;
 using Entities;
 using Enums;
+using Services;
 using UnityEngine;
 
 namespace Helpers
@@ -13,6 +15,26 @@ namespace Helpers
         {
             return gamePiece.Type == GamePieceType.CollectibleByBomb ||
                    gamePiece.Type == GamePieceType.CollectibleByBottomRow;
+        }
+
+        public static HashSet<GamePiece> GetGamePiecesToBreak(HashSet<GamePiece> matchedGamePieces,
+            IGamePieceService gamePieceService)
+        {
+            HashSet<GamePiece> gamePiecesToBreak = new HashSet<GamePiece>();
+
+            foreach (GamePiece matchedGamePiece in matchedGamePieces)
+            {
+                if (TryGetBombedGamePieces(matchedGamePiece, gamePieceService, out HashSet<GamePiece> bombedGamePieces))
+                {
+                    gamePiecesToBreak.UnionWith(bombedGamePieces);
+                }
+                else
+                {
+                    gamePiecesToBreak.Add(matchedGamePiece);
+                }
+            }
+
+            return gamePiecesToBreak;
         }
 
         public static BombType GetBombTypeOnMatch(HashSet<GamePiece> allMatches,
@@ -35,6 +57,46 @@ namespace Helpers
             }
 
             return bombType;
+        }
+        
+        public static bool HasAvailableMoves(GamePiece[,] gamePieces, Vector2Int boardSize,
+            out Tuple<GamePiece, GamePiece> gamePiecesForMatch)
+        {
+            gamePiecesForMatch = null;
+
+            GamePiece[,] tempGamePieces = (GamePiece[,])gamePieces.Clone();
+
+            for (int y = 0; y < boardSize.y; y++)
+            {
+                for (int x = 0; x < boardSize.x; x++)
+                {
+                    if (x < boardSize.x - 1)
+                    {
+                        SwapItems(tempGamePieces, x, y, x + 1, y);
+                        if (HasMatches(tempGamePieces, boardSize))
+                        {
+                            gamePiecesForMatch = new Tuple<GamePiece, GamePiece>(tempGamePieces[x,y], tempGamePieces[x + 1, y]);
+                            return true;
+                        }
+
+                        SwapItems(tempGamePieces, x, y, x + 1, y);
+                    }
+
+                    if (y < boardSize.y - 1)
+                    {
+                        SwapItems(tempGamePieces, x, y, x, y + 1);
+                        if (HasMatches(tempGamePieces, boardSize))
+                        {
+                            gamePiecesForMatch = new Tuple<GamePiece, GamePiece>(tempGamePieces[x,y], tempGamePieces[x, y + 1]);
+                            return true;
+                        }
+
+                        SwapItems(tempGamePieces, x, y, x, y + 1);
+                    }
+                }
+            }
+
+            return false;
         }
 
         public static bool HasMatchAtFillBoard(Vector2Int position, GamePiece[,] gamePieces, Vector2Int boardSize)
@@ -153,6 +215,57 @@ namespace Helpers
 
             return matches.Count >= minMatchesCount;
         }
+        
+        private static bool TryGetBombedGamePieces(GamePiece matchedGamePiece, IGamePieceService gamePieceService,
+            out HashSet<GamePiece> bombedGamePieces, HashSet<GamePiece> gamePiecesToExclude = null)
+        {
+            bombedGamePieces = new HashSet<GamePiece>();
+
+            if (matchedGamePiece is not BombGamePiece bombGamePiece)
+            {
+                return false;
+            }
+
+            bombedGamePieces = GetBombedGamePieces(bombGamePiece.BombType, matchedGamePiece, gamePieceService);
+
+            if (bombedGamePieces == null)
+            {
+                return false;
+            }
+
+            foreach (GamePiece bombedGamePiece in bombedGamePieces)
+            {
+                bombedGamePiece.Bombed = true;
+            }
+
+            if (gamePiecesToExclude != null)
+            {
+                bombedGamePieces.ExceptWith(gamePiecesToExclude);
+            }
+
+            foreach (var bombedGamePiece in bombedGamePieces.ToArray())
+            {
+                if (TryGetBombedGamePieces(bombedGamePiece, gamePieceService, out var pieces, bombedGamePieces))
+                {
+                    bombedGamePieces.UnionWith(pieces);
+                }
+            }
+
+            return true;
+        }
+        
+        private static HashSet<GamePiece> GetBombedGamePieces(BombType bombType, GamePiece matchedGamePiece, IGamePieceService gamePieceService)
+        {
+            return bombType switch
+            {
+                BombType.Column => gamePieceService.GetBombedColumnGamePieces(matchedGamePiece.Position.x),
+                BombType.Row => gamePieceService.GetBombedRowGamePieces(matchedGamePiece.Position.y),
+                BombType.Adjacent => gamePieceService.GetBombedAdjacentGamePieces(matchedGamePiece.Position,
+                    Settings.BombAdjacentGamePiecesRange),
+                BombType.Color => null,
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        }
 
         private static bool IsCornerMatch(HashSet<GamePiece> gamePieces)
         {
@@ -184,46 +297,6 @@ namespace Helpers
             }
 
             return horizontalMatches && verticalMatches;
-        }
-
-        public static bool HasAvailableMoves(GamePiece[,] gamePieces, Vector2Int boardSize,
-            out Tuple<GamePiece, GamePiece> gamePiecesForMatch)
-        {
-            gamePiecesForMatch = null;
-
-            GamePiece[,] tempGamePieces = (GamePiece[,])gamePieces.Clone();
-
-            for (int y = 0; y < boardSize.y; y++)
-            {
-                for (int x = 0; x < boardSize.x; x++)
-                {
-                    if (x < boardSize.x - 1)
-                    {
-                        SwapItems(tempGamePieces, x, y, x + 1, y);
-                        if (HasMatches(tempGamePieces, boardSize))
-                        {
-                            gamePiecesForMatch = new Tuple<GamePiece, GamePiece>(tempGamePieces[x,y], tempGamePieces[x + 1, y]);
-                            return true;
-                        }
-
-                        SwapItems(tempGamePieces, x, y, x + 1, y);
-                    }
-
-                    if (y < boardSize.y - 1)
-                    {
-                        SwapItems(tempGamePieces, x, y, x, y + 1);
-                        if (HasMatches(tempGamePieces, boardSize))
-                        {
-                            gamePiecesForMatch = new Tuple<GamePiece, GamePiece>(tempGamePieces[x,y], tempGamePieces[x, y + 1]);
-                            return true;
-                        }
-
-                        SwapItems(tempGamePieces, x, y, x, y + 1);
-                    }
-                }
-            }
-
-            return false;
         }
 
         private static bool HasMatches(GamePiece[,] gamePieces, Vector2Int boardSize)

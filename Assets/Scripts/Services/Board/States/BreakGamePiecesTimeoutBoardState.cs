@@ -40,15 +40,23 @@ namespace Services.Board.States
 
         private void BreakGamePieces(HashSet<GamePiece> gamePieces)
         {
+            bool hasBombGamePieces = false;
+
             foreach (GamePiece gamePiece in gamePieces)
             {
+                if (gamePiece is BombGamePiece)
+                {
+                    hasBombGamePieces = true;
+                }
+
                 _scoreService.AddScore(gamePiece.Score, gamePieces.Count);
 
                 _gamePieceService.ClearGamePieceAt(gamePiece.Position, true);
                 _tileService.ProcessTileMatchAt(gamePiece.Position);
             }
 
-            _soundMonoService.PlaySound(SoundType.BreakGamePieces);
+            _soundMonoService.PlaySound(hasBombGamePieces ? SoundType.BombGamePieces : SoundType.BreakGamePieces);
+
             _scoreService.IncrementCompletedBreakStreakIterations();
         }
     }

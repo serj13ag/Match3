@@ -8,5 +8,6 @@ namespace Services.Mono
         void Load(string key, Action<string> onLoadedCallback);
         void ShowFullScreenAd();
         void ShowRewardedScreenAd(Action onRewardedAdWatchedCallback);
+        void InitYaSDK(Action onSDKInitCallback);
     }
 }

@@ -1,5 +1,9 @@
 mergeInto(LibraryManager.library, {
 
+  InitSDK: function () {
+    InitSDK();
+  },
+
   SaveToPlayerData: function (key, jsonDataString) {
     SaveToPlayerData(UTF8ToString(key), UTF8ToString(jsonDataString));
   },

@@ -112,25 +112,28 @@
 
     <!-- YaGames SDK -->
 
-    YaGames
-        .init()
-        .then(_sdk => {
-            ysdk = _sdk;
+    function InitSDK(){
+        YaGames
+            .init()
+            .then(_sdk => {
+                ysdk = _sdk;
 
-            InitPlayer();
+                InitPlayer();
 
-            ysdk.features.LoadingAPI?.ready();
-            console.log('Yandex SDK Init completed');
-        })
-        .catch(e => {
-            console.error('InitYandexSDK err: ', e.message);
-        });
+                ysdk.features.LoadingAPI?.ready();
+                console.log('Yandex SDK Init completed');
+            })
+            .catch(e => {
+                console.error('InitYandexSDK err: ', e.message);
+            });
+    }
 
     function InitPlayer() {
         ysdk.getPlayer().then(_player => {
             player = _player;
 
             console.log('Player Init completed');
+            myGameInstance.SendMessage('YaGamesMonoService', 'OnSDKInitCompleted');
         }).catch(e => {
             console.error('InitPlayer err: ', e.message);
         });

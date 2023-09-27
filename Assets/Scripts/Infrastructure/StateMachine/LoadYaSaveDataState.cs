@@ -2,20 +2,18 @@ using System;
 using Constants;
 using Data;
 using Helpers;
-using Interfaces;
 using Services;
 using Services.Mono;
 using UnityEngine;
 
 namespace Infrastructure.StateMachine
 {
-    public class LoadYaSaveDataState : IState, IUpdatable
+    public class LoadYaSaveDataState : IState
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly IPersistentDataService _persistentDataService;
         private readonly IYaGamesMonoService _yaGamesMonoService;
 
-        private float _timeTillRequestLoadData;
         private bool _loadDataRequestInvoked;
 
         public bool IsGameLoopState => false;
@@ -26,35 +24,23 @@ namespace Infrastructure.StateMachine
             _gameStateMachine = gameStateMachine;
             _persistentDataService = persistentDataService;
             _yaGamesMonoService = yaGamesMonoService;
-
-            _timeTillRequestLoadData = Settings.TimeTillRequestLoadData;
         }
 
         public void Enter()
         {
             Debug.Log($"Entered {nameof(LoadYaSaveDataState)}");
+
+            _yaGamesMonoService.InitYaSDK(OnSDKInitCompleted);
         }
 
         public void Exit()
         {
+            Debug.Log($"Exited {nameof(LoadYaSaveDataState)}");
         }
 
-        public void OnUpdate(float deltaTime)
+        private void OnSDKInitCompleted()
         {
-            if (_loadDataRequestInvoked)
-            {
-                return;
-            }
-
-            if (_timeTillRequestLoadData < 0)
-            {
-                _yaGamesMonoService.Load(Settings.SavedPlayerDataKey, OnPlayerDataLoaded);
-                _loadDataRequestInvoked = true;
-            }
-            else
-            {
-                _timeTillRequestLoadData -= deltaTime;
-            }
+            _yaGamesMonoService.Load(Settings.SavedPlayerDataKey, OnPlayerDataLoaded);
         }
 
         private void OnPlayerDataLoaded(string dataString)

@@ -34,11 +34,6 @@ namespace Infrastructure
             DontDestroyOnLoad(this);
         }
 
-        private void Update()
-        {
-            _gameStateMachine.Update(Time.deltaTime);
-        }
-
         private void InitAndRegisterGlobalServices(ServiceLocator serviceLocator)
         {
             ISceneLoader sceneLoader = new SceneLoader(this);

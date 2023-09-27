@@ -9,6 +9,10 @@ namespace Services.Mono
     {
         private Action<string> _onLoadedCallback;
         private Action _onRewardedAdWatchedCallback;
+        private Action _onSDKInitCallback;
+
+        [DllImport("__Internal")]
+        private static extern void InitSDK();
 
         [DllImport("__Internal")]
         private static extern void SaveToPlayerData(string key, string jsonDataString);
@@ -27,6 +31,12 @@ namespace Services.Mono
             DontDestroyOnLoad(this);
         }
 
+        public void InitYaSDK(Action onSDKInitCallback)
+        {
+            InitSDK();
+            _onSDKInitCallback = onSDKInitCallback;
+        }
+
         public void Save(string key, string jsonDataString)
         {
             SaveToPlayerData(key, jsonDataString);
@@ -40,16 +50,6 @@ namespace Services.Mono
             Debug.Log($"{nameof(YaGamesMonoService)}: Loading from player data");
         }
 
-        // Call from YaAPI
-        [UsedImplicitly]
-        public void OnPlayerDataLoaded(string dataString)
-        {
-            Debug.Log($"{nameof(YaGamesMonoService)}: Call from YaAPI received, invoking {nameof(_onLoadedCallback)}");
-
-            _onLoadedCallback?.Invoke(dataString);
-            _onLoadedCallback = null;
-        }
-
         public void ShowFullScreenAd()
         {
             ShowFullAd();
@@ -61,6 +61,26 @@ namespace Services.Mono
         {
             _onRewardedAdWatchedCallback = onRewardedAdWatchedCallback;
             ShowRewardedAd();
+        }
+
+        // Call from YaAPI
+        [UsedImplicitly]
+        public void OnSDKInitCompleted()
+        {
+            Debug.Log($"{nameof(YaGamesMonoService)}: Call from YaAPI received, invoking {nameof(_onSDKInitCallback)}");
+
+            _onSDKInitCallback?.Invoke();
+            _onSDKInitCallback = null;
+        }
+
+        // Call from YaAPI
+        [UsedImplicitly]
+        public void OnPlayerDataLoaded(string dataString)
+        {
+            Debug.Log($"{nameof(YaGamesMonoService)}: Call from YaAPI received, invoking {nameof(_onLoadedCallback)}");
+
+            _onLoadedCallback?.Invoke(dataString);
+            _onLoadedCallback = null;
         }
 
         // Call from YaAPI

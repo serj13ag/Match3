@@ -7,14 +7,25 @@ namespace Services
     {
         private const int BorderSize = 1;
 
+        private readonly Vector2Int _boardSize;
+
         public Camera MainCamera { get; }
 
         public CameraService(Vector2Int boardSize)
         {
+            _boardSize = boardSize;
             MainCamera = Camera.main;
 
             SetCameraPosition(boardSize);
             SetCameraAspectRatio(boardSize);
+        }
+
+        public void UpdateAspectRatio()
+        {
+            if (MainCamera != null)
+            {
+                SetCameraAspectRatio(_boardSize);
+            }
         }
 
         private void SetCameraPosition(Vector2Int boardSize)

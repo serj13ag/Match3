@@ -13,9 +13,13 @@ namespace UI.Background
         [SerializeField] private TMP_Text _playerLevel;
         [SerializeField] private ScoreCounter _scoreCounter;
 
+        private ICameraService _cameraService;
+
         public void Init(IPlayerLevelService playerLevelService, IScoreService scoreService,
             ICameraService cameraService, IWindowService windowService, ICustomizationService customizationService)
         {
+            _cameraService = cameraService;
+
             InitInner(cameraService, windowService);
 
             _scoreCounter.Init(scoreService);
@@ -23,6 +27,11 @@ namespace UI.Background
             UpdatePlayerLevelText(playerLevelService.CurrentLevel);
 
             playerLevelService.OnCurrentLevelChanged += UpdatePlayerLevelText;
+        }
+
+        protected void OnRectTransformDimensionsChange()
+        {
+            _cameraService?.UpdateAspectRatio();
         }
 
         private void UpdatePlayerLevelText(object sender, PlayerLevelChangedEventArgs e)

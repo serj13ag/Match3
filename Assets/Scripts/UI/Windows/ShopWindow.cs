@@ -3,6 +3,7 @@ using System.Linq;
 using EventArguments;
 using Infrastructure;
 using Services;
+using Services.Mono.Sound;
 using StaticData.Shop;
 using TMPro;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace UI.Windows
         private IPurchaseService _purchaseService;
         private ICustomizationService _customizationService;
         private IAdsService _adsService;
+        private ISoundMonoService _soundMonoService;
 
         private List<BackgroundShopItem> _prefabs;
 
@@ -50,6 +52,7 @@ namespace UI.Windows
             _purchaseService = ServiceLocator.Instance.Get<IPurchaseService>();
             _customizationService = ServiceLocator.Instance.Get<ICustomizationService>();
             _adsService = ServiceLocator.Instance.Get<IAdsService>();
+            _soundMonoService = ServiceLocator.Instance.Get<ISoundMonoService>();
 
             _prefabs = new List<BackgroundShopItem>();
 
@@ -97,12 +100,14 @@ namespace UI.Windows
 
         private void ShowRewardedAd()
         {
+            _soundMonoService.Mute();
             _adsService.ShowRewardedAd(AddCoins);
         }
 
         private void AddCoins()
         {
             _coinService.IncrementCoins();
+            _soundMonoService.Unmute();
         }
 
         private void OnCoinsChanged(object sender, CoinsChangedEventArgs e)

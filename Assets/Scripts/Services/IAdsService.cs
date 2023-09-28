@@ -4,7 +4,7 @@ namespace Services
 {
     public interface IAdsService : IService
     {
-        void ShowFullAd();
+        void ShowFullAd(Action onFullAdWatchedCallback);
         void ShowRewardedAd(Action onRewardedAdWatchedCallback);
     }
 }

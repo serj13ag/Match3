@@ -8,5 +8,7 @@ namespace Services.Mono.Sound
 
         void PlayBackgroundMusic();
         void PlaySound(SoundType soundType);
+        void Mute();
+        void Unmute();
     }
 }

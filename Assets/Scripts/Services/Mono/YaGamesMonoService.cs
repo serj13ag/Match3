@@ -7,9 +7,10 @@ namespace Services.Mono
 {
     public class YaGamesMonoService : MonoBehaviour, IYaGamesMonoService
     {
-        private Action<string> _onLoadedCallback;
-        private Action _onRewardedAdWatchedCallback;
         private Action _onSDKInitCallback;
+        private Action<string> _onPlayerDataLoadedCallback;
+        private Action _onFullAdWatchedCallback;
+        private Action _onRewardedAdWatchedCallback;
 
         [DllImport("__Internal")]
         private static extern void InitSDK();
@@ -42,16 +43,17 @@ namespace Services.Mono
             SaveToPlayerData(key, jsonDataString);
         }
 
-        public void Load(string key, Action<string> onLoadedCallback)
+        public void Load(string key, Action<string> onPlayerDataLoadedCallback)
         {
-            _onLoadedCallback = onLoadedCallback;
+            _onPlayerDataLoadedCallback = onPlayerDataLoadedCallback;
             LoadFromPlayerData(key);
 
             Debug.Log($"{nameof(YaGamesMonoService)}: Loading from player data");
         }
 
-        public void ShowFullScreenAd()
+        public void ShowFullScreenAd(Action onFullAdWatchedCallback)
         {
+            _onFullAdWatchedCallback = onFullAdWatchedCallback;
             ShowFullAd();
 
             Debug.Log($"{nameof(YaGamesMonoService)}: Showing full ad");
@@ -77,20 +79,30 @@ namespace Services.Mono
         [UsedImplicitly]
         public void OnPlayerDataLoaded(string dataString)
         {
-            Debug.Log($"{nameof(YaGamesMonoService)}: Call from YaAPI received, invoking {nameof(_onLoadedCallback)}");
+            Debug.Log($"{nameof(YaGamesMonoService)}: Call from YaAPI received, invoking {nameof(_onPlayerDataLoadedCallback)}");
 
-            _onLoadedCallback?.Invoke(dataString);
-            _onLoadedCallback = null;
+            _onPlayerDataLoadedCallback?.Invoke(dataString);
+            _onPlayerDataLoadedCallback = null;
         }
 
         // Call from YaAPI
         [UsedImplicitly]
-        public void OnRewardedVideoWatched()
+        public void OnRewardedAdWatched()
         {
             Debug.Log($"{nameof(YaGamesMonoService)}: Call from YaAPI received, invoking {nameof(_onRewardedAdWatchedCallback)}");
 
             _onRewardedAdWatchedCallback?.Invoke();
             _onRewardedAdWatchedCallback = null;
+        }
+        
+        // Call from YaAPI
+        [UsedImplicitly]
+        public void OnFullAdWatched()
+        {
+            Debug.Log($"{nameof(YaGamesMonoService)}: Call from YaAPI received, invoking {nameof(_onFullAdWatchedCallback)}");
+
+            _onFullAdWatchedCallback?.Invoke();
+            _onFullAdWatchedCallback = null;
         }
     }
 }

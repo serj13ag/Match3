@@ -53,11 +53,17 @@ namespace Services.GameRound
 
                 if (_playerLevelService.CurrentLevel >= Settings.MinPlayerLevelToShowAds)
                 {
-                    _adsService.ShowFullAd();
+                    _soundMonoService.Mute();
+                    _adsService.ShowFullAd(Unmute);
                 }
 
                 _roundIsActive = false;
             }
+        }
+
+        private void Unmute()
+        {
+            _soundMonoService.Unmute();
         }
 
         private void UpdatePlayerLevel()

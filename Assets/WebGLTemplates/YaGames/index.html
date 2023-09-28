@@ -168,6 +168,7 @@
                     } else {
                         console.log('Fullscreen Ad was not shown');
                     }
+                    myGameInstance.SendMessage('YaGamesMonoService', 'OnFullAdWatched');
                     window.focus();
                 },
                 onError: (error) => {
@@ -186,10 +187,10 @@
                 },
                 onRewarded: () => {
                     console.log('Rewarded Ad was shown. Rewarded!');
-                    myGameInstance.SendMessage('YaGamesMonoService', 'OnRewardedVideoWatched');
                 },
                 onClose: () => {
                     console.log('Rewarded Ad closed');
+                    myGameInstance.SendMessage('YaGamesMonoService', 'OnRewardedAdWatched');
                 },
                 onError: (e) => {
                     console.log('Error Rewarded Ad', e);

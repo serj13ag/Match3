@@ -21,5 +21,10 @@ namespace Services.Mono.Sound
         {
             _audioSource.Stop();
         }
+
+        public void SetMute(bool value)
+        {
+            _audioSource.mute = value;
+        }
     }
 }

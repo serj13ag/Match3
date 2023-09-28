@@ -12,9 +12,9 @@ namespace Services
             _yaGamesMonoService = yaGamesMonoService;
         }
 
-        public void ShowFullAd()
+        public void ShowFullAd(Action onFullAdWatchedCallback)
         {
-            _yaGamesMonoService.ShowFullScreenAd();
+            _yaGamesMonoService.ShowFullScreenAd(onFullAdWatchedCallback);
         }
 
         public void ShowRewardedAd(Action onRewardedAdWatchedCallback)

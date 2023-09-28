@@ -61,6 +61,16 @@ namespace Services.Mono.Sound
             PlayOneShotClip(GetClip(soundType), GetVolume(soundType));
         }
 
+        public void Mute()
+        {
+            _backgroundMusicAudioSource.SetMute(true);
+        }
+
+        public void Unmute()
+        {
+            _backgroundMusicAudioSource.SetMute(false);
+        }
+
         private void OnSettingsChanged(object sender, SettingsChangedEventArgs e)
         {
             if (_musicEnabled != e.GameSettings.MusicEnabled)

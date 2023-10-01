@@ -29,11 +29,11 @@ namespace Services.UI
             ShowMessageWindow(onButtonClickCallback, message, buttonText);
         }
 
-        public void ShowGameWinMessageWindow(Action onButtonClickCallback)
+        public void ShowGameWinMessageWindow(Action onButtonClickCallback, bool showAd = false)
         {
             string message = _localizationService.GetTranslation(TranslationKeys.GameWinMessage);
             string buttonText = _localizationService.GetTranslation(TranslationKeys.Continue);
-            ShowMessageWindow(onButtonClickCallback, message, buttonText);
+            ShowMessageWindow(onButtonClickCallback, message, buttonText, showAd);
         }
 
         public void ShowGameOverMessageWindow(Action onButtonClickCallback)
@@ -73,12 +73,13 @@ namespace Services.UI
             _backgroundBlocker.Deactivate();
         }
 
-        private void ShowMessageWindow(Action onButtonClickCallback, string message, string buttonText)
+        private void ShowMessageWindow(Action onButtonClickCallback, string message, string buttonText,
+            bool showAd = false)
         {
             ShowBackgroundBlocker();
 
             MessageInGameWindow messageWindow = _uiFactory.GetMessageWindow();
-            messageWindow.ShowMessage(message, buttonText, onButtonClickCallback);
+            messageWindow.ShowMessage(message, buttonText, onButtonClickCallback, showAd);
 
             messageWindow.OnHided += OnWindowHided;
         }

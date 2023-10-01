@@ -1,4 +1,8 @@
 using System;
+using System.Collections;
+using Infrastructure;
+using Services;
+using Services.Mono.Sound;
 using TMPro;
 using UI.Windows;
 using UnityEngine;
@@ -12,7 +16,17 @@ namespace UI
         [SerializeField] private TMP_Text _messageText;
         [SerializeField] private TMP_Text _buttonText;
 
+        private ISoundMonoService _soundMonoService;
+        private IAdsService _adsService;
+
         private Action _onButtonClickCallback;
+        private Coroutine _adCoroutine;
+
+        private void Awake()
+        {
+            _soundMonoService = ServiceLocator.Instance.Get<ISoundMonoService>();
+            _adsService = ServiceLocator.Instance.Get<IAdsService>();
+        }
 
         private void OnEnable()
         {
@@ -24,7 +38,8 @@ namespace UI
             _button.onClick.RemoveListener(OnButtonClick);
         }
 
-        public void ShowMessage(string message = "", string buttonMessage = "", Action onButtonClickCallback = null)
+        public void ShowMessage(string message = "", string buttonMessage = "", Action onButtonClickCallback = null,
+            bool showAd = false)
         {
             if (!string.IsNullOrEmpty(message))
             {
@@ -39,6 +54,11 @@ namespace UI
             _onButtonClickCallback = onButtonClickCallback;
 
             Show();
+
+            if (showAd)
+            {
+                _adCoroutine = StartCoroutine(ShowAdCoroutine());
+            }
         }
 
         private void OnButtonClick()
@@ -46,6 +66,24 @@ namespace UI
             _onButtonClickCallback?.Invoke();
 
             Hide();
+
+            if (_adCoroutine != null)
+            {
+                StopCoroutine(_adCoroutine);
+            }
+        }
+
+        private IEnumerator ShowAdCoroutine()
+        {
+            yield return new WaitForSeconds(1f);
+            _soundMonoService.Mute();
+            _adsService.ShowFullAd(Unmute);
+            _adCoroutine = null;
+        }
+
+        private void Unmute()
+        {
+            _soundMonoService.Unmute();
         }
     }
 }

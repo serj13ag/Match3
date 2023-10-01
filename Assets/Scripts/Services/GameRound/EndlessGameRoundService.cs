@@ -12,7 +12,6 @@ namespace Services.GameRound
         private readonly ISoundMonoService _soundMonoService;
         private readonly IWindowService _windowService;
         private readonly ICoinService _coinService;
-        private readonly IAdsService _adsService;
         private readonly IScoreService _scoreService;
         private readonly IPlayerLevelService _playerLevelService;
 
@@ -21,13 +20,11 @@ namespace Services.GameRound
         public bool RoundIsActive => _roundIsActive;
 
         public EndlessGameRoundService(ISoundMonoService soundMonoService, IWindowService windowService,
-            ICoinService coinService, IAdsService adsService, IScoreService scoreService,
-            IPlayerLevelService playerLevelService)
+            ICoinService coinService, IScoreService scoreService, IPlayerLevelService playerLevelService)
         {
             _soundMonoService = soundMonoService;
             _windowService = windowService;
             _coinService = coinService;
-            _adsService = adsService;
             _scoreService = scoreService;
             _playerLevelService = playerLevelService;
 
@@ -46,24 +43,20 @@ namespace Services.GameRound
 
         private void OnScoreChanged(object sender, ScoreChangedEventArgs e)
         {
+            if (!_roundIsActive)
+            {
+                return;
+            }
+
             if (_scoreService.ScoreGoalReached)
             {
                 _soundMonoService.PlaySound(SoundType.Win);
-                _windowService.ShowGameWinMessageWindow(UpdatePlayerLevel); // TODO new level window
 
-                if (_playerLevelService.CurrentLevel >= Settings.MinPlayerLevelToShowAds)
-                {
-                    _soundMonoService.Mute();
-                    _adsService.ShowFullAd(Unmute);
-                }
+                bool showAd = _playerLevelService.CurrentLevel >= Settings.MinPlayerLevelToShowAds;
+                _windowService.ShowGameWinMessageWindow(UpdatePlayerLevel, showAd); // TODO new level window
 
                 _roundIsActive = false;
             }
-        }
-
-        private void Unmute()
-        {
-            _soundMonoService.Unmute();
         }
 
         private void UpdatePlayerLevel()

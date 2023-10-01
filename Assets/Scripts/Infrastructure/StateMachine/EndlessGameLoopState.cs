@@ -74,7 +74,7 @@ namespace Infrastructure.StateMachine
             IMovesLeftService movesLeftService = new InfiniteMovesLeftService();
             IPlayerLevelService playerLevelService = new PlayerLevelService(_persistentDataService, _staticDataService, progressUpdateService);
             IScoreService scoreService = new ScoreService(Settings.EndlessLevelName, _soundMonoService, _persistentDataService, progressUpdateService, playerLevelService.ScoreToNextLevel);
-            IGameRoundService gameRoundService = new EndlessGameRoundService(_soundMonoService, _windowService, _coinService, _adsService, scoreService, playerLevelService);
+            IGameRoundService gameRoundService = new EndlessGameRoundService(_soundMonoService, _windowService, _coinService, scoreService, playerLevelService);
 
             ITileService tileService = new TileService(Settings.EndlessLevelName, _staticDataService, progressUpdateService, gameFactory, gameRoundService);
             IGamePieceService gamePieceService = new GamePieceService(Settings.EndlessLevelName, _staticDataService, _soundMonoService,

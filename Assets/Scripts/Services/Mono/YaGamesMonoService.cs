@@ -16,6 +16,9 @@ namespace Services.Mono
         private static extern void InitSDK();
 
         [DllImport("__Internal")]
+        private static extern void GameReady();
+
+        [DllImport("__Internal")]
         private static extern void SaveToPlayerData(string key, string jsonDataString);
 
         [DllImport("__Internal")]
@@ -36,6 +39,11 @@ namespace Services.Mono
         {
             InitSDK();
             _onSDKInitCallback = onSDKInitCallback;
+        }
+
+        public void GameReadyNotify()
+        {
+            GameReady();
         }
 
         public void Save(string key, string jsonDataString)

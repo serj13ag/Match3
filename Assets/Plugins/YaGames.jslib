@@ -4,6 +4,10 @@ mergeInto(LibraryManager.library, {
     InitSDK();
   },
 
+  GameReady: function () {
+    GameReady();
+  },
+
   SaveToPlayerData: function (key, jsonDataString) {
     SaveToPlayerData(UTF8ToString(key), UTF8ToString(jsonDataString));
   },

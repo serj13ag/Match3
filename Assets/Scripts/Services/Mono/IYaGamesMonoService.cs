@@ -9,5 +9,6 @@ namespace Services.Mono
         void ShowFullScreenAd(Action onFullAdWatchedCallback);
         void ShowRewardedScreenAd(Action onRewardedAdWatchedCallback);
         void InitYaSDK(Action onSDKInitCallback);
+        void GameReadyNotify();
     }
 }

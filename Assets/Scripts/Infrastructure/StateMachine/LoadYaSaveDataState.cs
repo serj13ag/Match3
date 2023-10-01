@@ -35,6 +35,8 @@ namespace Infrastructure.StateMachine
 
         public void Exit()
         {
+            _yaGamesMonoService.GameReadyNotify();
+
             Debug.Log($"Exited {nameof(LoadYaSaveDataState)}");
         }
 

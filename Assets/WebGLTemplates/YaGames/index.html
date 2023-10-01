@@ -119,8 +119,6 @@
                 ysdk = _sdk;
 
                 InitPlayer();
-
-                ysdk.features.LoadingAPI?.ready();
                 console.log('Yandex SDK Init completed');
             })
             .catch(e => {
@@ -137,6 +135,10 @@
         }).catch(e => {
             console.error('InitPlayer err: ', e.message);
         });
+    }
+
+    function GameReady() {
+        ysdk.features.LoadingAPI?.ready();
     }
 
     function SaveToPlayerData(key, jsonDataString) {

@@ -63,12 +63,16 @@ namespace Services.Mono.Sound
 
         public void Mute()
         {
-            _backgroundMusicAudioSource.SetMute(true);
+            TurnBackgroundMusicOff();
+
+            Debug.Log($"{nameof(SoundMonoService)}: Sound muted");
         }
 
         public void Unmute()
         {
-            _backgroundMusicAudioSource.SetMute(false);
+            PlayBackgroundMusic();
+
+            Debug.Log($"{nameof(SoundMonoService)}: Sound unmuted");
         }
 
         private void OnSettingsChanged(object sender, SettingsChangedEventArgs e)
@@ -97,6 +101,11 @@ namespace Services.Mono.Sound
 
         private void TurnBackgroundMusicOff()
         {
+            if (_backgroundMusicAudioSource == null)
+            {
+                return;
+            }
+
             _backgroundMusicAudioSource.Stop();
 
             Destroy(_backgroundMusicAudioSource.gameObject);

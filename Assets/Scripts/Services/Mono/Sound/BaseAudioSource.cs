@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Services.Mono.Sound
 {
@@ -22,6 +23,7 @@ namespace Services.Mono.Sound
             _audioSource.Stop();
         }
 
+        [Obsolete]
         public void SetMute(bool value)
         {
             _audioSource.mute = value;

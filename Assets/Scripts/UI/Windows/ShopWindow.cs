@@ -100,14 +100,14 @@ namespace UI.Windows
 
         private void ShowRewardedAd()
         {
-            _soundMonoService.Mute();
+            _soundMonoService.AdStarted();
             _adsService.ShowRewardedAd(AddCoins);
         }
 
         private void AddCoins()
         {
             _coinService.IncrementCoins();
-            _soundMonoService.Unmute();
+            _soundMonoService.AdEnded();
         }
 
         private void OnCoinsChanged(object sender, CoinsChangedEventArgs e)

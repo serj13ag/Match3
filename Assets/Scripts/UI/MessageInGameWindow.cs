@@ -76,14 +76,14 @@ namespace UI
         private IEnumerator ShowAdCoroutine()
         {
             yield return new WaitForSeconds(1f);
-            _soundMonoService.Mute();
+            _soundMonoService.AdStarted();
             _adsService.ShowFullAd(Unmute);
             _adCoroutine = null;
         }
 
         private void Unmute()
         {
-            _soundMonoService.Unmute();
+            _soundMonoService.AdEnded();
         }
     }
 }

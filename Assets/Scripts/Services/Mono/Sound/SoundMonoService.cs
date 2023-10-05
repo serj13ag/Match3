@@ -27,6 +27,22 @@ namespace Services.Mono.Sound
         private bool _musicEnabled;
         private bool _soundEnabled;
         private LoopAudioSource _backgroundMusicAudioSource;
+        private bool _adIsActive;
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (hasFocus)
+            {
+                if (!_adIsActive)
+                {
+                    Unmute();
+                }
+            }
+            else
+            {
+                Mute();
+            }
+        }
 
         public void Init(IRandomService randomService, ISettingsService settingsService)
         {
@@ -61,14 +77,31 @@ namespace Services.Mono.Sound
             PlayOneShotClip(GetClip(soundType), GetVolume(soundType));
         }
 
-        public void Mute()
+        public void AdStarted()
+        {
+            _adIsActive = true;
+
+            Mute();
+        }
+
+        public void AdEnded()
+        {
+            _adIsActive = false;
+
+            if (_backgroundMusicAudioSource == null)
+            {
+                Unmute();
+            }
+        }
+
+        private void Mute()
         {
             TurnBackgroundMusicOff();
 
             Debug.Log($"{nameof(SoundMonoService)}: Sound muted");
         }
 
-        public void Unmute()
+        private void Unmute()
         {
             PlayBackgroundMusic();
 

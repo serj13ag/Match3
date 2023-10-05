@@ -18,6 +18,8 @@ namespace Infrastructure.StateMachine
 
         public GameStateMachine(ServiceLocator serviceLocator)
         {
+            bool isWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
+
             _states = new Dictionary<Type, IExitableState>
             {
                 [typeof(LoadLocalSaveDataState)] = new LoadLocalSaveDataState(
@@ -29,7 +31,8 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<IUiFactory>(),
                     serviceLocator.Get<ISoundMonoService>(),
                     serviceLocator.Get<ILoadingCurtainMonoService>(),
-                    serviceLocator.Get<IWindowService>()),
+                    serviceLocator.Get<IWindowService>(),
+                    isWebGl ? serviceLocator.Get<IYaGamesMonoService>() : null),
                 [typeof(EndlessGameLoopState)] = new EndlessGameLoopState(
                     serviceLocator.Get<ISceneLoader>(),
                     serviceLocator.Get<ILoadingCurtainMonoService>(),
@@ -58,7 +61,7 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<IWindowService>()),
             };
 
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
+            if (isWebGl)
             {
                 _states.Add(typeof(LoadYaSaveDataState), new LoadYaSaveDataState(
                     this,

@@ -14,12 +14,13 @@ namespace Infrastructure.StateMachine
         private readonly ISoundMonoService _soundMonoService;
         private readonly ILoadingCurtainMonoService _loadingCurtainMonoService;
         private readonly IWindowService _windowService;
+        private readonly IYaGamesMonoService _yaGamesMonoService;
 
         public bool IsGameLoopState => false;
 
         public MainMenuState(IGameStateMachine gameStateMachine, ISceneLoader sceneLoader, IUiFactory uiFactory,
             ISoundMonoService soundMonoService, ILoadingCurtainMonoService loadingCurtainMonoService,
-            IWindowService windowService)
+            IWindowService windowService, IYaGamesMonoService yaGamesMonoService)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
@@ -27,6 +28,7 @@ namespace Infrastructure.StateMachine
             _soundMonoService = soundMonoService;
             _loadingCurtainMonoService = loadingCurtainMonoService;
             _windowService = windowService;
+            _yaGamesMonoService = yaGamesMonoService;
         }
 
         public void Enter()
@@ -50,7 +52,12 @@ namespace Infrastructure.StateMachine
 
             _soundMonoService.PlayBackgroundMusic();
 
-            _loadingCurtainMonoService.FadeOffWithDelay();
+            _loadingCurtainMonoService.FadeOffWithDelay(NotifyGameReady);
+        }
+
+        private void NotifyGameReady()
+        {
+            _yaGamesMonoService?.GameReadyNotify();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Constants;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace Services.Mono
         [SerializeField] private MaskableGraphic _fadeMaskableGraphic;
         [SerializeField] private GameObject _rotatingCoinsContainer;
 
+        private Action _onFadeEndedCallback;
+
         private void Awake()
         {
             DontDestroyOnLoad(this);
@@ -21,13 +24,9 @@ namespace Services.Mono
             _rotatingCoinsContainer.gameObject.SetActive(true);
         }
 
-        public void FadeOnWithDelay()
+        public void FadeOffWithDelay(Action onFadeEndedCallback = null)
         {
-            StartCoroutine(FadeRoutine(Settings.ScreenFader.SolidAlpha));
-        }
-
-        public void FadeOffWithDelay()
-        {
+            _onFadeEndedCallback = onFadeEndedCallback;
             StartCoroutine(FadeRoutine(Settings.ScreenFader.ClearAlpha));
         }
 
@@ -37,6 +36,11 @@ namespace Services.Mono
 
             _fadeMaskableGraphic.CrossFadeAlpha(alpha, Settings.ScreenFader.TimeToFade, true);
             _rotatingCoinsContainer.gameObject.SetActive(false);
+
+            // wait until cross fade ended
+            yield return new WaitForSeconds(Settings.ScreenFader.TimeToFade);
+            _onFadeEndedCallback?.Invoke();
+            _onFadeEndedCallback = null;
         }
     }
 }

@@ -44,6 +44,8 @@ namespace Services.Mono
         public void GameReadyNotify()
         {
             GameReady();
+
+            Debug.Log($"{nameof(YaGamesMonoService)}: {nameof(GameReadyNotify)} called");
         }
 
         public void Save(string key, string jsonDataString)

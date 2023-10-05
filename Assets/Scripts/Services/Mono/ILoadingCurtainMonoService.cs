@@ -1,8 +1,10 @@
-﻿namespace Services.Mono
+﻿using System;
+
+namespace Services.Mono
 {
     public interface ILoadingCurtainMonoService : IService
     {
         void FadeOnInstantly();
-        void FadeOffWithDelay();
+        void FadeOffWithDelay(Action onFadeEndedCallback = null);
     }
 }

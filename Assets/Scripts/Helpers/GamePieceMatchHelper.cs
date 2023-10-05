@@ -11,6 +11,8 @@ namespace Helpers
 {
     public static class GamePieceMatchHelper
     {
+        private static int _recursiveCalls;
+
         public static bool IsCollectible(this GamePiece gamePiece)
         {
             return gamePiece.Type == GamePieceType.CollectibleByBomb ||
@@ -219,6 +221,8 @@ namespace Helpers
         private static bool TryGetBombedGamePieces(GamePiece matchedGamePiece, IGamePieceService gamePieceService,
             out HashSet<GamePiece> bombedGamePieces, HashSet<GamePiece> gamePiecesToExclude = null)
         {
+            _recursiveCalls++; // TODO fix
+
             bombedGamePieces = new HashSet<GamePiece>();
 
             if (matchedGamePiece is not BombGamePiece bombGamePiece)
@@ -245,12 +249,19 @@ namespace Helpers
 
             foreach (var bombedGamePiece in bombedGamePieces.ToArray())
             {
+                if (_recursiveCalls > 4)
+                {
+                    _recursiveCalls = 0;
+                    return true;
+                }
+
                 if (TryGetBombedGamePieces(bombedGamePiece, gamePieceService, out var pieces, bombedGamePieces))
                 {
                     bombedGamePieces.UnionWith(pieces);
                 }
             }
 
+            _recursiveCalls = 0;
             return true;
         }
         

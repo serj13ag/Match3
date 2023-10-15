@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Constants;
 using EventArguments;
 using Infrastructure;
 using Services;
@@ -28,6 +29,7 @@ namespace UI.Windows
         private ISoundMonoService _soundMonoService;
 
         private List<BackgroundShopItem> _prefabs;
+        private float _rewardedAdButtonTimeout;
 
         private void OnEnable()
         {
@@ -59,6 +61,16 @@ namespace UI.Windows
             UpdateCoinsCount();
 
             CreateBackgroundShopItems();
+
+            _rewardedAdButtonTimeout = 0f;
+        }
+
+        private void Update()
+        {
+            if (_rewardedAdButtonTimeout > 0)
+            {
+                _rewardedAdButtonTimeout -= Time.deltaTime;
+            }
         }
 
         public void PurchaseBackgroundItem(string itemCode)
@@ -100,6 +112,13 @@ namespace UI.Windows
 
         private void ShowRewardedAd()
         {
+            if (_rewardedAdButtonTimeout > 0f)
+            {
+                return;
+            }
+
+            _rewardedAdButtonTimeout = Settings.RewardedAdButtonTimeout;
+
             _soundMonoService.AdStarted();
             _adsService.ShowRewardedAd(AddCoins);
         }

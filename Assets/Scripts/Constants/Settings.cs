@@ -33,6 +33,8 @@
 
         public const string InitiallyPurchasedBackgroundItemCode = "default_purple";
 
+        public const float RewardedAdButtonTimeout = 2f;
+
         public static class Timeouts
         {
             public const float FillBoardTimeout = 0f;

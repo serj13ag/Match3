@@ -265,7 +265,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
+  m_fontSize: 52.6
   m_fontSizeBase: 52
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1713,7 +1713,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4176072578381824230, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
       propertyPath: m_text
-      value: BACK
+      value: WATCH AD
       objectReference: {fileID: 0}
     - target: {fileID: 5670065203702912938, guid: 5b8fcd86d55a10a46b03029aa49d4cde, type: 3}
       propertyPath: _key

@@ -12,6 +12,7 @@
         public const int MinPlayerLevelToShowAds = 10;
 
         public const bool CollectibleGamePieceEnabled = false;
+        public const bool ResetEnabled = false;
 
         public const float CameraPositionZ = -10f;
 

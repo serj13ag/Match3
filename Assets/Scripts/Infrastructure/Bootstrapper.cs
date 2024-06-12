@@ -44,16 +44,16 @@ namespace Infrastructure
 
             ISaveService saveService;
             IAdsService adsService;
+            IYaGamesMonoService yaGamesMonoService;
             if (isWebGl)
             {
-                IYaGamesMonoService yaGamesMonoService = assetProviderService.Instantiate<YaGamesMonoService>(AssetPaths.YaGamesMonoServicePath);
-                serviceLocator.Register(yaGamesMonoService);
-
+                yaGamesMonoService = assetProviderService.Instantiate<YaGamesMonoService>(AssetPaths.YaGamesMonoServicePath);
                 saveService = new YaGamesSaveService(yaGamesMonoService);
                 adsService = new YaGamesAdsService(yaGamesMonoService);
             }
             else
             {
+                yaGamesMonoService = new NullYaGamesMonoService();
                 saveService = new LocalSaveService();
                 adsService = new EmptyAdsService();
             }
@@ -89,6 +89,7 @@ namespace Infrastructure
             serviceLocator.Register(localizationService);
             serviceLocator.Register(coinService);
 
+            serviceLocator.Register(yaGamesMonoService);
             serviceLocator.Register(loadingCurtainMonoService);
             serviceLocator.Register(soundMonoService);
             serviceLocator.Register(updateMonoService);

@@ -57,7 +57,7 @@ namespace Infrastructure.StateMachine
 
         private void NotifyGameReady()
         {
-            _yaGamesMonoService?.GameReadyNotify();
+            _yaGamesMonoService.GameReadyNotify();
         }
     }
 }

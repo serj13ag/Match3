@@ -26,7 +26,7 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<ISoundMonoService>(),
                     serviceLocator.Get<ILoadingCurtainMonoService>(),
                     serviceLocator.Get<IWindowService>(),
-                    isWebGl ? serviceLocator.Get<IYaGamesMonoService>() : null),
+                    serviceLocator.Get<IYaGamesMonoService>()),
                 [typeof(EndlessGameLoopState)] = new EndlessGameLoopState(
                     serviceLocator.Get<ISceneLoader>(),
                     serviceLocator.Get<ILoadingCurtainMonoService>(),

@@ -47,18 +47,6 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<ICoinService>(),
                     serviceLocator.Get<IAdsService>(),
                     serviceLocator.Get<ICustomizationService>()),
-                [typeof(PuzzleGameLoopState)] = new PuzzleGameLoopState(
-                    this,
-                    serviceLocator.Get<ISceneLoader>(),
-                    serviceLocator.Get<ILoadingCurtainMonoService>(),
-                    serviceLocator.Get<IAssetProviderService>(),
-                    serviceLocator.Get<IRandomService>(),
-                    serviceLocator.Get<IStaticDataService>(),
-                    serviceLocator.Get<ISoundMonoService>(),
-                    serviceLocator.Get<IUpdateMonoService>(),
-                    serviceLocator.Get<IPersistentDataService>(),
-                    serviceLocator.Get<IUiFactory>(),
-                    serviceLocator.Get<IWindowService>()),
             };
 
             if (isWebGl)

@@ -10,6 +10,5 @@ namespace StaticData
         public int BoardHeight;
         public MoveInterpolationType MoveInterpolationType;
         public int[] ScorePerLevel;
-        public LevelStaticData[] PuzzleLevels;
     }
 }

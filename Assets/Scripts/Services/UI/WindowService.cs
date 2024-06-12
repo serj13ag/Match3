@@ -49,7 +49,6 @@ namespace Services.UI
 
             BaseWindow baseWindow = windowType switch
             {
-                WindowType.PuzzleLevels => _uiFactory.CreatePuzzleLevelsWindow(),
                 WindowType.Settings => _uiFactory.CreateSettingsWindow(),
                 WindowType.Shop => _uiFactory.CreateShopWindow(),
                 _ => throw new ArgumentOutOfRangeException(nameof(windowType), windowType, null),

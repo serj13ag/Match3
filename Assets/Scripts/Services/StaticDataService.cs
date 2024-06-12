@@ -23,8 +23,6 @@ namespace Services
 
         public SettingsStaticData Settings => _settings;
 
-        public IEnumerable<string> PuzzleLevelNames => _settings.PuzzleLevels.Select(x => x.LevelName);
-
         public List<LanguageType> AvailableLanguages => _languages.Keys.ToList();
 
         public IEnumerable<BackgroundShopItemStaticData> BackgroundShopItems => _backgroundShopItems.Values;

@@ -9,7 +9,6 @@ namespace Services
     public interface IStaticDataService : IService
     {
         SettingsStaticData Settings { get; }
-        IEnumerable<string> PuzzleLevelNames { get; }
         List<LanguageType> AvailableLanguages { get; }
         IEnumerable<BackgroundShopItemStaticData> BackgroundShopItems { get; }
 

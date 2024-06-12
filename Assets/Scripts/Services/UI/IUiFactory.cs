@@ -1,6 +1,5 @@
 ﻿using UI;
 using UI.Windows;
-using UnityEngine;
 
 namespace Services.UI
 {
@@ -12,8 +11,6 @@ namespace Services.UI
         BackgroundBlocker CreateBackgroundBlocker();
         BaseWindow CreateShopWindow();
         SettingsWindow CreateSettingsWindow();
-        PuzzleLevelsWindow CreatePuzzleLevelsWindow();
-        PuzzleLevelButton CreateLevelButton(Transform parentTransform);
         void Cleanup();
     }
 }

@@ -44,16 +44,6 @@ namespace Services.UI
             return _assetProviderService.Instantiate<SettingsWindow>(AssetPaths.SettingsWindowPath, _uiRootTransform);
         }
 
-        public PuzzleLevelsWindow CreatePuzzleLevelsWindow()
-        {
-            return _assetProviderService.Instantiate<PuzzleLevelsWindow>(AssetPaths.PuzzleLevelsWindowPath, _uiRootTransform);
-        }
-
-        public PuzzleLevelButton CreateLevelButton(Transform parentTransform)
-        {
-            return _assetProviderService.Instantiate<PuzzleLevelButton>(AssetPaths.PuzzleLevelButtonPath, parentTransform);
-        }
-
         public MessageInGameWindow GetMessageWindow()
         {
             if (_messageWindow == null)

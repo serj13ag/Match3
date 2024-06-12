@@ -1,8 +1,7 @@
 # Pixel Match
 
-My own implementation of a match three puzzle game from Udemy course: https://www.udemy.com/course/make-a-puzzle-match-game-in-unity/
-
-I was following the course step by step, but implemented features in my way and added some new functionality.
+My first simple game that made it to release on one web platform.
+You can play Pixel Match on itch.io (https://serj13.itch.io/pixel-match)
 
 ## Key Features
 

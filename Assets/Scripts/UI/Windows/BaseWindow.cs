@@ -23,7 +23,7 @@ namespace UI.Windows
         {
             OnHided?.Invoke(this, EventArgs.Empty);
 
-            Destroy(gameObject); // TODO use pooling
+            Destroy(gameObject);
         }
     }
 }

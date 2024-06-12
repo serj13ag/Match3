@@ -7,8 +7,6 @@ namespace UI
     {
         [SerializeField] private Image _image;
 
-        // TODO add fade
-
         public void Activate()
         {
             _image.enabled = true;

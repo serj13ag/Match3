@@ -13,8 +13,6 @@ namespace Services.UI
 
         private BackgroundBlocker _backgroundBlocker;
 
-        // TODO refactor
-
         public WindowService(IUiFactory uiFactory, ILocalizationService localizationService)
         {
             _uiFactory = uiFactory;

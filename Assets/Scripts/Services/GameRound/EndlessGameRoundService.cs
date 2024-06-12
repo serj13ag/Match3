@@ -38,7 +38,7 @@ namespace Services.GameRound
 
         public void EndRound()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         private void OnScoreChanged(object sender, ScoreChangedEventArgs e)
@@ -53,7 +53,7 @@ namespace Services.GameRound
                 _soundMonoService.PlaySound(SoundType.Win);
 
                 bool showAd = _playerLevelService.CurrentLevel >= Settings.MinPlayerLevelToShowAds;
-                _windowService.ShowGameWinMessageWindow(UpdatePlayerLevel, showAd); // TODO new level window
+                _windowService.ShowGameWinMessageWindow(UpdatePlayerLevel, showAd);
 
                 _roundIsActive = false;
             }

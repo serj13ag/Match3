@@ -15,7 +15,7 @@ namespace Infrastructure.StateMachine
 
         public bool InGameLoopState => _currentState.IsGameLoopState;
 
-        public GameStateMachine(ServiceLocator serviceLocator, bool isWebGl)
+        public GameStateMachine(ServiceLocator serviceLocator, bool isYaGamesEnvironment)
         {
             _states = new Dictionary<Type, IExitableState>
             {
@@ -43,7 +43,7 @@ namespace Infrastructure.StateMachine
                     serviceLocator.Get<ICustomizationService>()),
             };
 
-            if (isWebGl)
+            if (isYaGamesEnvironment)
             {
                 _states.Add(typeof(LoadYaSaveDataState), new LoadYaSaveDataState(
                     this,

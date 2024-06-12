@@ -14,13 +14,14 @@ namespace Infrastructure
 
         private void Awake()
         {
+            bool isWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
+
             ServiceLocator serviceLocator = new ServiceLocator();
+            InitAndRegisterGlobalServices(serviceLocator, isWebGl);
 
-            InitAndRegisterGlobalServices(serviceLocator);
+            _gameStateMachine = new GameStateMachine(serviceLocator, isWebGl);
 
-            _gameStateMachine = new GameStateMachine(serviceLocator);
-
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
+            if (isWebGl)
             {
                 _gameStateMachine.Enter<LoadYaSaveDataState>();
             }
@@ -34,7 +35,7 @@ namespace Infrastructure
             DontDestroyOnLoad(this);
         }
 
-        private void InitAndRegisterGlobalServices(ServiceLocator serviceLocator)
+        private void InitAndRegisterGlobalServices(ServiceLocator serviceLocator, bool isWebGl)
         {
             ISceneLoader sceneLoader = new SceneLoader(this);
             IRandomService randomService = new RandomService();
@@ -43,7 +44,7 @@ namespace Infrastructure
 
             ISaveService saveService;
             IAdsService adsService;
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
+            if (isWebGl)
             {
                 IYaGamesMonoService yaGamesMonoService = assetProviderService.Instantiate<YaGamesMonoService>(AssetPaths.YaGamesMonoServicePath);
                 serviceLocator.Register(yaGamesMonoService);

@@ -4,7 +4,6 @@ using Services;
 using Services.Mono;
 using Services.Mono.Sound;
 using Services.UI;
-using UnityEngine;
 
 namespace Infrastructure.StateMachine
 {
@@ -16,15 +15,10 @@ namespace Infrastructure.StateMachine
 
         public bool InGameLoopState => _currentState.IsGameLoopState;
 
-        public GameStateMachine(ServiceLocator serviceLocator)
+        public GameStateMachine(ServiceLocator serviceLocator, bool isWebGl)
         {
-            bool isWebGl = Application.platform == RuntimePlatform.WebGLPlayer;
-
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(LoadLocalSaveDataState)] = new LoadLocalSaveDataState(
-                    this,
-                    serviceLocator.Get<IPersistentDataService>()),
                 [typeof(MainMenuState)] = new MainMenuState(
                     this,
                     serviceLocator.Get<ISceneLoader>(),
@@ -55,6 +49,12 @@ namespace Infrastructure.StateMachine
                     this,
                     serviceLocator.Get<IPersistentDataService>(),
                     serviceLocator.Get<IYaGamesMonoService>()));
+            }
+            else
+            {
+                _states.Add(typeof(LoadLocalSaveDataState), new LoadLocalSaveDataState(
+                    this,
+                    serviceLocator.Get<IPersistentDataService>()));
             }
         }
 

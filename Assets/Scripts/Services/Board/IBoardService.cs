@@ -8,8 +8,6 @@ namespace Services.Board
     {
         Vector2Int BoardSize { get; }
 
-        void GamePiecesSwitched();
-
         bool PlayerMovedColorBomb(GamePiece clickedGamePiece, GamePiece targetGamePiece, out HashSet<GamePiece> gamePiecesToBreak);
 
         void ChangeStateToBreak(HashSet<GamePiece> gamePiecesToBreak);

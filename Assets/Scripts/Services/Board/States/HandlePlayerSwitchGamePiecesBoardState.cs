@@ -82,7 +82,6 @@ namespace Services.Board.States
 
         private void GamePiecesSwitched(HashSet<GamePiece> gamePiecesToBreak)
         {
-            _boardService.GamePiecesSwitched();
             _boardService.ChangeStateToBreak(gamePiecesToBreak);
         }
 

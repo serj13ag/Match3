@@ -3,8 +3,6 @@ using Constants;
 using DTO;
 using Entities;
 using Helpers;
-using Services.GameRound;
-using Services.MovesLeft;
 
 namespace Services.Board.States
 {
@@ -12,8 +10,6 @@ namespace Services.Board.States
     {
         private readonly IBoardService _boardService;
         private readonly IGamePieceService _gamePieceService;
-        private readonly IGameRoundService _gameRoundService;
-        private readonly IMovesLeftService _movesLeftService;
 
         private readonly HashSet<int> _columnIndexesToCollapse;
 
@@ -22,13 +18,11 @@ namespace Services.Board.States
         private int _movedPieceNumber;
 
         public CollapseColumnsTimeoutBoardState(IBoardService boardService, IGamePieceService gamePieceService,
-            IGameRoundService gameRoundService, IMovesLeftService movesLeftService, HashSet<int> columnIndexesToCollapse)
+            HashSet<int> columnIndexesToCollapse)
             : base(Settings.Timeouts.CollapseColumnsTimeout)
         {
             _boardService = boardService;
             _gamePieceService = gamePieceService;
-            _gameRoundService = gameRoundService;
-            _movesLeftService = movesLeftService;
 
             _columnIndexesToCollapse = columnIndexesToCollapse;
         }
@@ -77,7 +71,7 @@ namespace Services.Board.States
             }
             else // If removed game pieces at top of columns
             {
-                ChangeStateOrEndGame();
+                _boardService.ChangeStateToFill();
             }
         }
 
@@ -95,19 +89,7 @@ namespace Services.Board.States
             }
             else
             {
-                ChangeStateOrEndGame();
-            }
-        }
-
-        private void ChangeStateOrEndGame()
-        {
-            if (_movesLeftService.MovesLeft > 0)
-            {
                 _boardService.ChangeStateToFill();
-            }
-            else
-            {
-                _gameRoundService.EndRound();
             }
         }
     }

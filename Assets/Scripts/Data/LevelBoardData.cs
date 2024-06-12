@@ -12,7 +12,6 @@ namespace Data
         public List<TileSaveData> Tiles { get; set; }
         public List<GamePieceSaveData> GamePieces { get; set; }
         public int Score { get; set; }
-        public int MovesLeft { get; set; }
     }
 
     [Serializable]

@@ -4,7 +4,6 @@ using Services.Board;
 using Services.GameRound;
 using Services.Mono;
 using Services.Mono.Sound;
-using Services.MovesLeft;
 using Services.UI;
 using UI.Background;
 
@@ -71,7 +70,6 @@ namespace Infrastructure.StateMachine
 
             IParticleService particleService = new ParticleService(_staticDataService);
             IGameFactory gameFactory = new GameFactory(Settings.EndlessLevelName, _randomService, _staticDataService, particleService);
-            IMovesLeftService movesLeftService = new InfiniteMovesLeftService();
             IPlayerLevelService playerLevelService = new PlayerLevelService(_persistentDataService, _staticDataService, progressUpdateService);
             IScoreService scoreService = new ScoreService(Settings.EndlessLevelName, _soundMonoService, _persistentDataService, progressUpdateService, playerLevelService.ScoreToNextLevel);
             IGameRoundService gameRoundService = new EndlessGameRoundService(_soundMonoService, _windowService, _coinService, scoreService, playerLevelService);
@@ -81,7 +79,7 @@ namespace Infrastructure.StateMachine
                 _randomService, progressUpdateService, tileService, gameFactory, particleService);
 
             IBoardService boardService = new BoardService(Settings.EndlessLevelName, _soundMonoService, _updateMonoService,
-                _persistentDataService, _staticDataService, progressUpdateService, scoreService, movesLeftService, gameRoundService,
+                _persistentDataService, _staticDataService, progressUpdateService, scoreService, gameRoundService,
                 tileService, gamePieceService, particleService);
 
             ICameraService cameraService = new CameraService(boardService.BoardSize);

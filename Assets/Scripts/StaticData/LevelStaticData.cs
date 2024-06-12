@@ -12,8 +12,5 @@ namespace StaticData
 
         public StartingTilesStaticData StartingTiles;
         public StartingGamePiecesStaticData StartingGamePieces;
-
-        public int ScoreGoal;
-        public int MovesLeft;
     }
 }

@@ -9,7 +9,6 @@ using Services.Board.States;
 using Services.GameRound;
 using Services.Mono;
 using Services.Mono.Sound;
-using Services.MovesLeft;
 using UnityEngine;
 
 namespace Services.Board
@@ -20,7 +19,6 @@ namespace Services.Board
         private readonly IGamePieceService _gamePieceService;
         private readonly IParticleService _particleService;
         private readonly IScoreService _scoreService;
-        private readonly IMovesLeftService _movesLeftService;
         private readonly ISoundMonoService _soundMonoService;
         private readonly IUpdateMonoService _updateMonoService;
         private readonly IProgressUpdateService _progressUpdateService;
@@ -35,11 +33,10 @@ namespace Services.Board
         public BoardService(string levelName, ISoundMonoService soundMonoService, IUpdateMonoService updateMonoService,
             IPersistentDataService persistentDataService, IStaticDataService staticDataService,
             IProgressUpdateService progressUpdateService, IScoreService scoreService,
-            IMovesLeftService movesLeftService, IGameRoundService gameRoundService,
-            ITileService tileService, IGamePieceService gamePieceService, IParticleService particleService)
+            IGameRoundService gameRoundService, ITileService tileService, IGamePieceService gamePieceService,
+            IParticleService particleService)
         {
             _scoreService = scoreService;
-            _movesLeftService = movesLeftService;
             _tileService = tileService;
             _gamePieceService = gamePieceService;
             _particleService = particleService;
@@ -102,14 +99,9 @@ namespace Services.Board
             return gamePiecesToBreak.Count > 0;
         }
 
-        public void GamePiecesSwitched()
-        {
-            _movesLeftService.DecrementMovesLeft();
-        }
-
         public void ChangeStateToCollapse(HashSet<int> columnIndexesToCollapse)
         {
-            ChangeState(new CollapseColumnsTimeoutBoardState(this, _gamePieceService, _gameRoundService, _movesLeftService, columnIndexesToCollapse));
+            ChangeState(new CollapseColumnsTimeoutBoardState(this, _gamePieceService, columnIndexesToCollapse));
         }
 
         public void ChangeStateToFill()
